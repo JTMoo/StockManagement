@@ -6,12 +6,17 @@ namespace StockManagement.Kernel
     {
         private CancellationTokenSource _commandExecutionCancellation;
         private bool _disposed;
-        private CommandQueue queue;
+        private CommandQueue queue = new CommandQueue();
 
 
         public CommandManager() 
         {
             _commandExecutionCancellation = new CancellationTokenSource();
+        }
+
+        ~CommandManager()
+        {
+            this.Dispose();
         }
 
         public void Dispose()
@@ -28,7 +33,7 @@ namespace StockManagement.Kernel
 
         internal void Init()
         {
-            this.StartCommandExecutionTask();
+            this.StartCommandExecutionTask(this._commandExecutionCancellation.Token);
         }
 
         internal void StopCommandExecution()
@@ -38,9 +43,9 @@ namespace StockManagement.Kernel
             this._commandExecutionCancellation.Cancel();
         }
 
-        private void StartCommandExecutionTask()
+        private void StartCommandExecutionTask(CancellationToken cancellationToken)
         {
-            Task.Run(() =>
+            MainManager.Instance.StartObservedTask(() =>
             {
                 while(!this._commandExecutionCancellation.IsCancellationRequested)
                 {
@@ -50,7 +55,7 @@ namespace StockManagement.Kernel
                     var result = command.Execute();
                     command.Data.InvokeCallback(result);
                 }
-            });
+            }, cancellationToken);
         }
     }
 }

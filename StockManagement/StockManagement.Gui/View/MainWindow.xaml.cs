@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 
-namespace StockManagement.Gui
+namespace StockManagement.Gui.View
 {
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

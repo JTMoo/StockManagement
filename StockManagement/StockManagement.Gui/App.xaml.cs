@@ -1,6 +1,7 @@
 ﻿using StockManagement.Kernel;
 using System.Windows;
 
+
 namespace StockManagement.Gui
 {
     public partial class App : Application
