@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
@@ -9,7 +10,6 @@ internal abstract class StockItem : NotificationBase
 	private int _amount = 0;
 	private string _name = string.Empty;
 	private string _description = string.Empty;
-	private readonly double _price = 0.0;
 
 
 	[BsonId]
@@ -34,8 +34,7 @@ internal abstract class StockItem : NotificationBase
 		set { this.SetField(ref this._description, value); }
 	}
 
-	public double Price 
-	{ 
-		get { return this._price; } 
-	}
+	public int Price { get; }
+
+	public ManufacturerType Manufacturer { get; }
 }
