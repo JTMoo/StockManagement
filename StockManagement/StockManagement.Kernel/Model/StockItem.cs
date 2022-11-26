@@ -7,20 +7,25 @@ namespace StockManagement.Kernel.Model;
 
 internal abstract class StockItem : NotificationBase
 {
-	private int _amount = 0;
 	private string _name = string.Empty;
 	private string _description = string.Empty;
 
 
+	public StockItem ()
+	{
+	}
+
+	public StockItem (string name, string description = "", int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+	{
+		this.Name = name;
+		this.Description = description;
+		this.Price = price;
+		this.Manufacturer = manufacturer;
+	}
+
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
 	public string Id { get; internal set; }
-
-	public int Amount
-	{
-		get { return _amount; }
-		set { this.SetField(ref this._amount, value); }
-	}
 
 	public string Name
 	{

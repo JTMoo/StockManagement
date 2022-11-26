@@ -1,9 +1,21 @@
-﻿namespace StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Model.Types;
+
+namespace StockManagement.Kernel.Model;
+
 
 internal class Tire : StockItem
 {
-	private Dimensions _dimensions;
+	public Tire() : base()
+	{
+	}
 
+	public Tire (double rimDiameter, double profile, double width, string name, string description = "", int price = 0, ManufacturerType manufacturerType = ManufacturerType.None) 
+		: base (name, description, price, manufacturerType)
+	{
+		this.Data = new Dimensions(rimDiameter, profile, width);
+	}
+
+	public Dimensions Data { get; set; }
 
 	public class Dimensions
 	{
