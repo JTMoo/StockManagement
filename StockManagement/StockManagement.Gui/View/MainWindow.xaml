@@ -11,19 +11,31 @@
 	<Window.DataContext>
 		<vm:MainViewModel />
 	</Window.DataContext>
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        
-        <Button Grid.Row="2"
+
+		<ListView Grid.RowSpan="2"
+				  ScrollViewer.VerticalScrollBarVisibility="Visible" />
+
+		<Button Style="{StaticResource NormalButtonStyle}"
+				Grid.Row="2"
                 Grid.Column="2"
                 Content="Quit"
                 Command="{Binding QuitCommand}"/>
