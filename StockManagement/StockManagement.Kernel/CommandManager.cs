@@ -1,61 +1,60 @@
 ﻿using StockManagement.Kernel.Commands;
 
-namespace StockManagement.Kernel
+namespace StockManagement.Kernel;
+
+internal class CommandManager : IDisposable
 {
-    internal class CommandManager : IDisposable
+    private CancellationTokenSource _commandExecutionCancellation;
+    private bool _disposed;
+    private CommandQueue queue = new CommandQueue();
+
+
+    public CommandManager() 
     {
-        private CancellationTokenSource _commandExecutionCancellation;
-        private bool _disposed;
-        private CommandQueue queue = new CommandQueue();
+        _commandExecutionCancellation = new CancellationTokenSource();
+    }
 
+    ~CommandManager()
+    {
+        this.Dispose();
+    }
 
-        public CommandManager() 
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        if (this._commandExecutionCancellation != null)
         {
-            _commandExecutionCancellation = new CancellationTokenSource();
+            this._commandExecutionCancellation.Dispose();
         }
 
-        ~CommandManager()
-        {
-            this.Dispose();
-        }
+        _disposed = true;
+    }
 
-        public void Dispose()
-        {
-            if (_disposed) return;
+    internal void Init()
+    {
+        this.StartCommandExecutionTask(this._commandExecutionCancellation.Token);
+    }
 
-            if (this._commandExecutionCancellation != null)
+    internal void StopCommandExecution()
+    {
+        if (this._commandExecutionCancellation == null) return;
+
+        this._commandExecutionCancellation.Cancel();
+    }
+
+    private void StartCommandExecutionTask(CancellationToken cancellationToken)
+    {
+        MainManager.Instance.StartObservedTask(() =>
+        {
+            while(!this._commandExecutionCancellation.IsCancellationRequested)
             {
-                this._commandExecutionCancellation.Dispose();
+                var command = queue.Pop();
+                if (command == null) continue;
+
+                var result = command.Execute();
+                command.Data.InvokeCallback(result);
             }
-
-            _disposed = true;
-        }
-
-        internal void Init()
-        {
-            this.StartCommandExecutionTask(this._commandExecutionCancellation.Token);
-        }
-
-        internal void StopCommandExecution()
-        {
-            if (this._commandExecutionCancellation == null) return;
-
-            this._commandExecutionCancellation.Cancel();
-        }
-
-        private void StartCommandExecutionTask(CancellationToken cancellationToken)
-        {
-            MainManager.Instance.StartObservedTask(() =>
-            {
-                while(!this._commandExecutionCancellation.IsCancellationRequested)
-                {
-                    var command = queue.Pop();
-                    if (command == null) continue;
-
-                    var result = command.Execute();
-                    command.Data.InvokeCallback(result);
-                }
-            }, cancellationToken);
-        }
+        }, cancellationToken);
     }
 }

@@ -1,55 +1,64 @@
 ﻿using System.Diagnostics;
 
-namespace StockManagement.Kernel
+namespace StockManagement.Kernel;
+
+
+public class MainManager : IDisposable
 {
-    public class MainManager : IDisposable
+    public static readonly MainManager Instance = new MainManager();
+
+    private CommandManager _commandManager;
+    private MachineManager _machineManager;
+    private TireManager _tireManager;
+    private SparePartManager _sparePartManager;
+
+    public MainManager() 
     {
-        public static readonly MainManager Instance = new MainManager();
+        _commandManager = new CommandManager();
+        _machineManager = new MachineManager();
+        _tireManager = new TireManager();
+		_sparePartManager = new SparePartManager();
+    }
 
-        private CommandManager _commandManager;
+    ~MainManager()
+    {
+        this.Dispose();
+    }
 
-        public MainManager() 
+    public void Init()
+    {
+        _commandManager.Init();
+        _machineManager.Init();
+        _tireManager.Init();
+        _sparePartManager.Init();
+    }
+
+    public void Dispose()
+    {
+        _commandManager.Dispose();
+    }
+
+    public async void StartObservedTask(Action action)
+    {
+        try
         {
-            _commandManager = new CommandManager();
+            await Task.Factory.StartNew(action);
         }
-
-        ~MainManager()
+        catch (Exception ex)
         {
-            this.Dispose();
+            Trace.WriteLine(ex);
         }
+    }
 
-        public void Init()
+    public async void StartObservedTask(Action action, CancellationToken token)
+    {
+        try
         {
-            this._commandManager.Init();
+            await Task.Factory.StartNew(action, token);
         }
-
-        public void Dispose()
+        catch (Exception ex)
         {
-            this._commandManager.Dispose();
-        }
-
-        public async void StartObservedTask(Action action)
-        {
-            try
-            {
-                await Task.Factory.StartNew(action);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
-            }
-        }
-
-        public async void StartObservedTask(Action action, CancellationToken token)
-        {
-            try
-            {
-                await Task.Factory.StartNew(action, token);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
-            }
+            Trace.WriteLine(ex);
         }
     }
 }
