@@ -6,7 +6,7 @@ internal class CommandManager : IDisposable
 {
     private CancellationTokenSource _commandExecutionCancellation;
     private bool _disposed;
-    private CommandQueue queue = new CommandQueue();
+    private CommandQueue _queue = new CommandQueue();
 
 
     public CommandManager() 
@@ -23,9 +23,9 @@ internal class CommandManager : IDisposable
     {
         if (_disposed) return;
 
-        if (this._commandExecutionCancellation != null)
+        if (_commandExecutionCancellation != null)
         {
-            this._commandExecutionCancellation.Dispose();
+            _commandExecutionCancellation.Dispose();
         }
 
         _disposed = true;
@@ -33,23 +33,23 @@ internal class CommandManager : IDisposable
 
     internal void Init()
     {
-        this.StartCommandExecutionTask(this._commandExecutionCancellation.Token);
+        this.StartCommandExecutionTask(_commandExecutionCancellation.Token);
     }
 
     internal void StopCommandExecution()
     {
-        if (this._commandExecutionCancellation == null) return;
+        if (_commandExecutionCancellation == null) return;
 
-        this._commandExecutionCancellation.Cancel();
+        _commandExecutionCancellation.Cancel();
     }
 
     private void StartCommandExecutionTask(CancellationToken cancellationToken)
     {
         MainManager.Instance.StartObservedTask(() =>
         {
-            while(!this._commandExecutionCancellation.IsCancellationRequested)
+            while(!_commandExecutionCancellation.IsCancellationRequested)
             {
-                var command = queue.Pop();
+                var command = _queue.Pop();
                 if (command == null) continue;
 
                 var result = command.Execute();

@@ -12,6 +12,7 @@ public class MainManager : IDisposable
     private TireManager _tireManager;
     private SparePartManager _sparePartManager;
 
+
     public MainManager() 
     {
         _commandManager = new CommandManager();

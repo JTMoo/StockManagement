@@ -28,16 +28,39 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
 
 		<ListView Grid.RowSpan="2"
+				  Margin="5"
 				  ScrollViewer.VerticalScrollBarVisibility="Visible" />
 
-		<Button Style="{StaticResource NormalButtonStyle}"
-				Grid.Row="2"
-                Grid.Column="2"
-                Content="Quit"
-                Command="{Binding QuitCommand}"/>
+		<StackPanel Grid.Column="2">
+			<TextBlock Text="Select Manufacturer"
+					   Margin="5"/>
+			<ComboBox Margin="5" />
+			<TextBlock Text="Select Type"
+					   Margin="5"/>
+			<ComboBox Margin="5" />
+			<TextBlock Text="Type Name"
+					   Margin="5"/>
+			<TextBox Margin="5"/>
+			<TextBlock Text="Desciption"
+					   Margin="5"/>
+			<TextBlock Text="Desciption is shown here"
+					   Margin="5"/>
+			<Button Content="Picture"
+					Margin="5"/>
+		</StackPanel>
+
+		<StackPanel Grid.Row="2"
+					Grid.Column="2">
+			<Button Style="{StaticResource NormalButtonStyle}"
+					Content="Settings" />
+
+			<Button Style="{StaticResource NormalButtonStyle}"
+					Content="Quit"
+					Command="{Binding QuitCommand}"/>
+		</StackPanel>
     </Grid>
 </Window>

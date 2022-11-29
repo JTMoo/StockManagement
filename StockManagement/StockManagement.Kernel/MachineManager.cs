@@ -5,11 +5,11 @@ namespace StockManagement.Kernel;
 
 internal class MachineManager
 {
-	private List<Machine> machines = new List<Machine>();
+	private List<Machine> _machines = new List<Machine>();
 
 
 	internal void Init ()
 	{
-		this.machines.Clear();
+		_machines.Clear();
 	}
 }
