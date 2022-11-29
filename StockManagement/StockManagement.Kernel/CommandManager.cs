@@ -43,6 +43,16 @@ internal class CommandManager : IDisposable
         _commandExecutionCancellation.Cancel();
     }
 
+    internal bool Push(ICommand command)
+    {
+        if (_disposed) return false;
+        if (_commandExecutionCancellation == null) return false;
+        if(command == null) return false;
+        if(_queue == null) return false;
+
+        return _queue.Add(command);
+    }
+
     private void StartCommandExecutionTask(CancellationToken cancellationToken)
     {
         MainManager.Instance.StartObservedTask(() =>

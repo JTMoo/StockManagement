@@ -1,25 +1,27 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("StockManagement.Kernel.Tests")]
-namespace StockManagement.Kernel.Commands
+namespace StockManagement.Kernel.Commands;
+
+
+internal class CommandQueue
 {
-    internal class CommandQueue
+    List<ICommand> _queue = new List<ICommand>();
+
+    public bool Add (ICommand command)
     {
-        List<ICommand> queque = new List<ICommand>();
+        if (command == null) return false;
+        if (_queue == null) return false;
 
-        public bool Add (ICommand command)
-        {
-            if (command == null) return false;
+        _queue.Add(command);
+        return true;
+    }
 
-            this.queque.Add(command);
-            return true;
-        }
+    public ICommand? Pop ()
+    {
+        if (_queue == null) return null;
+        if (_queue.Count == 0) return null;
 
-        public ICommand? Pop ()
-        {
-            if (this.queque.Count == 0) return null;
-
-            return this.queque[0];
-        }
+        return _queue[0];
     }
 }

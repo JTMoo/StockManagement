@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using StockManagement.Kernel.Commands;
+using System.Diagnostics;
 
 namespace StockManagement.Kernel;
 
@@ -61,5 +62,10 @@ public class MainManager : IDisposable
         {
             Trace.WriteLine(ex);
         }
+    }
+
+    public bool PushCommand(ICommand command)
+    {
+        return _commandManager.Push(command);
     }
 }
