@@ -21,7 +21,9 @@ internal class CommandQueue
     {
         if (_queue == null) return null;
         if (_queue.Count == 0) return null;
+        var command = _queue[0];
+        _queue.RemoveAt(0);
 
-        return _queue[0];
+		return command;
     }
 }

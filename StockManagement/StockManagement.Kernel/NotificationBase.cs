@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace StockManagement.Kernel;
 
 
-internal class NotificationBase : INotifyPropertyChanged
+public class NotificationBase : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 

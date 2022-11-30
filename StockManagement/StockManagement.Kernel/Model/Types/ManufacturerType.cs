@@ -3,7 +3,7 @@
 namespace StockManagement.Kernel.Model.Types;
 
 
-internal enum ManufacturerType
+public enum ManufacturerType
 {
 	[Description("")]
 	None = 0,

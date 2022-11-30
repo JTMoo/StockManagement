@@ -27,6 +27,10 @@ public class MainManager : IDisposable
         this.Dispose();
     }
 
+    internal MachineManager MachineManager => _machineManager;
+	internal SparePartManager SparePartManager => _sparePartManager;
+    internal TireManager TireManager => _tireManager;
+
     public void Init()
     {
         _commandManager.Init();

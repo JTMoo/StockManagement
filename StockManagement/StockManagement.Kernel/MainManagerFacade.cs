@@ -3,9 +3,9 @@
 namespace StockManagement.Kernel;
 
 
-public class MainManagerFacade
+public static class MainManagerFacade
 {
-	public bool PushCommand(ICommand command)
+	public static bool PushCommand(ICommand command)
 	{
 		return MainManager.Instance.PushCommand(command);
 	}
