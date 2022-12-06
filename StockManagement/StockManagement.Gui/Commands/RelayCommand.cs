@@ -3,13 +3,14 @@ using System.Windows.Input;
 
 namespace StockManagement.Gui.Commands;
 
+
 public class RelayCommand<T> : ICommand
 {
-    readonly Action<T> _execute = null;
-    readonly Predicate<T> _canExecute = null;
+    readonly Action<T>? _execute = null;
+    readonly Predicate<T>? _canExecute = null;
 
-    
-    public RelayCommand(Action<T> execute) : this(execute, null)
+
+    public RelayCommand(Action<T> execute) : this(execute, _ => true)
     {
     }
 
