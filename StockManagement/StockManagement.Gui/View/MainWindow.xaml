@@ -83,15 +83,24 @@
 			<Border.BorderBrush>
 				<SolidColorBrush Color="LightGray" Opacity=".7" />
 			</Border.BorderBrush>
-			<Grid>
+			<Grid Margin="10">
 				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
 					<RowDefinition />
 					<RowDefinition />
 					<RowDefinition />
-					<RowDefinition />
-					<RowDefinition />
+					<RowDefinition Height="*"/>
 					<RowDefinition />
 				</Grid.RowDefinitions>
+
+				<StackPanel Orientation="Horizontal"
+							>
+					<TextBlock Text="Select Type"/>
+					<ComboBox Width="200"
+							  ItemsSource="{Binding StockItemTypes}"
+							  DisplayMemberPath="Name"
+							  SelectedItem="{Binding SelectedStockItemType}"/>
+				</StackPanel>
 
 				<StackPanel Orientation="Horizontal"
 							Grid.Row="5"

@@ -1,5 +1,9 @@
 ﻿namespace StockManagement.Kernel.Model;
 
-internal class SparePart : StockItem
+public class SparePart : StockItem
 {
+	internal override void Register()
+	{
+		MainManager.Instance.SparePartManager.Register(this);
+	}
 }

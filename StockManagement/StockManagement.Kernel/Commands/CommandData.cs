@@ -7,7 +7,7 @@ public class CommandData
 {
     public Action<bool> Callback { get; set; }
 
-    public Enum Type { get; set; }
+    public object Value { get; set; }
 
     public void InvokeCallback(bool success)
     {

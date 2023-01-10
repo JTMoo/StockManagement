@@ -14,12 +14,11 @@ internal class SparePartManager
 		this._spareParts.Clear();
 	}
 
-	internal bool AddSparePart(SparePart sparePart)
+	internal void Register(SparePart sparePart)
 	{
-		if (sparePart == null) return false;
+		if (sparePart == null) return;
 
 		_spareParts.Add(sparePart);
 		Trace.WriteLine("Spare Part added.");
-		return true;
 	}
 }

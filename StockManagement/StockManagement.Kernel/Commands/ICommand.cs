@@ -1,8 +1,7 @@
-﻿namespace StockManagement.Kernel.Commands
+﻿namespace StockManagement.Kernel.Commands;
+
+public interface ICommand
 {
-    public interface ICommand
-    {
-        public CommandData Data { get; }
-        public bool Execute();
-    }
+    public CommandData Data { get; }
+    public bool Execute();
 }

@@ -2,7 +2,7 @@
 
 namespace StockManagement.Kernel.Model;
 
-internal class Machine : StockItem
+public class Machine : StockItem
 {
 	public Machine() : base()
 	{
@@ -12,5 +12,10 @@ internal class Machine : StockItem
 		: base (name, description, price, manufacturerType)
 	{
 
+	}
+
+	internal override void Register()
+	{
+		MainManager.Instance.MachineManager.Register(this);
 	}
 }

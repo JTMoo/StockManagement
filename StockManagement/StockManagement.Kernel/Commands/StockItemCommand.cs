@@ -10,23 +10,9 @@ public class StockItemCommand : ICommand
 	public bool Execute()
 	{
 		if (Data == null) return false;
+		if (Data.Value == null) return false;
 
-		switch (Data.Type)
-		{
-			case Type SparePart:
-				MainManager.Instance.SparePartManager.AddSparePart(new SparePart());
-				break;
-		}
-
+		(Data.Value as StockItem)?.Register();
 		return true;
-	}
-
-	public enum Type
-	{
-		Machine,
-
-		SparePart,
-
-		Tire
 	}
 }

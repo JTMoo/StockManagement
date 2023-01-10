@@ -3,7 +3,7 @@
 namespace StockManagement.Kernel.Model;
 
 
-internal class Tire : StockItem
+public class Tire : StockItem
 {
 	public Tire() : base()
 	{
@@ -16,6 +16,11 @@ internal class Tire : StockItem
 	}
 
 	public Dimensions Data { get; set; }
+
+	internal override void Register()
+	{
+		MainManager.Instance.TireManager.Register(this);
+	}
 
 	public class Dimensions
 	{

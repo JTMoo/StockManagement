@@ -49,4 +49,6 @@ public abstract class StockItem : NotificationBase
 	public int Price { get; }
 
 	public ManufacturerType Manufacturer { get; }
+
+	internal abstract void Register();
 }
