@@ -3,10 +3,15 @@ using System.Diagnostics;
 
 namespace StockManagement.Kernel;
 
-internal class TireManager
+public class TireManager : NotificationBase
 {
 	private List<Tire> _tires = new List<Tire>();
 
+	public List<Tire> Tires
+	{
+		get { return _tires; }
+		private set { this.SetField(ref this._tires, value); }
+	}
 
 	internal void Init()
 	{

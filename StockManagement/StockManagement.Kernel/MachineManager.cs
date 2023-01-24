@@ -4,10 +4,15 @@ using System.Diagnostics;
 namespace StockManagement.Kernel;
 
 
-internal class MachineManager
+public class MachineManager : NotificationBase
 {
 	private List<Machine> _machines = new List<Machine>();
 
+	public List<Machine> Machines
+	{
+		get { return _machines; }
+		private set { this.SetField(ref this._machines, value); }
+	}
 
 	internal void Init ()
 	{

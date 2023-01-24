@@ -16,26 +16,28 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
+				<ResourceDictionary Source="Dictionaries\ListViewDictionary.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 		</ResourceDictionary>
 	</Window.Resources>
-	
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="150"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="250"/>
-        </Grid.ColumnDefinitions>
 
-		<ListView Grid.RowSpan="2"
-				  Margin="5"
-				  ScrollViewer.VerticalScrollBarVisibility="Visible" />
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="20"/>
+			<RowDefinition Height="150"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="20"/>
+			<ColumnDefinition Width="250"/>
+		</Grid.ColumnDefinitions>
+
+		<ListView Margin="5"
+				  ItemsSource="{Binding StockItems}"
+				  Style="{StaticResource DefaultListViewStyle}"
+				  ItemTemplate="{StaticResource DefaultListViewItemTemplate}" />
 
 		<StackPanel Grid.Column="2">
 			<TextBlock Text="Select Manufacturer"
@@ -86,20 +88,24 @@
 			<Grid Margin="10">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition />
+					<RowDefinition Height="Auto"/>
 					<RowDefinition />
 					<RowDefinition />
 					<RowDefinition Height="*"/>
 					<RowDefinition />
 				</Grid.RowDefinitions>
 
-				<StackPanel Orientation="Horizontal"
-							>
+				<StackPanel Orientation="Horizontal">
 					<TextBlock Text="Select Type"/>
 					<ComboBox Width="200"
 							  ItemsSource="{Binding StockItemTypes}"
 							  DisplayMemberPath="Name"
 							  SelectedItem="{Binding SelectedStockItemType}"/>
+				</StackPanel>
+				<StackPanel Grid.Row="1" Orientation="Horizontal">
+					<TextBlock Text="Type Name" />
+					<TextBox Width="200"
+							 Text="{Binding InputName}" />
 				</StackPanel>
 
 				<StackPanel Orientation="Horizontal"
@@ -114,5 +120,5 @@
 				</StackPanel>
 			</Grid>
 		</Border>
-    </Grid>
+	</Grid>
 </Window>

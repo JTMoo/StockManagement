@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace StockManagement.Kernel;
 
 
-public class MainManager : IDisposable
+public class MainManager : NotificationBase, IDisposable
 {
     public static readonly MainManager Instance = new MainManager();
 
@@ -27,9 +27,9 @@ public class MainManager : IDisposable
         this.Dispose();
     }
 
-    internal MachineManager MachineManager => _machineManager;
-	internal SparePartManager SparePartManager => _sparePartManager;
-    internal TireManager TireManager => _tireManager;
+    public MachineManager MachineManager => _machineManager;
+	public SparePartManager SparePartManager => _sparePartManager;
+    public TireManager TireManager => _tireManager;
 
     public void Init()
     {

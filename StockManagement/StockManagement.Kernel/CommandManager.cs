@@ -59,6 +59,7 @@ internal class CommandManager : IDisposable
         {
             while(!_commandExecutionCancellation.IsCancellationRequested)
             {
+                Thread.Sleep(500);
                 var command = _queue.Pop();
                 if (command == null) continue;
 

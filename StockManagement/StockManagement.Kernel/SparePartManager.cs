@@ -4,10 +4,15 @@ using System.Diagnostics;
 namespace StockManagement.Kernel;
 
 
-internal class SparePartManager
+public class SparePartManager : NotificationBase
 {
 	private List<SparePart> _spareParts = new List<SparePart>();
 
+	public List<SparePart> SpareParts
+	{
+		get { return _spareParts; }
+		private set { this.SetField(ref this._spareParts, value); }
+	}
 
 	internal void Init()
 	{
