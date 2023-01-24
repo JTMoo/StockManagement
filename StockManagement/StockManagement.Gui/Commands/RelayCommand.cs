@@ -3,11 +3,11 @@ using System.Windows.Input;
 
 namespace StockManagement.Gui.Commands;
 
-
 public class RelayCommand<T> : ICommand
 {
-    readonly Action<T>? _execute = null;
-    readonly Predicate<T>? _canExecute = null;
+    #pragma warning disable CA8600, CA8604
+    readonly Action<T>? _execute;
+    readonly Predicate<T>? _canExecute;
 
 
     public RelayCommand(Action<T> execute) : this(execute, _ => true)
@@ -23,19 +23,28 @@ public class RelayCommand<T> : ICommand
         _canExecute = canExecute;
     }
 
-    public bool CanExecute(object parameter)
+    public bool CanExecute(object? parameter)
     {
-        return _canExecute == null ? true : _canExecute((T)parameter);
+        if (_canExecute == null)
+            return false;
+        if (parameter == null)
+            return _canExecute(default!);
+        return _canExecute((T)parameter);
     }
 
-    public event EventHandler CanExecuteChanged
+    public event EventHandler? CanExecuteChanged
     {
         add { CommandManager.RequerySuggested += value; }
         remove { CommandManager.RequerySuggested -= value; }
     }
 
-    public void Execute(object parameter)
+    public void Execute(object? parameter)
     {
-        _execute((T)parameter);
+        if (_execute == null)
+            return;
+        if (parameter == null)
+            _execute(default!);
+        else
+            _execute.Invoke((T)parameter);
     }
 }
