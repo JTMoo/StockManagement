@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="StockManagement.Gui.View.StockItemCreation.MachineCreationDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StockManagement.Gui.View.StockItemCreation"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition Height="*"/>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="1" Orientation="Horizontal">
+			<TextBlock Text="Type Name" />
+			<TextBox Width="200"
+							 Text="{Binding InputName}" />
+		</StackPanel>
+
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="5"
+							Margin="10">
+			<Button Content="Confirm"
+							Width="200"
+							Command="{Binding ConfirmDialogCommand}"/>
+			<Button Content="Cancel"
+							Width="200"
+							Command="{Binding CancelDialogCommand}"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

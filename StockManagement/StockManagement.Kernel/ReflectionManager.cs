@@ -11,6 +11,7 @@ public static class ReflectionManager
 			.Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal))
 			.ToList();
 	}
+
 	public static List<Type> GetTypesOfBase(Assembly assembly, Type baseType)
 	{
 		return assembly.GetTypes()

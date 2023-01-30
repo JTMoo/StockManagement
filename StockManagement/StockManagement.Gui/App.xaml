@@ -1,9 +1,11 @@
 ﻿<Application x:Class="StockManagement.Gui.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:StockManagement.Gui"
-             StartupUri="View/MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="\View\Dictionaries\BaseDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

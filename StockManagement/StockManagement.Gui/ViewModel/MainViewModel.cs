@@ -1,10 +1,10 @@
 ﻿using StockManagement.Gui.Commands;
 using StockManagement.Kernel;
-using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
@@ -14,32 +14,27 @@ namespace StockManagement.Gui.ViewModel;
 
 internal class MainViewModel : NotificationBase
 {
-	private bool _showDialog = false;
 	private Type _selectedStockItemType;
-
 	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
-	private object _stockItemsLock = new object();
+	private Dictionary<Type, DialogViewModelBase> _itemTypeToViewModel = new Dictionary<Type, DialogViewModelBase>();
+
 
 	public MainViewModel()
     {
         QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
-		ConfirmDialogCommand = new RelayCommand<string>(this.OnConfirmDialogCommand);
-		CancelDialogCommand = new RelayCommand<string>(_ => this.ShowDialog = false);
-		CreateStockItemCommand = new RelayCommand<string>(_ => this.ShowDialog = true);
+		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 
-		var kernelAssembly = Assembly.Load(new AssemblyName("Stockmanagement.Kernel"));
-		StockItemTypes = ReflectionManager.GetTypesOfBase(kernelAssembly, typeof(StockItem));
+		this.AssignDialogs();
 
-		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
+		BindingOperations.EnableCollectionSynchronization(_stockItems, this.StockItemsLock);
 	}
 
-	public RelayCommand<string> QuitCommand { get; }	
-	public RelayCommand<string> ConfirmDialogCommand { get; }
-	public RelayCommand<string> CancelDialogCommand { get; }
+
+	public RelayCommand<string> QuitCommand { get; }
     public RelayCommand<string> CreateStockItemCommand { get; }
-
-	public List<Type> StockItemTypes { get; }
-
+	public DialogViewModelBase Dialog { get; set; }
+	public List<Type> StockItemTypes { get; private set; }
+	public object StockItemsLock { get; } = new object();
 
 	public ObservableCollection<StockItem> StockItems
 	{
@@ -53,72 +48,42 @@ internal class MainViewModel : NotificationBase
 		set { this.SetField(ref _selectedStockItemType, value); }
 	}
 
-	public string InputName { get; set; }
-
-	public bool ShowDialog
+	private void AssignDialogs()
 	{
-		get { return _showDialog; }
-		private set { this.SetField(ref _showDialog, value); }
-	}
+		var kernelAssembly = Assembly.Load(new AssemblyName("Stockmanagement.Kernel"));
+		this.StockItemTypes = ReflectionManager.GetTypesOfBase(kernelAssembly, typeof(StockItem));
 
-	private StockItem? GetStockItemFromType()
-	{
-		if (this.SelectedStockItemType == typeof(Machine))
-		{
-			return new Machine()
-			{
-				Name = InputName,
-				Description = "This a precise description of a machine"
-			};
-		}
-		if (this.SelectedStockItemType == typeof(SparePart))
-		{
-			return new SparePart()
-			{
-				Name = InputName,
-				Description = "This a precise description of a sparepart"
-			};
-		}
-		if (this.SelectedStockItemType == typeof(Tire))
-		{
-			return new Tire()
-			{
-				Name = InputName,
-				Description = "This a precise description of a tire"
-			};
-		}
+		var guiAssembly = Assembly.GetExecutingAssembly();
+		var viewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.StockItemCreation");
 
-		return null;
-	}
-
-	private void OnConfirmDialogCommand(string obj)
-	{
-		var item = this.GetStockItemFromType();
-		if (item == null)
+		if (this.StockItemTypes.Count != viewModels.Count)
 		{
-			this.ShowDialog= false;
-			MessageBox.Show("Failed to create Stock Item.");
+			Trace.WriteLine("Amount of StockItems and CreationDialog-VMs do not match.");
 			return;
 		}
 
-		var command = new StockItemCommand
+		for (int i = 0; i < this.StockItemTypes.Count; i++)
 		{
-			Data = new CommandData
+			var vm = Activator.CreateInstance(viewModels[i]) as DialogViewModelBase;
+			if (vm == null)
 			{
-				Value = item,
-				Callback = success =>
-				{
-					if (success)
-					{
-						lock(_stockItemsLock)
-						{
-							this.StockItems.Add(item);
-						}
-					}
-				}
+				Trace.WriteLine("Failed to create instance of viewmodel.");
+				return;
 			}
-		};
-		MainManagerFacade.PushCommand(command);
-		this.ShowDialog = false;
+			this._itemTypeToViewModel[this.StockItemTypes[i]] = vm;
+		}
+	}
+
+	private void OnCreateStockItemCommand(string param)
+	{
+		this.Dialog = _itemTypeToViewModel[this.SelectedStockItemType];
+		this.Dialog.Open();
+		this.Dialog.DialogClosing += this.OnDialogClosing;
+	}
+
+	private void OnDialogClosing(bool success)
+	{
+		this.Dialog.DialogClosing -= this.OnDialogClosing;
+		this.Dialog = new DialogViewModelBase();
 	}
 }
