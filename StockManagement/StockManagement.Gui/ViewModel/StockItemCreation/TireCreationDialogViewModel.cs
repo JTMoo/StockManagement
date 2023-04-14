@@ -1,15 +1,18 @@
 ﻿using StockManagement.Kernel.Commands;
 using StockManagement.Kernel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Gui.ViewModel.StockItemCreation;
 
-public class MachineCreationDialogViewModel : DialogViewModelBase
+public class TireCreationDialogViewModel : DialogViewModelBase
 {
-	public MachineCreationDialogViewModel() : base()
-	{
-	}
-
+	public TireCreationDialogViewModel() : base()
+	{ }
 
 	public override void Confirm(string obj)
 	{
@@ -17,14 +20,14 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new CommandData
 			{
-				Value = new Machine(),
+				Value = new Tire(),
 				Callback = success =>
 				{
 					if (success)
 					{
 						lock (GuiManager.Instance.MainViewModel.StockItemsLock)
 						{
-							GuiManager.Instance.MainViewModel.StockItems.Add(new Machine());
+							GuiManager.Instance.MainViewModel.StockItems.Add(new Tire());
 						}
 					}
 				}

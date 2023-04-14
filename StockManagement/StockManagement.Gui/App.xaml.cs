@@ -17,7 +17,7 @@ public partial class App : Application
         MainManager.Instance.Init();
 
         _mainViewModel = new MainViewModel();
-        GuiManager.Instance.MainViewModel = _mainViewModel;
+        GuiManager.Instance.Init(_mainViewModel);
 
         Window main = new MainWindow();
         main.DataContext = _mainViewModel;

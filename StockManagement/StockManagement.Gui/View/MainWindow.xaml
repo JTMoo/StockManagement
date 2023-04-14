@@ -1,6 +1,5 @@
 ﻿<Window x:Class="StockManagement.Gui.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:converter="clr-namespace:StockManagement.Gui.Converter"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15,7 +14,6 @@
 				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\ListViewDictionary.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -84,15 +82,10 @@
 					Command="{Binding CreateStockItemCommand}"/>
 		</StackPanel>
 
-		<Border Grid.ColumnSpan="3"
-				Grid.RowSpan="3"
-				Panel.ZIndex="1000"
-				BorderThickness="200"
-				Background="DarkGray"
-				Visibility="{Binding ShowDialog, Converter={StaticResource Bool2Collabsed}}">
-			<Border.BorderBrush>
-				<SolidColorBrush Color="LightGray" Opacity=".7" />
-			</Border.BorderBrush>
-		</Border>
+		<ContentControl Grid.ColumnSpan="3"
+						Grid.RowSpan="3"
+						Content="{Binding Dialog}"
+						Style="{StaticResource BaseDialogStyle}"
+						Panel.ZIndex="1000" />
 	</Grid>
 </Window>

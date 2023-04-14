@@ -1,5 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:converter="clr-namespace:StockManagement.Gui.Converter"
+					xmlns:selectors="clr-namespace:StockManagement.Gui.Selectors"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
+	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
+	
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">
 		<Setter Property="Height"
@@ -10,5 +16,29 @@
 				Value="Center" />
 		<Setter Property="Margin"
 				Value="5" />
+	</Style>
+	
+	<Style x:Key="BaseDialogStyle"
+		   TargetType="{x:Type ContentControl}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ContentControl}">
+					<Border Grid.ColumnSpan="3"
+							Grid.RowSpan="3"
+							Panel.ZIndex="1000"
+							BorderThickness="200"
+							Background="DarkGray"
+							Visibility="{Binding ShowDialog, Converter={StaticResource Bool2Collabsed}}">
+						<Border.BorderBrush>
+							<SolidColorBrush Color="LightGray" Opacity=".7" />
+						</Border.BorderBrush>
+						<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
+										  Content="{Binding Dialog}" 
+										  VerticalAlignment="Stretch"
+										  HorizontalAlignment="Stretch" />
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 </ResourceDictionary>

@@ -1,15 +1,14 @@
-﻿using StockManagement.Kernel.Commands;
-using StockManagement.Kernel;
+﻿using StockManagement.Kernel;
+using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Gui.ViewModel.StockItemCreation;
 
-public class MachineCreationDialogViewModel : DialogViewModelBase
-{
-	public MachineCreationDialogViewModel() : base()
-	{
-	}
 
+public class SparePartCreationDialogViewModel : DialogViewModelBase
+{
+	public SparePartCreationDialogViewModel() : base()
+	{ }
 
 	public override void Confirm(string obj)
 	{
@@ -17,14 +16,14 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new CommandData
 			{
-				Value = new Machine(),
+				Value = new SparePart(),
 				Callback = success =>
 				{
 					if (success)
 					{
 						lock (GuiManager.Instance.MainViewModel.StockItemsLock)
 						{
-							GuiManager.Instance.MainViewModel.StockItems.Add(new Machine());
+							GuiManager.Instance.MainViewModel.StockItems.Add(new SparePart());
 						}
 					}
 				}
