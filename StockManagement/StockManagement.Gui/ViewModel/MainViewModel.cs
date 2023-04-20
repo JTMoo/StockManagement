@@ -14,7 +14,7 @@ internal class MainViewModel : NotificationBase
 {
 	private Type _selectedStockItemType;
 	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
-
+	private DialogViewModelBase? _dialog;
 
 	public MainViewModel()
     {
@@ -27,7 +27,11 @@ internal class MainViewModel : NotificationBase
 	#region Properties
 	public RelayCommand<string> QuitCommand { get; }
     public RelayCommand<string> CreateStockItemCommand { get; }
-	public DialogViewModelBase Dialog { get; set; }
+	public DialogViewModelBase? Dialog
+	{
+		get { return _dialog; }
+		private set { this.SetField(ref _dialog, value); }
+	}
 	public List<Type> StockItemTypes { get; internal set; }
 	public object StockItemsLock { get; } = new object();
 
@@ -47,13 +51,14 @@ internal class MainViewModel : NotificationBase
 	private void OnCreateStockItemCommand(string param)
 	{
 		this.Dialog = GuiManager.Instance.StockItemToViewModel[this.SelectedStockItemType];
-		this.Dialog.Open();
 		this.Dialog.DialogClosing += this.OnDialogClosing;
 	}
 
 	private void OnDialogClosing(bool success)
 	{
+		if (this.Dialog == null) return;
+
 		this.Dialog.DialogClosing -= this.OnDialogClosing;
-		this.Dialog = new DialogViewModelBase();
+		this.Dialog = null;
 	}
 }

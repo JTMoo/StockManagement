@@ -5,6 +5,19 @@
 	
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
+
+	<DataTemplate x:Key="DialogContentTemplate">
+		<Border BorderThickness="200"
+				Background="DarkGray">
+			<Border.BorderBrush>
+				<SolidColorBrush Color="LightGray" Opacity=".7" />
+			</Border.BorderBrush>
+			<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
+							  Content="{Binding}"
+							  VerticalAlignment="Stretch"
+							  HorizontalAlignment="Stretch" />
+		</Border>
+	</DataTemplate>
 	
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">
@@ -20,25 +33,17 @@
 	
 	<Style x:Key="BaseDialogStyle"
 		   TargetType="{x:Type ContentControl}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type ContentControl}">
-					<Border Grid.ColumnSpan="3"
-							Grid.RowSpan="3"
-							Panel.ZIndex="1000"
-							BorderThickness="200"
-							Background="DarkGray"
-							Visibility="{Binding ShowDialog, Converter={StaticResource Bool2Collabsed}}">
-						<Border.BorderBrush>
-							<SolidColorBrush Color="LightGray" Opacity=".7" />
-						</Border.BorderBrush>
-						<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
-										  Content="{Binding Dialog}" 
-										  VerticalAlignment="Stretch"
-										  HorizontalAlignment="Stretch" />
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
+		<Setter Property="ContentTemplate"
+				Value="{StaticResource DialogContentTemplate}" />
+		<Setter Property="Visibility"
+				Value="Visible" />
+
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content}"
+						 Value="{x:Null}">
+				<Setter Property="Visibility"
+						Value="Collapsed" />
+			</DataTrigger>
+		</Style.Triggers>
 	</Style>
 </ResourceDictionary>

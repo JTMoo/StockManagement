@@ -10,7 +10,6 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 	{
 	}
 
-
 	public override void Confirm(string obj)
 	{
 		var command = new StockItemCommand

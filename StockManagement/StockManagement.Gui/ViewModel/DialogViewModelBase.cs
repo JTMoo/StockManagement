@@ -10,18 +10,10 @@ public class DialogViewModelBase : NotificationBase
 {
 	public event DialogClosingEventHandler DialogClosing;
 
-	private bool _visible;
-
 	public DialogViewModelBase()
 	{
 		ConfirmDialogCommand = new RelayCommand<string>(this.Confirm);
 		CancelDialogCommand = new RelayCommand<string>(this.Cancel);
-	}
-
-	public bool Visible
-	{
-		get { return _visible; }
-		private set { this.SetField(ref _visible, value); }
 	}
 
 	public RelayCommand<string> ConfirmDialogCommand { get; }
@@ -36,17 +28,10 @@ public class DialogViewModelBase : NotificationBase
 	{
 		if (DialogClosing != null)
 			DialogClosing(success);
-		
-		this.Visible = false;
 	}
 
 	public virtual void Confirm(string param)
 	{
 		this.Close(true);
-	}
-
-	public void Open()
-	{
-		this.Visible = true;
 	}
 }
