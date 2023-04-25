@@ -7,5 +7,6 @@ public partial class TireCreationDialog : UserControl
 {
     public TireCreationDialog()
     {
+        this.InitializeComponent();
     }
 }

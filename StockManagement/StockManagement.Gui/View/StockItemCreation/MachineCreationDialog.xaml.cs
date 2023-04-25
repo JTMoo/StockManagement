@@ -7,5 +7,6 @@ public partial class MachineCreationDialog : UserControl
 {
     public MachineCreationDialog()
     {
+        this.InitializeComponent();
     }
 }

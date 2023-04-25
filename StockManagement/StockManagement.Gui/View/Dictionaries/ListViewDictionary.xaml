@@ -20,17 +20,27 @@
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="150"/>
 								<ColumnDefinition Width="10"/>
+								<ColumnDefinition Width="100"/>
+								<ColumnDefinition Width="10"/>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="10"/>
 								<ColumnDefinition Width="*"/>
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="Name"
 									   HorizontalAlignment="Left" />
 							<TextBlock Grid.Column="2"
+									   Text="Price"
+									   HorizontalAlignment="Left" />
+							<TextBlock Grid.Column="4"
+									   Text="Manufacturer"
+									   HorizontalAlignment="Left" />
+							<TextBlock Grid.Column="6"
 									   Text="Description"
 									   HorizontalAlignment="Left" />
 
 							<ScrollViewer Grid.Row="2"
-										  Grid.ColumnSpan="3" >
+										  Grid.ColumnSpan="9999" >
 								<ItemsPresenter />
 							</ScrollViewer>
 						</Grid>
@@ -46,12 +56,22 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="150"/>
 				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="100"/>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="150"/>
+				<ColumnDefinition Width="10"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
 			<TextBlock HorizontalAlignment="Left"
 					   Text="{Binding Name}" />
-			<TextBlock Grid.Column="2" 
+			<TextBlock Grid.Column="2"
+					   HorizontalAlignment="Left"
+					   Text="{Binding Price}" />
+			<TextBlock Grid.Column="4"
+					   HorizontalAlignment="Left"
+					   Text="{Binding Manufacturer}" />
+			<TextBlock Grid.Column="6" 
 					   HorizontalAlignment="Left"
 					   Text="{Binding Description}" />
 		</Grid>

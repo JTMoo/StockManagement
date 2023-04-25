@@ -6,5 +6,6 @@ public partial class SparePartCreationDialog : UserControl
 {
     public SparePartCreationDialog()
     {
+        this.InitializeComponent();
     }
 }

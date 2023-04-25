@@ -8,19 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Page Remove="View\StockItemCreation\MachineCreationDialog.xaml" />
-    <Page Remove="View\StockItemCreation\SparePartCreationDialog.xaml" />
-    <Page Remove="View\StockItemCreation\TireCreationDialog.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="View\StockItemCreation\MachineCreationDialog.xaml" />
-    <Resource Include="View\StockItemCreation\SparePartCreationDialog.xaml" />
-    <Resource Include="View\StockItemCreation\TireCreationDialog.xaml" />
   </ItemGroup>
 
 </Project>

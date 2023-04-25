@@ -13,6 +13,7 @@ public class StockItemCommand : ICommand
 		if (Data.Value == null) return false;
 
 		(Data.Value as StockItem)?.Register();
+
 		return true;
 	}
 }

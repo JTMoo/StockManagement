@@ -1,16 +1,12 @@
-﻿using StockManagement.Gui.ViewModel;
-using StockManagement.Kernel.Model;
+﻿using MongoDB.Driver.Linq;
+using StockManagement.Gui.ViewModel;
 using StockManagement.Kernel;
-using System.Reflection;
+using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
-using System.Windows;
-using MongoDB.Driver.Linq;
 using System.Linq;
-using System.IO;
-using System.Windows.Markup;
-using SharpCompress.Compressors.Xz;
-using System.Text;
+using System.Reflection;
+using System.Windows;
 
 namespace StockManagement.Gui;
 
@@ -21,7 +17,6 @@ internal class GuiManager
 
 	internal MainViewModel MainViewModel { get; private set; }
 	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; private set; } = new Dictionary<Type, DialogViewModelBase>();
-	internal Dictionary<Type, DataTemplate> StockItemToView { get; private set; } = new Dictionary<Type, DataTemplate>();
 
 
 	public void Init(MainViewModel mainViewModel)
@@ -43,8 +38,6 @@ internal class GuiManager
 		var guiAssembly = Assembly.GetExecutingAssembly();
 		var viewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.StockItemCreation")
 			.Where(type => type.Name.Contains("ViewModel")).ToList();
-		var views = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.View.StockItemCreation");
-		
 
 		if (this.MainViewModel.StockItemTypes.Count != viewModels.Count)
 			throw new ArgumentOutOfRangeException("The amount of StockItemTypes and Creation ViewModels do not match.", innerException: null);
@@ -56,18 +49,6 @@ internal class GuiManager
 				throw new ArgumentNullException("Failed to create Instance of Creation ViewModel.", innerException: null);
 
 			this.StockItemToViewModel[this.MainViewModel.StockItemTypes[i]] = vm;
-
-			if (views[i] == null || views[i].FullName == null)
-				throw new ArgumentNullException("Correct Dialog-View was not found.", innerException: null);
-
-			var assemblyName = guiAssembly.GetName().Name;
-			var uriToXaml = new Uri("/" + assemblyName + ";component" + views[i].FullName.Replace(assemblyName, string.Empty).Replace(".", "/") + ".xaml", UriKind.Relative);
-			
-			var stream = Application.GetResourceStream(uriToXaml).Stream;
-			var template = (DataTemplate)XamlReader.Load(stream);
-			this.StockItemToView[viewModels[i]] = template;
-
-			stream.Close();
 		}
 	}
 
