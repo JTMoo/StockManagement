@@ -6,6 +6,9 @@
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
 
+	<GridLength x:Key="smallGridRowDialog">45</GridLength>
+	<GridLength x:Key="smallGridColumnDialog">120</GridLength>
+
 	<DataTemplate x:Key="DialogContentTemplate">
 		<Border BorderThickness="200"
 				Background="DarkGray">
@@ -18,6 +21,12 @@
 							  HorizontalAlignment="Stretch" />
 		</Border>
 	</DataTemplate>
+
+	<Style x:Key="BaseDialogTextBlockStyle"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="HorizontalAlignment"
+				Value="Center" />
+	</Style>
 	
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">

@@ -4,6 +4,8 @@ using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 using System.Windows;
 using System.Windows.Data;
 
@@ -16,12 +18,15 @@ internal class MainViewModel : NotificationBase
 	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
 	private DialogViewModelBase? _dialog;
 
+	private readonly object _stockItemsLock = new object();
+
+
 	public MainViewModel()
     {
         QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 
-		BindingOperations.EnableCollectionSynchronization(_stockItems, this.StockItemsLock);
+		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
 	}
 
 	#region Properties
@@ -33,7 +38,6 @@ internal class MainViewModel : NotificationBase
 		private set { this.SetField(ref _dialog, value); }
 	}
 	public List<Type> StockItemTypes { get; internal set; }
-	public object StockItemsLock { get; } = new object();
 
 	public ObservableCollection<StockItem> StockItems
 	{
@@ -47,6 +51,20 @@ internal class MainViewModel : NotificationBase
 		set { this.SetField(ref _selectedStockItemType, value); }
 	}
 	#endregion Properties
+
+	internal void StockItemCreationFinished(bool success, StockItem stockItem)
+	{
+		if (!success)
+		{
+			Trace.WriteLine("Unsuccessfully tried to add: " + stockItem.Name);
+			return;
+		}
+
+		lock (_stockItemsLock)
+		{
+			this.StockItems.Add(stockItem);
+		}
+	}
 
 	private void OnCreateStockItemCommand(string param)
 	{

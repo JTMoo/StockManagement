@@ -51,21 +51,11 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 			Data = new CommandData
 			{
 				Value = machine,
-				Callback = success => this.MachineCreationFinished(success, machine)
+				Callback = success => GuiManager.Instance.MainViewModel.StockItemCreationFinished(success, machine)
 			}
 		};
 
 		MainManagerFacade.PushCommand(command);
 		base.Confirm(obj);
-	}
-
-	private void MachineCreationFinished(bool success, Machine machine)
-	{
-		if (!success) return;
-
-		lock (GuiManager.Instance.MainViewModel.StockItemsLock)
-		{
-			GuiManager.Instance.MainViewModel.StockItems.Add(machine);
-		}
 	}
 }

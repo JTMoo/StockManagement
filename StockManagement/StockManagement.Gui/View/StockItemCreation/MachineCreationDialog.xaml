@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:System="clr-namespace:System;assembly=mscorlib"
+			 xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
 			 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,24 +14,26 @@
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 	</UserControl.Resources>
+	
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="10"/>
-			<RowDefinition Height="40"/>
-			<RowDefinition Height="40"/>
-			<RowDefinition Height="40"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="100"/>
+			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
 			<ColumnDefinition />
-			<ColumnDefinition Width="100"/>
+			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 
 		<!-- Name -->
 		<TextBlock Grid.Row="1"
+				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="Name" />
 		<TextBox Grid.Row="1"
 				 Grid.Column="1"
@@ -39,6 +41,7 @@
 		
 		<!-- Price -->
 		<TextBlock Grid.Row="2"
+				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="Price" />
 		<TextBox Grid.Column="1"
 				 Grid.Row="2"
@@ -46,6 +49,7 @@
 		
 		<!-- Manufacturer Type -->
 		<TextBlock Grid.Row="3"
+				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="Manufacturer" />
 		<ComboBox Grid.Row="3"
 				  Grid.Column="1"
@@ -54,6 +58,7 @@
 
 		<!-- Description -->
 		<TextBlock Grid.Row="4"
+				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="Decription"
 				   TextWrapping="Wrap" />
 		<TextBox Grid.Column="1"

@@ -9,8 +9,8 @@ public class Tire : StockItem
 	{
 	}
 
-	public Tire (double rimDiameter, double profile, double width, string name, string description = "", int price = 0, ManufacturerType manufacturerType = ManufacturerType.None) 
-		: base (name, description, price, manufacturerType)
+	public Tire (double rimDiameter, double profile, double width, string name, string description = "", int price = 0, ManufacturerType manufacturer = ManufacturerType.None) 
+		: base (name, description, price, manufacturer)
 	{
 		this.Data = new Dimensions(rimDiameter, profile, width);
 	}
