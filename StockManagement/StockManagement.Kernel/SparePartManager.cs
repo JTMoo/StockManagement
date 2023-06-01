@@ -1,5 +1,6 @@
 ﻿using StockManagement.Kernel.Model;
 using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 
 namespace StockManagement.Kernel;
 
@@ -24,6 +25,7 @@ public class SparePartManager : NotificationBase
 		if (sparePart == null) return;
 
 		_spareParts.Add(sparePart);
+		MainManager.Instance.DatabaseManager.SparePartCollection.InsertOneAsync(sparePart);
 		Trace.WriteLine("Spare Part added.");
 	}
 }

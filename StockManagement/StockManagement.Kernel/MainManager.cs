@@ -8,7 +8,8 @@ public class MainManager : NotificationBase, IDisposable
 {
     public static readonly MainManager Instance = new MainManager();
 
-    private CommandManager _commandManager;
+	private CommandManager _commandManager;
+    private DatabaseManager _databaseManager;
     private MachineManager _machineManager;
     private TireManager _tireManager;
     private SparePartManager _sparePartManager;
@@ -17,6 +18,7 @@ public class MainManager : NotificationBase, IDisposable
     public MainManager() 
     {
         _commandManager = new CommandManager();
+		_databaseManager = new DatabaseManager();
         _machineManager = new MachineManager();
         _tireManager = new TireManager();
 		_sparePartManager = new SparePartManager();
@@ -27,6 +29,7 @@ public class MainManager : NotificationBase, IDisposable
         this.Dispose();
     }
 
+    public DatabaseManager DatabaseManager => _databaseManager;
     public MachineManager MachineManager => _machineManager;
 	public SparePartManager SparePartManager => _sparePartManager;
     public TireManager TireManager => _tireManager;
@@ -34,6 +37,7 @@ public class MainManager : NotificationBase, IDisposable
     public void Init()
     {
         _commandManager.Init();
+        _databaseManager.Init();
         _machineManager.Init();
         _tireManager.Init();
         _sparePartManager.Init();

@@ -24,6 +24,7 @@ public class MachineManager : NotificationBase
 		if (_machines.Contains(machine)) return;
 
 		_machines.Add(machine);
+		MainManager.Instance.DatabaseManager.MachineCollection.InsertOneAsync(machine);
 		Trace.WriteLine("Machine added.");
 	}
 }
