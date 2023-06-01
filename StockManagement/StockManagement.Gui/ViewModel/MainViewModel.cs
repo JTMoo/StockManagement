@@ -15,7 +15,10 @@ namespace StockManagement.Gui.ViewModel;
 internal class MainViewModel : NotificationBase
 {
 	private Type _selectedStockItemType;
+	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
 	private DialogViewModelBase? _dialog;
+
+	private readonly object _stockItemsLock = new object();
 
 
 	public MainViewModel()
@@ -23,7 +26,8 @@ internal class MainViewModel : NotificationBase
         QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 
-		// TODO: Do events have to be detached? Right now this dies with application so now..
+		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
+
 		MainManager.Instance.MachineManager.Machines.CollectionChanged += this.OnMachinesChanged;
 		MainManager.Instance.SparePartManager.SpareParts.CollectionChanged += this.OnSparepartsChanged;
 		MainManager.Instance.TireManager.Tires.CollectionChanged += this.OnTiresChanged;
@@ -37,9 +41,13 @@ internal class MainViewModel : NotificationBase
 		get { return _dialog; }
 		private set { this.SetField(ref _dialog, value); }
 	}
-	public List<Type> StockItemTypes { get; internal set; } = new List<Type>();
+	public List<Type> StockItemTypes { get; internal set; }
 
-	public ObservableCollection<StockItem> StockItems { get; internal set; } = new ObservableCollection<StockItem>();
+	public ObservableCollection<StockItem> StockItems
+	{
+		get { return _stockItems; }
+		internal set { this.SetField(ref _stockItems, value); }
+	}
 
 	public Type SelectedStockItemType
 	{
@@ -68,8 +76,13 @@ internal class MainViewModel : NotificationBase
 
 		foreach (var tire in e.NewItems)
 		{
-			if (tire != null && tire is Tire)
+			if (tire == null || tire is not Tire)
+				continue;
+
+			lock (_stockItemsLock)
+			{
 				this.StockItems.Add((Tire)tire);
+			}
 		}
 	}
 
@@ -79,8 +92,13 @@ internal class MainViewModel : NotificationBase
 
 		foreach (var sparePart in e.NewItems)
 		{
-			if (sparePart != null && sparePart is SparePart)
+			if (sparePart == null || sparePart is not SparePart)
+				continue;
+
+			lock (_stockItemsLock)
+			{
 				this.StockItems.Add((SparePart)sparePart);
+			}
 		}
 	}
 
@@ -90,8 +108,13 @@ internal class MainViewModel : NotificationBase
 
 		foreach (var machine in e.NewItems)
 		{
-			if (machine != null && machine is Machine)
+			if (machine == null || machine is not Machine)
+				continue;
+
+			lock (_stockItemsLock)
+			{
 				this.StockItems.Add((Machine)machine);
+			}
 		}
 	}
 }
