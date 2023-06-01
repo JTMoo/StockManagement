@@ -53,13 +53,14 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 
 	public override void Confirm(string obj)
 	{
-		var sparePart = new SparePart(name: this.Name, description: this.Description, price: this.Price, manufacturer: this.SelectedManufacturer);
 		var command = new StockItemCommand
 		{
 			Data = new CommandData
 			{
-				Value = sparePart,
-				Callback = success => GuiManager.Instance.MainViewModel.StockItemCreationFinished(success, sparePart)
+				Value = new SparePart(name: this.Name,
+					description: this.Description,
+					price: this.Price,
+					manufacturer: this.SelectedManufacturer)
 			}
 		};
 

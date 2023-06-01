@@ -1,4 +1,6 @@
-﻿using StockManagement.Kernel.Model;
+﻿using MongoDB.Driver;
+using StockManagement.Kernel.Model;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace StockManagement.Kernel;
@@ -6,17 +8,19 @@ namespace StockManagement.Kernel;
 
 public class TireManager : NotificationBase
 {
-	private List<Tire> _tires = new List<Tire>();
+	private ObservableCollection<Tire> _tires = new ObservableCollection<Tire>();
 
-	public List<Tire> Tires
+	public ObservableCollection<Tire> Tires
 	{
 		get { return _tires; }
 		private set { this.SetField(ref this._tires, value); }
 	}
 
-	internal void Init()
+	internal async void Init()
 	{
-		this._tires.Clear();
+		this.Tires.Clear();
+		var tires = await MainManager.Instance.DatabaseManager.TireCollection.FindAsync(_ => true);
+		await tires.ForEachAsync(tire => this.Tires.Add(tire));
 	}
 
 	internal void Register(Tire tire)

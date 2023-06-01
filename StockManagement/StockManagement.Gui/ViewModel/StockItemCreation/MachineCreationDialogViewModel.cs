@@ -45,14 +45,14 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 
 	public override void Confirm(string obj)
 	{
-		var machine = new Machine(name: this.Name, 
-			description: this.Description, price: this.Price, manufacturer: this.SelectedManufacturer);
 		var command = new StockItemCommand
 		{
 			Data = new CommandData
 			{
-				Value = machine,
-				Callback = success => GuiManager.Instance.MainViewModel.StockItemCreationFinished(success, machine)
+				Value = new Machine(name: this.Name,
+					description: this.Description,
+					price: this.Price,
+					manufacturer: this.SelectedManufacturer)
 			}
 		};
 

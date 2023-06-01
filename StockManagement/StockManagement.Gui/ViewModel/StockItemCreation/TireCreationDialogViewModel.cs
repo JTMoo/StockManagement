@@ -66,14 +66,17 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 
 	public override void Confirm(string obj)
 	{
-		var tire = new Tire(rimDiameter: this.RimDiameter, profile: this.Profile, width: this.Width,
-			name: this.Name, description: this.Description, price: this.Price, manufacturer: this.SelectedManufacturer);
 		var command = new StockItemCommand
 		{
 			Data = new CommandData
 			{
-				Value = tire,
-				Callback = success => GuiManager.Instance.MainViewModel.StockItemCreationFinished(success, tire)
+				Value = new Tire(rimDiameter: this.RimDiameter, 
+					profile: this.Profile, 
+					width: this.Width,
+					name: this.Name,
+					description: this.Description,
+					price: this.Price,
+					manufacturer: this.SelectedManufacturer)
 			}
 		};
 

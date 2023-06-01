@@ -4,6 +4,7 @@ using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
@@ -14,10 +15,7 @@ namespace StockManagement.Gui.ViewModel;
 internal class MainViewModel : NotificationBase
 {
 	private Type _selectedStockItemType;
-	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
 	private DialogViewModelBase? _dialog;
-
-	private readonly object _stockItemsLock = new object();
 
 
 	public MainViewModel()
@@ -25,7 +23,10 @@ internal class MainViewModel : NotificationBase
         QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 
-		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
+		// TODO: Do events have to be detached? Right now this dies with application so now..
+		MainManager.Instance.MachineManager.Machines.CollectionChanged += this.OnMachinesChanged;
+		MainManager.Instance.SparePartManager.SpareParts.CollectionChanged += this.OnSparepartsChanged;
+		MainManager.Instance.TireManager.Tires.CollectionChanged += this.OnTiresChanged;
 	}
 
 	#region Properties
@@ -36,13 +37,9 @@ internal class MainViewModel : NotificationBase
 		get { return _dialog; }
 		private set { this.SetField(ref _dialog, value); }
 	}
-	public List<Type> StockItemTypes { get; internal set; }
+	public List<Type> StockItemTypes { get; internal set; } = new List<Type>();
 
-	public ObservableCollection<StockItem> StockItems
-	{
-		get { return _stockItems; }
-		internal set { this.SetField(ref _stockItems, value); }
-	}
+	public ObservableCollection<StockItem> StockItems { get; internal set; } = new ObservableCollection<StockItem>();
 
 	public Type SelectedStockItemType
 	{
@@ -50,20 +47,6 @@ internal class MainViewModel : NotificationBase
 		set { this.SetField(ref _selectedStockItemType, value); }
 	}
 	#endregion Properties
-
-	internal void StockItemCreationFinished(bool success, StockItem stockItem)
-	{
-		if (!success)
-		{
-			Trace.WriteLine("Unsuccessfully tried to add: " + stockItem.Name);
-			return;
-		}
-
-		lock (_stockItemsLock)
-		{
-			this.StockItems.Add(stockItem);
-		}
-	}
 
 	private void OnCreateStockItemCommand(string param)
 	{
@@ -77,5 +60,38 @@ internal class MainViewModel : NotificationBase
 
 		this.Dialog.DialogClosing -= this.OnDialogClosing;
 		this.Dialog = null;
+	}
+
+	private void OnTiresChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (e.NewItems == null) return;
+
+		foreach (var tire in e.NewItems)
+		{
+			if (tire != null && tire is Tire)
+				this.StockItems.Add((Tire)tire);
+		}
+	}
+
+	private void OnSparepartsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (e.NewItems == null) return;
+
+		foreach (var sparePart in e.NewItems)
+		{
+			if (sparePart != null && sparePart is SparePart)
+				this.StockItems.Add((SparePart)sparePart);
+		}
+	}
+
+	private void OnMachinesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (e.NewItems == null) return;
+
+		foreach (var machine in e.NewItems)
+		{
+			if (machine != null && machine is Machine)
+				this.StockItems.Add((Machine)machine);
+		}
 	}
 }

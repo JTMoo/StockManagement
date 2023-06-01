@@ -1,4 +1,6 @@
-﻿using StockManagement.Kernel.Model;
+﻿using MongoDB.Driver;
+using StockManagement.Kernel.Model;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace StockManagement.Kernel;
@@ -6,17 +8,19 @@ namespace StockManagement.Kernel;
 
 public class MachineManager : NotificationBase
 {
-	private List<Machine> _machines = new List<Machine>();
+	private ObservableCollection<Machine> _machines = new ObservableCollection<Machine>();
 
-	public List<Machine> Machines
+	public ObservableCollection<Machine> Machines
 	{
 		get { return _machines; }
 		private set { this.SetField(ref this._machines, value); }
 	}
 
-	internal void Init ()
+	internal async void Init ()
 	{
-		_machines.Clear();
+		this.Machines.Clear();
+		var machines = await MainManager.Instance.DatabaseManager.MachineCollection.FindAsync(_ => true);
+		await machines.ForEachAsync(machine => this.Machines.Add(machine));
 	}
 
 	internal void Register(Machine machine)
