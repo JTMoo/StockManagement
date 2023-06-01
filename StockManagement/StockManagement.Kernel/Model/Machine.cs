@@ -2,6 +2,7 @@
 
 namespace StockManagement.Kernel.Model;
 
+
 public class Machine : StockItem
 {
 	public Machine() : base()

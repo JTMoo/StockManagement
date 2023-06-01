@@ -2,6 +2,7 @@
 
 namespace StockManagement.Kernel.Model;
 
+
 public class SparePart : StockItem
 {
 	public SparePart(string name, Location location, string description = "", int price = 0, ManufacturerType manufacturer = ManufacturerType.None)

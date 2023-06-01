@@ -14,7 +14,6 @@ namespace StockManagement.Gui;
 internal class GuiManager
 {
 	internal static readonly GuiManager Instance = new GuiManager();
-
 	internal MainViewModel MainViewModel { get; private set; }
 	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; private set; } = new Dictionary<Type, DialogViewModelBase>();
 
@@ -36,15 +35,15 @@ internal class GuiManager
 	private void AssignDialogs()
 	{
 		var guiAssembly = Assembly.GetExecutingAssembly();
-		var viewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.StockItemCreation")
+		var stockItemCreationViewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.StockItemCreation")
 			.Where(type => type.Name.Contains("ViewModel")).ToList();
 
-		if (this.MainViewModel.StockItemTypes.Count != viewModels.Count)
+		if (this.MainViewModel.StockItemTypes.Count != stockItemCreationViewModels.Count)
 			throw new ArgumentOutOfRangeException("The amount of StockItemTypes and Creation ViewModels do not match.", innerException: null);
 
 		for (int i = 0; i < this.MainViewModel.StockItemTypes.Count; i++)
 		{
-			var vm = Activator.CreateInstance(viewModels[i]) as DialogViewModelBase;
+			var vm = Activator.CreateInstance(stockItemCreationViewModels[i]) as DialogViewModelBase;
 			if (vm == null)
 				throw new ArgumentNullException("Failed to create Instance of Creation ViewModel.", innerException: null);
 

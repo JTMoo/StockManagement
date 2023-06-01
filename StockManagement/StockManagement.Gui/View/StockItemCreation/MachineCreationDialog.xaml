@@ -14,7 +14,7 @@
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 	</UserControl.Resources>
-	
+
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="10"/>
@@ -38,7 +38,7 @@
 		<TextBox Grid.Row="1"
 				 Grid.Column="1"
 				 Text="{Binding Name}" />
-		
+
 		<!-- Price -->
 		<TextBlock Grid.Row="2"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
@@ -46,7 +46,7 @@
 		<TextBox Grid.Column="1"
 				 Grid.Row="2"
 				 Text="{Binding Price}" />
-		
+
 		<!-- Manufacturer Type -->
 		<TextBlock Grid.Row="3"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"

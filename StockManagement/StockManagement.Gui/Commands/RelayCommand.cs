@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 namespace StockManagement.Gui.Commands;
 
+
 public class RelayCommand<T> : ICommand
 {
     #pragma warning disable CA8600, CA8604

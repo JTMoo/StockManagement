@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("StockManagement.Kernel.Tests")]
-namespace StockManagement.Kernel.Commands;
+﻿namespace StockManagement.Kernel.Commands;
 
 
 internal class CommandQueue

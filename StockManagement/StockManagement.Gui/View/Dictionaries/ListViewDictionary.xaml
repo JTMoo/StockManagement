@@ -50,7 +50,6 @@
 		</Setter>
 	</Style>
 
-
 	<DataTemplate x:Key="DefaultListViewItemTemplate">
 		<Grid>
 			<Grid.ColumnDefinitions>

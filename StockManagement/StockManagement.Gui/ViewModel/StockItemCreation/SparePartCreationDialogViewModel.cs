@@ -25,6 +25,7 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 		get { return _description; }
 		set { this.SetField(ref _description, value); }
 	}
+
 	public ManufacturerType SelectedManufacturer
 	{
 		get { return _selectedManufacturer; }

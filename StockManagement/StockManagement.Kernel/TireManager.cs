@@ -1,8 +1,8 @@
 ﻿using StockManagement.Kernel.Model;
 using System.Diagnostics;
-using System.Reflection.PortableExecutable;
 
 namespace StockManagement.Kernel;
+
 
 public class TireManager : NotificationBase
 {

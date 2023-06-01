@@ -2,6 +2,7 @@
 
 namespace StockManagement.Kernel;
 
+
 internal class CommandManager : IDisposable
 {
     private CancellationTokenSource _commandExecutionCancellation;
