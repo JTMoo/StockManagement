@@ -19,8 +19,8 @@ public class MachineManager : NotificationBase
 	internal async void Init ()
 	{
 		this.Machines.Clear();
-		var machines = await MainManager.Instance.DatabaseManager.MachineCollection.FindAsync(_ => true);
-		await machines.ForEachAsync(machine => this.Machines.Add(machine));
+		var machines = await MainManager.Instance.DatabaseManager.MachineDB.GetAll();
+		machines.ForEach(machine => this.Machines.Add(machine));
 	}
 
 	internal void Register(Machine machine)
@@ -28,7 +28,7 @@ public class MachineManager : NotificationBase
 		if (_machines.Contains(machine)) return;
 
 		_machines.Add(machine);
-		MainManager.Instance.DatabaseManager.MachineCollection.InsertOneAsync(machine);
+		MainManager.Instance.DatabaseManager.MachineDB.Add(machine);
 		Trace.WriteLine("Machine added.");
 	}
 }

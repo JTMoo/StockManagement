@@ -1,4 +1,5 @@
 ﻿using StockManagement.Kernel.Commands;
+using StockManagement.Kernel.Database;
 using System.Diagnostics;
 
 namespace StockManagement.Kernel;
@@ -37,7 +38,6 @@ public class MainManager : NotificationBase, IDisposable
     public void Init()
     {
         _commandManager.Init();
-        _databaseManager.Init();
         _machineManager.Init();
         _tireManager.Init();
         _sparePartManager.Init();

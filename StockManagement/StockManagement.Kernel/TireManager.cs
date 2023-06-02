@@ -19,8 +19,8 @@ public class TireManager : NotificationBase
 	internal async void Init()
 	{
 		this.Tires.Clear();
-		var tires = await MainManager.Instance.DatabaseManager.TireCollection.FindAsync(_ => true);
-		await tires.ForEachAsync(tire => this.Tires.Add(tire));
+		var tires = await MainManager.Instance.DatabaseManager.TireDB.GetAll();
+		tires.ForEach(tire => this.Tires.Add(tire));
 	}
 
 	internal void Register(Tire tire)
@@ -28,7 +28,7 @@ public class TireManager : NotificationBase
 		if (tire == null) return;
 
 		_tires.Add(tire);
-		MainManager.Instance.DatabaseManager.TireCollection.InsertOneAsync(tire);
+		MainManager.Instance.DatabaseManager.TireDB.Add(tire);
 		Trace.WriteLine("Tire added.");
 	}
 }

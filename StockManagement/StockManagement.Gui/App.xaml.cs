@@ -1,7 +1,6 @@
 ﻿using StockManagement.Gui.View;
 using StockManagement.Gui.ViewModel;
 using StockManagement.Kernel;
-using System.Security.Cryptography.Xml;
 using System.Windows;
 
 namespace StockManagement.Gui;

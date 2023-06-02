@@ -1,4 +1,6 @@
-﻿using StockManagement.Kernel.Model.Types;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
@@ -14,6 +16,10 @@ public class Location : NotificationBase
 		_isle = isle;
 		_shelf = shelf;
 	}
+
+	[BsonId]
+	[BsonRepresentation(BsonType.ObjectId)]
+	public string Id { get; internal set; }
 
 	public IsleType Isle
 	{

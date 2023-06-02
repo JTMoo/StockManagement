@@ -32,6 +32,7 @@
 		<ListView Margin="5"
 				  ItemsSource="{Binding StockItems}"
 				  Style="{StaticResource DefaultListViewStyle}"
+				  SelectedItem="{Binding SelectedStockItem}"
 				  ItemTemplate="{StaticResource DefaultListViewItemTemplate}" />
 
 		<StackPanel Grid.Column="2">

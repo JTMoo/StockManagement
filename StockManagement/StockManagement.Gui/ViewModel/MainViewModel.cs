@@ -17,7 +17,7 @@ internal class MainViewModel : NotificationBase
 	private Type _selectedStockItemType;
 	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
 	private DialogViewModelBase? _dialog;
-
+	private StockItem _selectedStockItem;
 	private readonly object _stockItemsLock = new object();
 
 
@@ -47,6 +47,12 @@ internal class MainViewModel : NotificationBase
 	{
 		get { return _stockItems; }
 		internal set { this.SetField(ref _stockItems, value); }
+	}
+
+	public StockItem SelectedStockItem
+	{
+		get { return _selectedStockItem; }
+		set { this.SetField(ref _selectedStockItem, value); }
 	}
 
 	public Type SelectedStockItemType
