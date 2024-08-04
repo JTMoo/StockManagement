@@ -11,7 +11,7 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 	private string _name;
 	private int _price;
 	private ManufacturerType _selectedManufacturer;
-
+	private int _amount;
 
 	public MachineCreationDialogViewModel() : base()
 	{
@@ -22,6 +22,12 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 	{
 		get { return _description; }
 		set { this.SetField(ref _description, value); }
+	}
+
+	public int Amount
+	{
+		get { return _amount; }
+		set { this.SetField(ref _amount, value); }
 	}
 
 	public ManufacturerType SelectedManufacturer
@@ -51,6 +57,7 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 			{
 				Value = new Machine(name: this.Name,
 					description: this.Description,
+					amount: this.Amount,
 					price: this.Price,
 					manufacturer: this.SelectedManufacturer)
 			}

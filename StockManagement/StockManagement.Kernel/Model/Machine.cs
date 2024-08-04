@@ -9,10 +9,9 @@ public class Machine : StockItem
 	{
 	}
 
-	public Machine (string name, string description = "", int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
-		: base (name, description, price, manufacturer)
+	public Machine(string name, string description = "", int amount = 1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+		: base(name: name, description:description, amount:amount, price:price, manufacturer:manufacturer)
 	{
-
 	}
 
 	internal override void Register()

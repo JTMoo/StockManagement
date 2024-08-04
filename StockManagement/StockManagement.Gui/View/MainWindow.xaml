@@ -68,19 +68,11 @@
 
 		<StackPanel Grid.Row="2"
 					Orientation="Horizontal">
-			<StackPanel Orientation="Horizontal"
-						VerticalAlignment="Center">
-				<TextBlock Text="Select Type"
-						   VerticalAlignment="Center"
-						   Margin="5"/>
-				<ComboBox Style="{StaticResource BaseControlStyle}"
-						  ItemsSource="{Binding StockItemTypes}"
-						  DisplayMemberPath="Name"
-						  SelectedItem="{Binding SelectedStockItemType}"/>
-			</StackPanel>
 			<Button Style="{StaticResource NormalButtonStyle}"
 					Content="Create New Stock-Item"
 					Command="{Binding CreateStockItemCommand}"/>
+			<Button Style="{StaticResource NormalButtonStyle}"
+					Content="Import New Stock-Items from Excel" />
 		</StackPanel>
 
 		<ContentControl Grid.ColumnSpan="3"

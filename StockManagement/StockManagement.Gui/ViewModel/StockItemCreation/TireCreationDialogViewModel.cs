@@ -15,6 +15,7 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 	private int _rimDiameter;
 	private int _width;
 	private ManufacturerType _selectedManufacturer;
+	private int _amount;
 
 
 	public TireCreationDialogViewModel() : base()
@@ -37,6 +38,12 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 	{
 		get { return _name; }
 		set { this.SetField(ref _name, value); }
+	}
+
+	public int Amount
+	{
+		get { return _amount; }
+		set { this.SetField(ref _amount, value); }
 	}
 
 	public int Price
@@ -75,6 +82,7 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 					width: this.Width,
 					name: this.Name,
 					description: this.Description,
+					amount: this.Amount,
 					price: this.Price,
 					manufacturer: this.SelectedManufacturer)
 			}

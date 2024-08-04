@@ -24,6 +24,7 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
+		
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
 			<ColumnDefinition />

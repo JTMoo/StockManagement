@@ -13,6 +13,7 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 	private string _name;
 	private int _price;
 	private ManufacturerType _selectedManufacturer;
+	private int _amount;
 
 
 	public SparePartCreationDialogViewModel() : base()
@@ -44,6 +45,12 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 		set { this.SetField(ref _name, value); }
 	}
 
+	public int Amount
+	{
+		get { return _amount; }
+		set { this.SetField(ref _amount, value); }
+	}
+
 	public int Price
 	{
 		get { return _price; }
@@ -59,6 +66,7 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 			{
 				Value = new SparePart(name: this.Name,
 					description: this.Description,
+					amount: this.Amount,
 					price: this.Price,
 					manufacturer: this.SelectedManufacturer)
 			}

@@ -12,16 +12,17 @@ public abstract class StockItem : NotificationBase
 	private string _name = string.Empty;
 	private ManufacturerType _manufacturer;
 	private int _price;
-
+	private int _amount;
 
 	public StockItem ()
 	{
 	}
 
-	public StockItem (string name, string description = "", int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+	public StockItem (string name, string description = "", int amount=1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
 	{
 		this.Name = name;
 		this.Description = description;
+		this.Amount = amount;
 		this.Price = price;
 		this.Manufacturer = manufacturer;
 	}
@@ -34,6 +35,12 @@ public abstract class StockItem : NotificationBase
 	{
 		get { return _name; }
 		set { this.SetField(ref _name, value); }
+	}
+
+	public int Amount
+	{
+		get { return _amount; }
+		set { this.SetField(ref _amount, value); }
 	}
 
 	public string Description

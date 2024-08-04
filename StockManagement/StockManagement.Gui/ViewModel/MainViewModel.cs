@@ -1,11 +1,12 @@
 ﻿using StockManagement.Gui.Commands;
+using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 
@@ -14,7 +15,6 @@ namespace StockManagement.Gui.ViewModel;
 
 internal class MainViewModel : NotificationBase
 {
-	private Type _selectedStockItemType;
 	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
 	private DialogViewModelBase? _dialog;
 	private StockItem _selectedStockItem;
@@ -39,7 +39,15 @@ internal class MainViewModel : NotificationBase
 	public DialogViewModelBase? Dialog
 	{
 		get { return _dialog; }
-		private set { this.SetField(ref _dialog, value); }
+		internal set 
+		{ 
+			this.SetField(ref _dialog, value); 
+
+			if (_dialog != null)
+			{
+				_dialog.DialogClosing += this.OnDialogClosing;
+			}
+		}
 	}
 	public List<Type> StockItemTypes { get; internal set; }
 
@@ -54,18 +62,11 @@ internal class MainViewModel : NotificationBase
 		get { return _selectedStockItem; }
 		set { this.SetField(ref _selectedStockItem, value); }
 	}
-
-	public Type SelectedStockItemType
-	{
-		get { return _selectedStockItemType; }
-		set { this.SetField(ref _selectedStockItemType, value); }
-	}
 	#endregion Properties
 
 	private void OnCreateStockItemCommand(string param)
 	{
-		this.Dialog = GuiManager.Instance.StockItemToViewModel[this.SelectedStockItemType];
-		this.Dialog.DialogClosing += this.OnDialogClosing;
+		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
 	}
 
 	private void OnDialogClosing(bool success)
