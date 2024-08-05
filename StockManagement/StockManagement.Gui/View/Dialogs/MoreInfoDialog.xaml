@@ -15,6 +15,8 @@
 			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
 			<RowDefinition Height="{StaticResource smallSpacingGridDialog}"/>
 			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="{StaticResource smallSpacingGridDialog}"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
@@ -86,6 +88,13 @@
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="Change the description or add a picture to this Stock-Item." />
 
+		<!-- Show Picture -->
+		<Button Grid.Row="9"
+				Grid.Column="3"
+				IsEnabled="False"
+				Content="Show Picture" />
+
+		<!-- Info -->
 		<Border Grid.Column="7"
 				Grid.Row="2"
 				Grid.RowSpan="99"
@@ -114,7 +123,7 @@
 		
 		<StackPanel Orientation="Horizontal"
 					Grid.Row="99"
-					Grid.ColumnSpan="3"
+					Grid.ColumnSpan="99"
 					Margin="10">
 			<Button Content="Cancel"
 					Width="100"
