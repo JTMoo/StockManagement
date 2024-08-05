@@ -18,4 +18,12 @@ internal class MachineDataAccess
 		var col = DatabaseManager.ConnectToMongo<Machine>(typeof(Machine).ToString());
 		return col.InsertOneAsync(machine);
 	}
+
+	internal Task Update(Machine machine)
+	{
+		var col = DatabaseManager.ConnectToMongo<Machine>(typeof(Machine).ToString());
+		var filter = Builders<Machine>.Filter.Eq("Id", machine.Id);
+		// Upsert means: replace if existent - insert if not existent
+		return col.ReplaceOneAsync(filter, machine, new ReplaceOptions { IsUpsert = true });
+	}
 }

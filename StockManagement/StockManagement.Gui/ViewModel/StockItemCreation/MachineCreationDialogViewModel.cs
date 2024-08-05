@@ -51,9 +51,9 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 
 	public override void Confirm(string obj)
 	{
-		var command = new StockItemCommand
+		var command = new StockItemCreationCommand
 		{
-			Data = new CommandData
+			Data = new StockItemCommandData
 			{
 				Value = new Machine(name: this.Name,
 					description: this.Description,

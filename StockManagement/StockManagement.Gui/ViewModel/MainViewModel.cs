@@ -24,6 +24,7 @@ internal class MainViewModel : NotificationBase
 	public MainViewModel()
     {
         QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
+		MoreInfoCommand = new RelayCommand<StockItem>(stockItem => this.Dialog = new MoreInfoDialogViewModel(stockItem));
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 
 		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
@@ -35,7 +36,8 @@ internal class MainViewModel : NotificationBase
 
 	#region Properties
 	public RelayCommand<string> QuitCommand { get; }
-    public RelayCommand<string> CreateStockItemCommand { get; }
+	public RelayCommand<StockItem> MoreInfoCommand { get; }
+	public RelayCommand<string> CreateStockItemCommand { get; }
 	public DialogViewModelBase? Dialog
 	{
 		get { return _dialog; }
@@ -66,7 +68,14 @@ internal class MainViewModel : NotificationBase
 
 	private void OnCreateStockItemCommand(string param)
 	{
+		if (this.StockItemTypes == null)
+			return;
+
 		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
+	}
+	private void OnMoreInfoCommand(StockItem param)
+	{
+		this.Dialog = new MoreInfoDialogViewModel(param);
 	}
 
 	private void OnDialogClosing(bool success)

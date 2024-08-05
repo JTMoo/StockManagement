@@ -3,6 +3,7 @@ using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 
 namespace StockManagement.Kernel;
 
@@ -31,5 +32,12 @@ public class SparePartManager : NotificationBase
 		_spareParts.Add(sparePart);
 		MainManager.Instance.DatabaseManager.SparePartDB.Add(sparePart);
 		Trace.WriteLine("Spare Part added.");
+	}
+
+	internal void Update(SparePart sparePart, Action callback)
+	{
+		if (!_spareParts.Contains(sparePart)) return;
+
+		MainManager.Instance.DatabaseManager.SparePartDB.Update(sparePart).ContinueWith(_ => callback.Invoke());
 	}
 }

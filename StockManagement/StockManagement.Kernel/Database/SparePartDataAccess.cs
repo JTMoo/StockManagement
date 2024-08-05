@@ -18,4 +18,12 @@ internal class SparePartDataAccess
 		var col = DatabaseManager.ConnectToMongo<SparePart>(typeof(SparePart).ToString());
 		return col.InsertOneAsync(sparePart);
 	}
+
+	internal Task Update(SparePart sparePart)
+	{
+		var col = DatabaseManager.ConnectToMongo<SparePart>(typeof(SparePart).ToString());
+		var filter = Builders<SparePart>.Filter.Eq("Id", sparePart.Id);
+		// Upsert means: replace if existent - insert if not existent
+		return col.ReplaceOneAsync(filter, sparePart, new ReplaceOptions { IsUpsert = true });
+	}
 }

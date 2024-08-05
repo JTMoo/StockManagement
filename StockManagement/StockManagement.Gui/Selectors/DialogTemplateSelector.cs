@@ -8,33 +8,33 @@ namespace StockManagement.Gui.Selectors;
 
 public class DialogTemplateSelector : DataTemplateSelector
 {
-	private readonly Dictionary<Type, DataTemplate> StockItemToView = new Dictionary<Type, DataTemplate>();
+	private readonly Dictionary<Type, DataTemplate> ViewModelToView = new Dictionary<Type, DataTemplate>();
 
 	public DialogTemplateSelector() 
 	{
-		this.GetStockItemCreationTemplates();
+		this.GetDialogTemplates();
 	}
 
 	public override DataTemplate SelectTemplate(object item, DependencyObject container)
 	{
-		if (item == null || !StockItemToView.ContainsKey(item.GetType()))
+		if (item == null || !ViewModelToView.ContainsKey(item.GetType()))
 			return base.SelectTemplate(item, container);
 
-		return StockItemToView[item.GetType()];
+		return ViewModelToView[item.GetType()];
 	}
 
-	private void GetStockItemCreationTemplates()
+	private void GetDialogTemplates()
 	{
 		var resourceDictionary = new ResourceDictionary
 		{
-			Source = new Uri("/StockManagement.Gui;component/View/StockItemCreation/StockItemCreationDictionary.xaml", UriKind.Relative)
+			Source = new Uri("/StockManagement.Gui;component/View/Dictionaries/DialogTemplateSelectorDictionary.xaml", UriKind.Relative)
 		};
 
 		foreach (var key in resourceDictionary.Keys)
 		{
 			if (resourceDictionary[key] is DataTemplate dataTemplate && dataTemplate.DataType is Type dataType)
 			{
-				this.StockItemToView.Add(dataType, dataTemplate);
+				this.ViewModelToView.Add(dataType, dataTemplate);
 			}
 		}
 	}

@@ -94,7 +94,8 @@
 					HorizontalAlignment="Right"
 					Content="More"
 					Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
-					Command="{Binding MoreInfoCommand}" />
+					Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
+					CommandParameter="{Binding }"/>
 		</Grid>
 	</DataTemplate>
 </ResourceDictionary>

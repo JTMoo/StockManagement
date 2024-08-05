@@ -16,4 +16,7 @@
 	<DataTemplate DataType="{x:Type dialogVMs:StockItemTypeSelectionDialogViewModel}">
 		<dialogControls:StockItemTypeSelectionDialog />
 	</DataTemplate>
+	<DataTemplate DataType="{x:Type dialogVMs:MoreInfoDialogViewModel}">
+		<dialogControls:MoreInfoDialog />
+	</DataTemplate>
 </ResourceDictionary>

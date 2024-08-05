@@ -31,4 +31,11 @@ public class TireManager : NotificationBase
 		MainManager.Instance.DatabaseManager.TireDB.Add(tire);
 		Trace.WriteLine("Tire added.");
 	}
+
+	internal void Update(Tire tire, Action callback)
+	{
+		if (!_tires.Contains(tire)) return;
+
+		MainManager.Instance.DatabaseManager.TireDB.Update(tire).ContinueWith(_ => callback.Invoke());
+	}
 }

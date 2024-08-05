@@ -14,11 +14,13 @@ public class DatabaseManager
         this.MachineDB = new MachineDataAccess();
         this.SparePartDB = new SparePartDataAccess();
         this.TireDB = new TireDataAccess();
+        this.TransactionDB = new TransactionDataAccess();
     }
 
     internal MachineDataAccess MachineDB { get; }
     internal SparePartDataAccess SparePartDB { get; }
     internal TireDataAccess TireDB { get; }
+    internal TransactionDataAccess TransactionDB { get; }
 
 
     internal static IMongoCollection<T> ConnectToMongo<T>(in string collectionName)

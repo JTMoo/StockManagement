@@ -31,4 +31,11 @@ public class MachineManager : NotificationBase
 		MainManager.Instance.DatabaseManager.MachineDB.Add(machine);
 		Trace.WriteLine("Machine added.");
 	}
+
+	internal void Update(Machine machine, Action callback)
+	{
+		if (!_machines.Contains(machine)) return;
+
+		MainManager.Instance.DatabaseManager.MachineDB.Update(machine).ContinueWith(_ => callback.Invoke());
+	}
 }

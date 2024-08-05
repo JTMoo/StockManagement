@@ -18,4 +18,9 @@ public class Machine : StockItem
 	{
 		MainManager.Instance.MachineManager.Register(this);
 	}
+
+	internal override void Update(Action callback)
+	{
+		MainManager.Instance.MachineManager.Update(this, callback);
+	}
 }

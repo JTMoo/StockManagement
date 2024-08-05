@@ -18,4 +18,12 @@ internal class TireDataAccess
 		var col = DatabaseManager.ConnectToMongo<Tire>(typeof(Tire).ToString());
 		return col.InsertOneAsync(tire);
 	}
+
+	internal Task Update(Tire tire)
+	{
+		var col = DatabaseManager.ConnectToMongo<Tire>(typeof(Tire).ToString());
+		var filter = Builders<Tire>.Filter.Eq("Id", tire.Id);
+		// Upsert means: replace if existent - insert if not existent
+		return col.ReplaceOneAsync(filter, tire, new ReplaceOptions { IsUpsert = true });
+	}
 }

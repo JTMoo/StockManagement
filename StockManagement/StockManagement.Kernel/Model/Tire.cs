@@ -22,6 +22,11 @@ public class Tire : StockItem
 		MainManager.Instance.TireManager.Register(this);
 	}
 
+	internal override void Update(Action callback)
+	{
+		MainManager.Instance.TireManager.Update(this, callback);
+	}
+
 	public class Dimensions
 	{
 		private readonly double _rimDiameter = 0.0;

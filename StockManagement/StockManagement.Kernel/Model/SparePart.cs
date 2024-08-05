@@ -20,4 +20,9 @@ public class SparePart : StockItem
 	{
 		MainManager.Instance.SparePartManager.Register(this);
 	}
+
+	internal override void Update(Action callback)
+	{
+		MainManager.Instance.SparePartManager.Update(this, callback);
+	}
 }

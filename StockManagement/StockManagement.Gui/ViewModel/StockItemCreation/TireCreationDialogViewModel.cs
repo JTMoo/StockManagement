@@ -73,11 +73,11 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 
 	public override void Confirm(string obj)
 	{
-		var command = new StockItemCommand
+		var command = new StockItemCreationCommand
 		{
-			Data = new CommandData
+			Data = new StockItemCommandData
 			{
-				Value = new Tire(rimDiameter: this.RimDiameter, 
+				StockItem = new Tire(rimDiameter: this.RimDiameter, 
 					profile: this.Profile, 
 					width: this.Width,
 					name: this.Name,

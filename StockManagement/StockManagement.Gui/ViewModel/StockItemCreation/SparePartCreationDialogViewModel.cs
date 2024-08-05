@@ -60,11 +60,11 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 
 	public override void Confirm(string obj)
 	{
-		var command = new StockItemCommand
+		var command = new StockItemCreationCommand
 		{
-			Data = new CommandData
+			Data = new StockItemCommandData
 			{
-				Value = new SparePart(name: this.Name,
+				StockItem = new SparePart(name: this.Name,
 					description: this.Description,
 					amount: this.Amount,
 					price: this.Price,

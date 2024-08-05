@@ -68,4 +68,5 @@ public abstract class StockItem : NotificationBase
 	}
 
 	internal abstract void Register();
+	internal abstract void Update(Action callback);
 }
