@@ -36,9 +36,9 @@
 				  ItemTemplate="{StaticResource DefaultListViewItemTemplate}" />
 		
 		<!-- Search Bar -->
-		<StackPanel Grid.Column="2"
-					IsEnabled="False">
-			<TextBlock Text="Search:"
+		<StackPanel Grid.Row="0" Grid.Column="2"
+		            IsEnabled="False">
+			<TextBlock Text="{DynamicResource lang_search}"
 					   FontSize="30"
 					   HorizontalAlignment="Center"
 					   Margin="5"/>

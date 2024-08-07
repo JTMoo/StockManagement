@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+	<!-- The name of this ResourceDictionary. Should not be localized. -->
+	<sys:String x:Key="ResourceDictionaryName">Loc-en-US</sys:String>
+
+	<!-- Localized strings -->
+	<sys:String x:Key="lang_search">Search:</sys:String>
+</ResourceDictionary>

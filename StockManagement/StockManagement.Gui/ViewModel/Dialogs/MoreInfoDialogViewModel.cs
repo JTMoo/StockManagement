@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using StockManagement.Gui.Commands;
+﻿using StockManagement.Gui.Commands;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Model;
@@ -42,11 +41,10 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 
 	private void OnCheckoutCommand(string param)
 	{
-		if (this.CheckoutAmount == null || this.CheckoutAmount == "") return;
+		if (string.IsNullOrEmpty(this.CheckoutAmount)) return;
 
-		int amount;
-		Int32.TryParse(this.CheckoutAmount, out amount);
-		if (amount == 0) return;
+		var tryParse = int.TryParse(this.CheckoutAmount, out var amount);
+		if (!tryParse) return;
 
 		var command = new StockItemChangeAmountCommand()
 		{
@@ -64,11 +62,10 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 
 	private void OnCheckinCommand(string param)
 	{
-		if (this.CheckinAmount == null || this.CheckinAmount == "") return;
+		if (string.IsNullOrEmpty(this.CheckinAmount)) return;
 
-		int amount;
-		Int32.TryParse(this.CheckinAmount, out amount);
-		if (amount == 0) return;
+		var tryParse = Int32.TryParse(this.CheckinAmount, out var amount);
+		if (!tryParse) return;
 
 		var command = new StockItemChangeAmountCommand()
 		{
