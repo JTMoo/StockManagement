@@ -27,7 +27,7 @@
 				   Grid.Column="1"
 				   FontSize="30"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="Select a Stock Item Type" />
+				   Text="{DynamicResource lang_selectItemType}" />
 
 		<!-- Stock Item Type -->
 		<ComboBox Grid.Column="1"
@@ -40,11 +40,11 @@
 					Grid.Row="5"
 					Grid.ColumnSpan="3"
 					Margin="10">
-			<Button Content="Confirm"
+			<Button Content="{DynamicResource lang_confirm}"
 					Width="100"
 					Margin="10"
 					Command="{Binding ConfirmDialogCommand}"/>
-			<Button Content="Cancel"
+			<Button Content="{DynamicResource lang_cancel}"
 					Width="100"
 					Margin="10"
 					Command="{Binding CancelDialogCommand}"/>

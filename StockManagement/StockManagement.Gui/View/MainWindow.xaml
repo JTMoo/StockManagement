@@ -7,7 +7,7 @@
 		WindowState="Maximized"
 		WindowStyle="None"
 		FontSize="18"
-        Title="La Cosecha Stock Management" Height="800" Width="1200">
+        Title="Stock Management" Height="800" Width="1200">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -42,16 +42,16 @@
 					   FontSize="30"
 					   HorizontalAlignment="Center"
 					   Margin="5"/>
-			<TextBlock Text="Select Manufacturer"
+			<TextBlock Text="{DynamicResource lang_selectManufacturer}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource BaseControlStyle}" />
-			<TextBlock Text="Select Type"
+			<TextBlock Text="{DynamicResource lang_selectType}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource BaseControlStyle}" />
-			<TextBlock Text="Type Name"
+			<TextBlock Text="{DynamicResource lang_searchNames}"
 					   Margin="5"/>
 			<TextBox Style="{StaticResource BaseControlStyle}"/>
-			<TextBlock Text="Location"
+			<TextBlock Text="{DynamicResource lang_searchLocation}"
 					   Margin="5"/>
 		</StackPanel>
 
@@ -59,20 +59,20 @@
 					Grid.Column="2">
 			<Button Style="{StaticResource NormalButtonStyle}"
 					IsEnabled="False"
-					Content="Settings" />
+					Content="{DynamicResource lang_settings}" />
 
 			<Button Style="{StaticResource NormalButtonStyle}"
-					Content="Quit"
+					Content="{DynamicResource lang_quit}"
 					Command="{Binding QuitCommand}"/>
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"
 					Orientation="Horizontal">
 			<Button Style="{StaticResource NormalButtonStyle}"
-					Content="Create New Stock-Item"
+					Content="{DynamicResource lang_createItem}"
 					Command="{Binding CreateStockItemCommand}"/>
 			<Button Style="{StaticResource NormalButtonStyle}"
-					Content="Import from Excel" 
+					Content="{DynamicResource lang_excelImport}" 
 					IsEnabled="False" />
 		</StackPanel>
 

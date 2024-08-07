@@ -5,7 +5,34 @@
 	<!-- The name of this ResourceDictionary. Should not be localized. -->
 	<sys:String x:Key="ResourceDictionaryName">Loc-de-DE</sys:String>
 
-	<!-- Localized strings -->
+	<!-- Special Chars / Sentences -->
+	<sys:String x:Key="lang_additionalInformation">Zusätzliche Informationen</sys:String>
+	<sys:String x:Key="lang_changeInfo">Artikelinfos ändern</sys:String>
+	<sys:String x:Key="lang_createItem">Lagerartikel erstellen</sys:String>
+	<sys:String x:Key="lang_excelImport">Lagerorte durchsuchen:</sys:String>
 	<sys:String x:Key="lang_search">Suche:</sys:String>
+	<sys:String x:Key="lang_searchLocation">Lagerorte durchsuchen:</sys:String>
+	<sys:String x:Key="lang_searchNames">Namen durchsuchen:</sys:String>
+	<sys:String x:Key="lang_selectItemType">Lagerartikeltyp auswählen:</sys:String>
+	<sys:String x:Key="lang_selectManufacturer">Hersteller auswählen:</sys:String>
+	<sys:String x:Key="lang_selectType">Artikeltyp auswählen:</sys:String>
+	<sys:String x:Key="lang_showPicture">Bild anzeigen</sys:String>
+	
+	<!-- Single Words-->
+	<sys:String x:Key="lang_amount">Menge</sys:String>
+	<sys:String x:Key="lang_cancel">Abbrechen</sys:String>
+	<sys:String x:Key="lang_checkin">Einbuchen</sys:String>
+	<sys:String x:Key="lang_checkout">Ausbuchen</sys:String>
+	<sys:String x:Key="lang_confirm">Bestätigen</sys:String>
+	<sys:String x:Key="lang_description">Beschreibung</sys:String>
+	<sys:String x:Key="lang_location">Lagerort</sys:String>
+	<sys:String x:Key="lang_manufacturer">Hersteller</sys:String>
+	<sys:String x:Key="lang_name">Name</sys:String>
+	<sys:String x:Key="lang_price">Preis</sys:String>
+	<sys:String x:Key="lang_profile">Profil</sys:String>
+	<sys:String x:Key="lang_quit">Beenden</sys:String>
+	<sys:String x:Key="lang_rimDiameter">Felgendurchmesser</sys:String>
+	<sys:String x:Key="lang_settings">Einstellungen</sys:String>
+	<sys:String x:Key="lang_width">Breite</sys:String>
 
 </ResourceDictionary>

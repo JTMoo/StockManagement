@@ -32,19 +32,19 @@
 								<ColumnDefinition Width="*"/>
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Text="Name"
+							<TextBlock Text="{DynamicResource lang_name}"
 									   HorizontalAlignment="Left" />
 							<TextBlock Grid.Column="2"
-									   Text="Amount"
+									   Text="{DynamicResource lang_amount}"
 									   HorizontalAlignment="Left" />
 							<TextBlock Grid.Column="4"
-									   Text="Price"
+									   Text="{DynamicResource lang_price}"
 									   HorizontalAlignment="Left" />
 							<TextBlock Grid.Column="6"
-									   Text="Manufacturer"
+									   Text="{DynamicResource lang_manufacturer}"
 									   HorizontalAlignment="Left" />
 							<TextBlock Grid.Column="8"
-									   Text="Description"
+									   Text="{DynamicResource lang_description}"
 									   HorizontalAlignment="Left" />
 
 							<ScrollViewer Grid.Row="2"

@@ -5,7 +5,33 @@
 	<!-- The name of this ResourceDictionary. Should not be localized. -->
 	<sys:String x:Key="ResourceDictionaryName">Loc-es-PY</sys:String>
 
-	<!-- Localized strings -->
+	<!-- Special Chars / Sentences -->
+	<sys:String x:Key="lang_additionalInformation">Informaciones additionales</sys:String>
+	<sys:String x:Key="lang_changeInfo">Cambio del artículo</sys:String>
+	<sys:String x:Key="lang_createItem">Crear artículo</sys:String>
+	<sys:String x:Key="lang_excelImport">Importación de Excel</sys:String>
 	<sys:String x:Key="lang_search">Búsqueda:</sys:String>
+	<sys:String x:Key="lang_searchLocation">Buscar ubicaciones:</sys:String>
+	<sys:String x:Key="lang_searchNames">Buscar nombres:</sys:String>
+	<sys:String x:Key="lang_selectItemType">Seleccionar tipo:</sys:String>
+	<sys:String x:Key="lang_selectManufacturer">Seleccionar fabricante:</sys:String>
+	<sys:String x:Key="lang_selectType">Seleccionar tipo del artículo:</sys:String>
+	<sys:String x:Key="lang_showPicture">Mostrar imagen</sys:String>
 
+	<!-- Single Words-->
+	<sys:String x:Key="lang_amount">Monto</sys:String>
+	<sys:String x:Key="lang_cancel">Cancelar</sys:String>
+	<sys:String x:Key="lang_checkin">Checkin</sys:String>
+	<sys:String x:Key="lang_checkout">Checkout</sys:String>
+	<sys:String x:Key="lang_confirm">Confirmar</sys:String>
+	<sys:String x:Key="lang_description">Descripción</sys:String>
+	<sys:String x:Key="lang_location">Ubicacion</sys:String>
+	<sys:String x:Key="lang_manufacturer">Fabricante</sys:String>
+	<sys:String x:Key="lang_name">Nombre</sys:String>
+	<sys:String x:Key="lang_price">Precio</sys:String>
+	<sys:String x:Key="lang_profile">Perfil</sys:String>
+	<sys:String x:Key="lang_quit">Salir</sys:String>
+	<sys:String x:Key="lang_rimDiameter">´Diámetro del cubierto</sys:String>
+	<sys:String x:Key="lang_settings">Configuracion</sys:String>
+	<sys:String x:Key="lang_width">Ancho</sys:String>
 </ResourceDictionary>

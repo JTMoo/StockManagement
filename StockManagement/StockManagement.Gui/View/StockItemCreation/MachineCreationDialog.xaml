@@ -34,7 +34,7 @@
 		<!-- Name -->
 		<TextBlock Grid.Row="1"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="Name" />
+				   Text="{DynamicResource lang_name}" />
 		<TextBox Grid.Row="1"
 				 Grid.Column="1"
 				 Text="{Binding Name}" />
@@ -42,7 +42,7 @@
 		<!-- Price -->
 		<TextBlock Grid.Row="2"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="Price" />
+				   Text="{DynamicResource lang_price}" />
 		<TextBox Grid.Column="1"
 				 Grid.Row="2"
 				 Text="{Binding Price}" />
@@ -50,7 +50,7 @@
 		<!-- Manufacturer Type -->
 		<TextBlock Grid.Row="3"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="Manufacturer" />
+				   Text="{DynamicResource lang_manufacturer}" />
 		<ComboBox Grid.Row="3"
 				  Grid.Column="1"
 				  ItemsSource="{Binding Source={StaticResource typeFromEnum}}"
@@ -59,7 +59,7 @@
 		<!-- Description -->
 		<TextBlock Grid.Row="4"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="Decription"
+				   Text="{DynamicResource lang_description}"
 				   TextWrapping="Wrap" />
 		<TextBox Grid.Column="1"
 				 Grid.Row="4"
@@ -69,11 +69,11 @@
 					Grid.Row="5"
 					Grid.ColumnSpan="3"
 					Margin="10">
-			<Button Content="Confirm"
+			<Button Content="{DynamicResource lang_confirm}"
 					Width="100"
 					Margin="10"
 					Command="{Binding ConfirmDialogCommand}"/>
-			<Button Content="Cancel"
+			<Button Content="{DynamicResource lang_cancel}"
 					Width="100"
 					Margin="10"
 					Command="{Binding CancelDialogCommand}"/>

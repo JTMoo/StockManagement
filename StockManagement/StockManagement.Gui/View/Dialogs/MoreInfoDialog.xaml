@@ -39,7 +39,7 @@
 				   Grid.ColumnSpan="7"
 				   FontSize="30"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="Additional Information" />
+				   Text="{DynamicResource lang_additionalInformation}" />
 
 		<!-- Checkout -->
 		<TextBox Grid.Row="3"
@@ -49,7 +49,7 @@
 		
 		<Button Grid.Row="3"
 				Grid.Column="3"
-				Content="Checkout"
+				Content="{DynamicResource lang_checkout}"
 				Command="{Binding CheckoutCommand}"/>
 
 		<TextBlock Grid.Row="3"
@@ -67,7 +67,7 @@
 		
 		<Button Grid.Row="5"
 				Grid.Column="3"
-				Content="Check-In"
+				Content="{DynamicResource lang_checkin}"
 				Command="{Binding CheckinCommand}" />
 
 		<TextBlock Grid.Row="5"
@@ -80,7 +80,7 @@
 		<Button Grid.Row="7"
 				Grid.Column="3"
 				IsEnabled="False"
-				Content="Change Info" />
+				Content="{DynamicResource lang_changeInfo}" />
 		
 		<TextBlock Grid.Row="7"
 				   Grid.Column="5"
@@ -92,7 +92,7 @@
 		<Button Grid.Row="9"
 				Grid.Column="3"
 				IsEnabled="False"
-				Content="Show Picture" />
+				Content="{DynamicResource lang_showPicture}" />
 
 		<!-- Info -->
 		<Border Grid.Column="7"
@@ -102,19 +102,19 @@
 				Padding="5"
 				BorderBrush="DarkSlateBlue">
 			<StackPanel Orientation="Vertical">
-				<TextBlock Text="Name:"
+				<TextBlock Text="{DynamicResource lang_name}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Name}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
-				<TextBlock Text="Price:"
+				<TextBlock Text="{DynamicResource lang_price}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Price}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
-				<TextBlock Text="Amount:"
+				<TextBlock Text="{DynamicResource lang_amount}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Amount}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
-				<TextBlock Text="Description:"
+				<TextBlock Text="{DynamicResource lang_description}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Description}"
 					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
@@ -125,7 +125,7 @@
 					Grid.Row="99"
 					Grid.ColumnSpan="99"
 					Margin="10">
-			<Button Content="Cancel"
+			<Button Content="{DynamicResource lang_cancel}"
 					Width="100"
 					Margin="10"
 					Command="{Binding CancelDialogCommand}"/>
