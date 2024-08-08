@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 
@@ -25,6 +24,7 @@ internal class MainViewModel : NotificationBase
     {
         QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		MoreInfoCommand = new RelayCommand<StockItem>(stockItem => this.Dialog = new MoreInfoDialogViewModel(stockItem));
+		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 
 		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
@@ -38,6 +38,7 @@ internal class MainViewModel : NotificationBase
 	public RelayCommand<string> QuitCommand { get; }
 	public RelayCommand<StockItem> MoreInfoCommand { get; }
 	public RelayCommand<string> CreateStockItemCommand { get; }
+	public RelayCommand<string> OpenSettingsCommand { get; }
 	public DialogViewModelBase? Dialog
 	{
 		get { return _dialog; }

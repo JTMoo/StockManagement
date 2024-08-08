@@ -1,21 +1,29 @@
-﻿using MongoDB.Driver.Linq;
-using StockManagement.Gui.ViewModel;
+﻿using StockManagement.Gui.ViewModel;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
+using StockManagement.Kernel.Model.ExtensionMethods;
 
 namespace StockManagement.Gui;
 
 
 internal class GuiManager
 {
-	internal static readonly GuiManager Instance = new GuiManager();
+	private static string? _directory;
+	public readonly string FolderName = "Resources";
+
+
+	internal static readonly GuiManager Instance = new();
 	internal MainViewModel MainViewModel { get; private set; }
-	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; private set; } = new Dictionary<Type, DialogViewModelBase>();
+	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; } = new();
 
 
 	public void Init(MainViewModel mainViewModel)
@@ -23,13 +31,28 @@ internal class GuiManager
 		this.MainViewModel = mainViewModel;
 		try
 		{
-			this.MainViewModel.StockItemTypes = this.GetStockItemTypes();
+			this.MainViewModel.StockItemTypes = GetStockItemTypes();
 			this.AssignDialogs();
+			_directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+			SetLanguageResourceDictionary(GetLocXamlFilePath(MainManager.Instance.Settings.SelectedLanguage.GetEnumDescription()));
 		}
 		catch(Exception ex)
 		{
 			MessageBox.Show(ex.Message);
 		}
+	}
+
+	public void ChangeLanguage(string inFiveCharLang)
+	{
+		if (CultureInfo.CurrentCulture.Name.Equals(inFiveCharLang))
+			return;
+
+		var ci = new CultureInfo(inFiveCharLang);
+		Thread.CurrentThread.CurrentCulture = ci;
+		Thread.CurrentThread.CurrentUICulture = ci;
+
+		SetLanguageResourceDictionary(GetLocXamlFilePath(inFiveCharLang));
 	}
 
 	private void AssignDialogs()
@@ -44,16 +67,40 @@ internal class GuiManager
 		for (int i = 0; i < this.MainViewModel.StockItemTypes.Count; i++)
 		{
 			var vm = Activator.CreateInstance(stockItemCreationViewModels[i]) as DialogViewModelBase;
-			if (vm == null)
-				throw new ArgumentNullException("Failed to create Instance of Creation ViewModel.", innerException: null);
-
-			this.StockItemToViewModel[this.MainViewModel.StockItemTypes[i]] = vm;
+			this.StockItemToViewModel[this.MainViewModel.StockItemTypes[i]] = vm ?? throw new ArgumentNullException("Failed to create Instance of Creation ViewModel.", innerException: null);
 		}
 	}
 
-	private List<Type> GetStockItemTypes()
+	private static List<Type> GetStockItemTypes()
 	{
 		var kernelAssembly = Assembly.Load(new AssemblyName("Stockmanagement.Kernel"));
 		return ReflectionManager.GetTypesOfBase(kernelAssembly, typeof(StockItem));
+	}
+
+	private string GetLocXamlFilePath(string inFiveCharLang)
+	{
+		string locXamlFile = "LocalizationDictionary." + inFiveCharLang + ".xaml";
+		if (_directory != null) return Path.Combine(_directory, FolderName, locXamlFile);
+
+		return string.Empty;
+	}
+
+	private void SetLanguageResourceDictionary(string inFile)
+	{
+		if (!File.Exists(inFile))
+		{
+			Trace.WriteLine("Couldn't find Language File.");
+			return;
+		}
+
+		var languageDictionary = new ResourceDictionary
+		{
+			Source = new Uri(inFile)
+		};
+
+		var name = "ResourceDictionaryName";
+		var dict = Application.Current.Resources.MergedDictionaries.FirstOrDefault(dict => dict.Contains(name));
+		Application.Current.Resources.MergedDictionaries.Remove(dict);
+		Application.Current.Resources.MergedDictionaries.Add(languageDictionary);
 	}
 }

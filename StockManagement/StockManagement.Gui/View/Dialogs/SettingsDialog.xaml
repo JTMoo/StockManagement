@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="StockManagement.Gui.View.Dialogs.SettingsDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ObjectDataProvider x:Key="ItemsFromLanguages" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type TypeName="types:Language"/>
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+	</UserControl.Resources>
+
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="100"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="10"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="80"/>
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
+			<ColumnDefinition />
+			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
+		</Grid.ColumnDefinitions>
+
+		<!-- Title -->
+		<TextBlock Grid.Row="1"
+		           Grid.Column="1"
+		           FontSize="30"
+		           Style="{StaticResource BaseDialogTextBlockStyle}"
+		           Text="{DynamicResource lang_selectLanguage}" />
+
+		<!-- Stock Item Type -->
+		<ComboBox Grid.Column="1"
+		          Grid.Row="3"
+		          ItemsSource="{Binding Source={StaticResource ItemsFromLanguages}}"
+		          SelectedItem="{Binding SelectedLanguage}"/>
+
+		<StackPanel Orientation="Horizontal"
+		            Grid.Row="5"
+		            Grid.ColumnSpan="3"
+		            Margin="10">
+			<Button Content="{DynamicResource lang_confirm}"
+			        Width="100"
+			        Margin="10"
+			        Command="{Binding ConfirmDialogCommand}"/>
+			<Button Content="{DynamicResource lang_cancel}"
+			        Width="100"
+			        Margin="10"
+			        Command="{Binding CancelDialogCommand}"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

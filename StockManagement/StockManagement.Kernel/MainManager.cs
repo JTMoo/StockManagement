@@ -1,6 +1,7 @@
 ﻿using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Database;
 using System.Diagnostics;
+using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel;
 
@@ -15,6 +16,8 @@ public class MainManager : NotificationBase, IDisposable
     private TireManager _tireManager;
     private SparePartManager _sparePartManager;
 
+    private Settings _settings;
+
 
     public MainManager() 
     {
@@ -23,6 +26,8 @@ public class MainManager : NotificationBase, IDisposable
         _machineManager = new MachineManager();
         _tireManager = new TireManager();
 		_sparePartManager = new SparePartManager();
+			
+	    _settings = this.DatabaseManager.SettingsDB.Get() ?? new Settings();
     }
 
     ~MainManager()
@@ -34,6 +39,7 @@ public class MainManager : NotificationBase, IDisposable
     public MachineManager MachineManager => _machineManager;
 	public SparePartManager SparePartManager => _sparePartManager;
     public TireManager TireManager => _tireManager;
+    public Settings Settings => _settings;
 
     public void Init()
     {

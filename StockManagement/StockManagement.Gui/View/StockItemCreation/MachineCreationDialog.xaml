@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:System="clr-namespace:System;assembly=mscorlib"
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
 			 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ObjectDataProvider x:Key="typeFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+		<ObjectDataProvider x:Key="typeFromEnum" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
 			<ObjectDataProvider.MethodParameters>
 				<x:Type TypeName="types:ManufacturerType"/>
 			</ObjectDataProvider.MethodParameters>

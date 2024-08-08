@@ -14,6 +14,7 @@
 	<sys:String x:Key="lang_searchLocation">Lagerorte durchsuchen:</sys:String>
 	<sys:String x:Key="lang_searchNames">Namen durchsuchen:</sys:String>
 	<sys:String x:Key="lang_selectItemType">Lagerartikeltyp auswählen:</sys:String>
+	<sys:String x:Key="lang_selectLanguage">Sprache auswählen:</sys:String>
 	<sys:String x:Key="lang_selectManufacturer">Hersteller auswählen:</sys:String>
 	<sys:String x:Key="lang_selectType">Artikeltyp auswählen:</sys:String>
 	<sys:String x:Key="lang_showPicture">Bild anzeigen</sys:String>

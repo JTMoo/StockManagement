@@ -9,8 +9,8 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 
 public class MoreInfoDialogViewModel : DialogViewModelBase
 {
-	private string checkoutAmount;
-	private string checkinAmount;
+	private string _checkoutAmount;
+	private string _checkinAmount;
 
 
 	public MoreInfoDialogViewModel(StockItem stockItem) 
@@ -28,14 +28,14 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 
 	public string CheckoutAmount
 	{
-		get { return this.checkoutAmount; }
-		set { this.SetField(ref this.checkoutAmount, value); }
+		get { return this._checkoutAmount; }
+		set { this.SetField(ref this._checkoutAmount, value); }
 	}
 
 	public string CheckinAmount
 	{
-		get { return this.checkinAmount; }
-		set { this.SetField(ref this.checkinAmount, value); }
+		get { return this._checkinAmount; }
+		set { this.SetField(ref this._checkinAmount, value); }
 	}
 
 

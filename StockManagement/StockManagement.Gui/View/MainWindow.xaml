@@ -58,8 +58,8 @@
 		<StackPanel Grid.Row="2"
 					Grid.Column="2">
 			<Button Style="{StaticResource NormalButtonStyle}"
-					IsEnabled="False"
-					Content="{DynamicResource lang_settings}" />
+					Content="{DynamicResource lang_settings}"
+					Command="{Binding OpenSettingsCommand}"/>
 
 			<Button Style="{StaticResource NormalButtonStyle}"
 					Content="{DynamicResource lang_quit}"
