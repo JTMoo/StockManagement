@@ -11,8 +11,8 @@
 	<sys:String x:Key="lang_createItem">Lagerartikel erstellen</sys:String>
 	<sys:String x:Key="lang_excelImport">Lagerorte durchsuchen:</sys:String>
 	<sys:String x:Key="lang_search">Suche:</sys:String>
+	<sys:String x:Key="lang_searchBoxDefault">Suche nach Namen...</sys:String>
 	<sys:String x:Key="lang_searchLocation">Lagerorte durchsuchen:</sys:String>
-	<sys:String x:Key="lang_searchNames">Namen durchsuchen:</sys:String>
 	<sys:String x:Key="lang_selectItemType">Lagerartikeltyp auswählen:</sys:String>
 	<sys:String x:Key="lang_selectLanguage">Sprache auswählen:</sys:String>
 	<sys:String x:Key="lang_selectManufacturer">Hersteller auswählen:</sys:String>

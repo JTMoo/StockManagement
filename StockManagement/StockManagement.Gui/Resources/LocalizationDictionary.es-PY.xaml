@@ -11,8 +11,8 @@
 	<sys:String x:Key="lang_createItem">Crear artículo</sys:String>
 	<sys:String x:Key="lang_excelImport">Importación de Excel</sys:String>
 	<sys:String x:Key="lang_search">Búsqueda:</sys:String>
+	<sys:String x:Key="lang_searchBoxDefault">Buscar en nombres...</sys:String>
 	<sys:String x:Key="lang_searchLocation">Buscar ubicaciones:</sys:String>
-	<sys:String x:Key="lang_searchNames">Buscar nombres:</sys:String>
 	<sys:String x:Key="lang_selectItemType">Seleccionar tipo:</sys:String>
 	<sys:String x:Key="lang_selectLanguage">Seleccionar idioma:</sys:String>
 	<sys:String x:Key="lang_selectManufacturer">Seleccionar fabricante:</sys:String>

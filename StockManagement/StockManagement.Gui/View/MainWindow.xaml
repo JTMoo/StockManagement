@@ -13,6 +13,7 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Dictionaries\TextBoxDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\ListViewDictionary.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -48,6 +49,9 @@
 					   FontSize="30"
 					   HorizontalAlignment="Center"
 					   Margin="5"/>
+			<TextBox Style="{StaticResource SearchTextBoxStyle}"
+					 Height="30"
+					 Text="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
 			<TextBlock Text="{DynamicResource lang_selectManufacturer}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource BaseControlStyle}"
@@ -55,10 +59,10 @@
 					  SelectedItem="{Binding SelectedSearchManufacturer}" />
 			<TextBlock Text="{DynamicResource lang_selectType}"
 					   Margin="5"/>
-			<ComboBox Style="{StaticResource BaseControlStyle}" />
-			<TextBlock Text="{DynamicResource lang_searchNames}"
-					   Margin="5"/>
-			<TextBox Style="{StaticResource BaseControlStyle}"/>
+			<ComboBox Style="{StaticResource BaseControlStyle}"
+					  ItemsSource="{Binding StockItemTypes}"
+					  DisplayMemberPath="Name"
+					  SelectedItem="{Binding SelectedSearchStockItemType}"/>
 			<TextBlock Text="{DynamicResource lang_searchLocation}"
 					   Margin="5"/>
 		</StackPanel>

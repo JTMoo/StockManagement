@@ -11,8 +11,8 @@
 	<sys:String x:Key="lang_createItem">Create Stock item</sys:String>
 	<sys:String x:Key="lang_excelImport">Excel Import</sys:String>
 	<sys:String x:Key="lang_search">Search:</sys:String>
+	<sys:String x:Key="lang_searchBoxDefault">Search names...</sys:String>
 	<sys:String x:Key="lang_searchLocation">Search Location:</sys:String>
-	<sys:String x:Key="lang_searchNames">Search names:</sys:String>
 	<sys:String x:Key="lang_selectItemType">Select item type:</sys:String>
 	<sys:String x:Key="lang_selectLanguage">Select language:</sys:String>
 	<sys:String x:Key="lang_selectManufacturer">Select manufacturer:</sys:String>

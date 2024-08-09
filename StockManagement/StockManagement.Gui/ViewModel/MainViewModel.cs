@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
 
@@ -21,7 +22,9 @@ internal class MainViewModel : NotificationBase
 
 	private DialogViewModelBase? _dialog;
 	private StockItem _selectedStockItem;
+	private string _searchNames;
 	private ManufacturerType _selectedSearchManufacturer;
+	private Type _selectedSearchStockItemType;
 	private readonly object _stockItemsLock = new object();
 
 
@@ -79,13 +82,33 @@ internal class MainViewModel : NotificationBase
 		set { this.SetField(ref _selectedStockItem, value); }
 	}
 
+	public string SearchNames
+	{
+		get { return _searchNames; }
+		set
+		{
+			this.SetField(ref _searchNames, value);
+			this.OnRefreshSearch(names: true);
+		}
+	}
+
 	public ManufacturerType SelectedSearchManufacturer
 	{
 		get { return _selectedSearchManufacturer; }
 		set
 		{
 			this.SetField(ref _selectedSearchManufacturer, value);
-			this.OnRefreshSearch();
+			this.OnRefreshSearch(manufacturer: true);
+		}
+	}
+
+	public Type SelectedSearchStockItemType
+	{
+		get { return _selectedSearchStockItemType; }
+		set
+		{
+			this.SetField(ref _selectedSearchStockItemType, value);
+			this.OnRefreshSearch(type: true);
 		}
 	}
 	#endregion Properties
@@ -110,9 +133,16 @@ internal class MainViewModel : NotificationBase
 		this.Dialog = null;
 	}
 
-	private void OnRefreshSearch()
+	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool location = false)
 	{
-		var filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? this.StockItems : this.StockItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
+		IEnumerable<StockItem> filteredItems = this.StockItems;
+		if (manufacturer)
+			filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? filteredItems : filteredItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
+		else if (type)
+			filteredItems = this.SelectedSearchStockItemType == null ? filteredItems : filteredItems.Where(item => item.GetType() == this.SelectedSearchStockItemType);
+		else if (names)
+			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Name.ToLower(), this.SearchNames));
+		
 		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
 	}
 
