@@ -2,10 +2,12 @@
 using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -15,17 +17,22 @@ namespace StockManagement.Gui.ViewModel;
 internal class MainViewModel : NotificationBase
 {
 	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
+	private ObservableCollection<StockItem> _filteredStockItems = new ObservableCollection<StockItem>();
+
 	private DialogViewModelBase? _dialog;
 	private StockItem _selectedStockItem;
+	private ManufacturerType _selectedSearchManufacturer;
 	private readonly object _stockItemsLock = new object();
 
 
 	public MainViewModel()
-    {
-        QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
+	{
+		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		MoreInfoCommand = new RelayCommand<StockItem>(stockItem => this.Dialog = new MoreInfoDialogViewModel(stockItem));
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
+
+		this.StockItems.CollectionChanged += (_, __) => this.OnRefreshSearch();
 
 		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
 
@@ -42,9 +49,9 @@ internal class MainViewModel : NotificationBase
 	public DialogViewModelBase? Dialog
 	{
 		get { return _dialog; }
-		internal set 
-		{ 
-			this.SetField(ref _dialog, value); 
+		internal set
+		{
+			this.SetField(ref _dialog, value);
 
 			if (_dialog != null)
 			{
@@ -56,14 +63,30 @@ internal class MainViewModel : NotificationBase
 
 	public ObservableCollection<StockItem> StockItems
 	{
-		get { return _stockItems; }
-		internal set { this.SetField(ref _stockItems, value); }
+		get => this._stockItems;
+		set => this.SetField(ref this._stockItems, value);
+	}
+
+	public ObservableCollection<StockItem> FilteredStockItems
+	{
+		get => this._filteredStockItems;
+		set => this.SetField(ref this._filteredStockItems, value);
 	}
 
 	public StockItem SelectedStockItem
 	{
 		get { return _selectedStockItem; }
 		set { this.SetField(ref _selectedStockItem, value); }
+	}
+
+	public ManufacturerType SelectedSearchManufacturer
+	{
+		get { return _selectedSearchManufacturer; }
+		set
+		{
+			this.SetField(ref _selectedSearchManufacturer, value);
+			this.OnRefreshSearch();
+		}
 	}
 	#endregion Properties
 
@@ -85,6 +108,12 @@ internal class MainViewModel : NotificationBase
 
 		this.Dialog.DialogClosing -= this.OnDialogClosing;
 		this.Dialog = null;
+	}
+
+	private void OnRefreshSearch()
+	{
+		var filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? this.StockItems : this.StockItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
+		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
 	}
 
 	private void OnTiresChanged(object? sender, NotifyCollectionChangedEventArgs e)

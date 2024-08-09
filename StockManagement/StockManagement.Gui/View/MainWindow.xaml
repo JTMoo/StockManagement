@@ -3,7 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        mc:Ignorable="d"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+		xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
+		mc:Ignorable="d"
 		WindowState="Maximized"
 		WindowStyle="None"
 		FontSize="18"
@@ -14,6 +16,11 @@
 				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\ListViewDictionary.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<ObjectDataProvider x:Key="typesFromManufacturers" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+				<ObjectDataProvider.MethodParameters>
+					<x:Type TypeName="types:ManufacturerType"/>
+				</ObjectDataProvider.MethodParameters>
+			</ObjectDataProvider>
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -30,21 +37,22 @@
 		</Grid.ColumnDefinitions>
 
 		<ListView Margin="5"
-				  ItemsSource="{Binding StockItems}"
+				  ItemsSource="{Binding FilteredStockItems}"
 				  Style="{StaticResource DefaultListViewStyle}"
 				  SelectedItem="{Binding SelectedStockItem}"
 				  ItemTemplate="{StaticResource DefaultListViewItemTemplate}" />
 		
 		<!-- Search Bar -->
-		<StackPanel Grid.Row="0" Grid.Column="2"
-		            IsEnabled="False">
+		<StackPanel Grid.Row="0" Grid.Column="2">
 			<TextBlock Text="{DynamicResource lang_search}"
 					   FontSize="30"
 					   HorizontalAlignment="Center"
 					   Margin="5"/>
 			<TextBlock Text="{DynamicResource lang_selectManufacturer}"
 					   Margin="5"/>
-			<ComboBox Style="{StaticResource BaseControlStyle}" />
+			<ComboBox Style="{StaticResource BaseControlStyle}"
+					  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
+					  SelectedItem="{Binding SelectedSearchManufacturer}" />
 			<TextBlock Text="{DynamicResource lang_selectType}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource BaseControlStyle}" />
