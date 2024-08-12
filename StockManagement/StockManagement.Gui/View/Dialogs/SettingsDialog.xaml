@@ -5,14 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
+			 xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ObjectDataProvider x:Key="ItemsFromLanguages" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
-			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="types:Language"/>
-			</ObjectDataProvider.MethodParameters>
-		</ObjectDataProvider>
+		<ResourceDictionary>
+			<ObjectDataProvider x:Key="ItemsFromLanguages" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+				<ObjectDataProvider.MethodParameters>
+					<x:Type TypeName="types:Language"/>
+				</ObjectDataProvider.MethodParameters>
+			</ObjectDataProvider>
+		</ResourceDictionary>
 	</UserControl.Resources>
 
 	<Grid Margin="10">
@@ -44,18 +47,9 @@
 		          ItemsSource="{Binding Source={StaticResource ItemsFromLanguages}}"
 		          SelectedItem="{Binding SelectedLanguage}"/>
 
-		<StackPanel Orientation="Horizontal"
-		            Grid.Row="5"
-		            Grid.ColumnSpan="3"
-		            Margin="10">
-			<Button Content="{DynamicResource lang_confirm}"
-			        Width="100"
-			        Margin="10"
-			        Command="{Binding ConfirmDialogCommand}"/>
-			<Button Content="{DynamicResource lang_cancel}"
-			        Width="100"
-			        Margin="10"
-			        Command="{Binding CancelDialogCommand}"/>
-		</StackPanel>
+		<controls:DialogActionBarControl Grid.Row="99"
+										 Grid.ColumnSpan="99"
+										 ConfirmCommand="{Binding ConfirmDialogCommand}"
+										 CancelCommand="{Binding CancelDialogCommand}"/>
 	</Grid>
 </UserControl>

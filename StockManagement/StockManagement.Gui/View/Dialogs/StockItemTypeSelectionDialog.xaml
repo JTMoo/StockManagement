@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
+			 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="100"/>
@@ -22,7 +22,7 @@
 			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
 		</Grid.ColumnDefinitions>
 
-		<!-- TItle -->
+		<!-- Title -->
 		<TextBlock Grid.Row="1"
 				   Grid.Column="1"
 				   FontSize="30"
@@ -36,18 +36,9 @@
 				  DisplayMemberPath="Name"
 				  SelectedItem="{Binding SelectedStockItemType}"/>
 
-		<StackPanel Orientation="Horizontal"
-					Grid.Row="5"
-					Grid.ColumnSpan="3"
-					Margin="10">
-			<Button Content="{DynamicResource lang_confirm}"
-					Width="100"
-					Margin="10"
-					Command="{Binding ConfirmDialogCommand}"/>
-			<Button Content="{DynamicResource lang_cancel}"
-					Width="100"
-					Margin="10"
-					Command="{Binding CancelDialogCommand}"/>
-		</StackPanel>
+		<controls:DialogActionBarControl Grid.Row="99"
+										 Grid.ColumnSpan="99"
+										 ConfirmCommand="{Binding ConfirmDialogCommand}"
+										 CancelCommand="{Binding CancelDialogCommand}"/>
 	</Grid>
 </UserControl>

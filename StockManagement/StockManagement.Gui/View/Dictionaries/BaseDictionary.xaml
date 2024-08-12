@@ -38,7 +38,7 @@
 		<Setter Property="Margin"
 				Value="0,10,0,0" />
 	</Style>
-	
+
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">
 		<Setter Property="Height"
@@ -50,7 +50,7 @@
 		<Setter Property="Margin"
 				Value="5" />
 	</Style>
-	
+
 	<Style x:Key="BaseDialogStyle"
 		   TargetType="{x:Type ContentControl}">
 		<Setter Property="ContentTemplate"

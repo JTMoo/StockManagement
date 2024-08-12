@@ -69,23 +69,23 @@
 
 		<StackPanel Grid.Row="2"
 					Grid.Column="2">
-			<Button Style="{StaticResource NormalButtonStyle}"
+			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{DynamicResource lang_settings}"
 					Command="{Binding OpenSettingsCommand}"/>
 
-			<Button Style="{StaticResource NormalButtonStyle}"
+			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{DynamicResource lang_quit}"
 					Command="{Binding QuitCommand}"/>
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"
 					Orientation="Horizontal">
-			<Button Style="{StaticResource NormalButtonStyle}"
+			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{DynamicResource lang_createItem}"
 					Command="{Binding CreateStockItemCommand}"/>
-			<Button Style="{StaticResource NormalButtonStyle}"
+			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{DynamicResource lang_excelImport}" 
-					IsEnabled="False" />
+					Visibility="Hidden" />
 		</StackPanel>
 
 		<ContentControl Grid.ColumnSpan="3"
