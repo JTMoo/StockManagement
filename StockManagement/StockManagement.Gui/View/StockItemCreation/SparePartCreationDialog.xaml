@@ -9,11 +9,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ObjectDataProvider x:Key="typeFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="types:ManufacturerType"/>
-			</ObjectDataProvider.MethodParameters>
-		</ObjectDataProvider>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Dictionaries\ComboBoxDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<ObjectDataProvider x:Key="typeFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+				<ObjectDataProvider.MethodParameters>
+					<x:Type TypeName="types:ManufacturerType"/>
+				</ObjectDataProvider.MethodParameters>
+			</ObjectDataProvider>
+		</ResourceDictionary>
 	</UserControl.Resources>
 	
 	<Grid Margin="10">
@@ -55,6 +60,7 @@
 				   Text="{DynamicResource lang_manufacturer}" />
 		<ComboBox Grid.Row="3"
 				  Grid.Column="1"
+				  Style="{StaticResource CustomComboBoxStyle}"
 				  ItemsSource="{Binding Source={StaticResource typeFromEnum}}"
 				  SelectedItem="{Binding SelectedManufacturer}"/>
 

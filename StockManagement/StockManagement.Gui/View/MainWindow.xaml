@@ -13,6 +13,7 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Dictionaries\ComboBoxDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\TextBoxDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
 				<ResourceDictionary Source="Dictionaries\ListViewDictionary.xaml" />
@@ -54,12 +55,12 @@
 					 Text="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
 			<TextBlock Text="{DynamicResource lang_selectManufacturer}"
 					   Margin="5"/>
-			<ComboBox Style="{StaticResource BaseControlStyle}"
+			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
 					  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
 					  SelectedItem="{Binding SelectedSearchManufacturer}" />
 			<TextBlock Text="{DynamicResource lang_selectType}"
 					   Margin="5"/>
-			<ComboBox Style="{StaticResource BaseControlStyle}"
+			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
 					  ItemsSource="{Binding StockItemTypes}"
 					  DisplayMemberPath="Name"
 					  SelectedItem="{Binding SelectedSearchStockItemType}"/>

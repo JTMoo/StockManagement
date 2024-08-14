@@ -29,6 +29,7 @@
 	<sys:String x:Key="lang_location">Ubicacion</sys:String>
 	<sys:String x:Key="lang_manufacturer">Fabricante</sys:String>
 	<sys:String x:Key="lang_name">Nombre</sys:String>
+	<sys:String x:Key="lang_more">Mas</sys:String>
 	<sys:String x:Key="lang_price">Precio</sys:String>
 	<sys:String x:Key="lang_profile">Perfil</sys:String>
 	<sys:String x:Key="lang_quit">Salir</sys:String>

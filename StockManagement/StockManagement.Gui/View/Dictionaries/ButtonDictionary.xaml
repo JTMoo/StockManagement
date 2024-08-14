@@ -6,27 +6,26 @@
 		<Setter Property="FontWeight"
 				Value="DemiBold" />
 		<Setter Property="Foreground"
-				Value="#071c31" />
+				Value="{StaticResource MainBlue}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
 					<Border CornerRadius="5"
 							BorderThickness="1"
-							Padding="5"
-							BorderBrush="#000">
+							BorderBrush="{StaticResource BorderBlack}">
 						<ContentPresenter VerticalAlignment="Center"
 										  HorizontalAlignment="Center"
 										  Content="{TemplateBinding Content}" />
 						<Border.Style>
 							<Style>
 								<Setter Property="Border.Background"
-										Value="#e0e0e0" />
+										Value="{StaticResource MainElementBackground}" />
 								<Style.Triggers>
 									<Trigger Property="Border.IsMouseOver" Value="True">
 										<Setter Property="Border.Background"
-												Value="#071c31" />
+												Value="{StaticResource MainBlue}" />
 										<Setter Property="Button.Foreground"
-												Value="#e0e0e0" />
+												Value="{StaticResource MainElementBackground}" />
 									</Trigger>
 								</Style.Triggers>
 							</Style>
@@ -45,14 +44,4 @@
 		<Setter Property="Height"
 				Value="Auto" />
 	</Style>
-	
-	<Style x:Key="NormalButtonStyle"
-		   TargetType="{x:Type Button}"
-		   BasedOn="{StaticResource BaseControlStyle}">
-		<Setter Property="Background"
-				Value="Khaki" />
-		<Setter Property="FontWeight"
-				Value="DemiBold" />
-	</Style>
-	
 </ResourceDictionary>

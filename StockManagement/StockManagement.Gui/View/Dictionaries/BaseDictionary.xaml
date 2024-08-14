@@ -11,16 +11,29 @@
 	<GridLength x:Key="smallGridRowDialog">45</GridLength>
 	<GridLength x:Key="smallGridColumnDialog">120</GridLength>
 
+	<Color x:Key="Blue">#071c31</Color>
+	<Color x:Key="LightGray">#e0e0e0</Color>
+	<Color x:Key="Black">#000</Color>
+
+	<SolidColorBrush x:Key="MainBlue" Color="{StaticResource Blue}" />
+	<SolidColorBrush x:Key="DialogBackground" Color="{StaticResource Blue}" Opacity=".7" />
+	<SolidColorBrush x:Key="MainElementBackground" Color="{StaticResource LightGray}" />
+	<SolidColorBrush x:Key="MainBackground" Color="GhostWhite" />
+	<SolidColorBrush x:Key="BorderBlack" Color="{StaticResource Black}" />
+
 	<DataTemplate x:Key="DialogContentTemplate">
 		<Border BorderThickness="200"
-				Background="DarkGray">
-			<Border.BorderBrush>
-				<SolidColorBrush Color="LightGray" Opacity=".7" />
-			</Border.BorderBrush>
-			<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
-							  Content="{Binding}"
-							  VerticalAlignment="Stretch"
-							  HorizontalAlignment="Stretch" />
+				Background="{StaticResource MainBackground}"
+				BorderBrush="{StaticResource DialogBackground}">
+			<Border BorderThickness="5"
+					BorderBrush="{StaticResource BorderBlack}"
+					CornerRadius="6"
+					Margin="-3">
+				<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
+								  Content="{Binding}"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Stretch" />
+			</Border>
 		</Border>
 	</DataTemplate>
 
@@ -35,34 +48,23 @@
 	<Style x:Key="AdditionInfoTextBlockStyle"
 		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"
 		   TargetType="{x:Type TextBlock}">
-		<Setter Property="Margin"
-				Value="0,10,0,0" />
+		<Setter Property="Margin" Value="0,10,0,0" />
 	</Style>
 
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">
-		<Setter Property="Height"
-				Value="60" />
-		<Setter Property="Width"
-				Value="200" />
-		<Setter Property="VerticalContentAlignment"
-				Value="Center" />
-		<Setter Property="Margin"
-				Value="5" />
+		<Setter Property="Height" Value="60" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Margin" Value="5" />
 	</Style>
 
 	<Style x:Key="BaseDialogStyle"
 		   TargetType="{x:Type ContentControl}">
-		<Setter Property="ContentTemplate"
-				Value="{StaticResource DialogContentTemplate}" />
-		<Setter Property="Visibility"
-				Value="Visible" />
-
+		<Setter Property="ContentTemplate" Value="{StaticResource DialogContentTemplate}" />
+		<Setter Property="Visibility" Value="Visible" />
 		<Style.Triggers>
-			<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content}"
-						 Value="{x:Null}">
-				<Setter Property="Visibility"
-						Value="Collapsed" />
+			<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Value="{x:Null}">
+				<Setter Property="Visibility" Value="Collapsed" />
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>

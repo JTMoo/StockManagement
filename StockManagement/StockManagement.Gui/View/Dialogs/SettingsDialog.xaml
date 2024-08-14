@@ -10,6 +10,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
 		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Dictionaries\ComboBoxDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
 			<ObjectDataProvider x:Key="ItemsFromLanguages" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
 				<ObjectDataProvider.MethodParameters>
 					<x:Type TypeName="types:Language"/>
@@ -44,6 +47,7 @@
 		<!-- Stock Item Type -->
 		<ComboBox Grid.Column="1"
 		          Grid.Row="3"
+				  Style="{StaticResource CustomComboBoxStyle}"
 		          ItemsSource="{Binding Source={StaticResource ItemsFromLanguages}}"
 		          SelectedItem="{Binding SelectedLanguage}"/>
 

@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:converter="clr-namespace:StockManagement.Gui.Converter"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="ButtonDictionary.xaml"/>
+	</ResourceDictionary.MergedDictionaries>
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 
 	<Style x:Key="DefaultListViewStyle"
@@ -92,7 +94,11 @@
 					   Text="{Binding Location}" />
 			<Button	Grid.Column="10"
 					HorizontalAlignment="Right"
-					Content="More"
+					Content="{DynamicResource lang_more}"
+					Style="{StaticResource BaseButtonStyle}"
+					Height="Auto"
+					FontSize="15"
+					Margin="0"
 					Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
 					Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
 					CommandParameter="{Binding }"/>
