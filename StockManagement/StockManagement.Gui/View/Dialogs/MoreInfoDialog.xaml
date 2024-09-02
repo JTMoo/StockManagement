@@ -36,17 +36,17 @@
 			<ColumnDefinition Width="{StaticResource smallSpacingGridDialog}"/>
 			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
 			<ColumnDefinition Width="{StaticResource smallSpacingGridDialog}"/>
-			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*" MinWidth="290"/>
 			<ColumnDefinition Width="{StaticResource smallSpacingGridDialog}"/>
-			<ColumnDefinition Width="200"/>
+			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="{StaticResource largeSpacingGridDialog}"/>
 		</Grid.ColumnDefinitions>
 
 		<!-- Title -->
-		<TextBlock Grid.Row="1"
-				   Grid.Column="1"
-				   Grid.ColumnSpan="7"
+		<TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7"
 				   FontSize="30"
+				   FontWeight="Bold"
+				   HorizontalAlignment="Center"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{DynamicResource lang_additionalInformation}" />
 
@@ -54,6 +54,7 @@
 		<TextBox Grid.Row="3"
 				 Grid.Column="1"
 				 FontSize="20"
+				 VerticalContentAlignment="Center"
 				 Text="{Binding CheckoutAmount}" />
 
 		<Button Style="{StaticResource BaseDialogButtonStyle}"
@@ -73,6 +74,7 @@
 		<TextBox Grid.Row="5"
 				 Grid.Column="1"
 				 FontSize="20"
+				 VerticalContentAlignment="Center"
 				 Text="{Binding CheckinAmount}" />
 
 		<Button Style="{StaticResource BaseDialogButtonStyle}"
@@ -114,23 +116,33 @@
 				BorderThickness="2"
 				Padding="5"
 				BorderBrush="#071c31">
-			<StackPanel Orientation="Vertical">
+			<StackPanel Orientation="Vertical"
+						CanVerticallyScroll="True">
 				<TextBlock Text="{DynamicResource lang_name}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   FontWeight="Bold"
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Name}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+				<TextBlock Text="{DynamicResource lang_code}"
+						   FontWeight="Bold"
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+				<TextBlock Text="{Binding StockItem.Code}"
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{DynamicResource lang_price}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   FontWeight="Bold"
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Price}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{DynamicResource lang_amount}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   FontWeight="Bold"
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Amount}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{DynamicResource lang_description}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   FontWeight="Bold"
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 				<TextBlock Text="{Binding StockItem.Description}"
-					   Style="{StaticResource AdditionInfoTextBlockStyle}" />
+						   Style="{StaticResource AdditionInfoTextBlockStyle}" />
 			</StackPanel>
 		</Border>
 

@@ -50,6 +50,7 @@
 		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"
 		   TargetType="{x:Type TextBlock}">
 		<Setter Property="Margin" Value="0,10,0,0" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
 	</Style>
 
 	<Style x:Key="BaseControlStyle"

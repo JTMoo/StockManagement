@@ -5,7 +5,8 @@
 		<ResourceDictionary Source="ButtonDictionary.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
-
+	
+	<!-- Headline -->
 	<Style x:Key="DefaultListViewStyle"
 		   TargetType="{x:Type ListView}">
 		<Setter Property="HorizontalAlignment"
@@ -24,28 +25,28 @@
 							</Grid.RowDefinitions>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="150"/>
-								<ColumnDefinition Width="10"/>
 								<ColumnDefinition Width="100"/>
-								<ColumnDefinition Width="10"/>
 								<ColumnDefinition Width="100"/>
-								<ColumnDefinition Width="10"/>
+								<ColumnDefinition Width="100"/>
 								<ColumnDefinition Width="150"/>
-								<ColumnDefinition Width="10"/>
 								<ColumnDefinition Width="*"/>
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="{DynamicResource lang_name}"
 									   HorizontalAlignment="Left" />
-							<TextBlock Grid.Column="2"
-									   Text="{DynamicResource lang_amount}"
+							<TextBlock Margin="10, 0, 0, 0" Grid.Column="1"
+									   Text="{DynamicResource lang_code}"
 									   HorizontalAlignment="Left" />
-							<TextBlock Grid.Column="4"
+							<TextBlock Margin="10, 0, 0, 0" Grid.Column="2"
+									   Text="{DynamicResource lang_quantity}"
+									   HorizontalAlignment="Left" />
+							<TextBlock Margin="10, 0, 0, 0" Grid.Column="3"
 									   Text="{DynamicResource lang_price}"
 									   HorizontalAlignment="Left" />
-							<TextBlock Grid.Column="6"
+							<TextBlock Margin="10, 0, 0, 0" Grid.Column="4"
 									   Text="{DynamicResource lang_manufacturer}"
 									   HorizontalAlignment="Left" />
-							<TextBlock Grid.Column="8"
+							<TextBlock Margin="10, 0, 0, 0" Grid.Column="5"
 									   Text="{DynamicResource lang_location}"
 									   HorizontalAlignment="Left" />
 
@@ -61,17 +62,15 @@
 		</Setter>
 	</Style>
 
+	<!-- Items -->
 	<DataTemplate x:Key="DefaultListViewItemTemplate">
 		<Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter}, Path=ActualWidth}">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="150"/>
-				<ColumnDefinition Width="10"/>
 				<ColumnDefinition Width="100"/>
-				<ColumnDefinition Width="10"/>
 				<ColumnDefinition Width="100"/>
-				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="100"/>
 				<ColumnDefinition Width="150"/>
-				<ColumnDefinition Width="10"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="10"/>
 				<ColumnDefinition Width="auto"/>
@@ -80,16 +79,19 @@
 
 			<TextBlock HorizontalAlignment="Left"
 					   Text="{Binding Name}" />
-			<TextBlock Grid.Column="2"
+			<TextBlock Margin="10, 0, 0, 0" Grid.Column="1"
+					   HorizontalAlignment="Left"
+					   Text="{Binding Code}" />
+			<TextBlock Margin="10, 0, 0, 0" Grid.Column="2"
 					   HorizontalAlignment="Left"
 					   Text="{Binding Amount}" />
-			<TextBlock Grid.Column="4"
+			<TextBlock Margin="10, 0, 0, 0" Grid.Column="3"
 					   HorizontalAlignment="Left"
 					   Text="{Binding Price}" />
-			<TextBlock Grid.Column="6"
+			<TextBlock Margin="10, 0, 0, 0" Grid.Column="4"
 					   HorizontalAlignment="Left"
 					   Text="{Binding Manufacturer}" />
-			<TextBlock Grid.Column="8" 
+			<TextBlock Margin="10, 0, 0, 0" Grid.Column="5" 
 					   HorizontalAlignment="Left"
 					   Text="{Binding Location}" />
 			<Button	Grid.Column="10"

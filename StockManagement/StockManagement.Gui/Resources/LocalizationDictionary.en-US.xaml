@@ -11,8 +11,10 @@
 	<sys:String x:Key="lang_createItem">Create Stock item</sys:String>
 	<sys:String x:Key="lang_excelImport">Excel Import</sys:String>
 	<sys:String x:Key="lang_search">Search:</sys:String>
-	<sys:String x:Key="lang_searchBoxDefault">Search names...</sys:String>
+	<sys:String x:Key="lang_searchBoxDefault">Search...</sys:String>
+	<sys:String x:Key="lang_searchCodes">Search Codes:</sys:String>
 	<sys:String x:Key="lang_searchLocation">Search Location:</sys:String>
+	<sys:String x:Key="lang_searchNames">Search Names:</sys:String>
 	<sys:String x:Key="lang_selectItemType">Select item type:</sys:String>
 	<sys:String x:Key="lang_selectLanguage">Select language:</sys:String>
 	<sys:String x:Key="lang_selectManufacturer">Select manufacturer:</sys:String>
@@ -24,6 +26,7 @@
 	<sys:String x:Key="lang_cancel">Cancel</sys:String>
 	<sys:String x:Key="lang_checkin">Checkin</sys:String>
 	<sys:String x:Key="lang_checkout">Checkout</sys:String>
+	<sys:String x:Key="lang_code">Code</sys:String>
 	<sys:String x:Key="lang_confirm">Confirm</sys:String>
 	<sys:String x:Key="lang_description">Description</sys:String>
 	<sys:String x:Key="lang_location">Location</sys:String>
@@ -32,6 +35,7 @@
 	<sys:String x:Key="lang_more">More</sys:String>
 	<sys:String x:Key="lang_price">Price</sys:String>
 	<sys:String x:Key="lang_profile">Profile</sys:String>
+	<sys:String x:Key="lang_quantity">Quantity</sys:String>
 	<sys:String x:Key="lang_quit">Quit</sys:String>
 	<sys:String x:Key="lang_rimDiameter">Rim Diameter</sys:String>
 	<sys:String x:Key="lang_settings">Settings</sys:String>

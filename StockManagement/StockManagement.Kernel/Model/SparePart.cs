@@ -5,14 +5,14 @@ namespace StockManagement.Kernel.Model;
 
 public class SparePart : StockItem
 {
-	public SparePart(string name, string location, string description = "", int amount = 1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
-		: this(name: name, description: description, amount:amount, price:price, manufacturer:manufacturer)
+	public SparePart(string name, string location, string code = "", string description = "", int amount = 1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+		: this(name: name, code:code, description: description, amount:amount, price:price, manufacturer:manufacturer)
 	{
 		this.Location = location;
 	}
 
-	public SparePart(string name, string description = "", int amount = 1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
-		: base(name:name, description:description, amount:amount, price:price, manufacturer:manufacturer)
+	public SparePart(string name, string code = "", string description = "", int amount = 1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+		: base(name:name, code:code, description:description, amount:amount, price:price, manufacturer:manufacturer)
 	{
 	}
 

@@ -44,7 +44,8 @@
 		<Border Grid.Row="1"
 				Grid.Column="1"
 				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Name}" />
+			<TextBox Text="{Binding Name}"
+					 VerticalContentAlignment="Center" />
 		</Border>
 
 		<!-- Price -->
@@ -55,7 +56,8 @@
 		<Border Grid.Row="2"
 				Grid.Column="1"
 				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Price}" />
+			<TextBox Text="{Binding Price}"
+					 VerticalContentAlignment="Center" />
 		</Border>
 
 		<!-- Manufacturer Type -->
@@ -76,7 +78,9 @@
 		<Border Grid.Row="4"
 				Grid.Column="1"
 				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Description}" />
+			<TextBox Text="{Binding Description}"
+					 TextWrapping="Wrap"
+					 VerticalScrollBarVisibility="Auto" />
 		</Border>
 
 		<controls:DialogActionBarControl Grid.Row="99"

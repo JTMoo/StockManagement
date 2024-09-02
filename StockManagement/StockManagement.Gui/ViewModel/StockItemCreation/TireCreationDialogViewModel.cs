@@ -10,6 +10,7 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 {
 	private string _description;
 	private string _name;
+	private string _code;
 	private int _price;
 	private int _profile;
 	private int _rimDiameter;
@@ -38,6 +39,12 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 	{
 		get { return _name; }
 		set { this.SetField(ref _name, value); }
+	}
+	
+	public string Code
+	{
+		get { return _code; }
+		set { this.SetField(ref _code, value); }
 	}
 
 	public int Amount
@@ -81,6 +88,7 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 					profile: this.Profile, 
 					width: this.Width,
 					name: this.Name,
+					code: this.Code,
 					description: this.Description,
 					amount: this.Amount,
 					price: this.Price,

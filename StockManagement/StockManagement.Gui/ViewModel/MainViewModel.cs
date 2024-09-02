@@ -23,6 +23,7 @@ internal class MainViewModel : NotificationBase
 	private DialogViewModelBase? _dialog;
 	private StockItem _selectedStockItem;
 	private string _searchNames;
+	private string _searchCodes;
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private readonly object _stockItemsLock = new object();
@@ -92,6 +93,16 @@ internal class MainViewModel : NotificationBase
 		}
 	}
 
+	public string SearchCodes
+	{
+		get { return _searchCodes; }
+		set
+		{
+			this.SetField(ref _searchCodes, value);
+			this.OnRefreshSearch(codes: true);
+		}
+	}
+
 	public ManufacturerType SelectedSearchManufacturer
 	{
 		get { return _selectedSearchManufacturer; }
@@ -133,7 +144,7 @@ internal class MainViewModel : NotificationBase
 		this.Dialog = null;
 	}
 
-	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool location = false)
+	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool location = false, bool codes = false)
 	{
 		IEnumerable<StockItem> filteredItems = this.StockItems;
 		if (manufacturer)
@@ -141,7 +152,9 @@ internal class MainViewModel : NotificationBase
 		else if (type)
 			filteredItems = this.SelectedSearchStockItemType == null ? filteredItems : filteredItems.Where(item => item.GetType() == this.SelectedSearchStockItemType);
 		else if (names)
-			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Name.ToLower(), this.SearchNames));
+			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Name.ToLower(), this.SearchNames.ToLower()));
+		else if (codes)
+			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Code.ToLower(), this.SearchCodes.ToLower()));
 		
 		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
 	}

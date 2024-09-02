@@ -50,9 +50,20 @@
 					   FontSize="30"
 					   HorizontalAlignment="Center"
 					   Margin="5"/>
-			<TextBox Style="{StaticResource SearchTextBoxStyle}"
+			<TextBlock Text="{DynamicResource lang_searchNames}"
+					   Margin="5"/>
+			<Border Style="{StaticResource BaseDialogTextBoxBorderStyle}">
+				<TextBox Style="{StaticResource SearchTextBoxStyle}"
 					 Height="30"
 					 Text="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
+			</Border>
+			<TextBlock Text="{DynamicResource lang_searchCodes}"
+					   Margin="5"/>
+			<Border Style="{StaticResource BaseDialogTextBoxBorderStyle}">
+				<TextBox Style="{StaticResource SearchTextBoxStyle}"
+					 Height="30"
+					 Text="{Binding SearchCodes, UpdateSourceTrigger=PropertyChanged}" />
+			</Border>
 			<TextBlock Text="{DynamicResource lang_selectManufacturer}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource CustomComboBoxStyle}"

@@ -7,6 +7,7 @@ namespace StockManagement.Kernel.Model;
 
 public abstract class StockItem : NotificationBase
 {
+	private string _code = string.Empty;
 	private string _description = string.Empty;
 	private string _location = string.Empty;
 	private string _name = string.Empty;
@@ -18,9 +19,10 @@ public abstract class StockItem : NotificationBase
 	{
 	}
 
-	public StockItem (string name, string description = "", int amount=1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+	public StockItem (string name, string code = "", string description = "", int amount=1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
 	{
 		this.Name = name;
+		this.Code = code;
 		this.Description = description;
 		this.Amount = amount;
 		this.Price = price;
@@ -35,6 +37,12 @@ public abstract class StockItem : NotificationBase
 	{
 		get { return _name; }
 		set { this.SetField(ref _name, value); }
+	}
+
+	public string Code
+	{
+		get { return _code; }
+		set { this.SetField(ref _code, value); }
 	}
 
 	public int Amount
