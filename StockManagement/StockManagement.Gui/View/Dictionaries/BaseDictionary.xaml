@@ -8,18 +8,20 @@
 
 	<GridLength x:Key="smallSpacingGridDialog">10</GridLength>
 	<GridLength x:Key="largeSpacingGridDialog">30</GridLength>
-	<GridLength x:Key="smallGridRowDialog">45</GridLength>
+	<GridLength x:Key="smallGridRowDialog">50</GridLength>
 	<GridLength x:Key="smallGridColumnDialog">120</GridLength>
 
 	<Color x:Key="Blue">#071c31</Color>
 	<Color x:Key="LightGray">#e0e0e0</Color>
 	<Color x:Key="Black">#000</Color>
+	<Color x:Key="LightBorderColor">#405668</Color>
 
 	<SolidColorBrush x:Key="MainBlue" Color="{StaticResource Blue}" />
 	<SolidColorBrush x:Key="DialogBackground" Color="{StaticResource Blue}" Opacity=".7" />
 	<SolidColorBrush x:Key="MainElementBackground" Color="{StaticResource LightGray}" />
 	<SolidColorBrush x:Key="MainBackground" Color="GhostWhite" />
 	<SolidColorBrush x:Key="BorderBlack" Color="{StaticResource Black}" />
+	<SolidColorBrush x:Key="LightBorder" Color="{StaticResource LightBorderColor}" />
 
 	<DataTemplate x:Key="DialogContentTemplate">
 		<Border BorderThickness="200"
@@ -39,10 +41,9 @@
 
 	<Style x:Key="BaseDialogTextBlockStyle"
 		   TargetType="{x:Type TextBlock}">
-		<Setter Property="HorizontalAlignment"
-				Value="Center" />
-		<Setter Property="TextWrapping"
-				Value="WrapWithOverflow" />
+		<Setter Property="HorizontalAlignment" Value="Right" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="TextWrapping" Value="WrapWithOverflow" />
 	</Style>
 	
 	<Style x:Key="AdditionInfoTextBlockStyle"
@@ -67,5 +68,13 @@
 				<Setter Property="Visibility" Value="Collapsed" />
 			</DataTrigger>
 		</Style.Triggers>
+	</Style>
+
+	<Style x:Key="BaseDialogTextBoxBorderStyle"
+		   TargetType="{x:Type Border}">
+		<Setter Property="Margin" Value="2" />
+		<Setter Property="CornerRadius" Value="4" />
+		<Setter Property="BorderThickness" Value="2" />
+		<Setter Property="BorderBrush" Value="{StaticResource LightBorder}" />
 	</Style>
 </ResourceDictionary>

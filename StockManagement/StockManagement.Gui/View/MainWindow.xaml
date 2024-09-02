@@ -83,10 +83,10 @@
 					Orientation="Horizontal">
 			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{DynamicResource lang_createItem}"
-					Command="{Binding CreateStockItemCommand}"/>
+					Command="{Binding CreateStockItemCommand}" />
 			<Button Style="{StaticResource BaseButtonStyle}"
-					Content="{DynamicResource lang_excelImport}" 
-					Visibility="Hidden" />
+					Content="{DynamicResource lang_excelImport}"
+					Command="{Binding ExcelImportCommand}"/>
 		</StackPanel>
 
 		<ContentControl Grid.ColumnSpan="3"

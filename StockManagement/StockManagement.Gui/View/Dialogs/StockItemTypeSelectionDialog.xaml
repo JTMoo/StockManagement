@@ -17,9 +17,9 @@
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="100"/>
-			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="10"/>
-			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
@@ -31,9 +31,8 @@
 		</Grid.ColumnDefinitions>
 
 		<!-- Title -->
-		<TextBlock Grid.Row="1"
-				   Grid.Column="1"
-				   FontSize="30"
+		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="30"
+				   HorizontalAlignment="Center"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{DynamicResource lang_selectItemType}" />
 

@@ -8,7 +8,7 @@ namespace StockManagement.Kernel.Model;
 public abstract class StockItem : NotificationBase
 {
 	private string _description = string.Empty;
-	private Location _location = new Location();
+	private string _location = string.Empty;
 	private string _name = string.Empty;
 	private ManufacturerType _manufacturer;
 	private int _price;
@@ -49,7 +49,7 @@ public abstract class StockItem : NotificationBase
 		set { this.SetField(ref _description, value); }
 	}
 
-	public Location Location
+	public string Location
 	{
 		get { return _location; }
 		set { this.SetField(ref _location, value); }

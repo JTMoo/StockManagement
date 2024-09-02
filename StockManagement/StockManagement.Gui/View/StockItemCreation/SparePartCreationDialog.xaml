@@ -42,17 +42,21 @@
 		<TextBlock Grid.Row="1"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{DynamicResource lang_name}" />
-		<TextBox Grid.Row="1"
-				 Grid.Column="1"
-				 Text="{Binding Name}" />
+		<Border Grid.Row="1"
+				Grid.Column="1"
+				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
+			<TextBox Text="{Binding Name}" />
+		</Border>
 
 		<!-- Price -->
 		<TextBlock Grid.Row="2"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{DynamicResource lang_price}" />
-		<TextBox Grid.Column="1"
-				 Grid.Row="2"
-				 Text="{Binding Price}" />
+		<Border Grid.Row="2"
+				Grid.Column="1"
+				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
+			<TextBox Text="{Binding Price}" />
+		</Border>
 
 		<!-- Manufacturer Type -->
 		<TextBlock Grid.Row="3"
@@ -69,9 +73,11 @@
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{DynamicResource lang_description}"
 				   TextWrapping="Wrap" />
-		<TextBox Grid.Column="1"
-				 Grid.Row="4"
-				 Text="{Binding Description}" />
+		<Border Grid.Row="4"
+				Grid.Column="1"
+				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
+			<TextBox Text="{Binding Description}" />
+		</Border>
 		
 		<!-- Location -->
 		<TextBlock Grid.Column="2"
@@ -79,9 +85,11 @@
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{DynamicResource lang_location}"
 				   TextWrapping="Wrap" />
-		<TextBox Grid.Column="3"
-				 Grid.Row="1"
-				 Text="{Binding Location}" />
+		<Border Grid.Row="1"
+				Grid.Column="3"
+				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
+			<TextBox Text="{Binding Location}" />
+		</Border>
 
 		<controls:DialogActionBarControl Grid.Row="99"
 										 Grid.ColumnSpan="99"
