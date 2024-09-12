@@ -85,7 +85,7 @@ internal class GuiManager
 		return string.Empty;
 	}
 
-	private void SetLanguageResourceDictionary(string inFile)
+	private static void SetLanguageResourceDictionary(string inFile)
 	{
 		if (!File.Exists(inFile))
 		{
