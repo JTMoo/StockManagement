@@ -1,4 +1,6 @@
-﻿namespace StockManagement.Kernel.Commands;
+﻿using StockManagement.Kernel.Commands.Data;
+
+namespace StockManagement.Kernel.Commands.StockItem;
 
 
 public class StockItemCreationCommand : ICommand

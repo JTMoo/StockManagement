@@ -1,5 +1,6 @@
 ﻿using StockManagement.Kernel;
-using StockManagement.Kernel.Commands;
+using StockManagement.Kernel.Commands.Data;
+using StockManagement.Kernel.Commands.StockItem;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 

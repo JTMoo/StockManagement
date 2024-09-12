@@ -8,7 +8,7 @@ namespace StockManagement.Kernel;
 
 public class MachineManager : NotificationBase
 {
-	private ObservableCollection<Machine> _machines = new ObservableCollection<Machine>();
+	private ObservableCollection<Machine> _machines = new();
 
 	public ObservableCollection<Machine> Machines
 	{
@@ -19,7 +19,7 @@ public class MachineManager : NotificationBase
 	internal async void Init ()
 	{
 		this.Machines.Clear();
-		var machines = await MainManager.Instance.DatabaseManager.MachineDB.GetAll();
+		var machines = await Database.MachineDataAccess.GetAll();
 		machines.ForEach(machine => this.Machines.Add(machine));
 	}
 
@@ -28,7 +28,7 @@ public class MachineManager : NotificationBase
 		if (_machines.Contains(machine)) return;
 
 		_machines.Add(machine);
-		MainManager.Instance.DatabaseManager.MachineDB.Add(machine);
+		Database.MachineDataAccess.Add(machine);
 		Trace.WriteLine("Machine added.");
 	}
 
@@ -36,6 +36,6 @@ public class MachineManager : NotificationBase
 	{
 		if (!_machines.Contains(machine)) return;
 
-		MainManager.Instance.DatabaseManager.MachineDB.Update(machine).ContinueWith(_ => callback.Invoke());
+		Database.MachineDataAccess.Update(machine).ContinueWith(_ => callback.Invoke());
 	}
 }

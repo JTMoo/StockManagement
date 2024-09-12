@@ -1,9 +1,7 @@
-﻿using StockManagement.Kernel.Model;
-
-namespace StockManagement.Kernel.Commands;
+﻿namespace StockManagement.Kernel.Commands.Data;
 
 
 public class StockItemCommandData : CommandData
 {
-	public StockItem StockItem { get; set; }
+	public Model.StockItem StockItem { get; set; }
 }

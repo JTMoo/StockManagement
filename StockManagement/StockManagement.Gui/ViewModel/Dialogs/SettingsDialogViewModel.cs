@@ -1,5 +1,6 @@
 ﻿using StockManagement.Kernel;
 using StockManagement.Kernel.Commands;
+using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Kernel.Model.Types;
 

@@ -5,14 +5,14 @@ namespace StockManagement.Kernel;
 
 internal class CommandManager : IDisposable
 {
-    private CancellationTokenSource _commandExecutionCancellation;
+    private readonly CancellationTokenSource _commandExecutionCancellation;
     private bool _disposed;
-    private CommandQueue _queue = new CommandQueue();
+    private readonly CommandQueue _queue = new();
 
 
     public CommandManager() 
     {
-        _commandExecutionCancellation = new CancellationTokenSource();
+        this._commandExecutionCancellation = new CancellationTokenSource();
     }
 
     ~CommandManager()
@@ -22,43 +22,39 @@ internal class CommandManager : IDisposable
 
     public void Dispose()
     {
-        if (_disposed) return;
-
-        if (_commandExecutionCancellation != null)
-        {
-            _commandExecutionCancellation.Dispose();
-        }
-
-        _disposed = true;
-    }
+        if (this._disposed) return;
+		this._commandExecutionCancellation?.Dispose();
+		this._disposed = true;
+		GC.SuppressFinalize(this);
+	}
 
     internal void Init()
     {
-        this.StartCommandExecutionTask(_commandExecutionCancellation.Token);
+        this.StartCommandExecutionTask(this._commandExecutionCancellation.Token);
     }
 
     internal void StopCommandExecution()
     {
-        if (_commandExecutionCancellation == null) return;
+        if (this._commandExecutionCancellation == null) return;
 
-        _commandExecutionCancellation.Cancel();
+		this._commandExecutionCancellation.Cancel();
     }
 
     internal bool Push(ICommand command)
     {
-        if (_disposed) return false;
-        if (_commandExecutionCancellation == null) return false;
+        if (this._disposed) return false;
+        if (this._commandExecutionCancellation == null) return false;
         if(command == null) return false;
-        if(_queue == null) return false;
+        if (this._queue == null) return false;
 
-        return _queue.Add(command);
+		return this._queue.Add(command);
     }
 
     private void StartCommandExecutionTask(CancellationToken cancellationToken)
     {
-        MainManager.Instance.StartObservedTask(() =>
+		MainManager.StartObservedTask(() =>
         {
-            while(!_commandExecutionCancellation.IsCancellationRequested)
+            while(!this._commandExecutionCancellation.IsCancellationRequested)
             {
                 Thread.Sleep(500);
                 var command = _queue.Pop();

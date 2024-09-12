@@ -11,7 +11,7 @@ internal class BoolToVisibilityCollabsedConverter : IValueConverter
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		if (value == null) throw new ArgumentNullException(nameof(value));
-		if (!(value is bool visibility)) throw new InvalidCastException(nameof(value));
+		if (value is not bool visibility) throw new InvalidCastException(nameof(value));
 
 		if (parameter != null && parameter is string invert && invert.ToLowerInvariant() == "invert")
 			return visibility ? Visibility.Collapsed : Visibility.Visible;

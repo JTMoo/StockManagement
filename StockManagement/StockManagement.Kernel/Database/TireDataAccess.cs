@@ -6,20 +6,20 @@ namespace StockManagement.Kernel.Database;
 
 internal class TireDataAccess
 {
-	internal async Task<List<Tire>> GetAll()
+	internal static async Task<List<Tire>> GetAll()
 	{
 		var tireCollection = DatabaseManager.ConnectToMongo<Tire>(typeof(Tire).ToString());
 		var tires = await tireCollection.FindAsync(_ => true);
 		return tires.ToList();
 	}
 
-	internal Task Add(Tire tire)
+	internal static Task Add(Tire tire)
 	{
 		var col = DatabaseManager.ConnectToMongo<Tire>(typeof(Tire).ToString());
 		return col.InsertOneAsync(tire);
 	}
 
-	internal Task Update(Tire tire)
+	internal static Task Update(Tire tire)
 	{
 		var col = DatabaseManager.ConnectToMongo<Tire>(typeof(Tire).ToString());
 		var filter = Builders<Tire>.Filter.Eq("Id", tire.Id);

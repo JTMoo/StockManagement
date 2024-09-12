@@ -1,16 +1,13 @@
-﻿using MongoDB.Driver;
-using StockManagement.Kernel.Database;
-using StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Reflection.PortableExecutable;
 
 namespace StockManagement.Kernel;
 
 
 public class SparePartManager : NotificationBase
 {
-	private ObservableCollection<SparePart> _spareParts = new ObservableCollection<SparePart>();
+	private ObservableCollection<SparePart> _spareParts = new();
 
 	public ObservableCollection<SparePart> SpareParts
 	{
@@ -21,7 +18,7 @@ public class SparePartManager : NotificationBase
 	internal async void Init()
 	{
 		this.SpareParts.Clear();
-		var spareParts = await MainManager.Instance.DatabaseManager.SparePartDB.GetAll();
+		var spareParts = await Database.SparePartDataAccess.GetAll();
 		spareParts.ForEach(sparePart => this.SpareParts.Add(sparePart));
 	}
 
@@ -30,7 +27,7 @@ public class SparePartManager : NotificationBase
 		if (sparePart == null) return;
 
 		_spareParts.Add(sparePart);
-		MainManager.Instance.DatabaseManager.SparePartDB.Add(sparePart);
+		Database.SparePartDataAccess.Add(sparePart);
 		Trace.WriteLine("Spare Part added.");
 	}
 
@@ -38,6 +35,6 @@ public class SparePartManager : NotificationBase
 	{
 		if (!_spareParts.Contains(sparePart)) return;
 
-		MainManager.Instance.DatabaseManager.SparePartDB.Update(sparePart).ContinueWith(_ => callback.Invoke());
+		Database.SparePartDataAccess.Update(sparePart).ContinueWith(_ => callback.Invoke());
 	}
 }

@@ -1,6 +1,7 @@
-﻿using StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Commands.Data;
+using StockManagement.Kernel.Model;
 
-namespace StockManagement.Kernel.Commands;
+namespace StockManagement.Kernel.Commands.StockItem;
 
 
 public class StockItemChangeAmountCommand : ICommand
@@ -24,7 +25,7 @@ public class StockItemChangeAmountCommand : ICommand
 
 		var transaction = new Transaction(stockItem.Name, DateTime.Now, Transaction.Kind.Amount, amount);
 		stockItem.Amount += amount;
-		stockItem.Update(() => this.OnUpdateCompleted(transaction));
+		stockItem.Update(() => OnUpdateCompleted(transaction));
 
 		return false;
 	}
@@ -38,11 +39,11 @@ public class StockItemChangeAmountCommand : ICommand
 	/// ----------------------------------------------------------------------------------------------
 	/// <param name="transaction">Transaction that documents change to stock item</param>
 	/// ----------------------------------------------------------------------------------------------
-	private void OnUpdateCompleted(Transaction transaction)
+	private static void OnUpdateCompleted(Transaction transaction)
 	{
 		if (transaction == null) return;
 
-		MainManager.Instance.DatabaseManager.TransactionDB.Add(transaction);
+		Database.TransactionDataAccess.Add(transaction);
 	}
 
 	public enum ChangeType

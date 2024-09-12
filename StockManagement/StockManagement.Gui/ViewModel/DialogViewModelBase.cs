@@ -26,8 +26,7 @@ public class DialogViewModelBase : NotificationBase
 
 	public void Close(bool success)
 	{
-		if (DialogClosing != null)
-			DialogClosing(success);
+		DialogClosing?.Invoke(success);
 	}
 
 	public virtual void Confirm(string param)

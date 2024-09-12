@@ -6,8 +6,7 @@ namespace StockManagement.Gui.Commands;
 
 public class RelayCommand<T> : ICommand
 {
-    #pragma warning disable CA8600, CA8604
-    readonly Action<T>? _execute;
+	readonly Action<T>? _execute;
     readonly Predicate<T>? _canExecute;
 
 
@@ -17,20 +16,17 @@ public class RelayCommand<T> : ICommand
 
     public RelayCommand(Action<T> execute, Predicate<T> canExecute)
     {
-        if (execute == null)
-            throw new ArgumentNullException("execute");
-
-        _execute = execute;
-        _canExecute = canExecute;
+		this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
+		this._canExecute = canExecute;
     }
 
     public bool CanExecute(object? parameter)
     {
-        if (_canExecute == null)
+        if (this._canExecute == null)
             return false;
         if (parameter == null)
-            return _canExecute(default!);
-        return _canExecute((T)parameter);
+            return this._canExecute(default!);
+        return this._canExecute((T)parameter);
     }
 
     public event EventHandler? CanExecuteChanged
@@ -41,11 +37,11 @@ public class RelayCommand<T> : ICommand
 
     public void Execute(object? parameter)
     {
-        if (_execute == null)
+        if (this._execute == null)
             return;
         if (parameter == null)
-            _execute(default!);
+			this._execute(default!);
         else
-            _execute.Invoke((T)parameter);
+			this._execute.Invoke((T)parameter);
     }
 }

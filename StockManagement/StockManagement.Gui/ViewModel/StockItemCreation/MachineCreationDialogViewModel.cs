@@ -1,9 +1,11 @@
-﻿using StockManagement.Kernel.Commands;
-using StockManagement.Kernel;
+﻿using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
+using StockManagement.Kernel.Commands.StockItem;
+using StockManagement.Kernel.Commands.Data;
 
 namespace StockManagement.Gui.ViewModel.StockItemCreation;
+
 
 public class MachineCreationDialogViewModel : DialogViewModelBase
 {

@@ -17,8 +17,8 @@ namespace StockManagement.Gui.ViewModel;
 
 internal class MainViewModel : NotificationBase
 {
-	private ObservableCollection<StockItem> _stockItems = new ObservableCollection<StockItem>();
-	private ObservableCollection<StockItem> _filteredStockItems = new ObservableCollection<StockItem>();
+	private ObservableCollection<StockItem> _stockItems = new();
+	private ObservableCollection<StockItem> _filteredStockItems = new();
 
 	private DialogViewModelBase? _dialog;
 	private StockItem _selectedStockItem;
@@ -26,7 +26,7 @@ internal class MainViewModel : NotificationBase
 	private string _searchCodes;
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
-	private readonly object _stockItemsLock = new object();
+	private readonly object _stockItemsLock = new();
 
 
 	public MainViewModel()
@@ -131,10 +131,6 @@ internal class MainViewModel : NotificationBase
 
 		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
 	}
-	private void OnMoreInfoCommand(StockItem param)
-	{
-		this.Dialog = new MoreInfoDialogViewModel(param);
-	}
 
 	private void OnDialogClosing(bool success)
 	{
@@ -144,7 +140,7 @@ internal class MainViewModel : NotificationBase
 		this.Dialog = null;
 	}
 
-	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool location = false, bool codes = false)
+	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool codes = false)
 	{
 		IEnumerable<StockItem> filteredItems = this.StockItems;
 		if (manufacturer)

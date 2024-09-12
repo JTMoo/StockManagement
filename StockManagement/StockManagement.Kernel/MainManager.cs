@@ -8,26 +8,14 @@ namespace StockManagement.Kernel;
 
 public class MainManager : NotificationBase, IDisposable
 {
-    public static readonly MainManager Instance = new MainManager();
+    public static readonly MainManager Instance = new();
 
-	private CommandManager _commandManager;
-    private DatabaseManager _databaseManager;
-    private MachineManager _machineManager;
-    private TireManager _tireManager;
-    private SparePartManager _sparePartManager;
-
-    private Settings _settings;
+	private readonly CommandManager _commandManager = new();
 
 
-    public MainManager() 
+	public MainManager() 
     {
-        _commandManager = new CommandManager();
-		_databaseManager = new DatabaseManager();
-        _machineManager = new MachineManager();
-        _tireManager = new TireManager();
-		_sparePartManager = new SparePartManager();
-			
-	    _settings = this.DatabaseManager.SettingsDB.Get() ?? new Settings();
+		this.Settings = SettingsDataAccess.Get() ?? new();
     }
 
     ~MainManager()
@@ -35,26 +23,27 @@ public class MainManager : NotificationBase, IDisposable
         this.Dispose();
     }
 
-    public DatabaseManager DatabaseManager => _databaseManager;
-    public MachineManager MachineManager => _machineManager;
-	public SparePartManager SparePartManager => _sparePartManager;
-    public TireManager TireManager => _tireManager;
-    public Settings Settings => _settings;
+    public DatabaseManager DatabaseManager { get; } = new();
+	public MachineManager MachineManager { get; } = new();
+	public SparePartManager SparePartManager { get; } = new();
+	public TireManager TireManager { get; } = new();
+	public Settings Settings { get; }
 
-    public void Init()
+	public void Init()
     {
-        _commandManager.Init();
-        _machineManager.Init();
-        _tireManager.Init();
-        _sparePartManager.Init();
+		this._commandManager.Init();
+		this.MachineManager.Init();
+		this.TireManager.Init();
+		this.SparePartManager.Init();
     }
 
     public void Dispose()
     {
         _commandManager.Dispose();
+        GC.SuppressFinalize(this);
     }
 
-    public async void StartObservedTask(Action action)
+    public static async void StartObservedTask(Action action)
     {
         try
         {
@@ -66,7 +55,7 @@ public class MainManager : NotificationBase, IDisposable
         }
     }
 
-    public async void StartObservedTask(Action action, CancellationToken token)
+    public static async void StartObservedTask(Action action, CancellationToken token)
     {
         try
         {

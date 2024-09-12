@@ -6,20 +6,20 @@ namespace StockManagement.Kernel.Database;
 
 internal class MachineDataAccess
 {
-	internal async Task<List<Machine>> GetAll()
+	internal static async Task<List<Machine>> GetAll()
 	{
 		var machineCollection = DatabaseManager.ConnectToMongo<Machine>(typeof(Machine).ToString());
 		var machines = await machineCollection.FindAsync(_ => true);
 		return machines.ToList();
 	}
 
-	internal Task Add(Machine machine)
+	internal static Task Add(Machine machine)
 	{
 		var col = DatabaseManager.ConnectToMongo<Machine>(typeof(Machine).ToString());
 		return col.InsertOneAsync(machine);
 	}
 
-	internal Task Update(Machine machine)
+	internal static Task Update(Machine machine)
 	{
 		var col = DatabaseManager.ConnectToMongo<Machine>(typeof(Machine).ToString());
 		var filter = Builders<Machine>.Filter.Eq("Id", machine.Id);
