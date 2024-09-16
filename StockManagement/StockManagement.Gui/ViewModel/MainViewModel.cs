@@ -1,4 +1,5 @@
-﻿using StockManagement.Gui.Commands;
+﻿using Microsoft.Win32;
+using StockManagement.Gui.Commands;
 using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
@@ -35,6 +36,7 @@ internal class MainViewModel : NotificationBase
 		MoreInfoCommand = new RelayCommand<StockItem>(stockItem => this.Dialog = new MoreInfoDialogViewModel(stockItem));
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
+		ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
 
 		this.StockItems.CollectionChanged += (_, __) => this.OnRefreshSearch();
 
@@ -46,6 +48,7 @@ internal class MainViewModel : NotificationBase
 	}
 
 	#region Properties
+	public RelayCommand<string> ExcelImportCommand { get; }
 	public RelayCommand<string> QuitCommand { get; }
 	public RelayCommand<StockItem> MoreInfoCommand { get; }
 	public RelayCommand<string> CreateStockItemCommand { get; }
@@ -130,6 +133,19 @@ internal class MainViewModel : NotificationBase
 			return;
 
 		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
+	}
+
+	private void OnExcelImportCommand(string obj)
+	{
+		var dialog = new OpenFileDialog
+		{
+			Filter = "Excel files (*.xlsx)|*.xlsx"
+		};
+		if (dialog.ShowDialog() is bool isTrue && isTrue)
+		{
+			var file = dialog.FileName;
+			MessageBox.Show($"Selected following file: {file}");
+		}
 	}
 
 	private void OnDialogClosing(bool success)
