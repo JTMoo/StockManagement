@@ -7,7 +7,7 @@ namespace StockManagement.Kernel;
 
 public class SparePartManager : NotificationBase
 {
-	private ObservableCollection<SparePart> _spareParts = new();
+	private ObservableCollection<SparePart> _spareParts = [];
 
 	public ObservableCollection<SparePart> SpareParts
 	{

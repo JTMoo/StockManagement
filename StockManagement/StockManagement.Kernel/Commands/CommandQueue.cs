@@ -3,7 +3,7 @@
 
 internal class CommandQueue
 {
-	readonly List<ICommand> _queue = new();
+	readonly List<ICommand> _queue = [];
 
     public bool Add (ICommand command)
     {

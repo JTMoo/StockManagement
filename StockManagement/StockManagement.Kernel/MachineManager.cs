@@ -7,7 +7,7 @@ namespace StockManagement.Kernel;
 
 public class MachineManager : NotificationBase
 {
-	private ObservableCollection<Machine> _machines = new();
+	private ObservableCollection<Machine> _machines = [];
 
 	public ObservableCollection<Machine> Machines
 	{

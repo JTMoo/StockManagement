@@ -5,17 +5,10 @@ using StockManagement.Kernel.Model.Types;
 namespace StockManagement.Kernel.Model;
 
 
-public class Location : NotificationBase
+public class Location(IsleType isle = IsleType.None, ShelfType shelf = ShelfType.None) : NotificationBase
 {
-	private IsleType _isle;
-	private ShelfType _shelf;
-
-
-	public Location (IsleType isle = IsleType.None, ShelfType shelf = ShelfType.None)
-	{
-		_isle = isle;
-		_shelf = shelf;
-	}
+	private IsleType _isle = isle;
+	private ShelfType _shelf = shelf;
 
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]

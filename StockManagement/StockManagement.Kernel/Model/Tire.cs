@@ -27,19 +27,11 @@ public class Tire : StockItem
 		MainManager.Instance.TireManager.Update(this, callback);
 	}
 
-	public class Dimensions
+	public class Dimensions(double rimDiameter, double profile, double width)
 	{
-		private readonly double _rimDiameter = 0.0;
-		private readonly double _profile = 0.0;
-		private readonly double _width = 0.0;
-
-
-		public Dimensions (double rimDiameter, double profile, double width)
-		{
-			this._rimDiameter = rimDiameter;
-			this._profile = profile;
-			this._width = width;
-		}
+		private readonly double _rimDiameter = rimDiameter;
+		private readonly double _profile = profile;
+		private readonly double _width = width;
 
 		public double RimDiameter
 		{

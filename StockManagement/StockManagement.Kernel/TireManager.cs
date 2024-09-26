@@ -7,7 +7,7 @@ namespace StockManagement.Kernel;
 
 public class TireManager : NotificationBase
 {
-	private ObservableCollection<Tire> _tires = new();
+	private ObservableCollection<Tire> _tires = [];
 
 	public ObservableCollection<Tire> Tires
 	{

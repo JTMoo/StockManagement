@@ -23,7 +23,7 @@ internal class GuiManager
 
 	internal static readonly GuiManager Instance = new();
 	internal MainViewModel MainViewModel { get; private set; }
-	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; } = new();
+	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; } = [];
 
 
 	public void Init(MainViewModel mainViewModel)

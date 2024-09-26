@@ -18,8 +18,8 @@ namespace StockManagement.Gui.ViewModel;
 
 internal class MainViewModel : NotificationBase
 {
-	private ObservableCollection<StockItem> _stockItems = new();
-	private ObservableCollection<StockItem> _filteredStockItems = new();
+	private ObservableCollection<StockItem> _stockItems = [];
+	private ObservableCollection<StockItem> _filteredStockItems = [];
 
 	private DialogViewModelBase? _dialog;
 	private StockItem _selectedStockItem;

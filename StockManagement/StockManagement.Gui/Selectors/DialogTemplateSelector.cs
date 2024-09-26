@@ -8,7 +8,7 @@ namespace StockManagement.Gui.Selectors;
 
 public class DialogTemplateSelector : DataTemplateSelector
 {
-	private readonly Dictionary<Type, DataTemplate> ViewModelToView = new();
+	private readonly Dictionary<Type, DataTemplate> ViewModelToView = [];
 
 	public DialogTemplateSelector() 
 	{

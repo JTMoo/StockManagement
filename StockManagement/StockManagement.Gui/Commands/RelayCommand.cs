@@ -4,23 +4,17 @@ using System.Windows.Input;
 namespace StockManagement.Gui.Commands;
 
 
-public class RelayCommand<T> : ICommand
+public class RelayCommand<T>(Action<T> execute, Predicate<T> canExecute) : ICommand
 {
-	readonly Action<T>? _execute;
-    readonly Predicate<T>? _canExecute;
+	readonly Action<T>? _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+    readonly Predicate<T>? _canExecute = canExecute;
 
 
     public RelayCommand(Action<T> execute) : this(execute, _ => true)
     {
     }
 
-    public RelayCommand(Action<T> execute, Predicate<T> canExecute)
-    {
-		this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
-		this._canExecute = canExecute;
-    }
-
-    public bool CanExecute(object? parameter)
+	public bool CanExecute(object? parameter)
     {
         if (this._canExecute == null)
             return false;

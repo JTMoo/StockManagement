@@ -4,15 +4,9 @@ using System.Collections.Generic;
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
 
-public class StockItemTypeSelectionDialogViewModel : DialogViewModelBase
+public class StockItemTypeSelectionDialogViewModel(List<Type> stockItemTypes) : DialogViewModelBase
 {
 	private Type _selectedStockItemType;
-	
-
-	public StockItemTypeSelectionDialogViewModel(List<Type> stockItemTypes)
-	{
-		this.StockItemTypes = stockItemTypes;
-	}
 
 	#region Properties
 	public Type SelectedStockItemType
@@ -21,7 +15,7 @@ public class StockItemTypeSelectionDialogViewModel : DialogViewModelBase
 		set { this.SetField(ref _selectedStockItemType, value); }
 	}
 
-	public List<Type> StockItemTypes { get; }
+	public List<Type> StockItemTypes { get; } = stockItemTypes;
 	#endregion Properties
 
 	public override void Confirm(string obj)
