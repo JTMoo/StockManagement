@@ -1,7 +1,7 @@
 ﻿using StockManagement.Gui.Commands;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Commands.Data;
-using StockManagement.Kernel.Commands.StockItem;
+using StockManagement.Kernel.Commands.StockItemCommands;
 using StockManagement.Kernel.Model;
 using System;
 

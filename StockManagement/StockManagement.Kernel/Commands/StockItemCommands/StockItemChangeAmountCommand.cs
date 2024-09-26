@@ -1,7 +1,7 @@
 ﻿using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Model;
 
-namespace StockManagement.Kernel.Commands.StockItem;
+namespace StockManagement.Kernel.Commands.StockItemCommands;
 
 
 public class StockItemChangeAmountCommand : ICommand

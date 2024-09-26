@@ -1,6 +1,7 @@
 ﻿using StockManagement.Kernel.Commands.Data;
+using StockManagement.Kernel.Model;
 
-namespace StockManagement.Kernel.Commands.StockItem;
+namespace StockManagement.Kernel.Commands.StockItemCommands;
 
 
 public class StockItemCreationCommand : ICommand
@@ -10,10 +11,9 @@ public class StockItemCreationCommand : ICommand
 	public bool Execute()
 	{
 		if (Data == null) return false;
-		if (Data is not StockItemCommandData) return false;
+		if (Data is not StockItemCommandData data || data.StockItem is not StockItem item) return false;
 
-
-		((StockItemCommandData)Data).StockItem?.Register();
+		item.Register();
 
 		return true;
 	}

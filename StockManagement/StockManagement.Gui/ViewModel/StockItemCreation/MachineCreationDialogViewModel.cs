@@ -1,8 +1,8 @@
 ﻿using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
-using StockManagement.Kernel.Commands.StockItem;
 using StockManagement.Kernel.Commands.Data;
+using StockManagement.Kernel.Commands.StockItemCommands;
 
 namespace StockManagement.Gui.ViewModel.StockItemCreation;
 
@@ -57,7 +57,7 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new StockItemCommandData
 			{
-				Value = new Machine(name: this.Name,
+				StockItem = new Machine(name: this.Name,
 					description: this.Description,
 					amount: this.Amount,
 					price: this.Price,

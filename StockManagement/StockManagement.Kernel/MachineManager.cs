@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -20,7 +19,7 @@ public class MachineManager : NotificationBase
 	{
 		this.Machines.Clear();
 		var machines = await Database.MachineDataAccess.GetAll();
-		machines.ForEach(machine => this.Machines.Add(machine));
+		machines.ForEach(this.Machines.Add);
 	}
 
 	internal void Register(Machine machine)
