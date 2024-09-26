@@ -13,7 +13,7 @@ public partial class App
 
 	protected override void OnStartup(StartupEventArgs e)
     {
-        MainManager.Instance.Init();
+        MainManager.Initialize();
 
         _mainViewModel = new MainViewModel();
         GuiManager.Instance.Init(_mainViewModel);
@@ -28,7 +28,7 @@ public partial class App
 
     protected override void OnExit(ExitEventArgs e)
     {
-        MainManager.Instance.Dispose();
+        MainManager.Dispose(true);
         base.OnExit(e);
     }
 }

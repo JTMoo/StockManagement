@@ -7,33 +7,39 @@ namespace StockManagement.Kernel;
 
 public class MachineManager : NotificationBase
 {
-	private ObservableCollection<Machine> _machines = [];
+	private readonly ObservableCollection<Machine> _editableMachines = [];
+	private readonly ReadOnlyObservableCollection<Machine> _machines;
 
-	public ObservableCollection<Machine> Machines
+
+	public MachineManager()
+	{
+		this._machines = new(this._editableMachines);
+	}
+
+	public ReadOnlyObservableCollection<Machine> Machines
 	{
 		get { return _machines; }
-		private set { this.SetField(ref this._machines, value); }
 	}
 
 	internal async void Init ()
 	{
-		this.Machines.Clear();
+		this._editableMachines.Clear();
 		var machines = await Database.MachineDataAccess.GetAll();
-		machines.ForEach(this.Machines.Add);
+		machines.ForEach(this._editableMachines.Add);
 	}
 
 	internal void Register(Machine machine)
 	{
-		if (_machines.Contains(machine)) return;
+		if (_editableMachines.Contains(machine)) return;
 
-		_machines.Add(machine);
+		_editableMachines.Add(machine);
 		Database.MachineDataAccess.Add(machine);
 		Trace.WriteLine("Machine added.");
 	}
 
 	internal void Update(Machine machine, Action callback)
 	{
-		if (!_machines.Contains(machine)) return;
+		if (!_editableMachines.Contains(machine)) return;
 
 		Database.MachineDataAccess.Update(machine).ContinueWith(_ => callback.Invoke());
 	}

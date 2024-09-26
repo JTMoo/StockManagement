@@ -8,10 +8,11 @@ namespace StockManagement.Kernel;
 
 public class MainManager : NotificationBase, IDisposable
 {
-    public static readonly MainManager Instance = new();
+    internal static readonly MainManager Instance = new();
 
 	private readonly CommandManager _commandManager = new();
-
+	private static readonly bool _isInitialized;
+	private static bool _disposed;
 
 	public MainManager() 
     {
@@ -29,21 +30,37 @@ public class MainManager : NotificationBase, IDisposable
 	public TireManager TireManager { get; } = new();
 	public Settings Settings { get; }
 
-	public void Init()
+
+    public static void Initialize()
     {
-		this._commandManager.Init();
-		this.MachineManager.Init();
-		this.TireManager.Init();
-		this.SparePartManager.Init();
+        if (_isInitialized) return;
+
+        Instance.Init();
     }
 
-    public void Dispose()
-    {
-        _commandManager.Dispose();
-        GC.SuppressFinalize(this);
-    }
 
-    public static async void StartObservedTask(Action action)
+    public static void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (disposing)
+		{
+			Instance.Dispose();
+		}
+
+        _disposed = true;
+	}
+
+	public void Dispose()
+	{
+		_commandManager.Dispose();
+		GC.SuppressFinalize(this);
+	}
+
+	public static async void StartObservedTask(Action action)
     {
         try
         {
@@ -70,5 +87,13 @@ public class MainManager : NotificationBase, IDisposable
     public bool PushCommand(ICommand command)
     {
         return _commandManager.Push(command);
-    }
+	}
+
+	private void Init()
+	{
+		this._commandManager.Init();
+		this.MachineManager.Init();
+		this.TireManager.Init();
+		this.SparePartManager.Init();
+	}
 }

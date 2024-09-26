@@ -13,7 +13,7 @@ public class SettingsDialogViewModel : DialogViewModelBase
 
 	public SettingsDialogViewModel()
 	{
-		this.SelectedLanguage = MainManager.Instance.Settings.SelectedLanguage;
+		this.SelectedLanguage = MainManagerFacade.SelectedLanguage;
 	}
 
 	public Language SelectedLanguage

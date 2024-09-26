@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using StockManagement.Kernel.Model.ExtensionMethods;
+using System.Windows.Data;
 
 namespace StockManagement.Gui;
 
@@ -25,17 +26,17 @@ internal class GuiManager
 	internal MainViewModel MainViewModel { get; private set; }
 	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; } = [];
 
-
 	public void Init(MainViewModel mainViewModel)
 	{
 		this.MainViewModel = mainViewModel;
+
 		try
 		{
 			this.MainViewModel.StockItemTypes = GetStockItemTypes();
 			this.AssignDialogs();
 			_directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-			SetLanguageResourceDictionary(GetLocXamlFilePath(MainManager.Instance.Settings.SelectedLanguage.GetEnumDescription()));
+			SetLanguageResourceDictionary(GetLocXamlFilePath(MainManagerFacade.SelectedLanguage.GetEnumDescription()));
 		}
 		catch(Exception ex)
 		{

@@ -7,33 +7,39 @@ namespace StockManagement.Kernel;
 
 public class SparePartManager : NotificationBase
 {
-	private ObservableCollection<SparePart> _spareParts = [];
+	private readonly ObservableCollection<SparePart> _editableSpareParts = [];
+	private readonly ReadOnlyObservableCollection<SparePart> _spareParts;
 
-	public ObservableCollection<SparePart> SpareParts
+
+	public SparePartManager()
+	{
+		this._spareParts = new(_editableSpareParts);
+	}
+
+	public ReadOnlyObservableCollection<SparePart> SpareParts
 	{
 		get { return _spareParts; }
-		private set { this.SetField(ref this._spareParts, value); }
 	}
 
 	internal async void Init()
 	{
-		this.SpareParts.Clear();
+		this._editableSpareParts.Clear();
 		var spareParts = await Database.SparePartDataAccess.GetAll();
-		spareParts.ForEach(sparePart => this.SpareParts.Add(sparePart));
+		spareParts.ForEach(sparePart => this._editableSpareParts.Add(sparePart));
 	}
 
 	internal void Register(SparePart sparePart)
 	{
 		if (sparePart == null) return;
 
-		_spareParts.Add(sparePart);
+		_editableSpareParts.Add(sparePart);
 		Database.SparePartDataAccess.Add(sparePart);
 		Trace.WriteLine("Spare Part added.");
 	}
 
 	internal void Update(SparePart sparePart, Action callback)
 	{
-		if (!_spareParts.Contains(sparePart)) return;
+		if (!_editableSpareParts.Contains(sparePart)) return;
 
 		Database.SparePartDataAccess.Update(sparePart).ContinueWith(_ => callback.Invoke());
 	}

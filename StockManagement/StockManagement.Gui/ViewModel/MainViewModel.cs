@@ -7,7 +7,7 @@ using StockManagement.Kernel.Model.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -27,7 +27,7 @@ internal class MainViewModel : NotificationBase
 	private string _searchCodes;
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
-	private readonly object _stockItemsLock = new();
+	private ICollectionView stockItems;
 
 
 	public MainViewModel()
@@ -38,17 +38,23 @@ internal class MainViewModel : NotificationBase
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 		ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
 
-		this.StockItems.CollectionChanged += (_, __) => this.OnRefreshSearch();
+		this.stockItems = new CollectionViewSource 
+		{ 
+			Source = new CompositeCollection
+			{
+				new CollectionContainer() { Collection = MainManagerFacade.Machines },
+				new CollectionContainer() { Collection = MainManagerFacade.SpareParts },
+				new CollectionContainer() { Collection = MainManagerFacade.Tires }
+			}
+		}.View;
 
-		BindingOperations.EnableCollectionSynchronization(_stockItems, _stockItemsLock);
-
-		MainManager.Instance.MachineManager.Machines.CollectionChanged += this.OnMachinesChanged;
-		MainManager.Instance.SparePartManager.SpareParts.CollectionChanged += this.OnSparepartsChanged;
-		MainManager.Instance.TireManager.Tires.CollectionChanged += this.OnTiresChanged;
+		this.stockItems.CollectionChanged += (_, __) => this.OnRefreshSearch();
+		this.OnRefreshSearch();
 	}
 
 	#region Properties
 	public RelayCommand<string> ExcelImportCommand { get; }
+
 	public RelayCommand<string> QuitCommand { get; }
 	public RelayCommand<StockItem> MoreInfoCommand { get; }
 	public RelayCommand<string> CreateStockItemCommand { get; }
@@ -67,12 +73,6 @@ internal class MainViewModel : NotificationBase
 		}
 	}
 	public List<Type> StockItemTypes { get; internal set; }
-
-	public ObservableCollection<StockItem> StockItems
-	{
-		get => this._stockItems;
-		set => this.SetField(ref this._stockItems, value);
-	}
 
 	public ObservableCollection<StockItem> FilteredStockItems
 	{
@@ -158,7 +158,7 @@ internal class MainViewModel : NotificationBase
 
 	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool codes = false)
 	{
-		IEnumerable<StockItem> filteredItems = this.StockItems;
+		var filteredItems = this.stockItems.Cast<StockItem>();
 		if (manufacturer)
 			filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? filteredItems : filteredItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
 		else if (type)
@@ -169,53 +169,5 @@ internal class MainViewModel : NotificationBase
 			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Code.ToLower(), this.SearchCodes.ToLower()));
 		
 		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
-	}
-
-	private void OnTiresChanged(object? sender, NotifyCollectionChangedEventArgs e)
-	{
-		if (e.NewItems == null) return;
-
-		foreach (var tire in e.NewItems)
-		{
-			if (tire == null || tire is not Tire)
-				continue;
-
-			lock (_stockItemsLock)
-			{
-				this.StockItems.Add((Tire)tire);
-			}
-		}
-	}
-
-	private void OnSparepartsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-	{
-		if (e.NewItems == null) return;
-
-		foreach (var sparePart in e.NewItems)
-		{
-			if (sparePart == null || sparePart is not SparePart)
-				continue;
-
-			lock (_stockItemsLock)
-			{
-				this.StockItems.Add((SparePart)sparePart);
-			}
-		}
-	}
-
-	private void OnMachinesChanged(object? sender, NotifyCollectionChangedEventArgs e)
-	{
-		if (e.NewItems == null) return;
-
-		foreach (var machine in e.NewItems)
-		{
-			if (machine == null || machine is not Machine)
-				continue;
-
-			lock (_stockItemsLock)
-			{
-				this.StockItems.Add((Machine)machine);
-			}
-		}
 	}
 }
