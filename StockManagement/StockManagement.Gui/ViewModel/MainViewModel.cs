@@ -18,7 +18,6 @@ namespace StockManagement.Gui.ViewModel;
 
 internal class MainViewModel : NotificationBase
 {
-	private ObservableCollection<StockItem> _stockItems = [];
 	private ObservableCollection<StockItem> _filteredStockItems = [];
 
 	private DialogViewModelBase? _dialog;
@@ -27,7 +26,7 @@ internal class MainViewModel : NotificationBase
 	private string _searchCodes;
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
-	private ICollectionView stockItems;
+	private readonly ICollectionView stockItems;
 
 
 	public MainViewModel()
@@ -143,8 +142,7 @@ internal class MainViewModel : NotificationBase
 		};
 		if (dialog.ShowDialog() is bool isTrue && isTrue)
 		{
-			var file = dialog.FileName;
-			MessageBox.Show($"Selected following file: {file}");
+			this.Dialog = new ExcelImportDialogViewModel(dialog.FileName);
 		}
 	}
 

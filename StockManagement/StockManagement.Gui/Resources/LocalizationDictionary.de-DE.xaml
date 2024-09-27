@@ -15,6 +15,7 @@
 	<sys:String x:Key="lang_searchCodes">Suche in Codes:</sys:String>
 	<sys:String x:Key="lang_searchLocation">Lagerorte durchsuchen:</sys:String>
 	<sys:String x:Key="lang_searchNames">Suche in Namen:</sys:String>
+	<sys:String x:Key="lang_selectExcelSheet">Excel Blatt auswählen:</sys:String>
 	<sys:String x:Key="lang_selectItemType">Lagerartikeltyp auswählen:</sys:String>
 	<sys:String x:Key="lang_selectLanguage">Sprache auswählen:</sys:String>
 	<sys:String x:Key="lang_selectManufacturer">Hersteller auswählen:</sys:String>

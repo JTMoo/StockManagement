@@ -26,6 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
   </ItemGroup>
 

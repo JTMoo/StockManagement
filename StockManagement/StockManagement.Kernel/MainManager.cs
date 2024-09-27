@@ -2,6 +2,7 @@
 using StockManagement.Kernel.Database;
 using System.Diagnostics;
 using StockManagement.Kernel.Model;
+using System.Runtime.CompilerServices;
 
 namespace StockManagement.Kernel;
 
@@ -11,7 +12,7 @@ public class MainManager : NotificationBase, IDisposable
     internal static readonly MainManager Instance = new();
 
 	private readonly CommandManager _commandManager = new();
-	private static readonly bool _isInitialized;
+	private static bool _isInitialized = false;
 	private static bool _disposed;
 
 	public MainManager() 
@@ -95,5 +96,6 @@ public class MainManager : NotificationBase, IDisposable
 		this.MachineManager.Init();
 		this.TireManager.Init();
 		this.SparePartManager.Init();
+        _isInitialized = true;
 	}
 }
