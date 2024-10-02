@@ -25,4 +25,7 @@
 	<DataTemplate DataType="{x:Type dialogVMs:ExcelImportDialogViewModel}">
 		<dialogControls:ExcelImportDialog />
 	</DataTemplate>
+	<DataTemplate DataType="{x:Type dialogVMs:TableMappingViewModel}">
+		<dialogControls:TableMappingDialog />
+	</DataTemplate>
 </ResourceDictionary>

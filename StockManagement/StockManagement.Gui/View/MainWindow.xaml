@@ -3,29 +3,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
-		xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
 		mc:Ignorable="d"
 		WindowState="Maximized"
 		WindowStyle="None"
 		FontSize="18"
         Title="Stock Management" Height="800" Width="1200">
-	<Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="Dictionaries\ComboBoxDictionary.xaml" />
-				<ResourceDictionary Source="Dictionaries\TextBoxDictionary.xaml" />
-				<ResourceDictionary Source="Dictionaries\ButtonDictionary.xaml" />
-				<ResourceDictionary Source="Dictionaries\ListViewDictionary.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-			<ObjectDataProvider x:Key="typesFromManufacturers" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
-				<ObjectDataProvider.MethodParameters>
-					<x:Type TypeName="types:ManufacturerType"/>
-				</ObjectDataProvider.MethodParameters>
-			</ObjectDataProvider>
-		</ResourceDictionary>
-	</Window.Resources>
-
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>

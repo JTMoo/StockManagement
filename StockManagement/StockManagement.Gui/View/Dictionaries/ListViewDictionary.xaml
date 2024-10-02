@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:converter="clr-namespace:StockManagement.Gui.Converter"
+					xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="ButtonDictionary.xaml"/>
@@ -104,6 +105,28 @@
 					Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
 					Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
 					CommandParameter="{Binding }"/>
+		</Grid>
+	</DataTemplate>
+	
+	<DataTemplate x:Key="StockItemTypeExcelImportListViewItems">
+		<Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter}, Path=ActualWidth}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="50"/>
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+
+			<ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TableNames}">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="SelectionChanged">
+						<i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectedItemChangedCommand}"
+											   CommandParameter="{Binding .}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+			</ComboBox>
+			<TextBlock Grid.Column="1" Style="{StaticResource ArrowTextBlockStyle}" />
+			<TextBlock Grid.Column="2" HorizontalAlignment="Left" Text="{Binding Name}"
+					   FontSize="25" />
 		</Grid>
 	</DataTemplate>
 </ResourceDictionary>

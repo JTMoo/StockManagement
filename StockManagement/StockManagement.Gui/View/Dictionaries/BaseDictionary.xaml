@@ -1,8 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:converter="clr-namespace:StockManagement.Gui.Converter"
 					xmlns:selectors="clr-namespace:StockManagement.Gui.Selectors"
+					xmlns:system="clr-namespace:System;assembly=mscorlib"
+					xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	
+	<ObjectDataProvider x:Key="typesFromManufacturers" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+		<ObjectDataProvider.MethodParameters>
+			<x:Type TypeName="types:ManufacturerType"/>
+		</ObjectDataProvider.MethodParameters>
+	</ObjectDataProvider>
+
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
 
@@ -50,6 +57,14 @@
 		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"
 		   TargetType="{x:Type TextBlock}">
 		<Setter Property="Margin" Value="0,10,0,0" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+	</Style>
+
+	<Style x:Key="ArrowTextBlockStyle"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="Text" Value="&#x2794;" />
+		<Setter Property="FontSize" Value="25" />
+		<Setter Property="VerticalAlignment" Value="Center" />
 		<Setter Property="HorizontalAlignment" Value="Center" />
 	</Style>
 

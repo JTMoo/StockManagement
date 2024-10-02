@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="StockManagement.Gui.View.Dialogs.ExcelImportDialog"
+﻿<UserControl x:Class="StockManagement.Gui.View.Dialogs.TableMappingDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -17,10 +17,11 @@
 
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="100"/>
+			<RowDefinition Height="10"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="10"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="10"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
@@ -35,18 +36,23 @@
 		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="30"
 				   HorizontalAlignment="Center"
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{DynamicResource lang_selectExcelSheet}" />
+				   Text="{DynamicResource lang_mapProperties}" />
 
 		<!-- Excel Sheet Names -->
 		<ComboBox Grid.Column="1"
 				  Grid.Row="3"
-				  ItemsSource="{Binding WorksheetNames}"
-				  Style="{StaticResource CustomComboBoxStyle}"
-				  SelectedItem="{Binding SelectedWorksheetName}"/>
+				  ItemsSource="{Binding StockItemTypes}"
+				  DisplayMemberPath="Name"
+				  SelectedItem="{Binding SelectedStockItemType}" />
 
 		<controls:DialogActionBarControl Grid.Row="99"
 										 Grid.ColumnSpan="99"
 										 ConfirmCommand="{Binding ConfirmDialogCommand}"
 										 CancelCommand="{Binding CancelDialogCommand}"/>
+
+		<ListView Grid.Row="5" Grid.Column="1" 
+				  ItemsSource="{Binding SelectedStockItemTypeProperties}"
+				  Background="Transparent"
+				  ItemTemplate="{StaticResource StockItemTypeExcelImportListViewItems}"/>
 	</Grid>
 </UserControl>

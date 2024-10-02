@@ -7,6 +7,7 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 public class ExcelImportDialogViewModel : DialogViewModelBase
 {
 	private string selectedWorksheetName = string.Empty;
+	private XLWorkbook workbook;
 
 
 	public ExcelImportDialogViewModel(string filePath)
@@ -14,7 +15,7 @@ public class ExcelImportDialogViewModel : DialogViewModelBase
 		this.GetExcelSheetNames(filePath);
 	}
 
-	public ObservableCollection<string> WorksheetNames { get; set; }
+	public ObservableCollection<string> WorksheetNames { get; } = [];
 
 	public string SelectedWorksheetName
 	{
@@ -22,10 +23,15 @@ public class ExcelImportDialogViewModel : DialogViewModelBase
 		set { this.SetField(ref this.selectedWorksheetName, value); }
 	}
 
+	public override void Confirm(string param)
+	{
+		GuiManager.Instance.MainViewModel.Dialog = new TableMappingViewModel(this.workbook.Worksheet(this.SelectedWorksheetName));
+	}
+
 	private void GetExcelSheetNames(string filePath)
 	{
-		var workbook = new XLWorkbook(filePath);
-		foreach (var sheet in workbook.Worksheets)
+		this.workbook = new XLWorkbook(filePath);
+		foreach (var sheet in this.workbook.Worksheets)
 		{
 			this.WorksheetNames.Add(sheet.Name);
 		}

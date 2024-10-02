@@ -13,6 +13,7 @@ public abstract class StockItem : NotificationBase
 	private string _name = string.Empty;
 	private ManufacturerType _manufacturer;
 	private int _price;
+	private double _factor;
 	private int _amount;
 
 	public StockItem ()
@@ -67,6 +68,12 @@ public abstract class StockItem : NotificationBase
 	{
 		get { return _price; }
 		set { this.SetField(ref _price, value); }
+	}
+
+	public double Factor
+	{
+		get { return _factor; }
+		set { this.SetField(ref _factor, value); }
 	}
 
 	public ManufacturerType Manufacturer

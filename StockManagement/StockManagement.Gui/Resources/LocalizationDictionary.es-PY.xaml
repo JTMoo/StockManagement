@@ -10,6 +10,7 @@
 	<sys:String x:Key="lang_changeInfo">Cambio del artículo</sys:String>
 	<sys:String x:Key="lang_createItem">Crear artículo</sys:String>
 	<sys:String x:Key="lang_excelImport">Importación de Excel</sys:String>
+	<sys:String x:Key="lang_mapProperties">Mapear columnas á propiedades</sys:String>
 	<sys:String x:Key="lang_search">Búsqueda:</sys:String>
 	<sys:String x:Key="lang_searchBoxDefault">Buscar...</sys:String>
 	<sys:String x:Key="lang_searchCodes">Buscar en codigos:</sys:String>

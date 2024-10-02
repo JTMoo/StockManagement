@@ -10,6 +10,7 @@
 	<sys:String x:Key="lang_changeInfo">Artikelinfos ändern</sys:String>
 	<sys:String x:Key="lang_createItem">Lagerartikel erstellen</sys:String>
 	<sys:String x:Key="lang_excelImport">Excel Import</sys:String>
+	<sys:String x:Key="lang_mapProperties">Spalten zu Eigenschaften zuordnen</sys:String>
 	<sys:String x:Key="lang_search">Suche:</sys:String>
 	<sys:String x:Key="lang_searchBoxDefault">Suche...</sys:String>
 	<sys:String x:Key="lang_searchCodes">Suche in Codes:</sys:String>
