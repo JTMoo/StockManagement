@@ -38,9 +38,8 @@
 		</Grid.ColumnDefinitions>
 
 		<!-- Title -->
-		<TextBlock Grid.Row="1"
-		           Grid.Column="1"
-		           FontSize="30"
+		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="30"
+				   HorizontalAlignment="Center"
 		           Style="{StaticResource BaseDialogTextBlockStyle}"
 		           Text="{DynamicResource lang_selectLanguage}" />
 

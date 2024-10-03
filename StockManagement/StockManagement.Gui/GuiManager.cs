@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using StockManagement.Kernel.Model.ExtensionMethods;
-using System.Windows.Data;
 
 namespace StockManagement.Gui;
 

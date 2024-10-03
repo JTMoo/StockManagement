@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using StockManagement.Gui.Commands;
 using StockManagement.Kernel.Model.ExtensionMethods;
@@ -11,10 +13,10 @@ using StockManagement.Kernel.Model.ExtensionMethods;
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
 
-public class TableMappingViewModel : DialogViewModelBase
+public partial class TableMappingViewModel : DialogViewModelBase
 {
 	private Type selectedStockItemType;
-	private IXLWorksheet worksheet;
+	private readonly IXLWorksheet worksheet;
 
 
 	public TableMappingViewModel(IXLWorksheet worksheet)
@@ -27,8 +29,9 @@ public class TableMappingViewModel : DialogViewModelBase
 		this.PropertyChanged += OnPropertyChangedEvent;
 	}
 
+	#region Properties
+	public List<Type> StockItemTypes { get; } = new(GuiManager.Instance.MainViewModel.StockItemTypes);
 	public ObservableCollection<PropertyInfo> SelectedStockItemTypeProperties { get; } = [];
-
 	public ObservableCollection<string> TableNames { get; } = [];
 
 	public Type SelectedStockItemType
@@ -38,6 +41,7 @@ public class TableMappingViewModel : DialogViewModelBase
 	}
 
 	public RelayCommand<PropertyInfo> SelectedItemChangedCommand { get; }
+	#endregion Properties
 
 	private void GetTableDataFromWorksheet()
 	{
@@ -45,7 +49,7 @@ public class TableMappingViewModel : DialogViewModelBase
 
 		foreach (var cell in this.worksheet.FirstRowUsed().CellsUsed())
 		{
-			this.TableNames.Add(cell.GetString());
+			this.TableNames.Add(LineBreakDetection().Replace(cell.GetString(), " "));
 		}
 	}
 
@@ -60,7 +64,7 @@ public class TableMappingViewModel : DialogViewModelBase
 		var table = this.worksheet.Tables.Table(0);
 		foreach (var cell in table.FirstRowUsed().CellsUsed())
 		{
-			this.TableNames.Add(cell.GetString());
+			this.TableNames.Add(LineBreakDetection().Replace(cell.GetString(), " "));
 		}
 
 		return true;
@@ -77,4 +81,7 @@ public class TableMappingViewModel : DialogViewModelBase
 	{
 		Trace.WriteLine("Works so far");
 	}
+
+	[GeneratedRegex(@"\t|\n|\r")]
+	private static partial Regex LineBreakDetection();
 }

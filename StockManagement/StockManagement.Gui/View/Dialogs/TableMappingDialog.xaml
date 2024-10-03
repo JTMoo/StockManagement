@@ -7,13 +7,6 @@
              xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="..\Dictionaries\ComboBoxDictionary.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</UserControl.Resources>
 
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
@@ -43,6 +36,7 @@
 				  Grid.Row="3"
 				  ItemsSource="{Binding StockItemTypes}"
 				  DisplayMemberPath="Name"
+				  Style="{StaticResource CustomComboBoxStyle}"
 				  SelectedItem="{Binding SelectedStockItemType}" />
 
 		<controls:DialogActionBarControl Grid.Row="99"
@@ -52,7 +46,8 @@
 
 		<ListView Grid.Row="5" Grid.Column="1" 
 				  ItemsSource="{Binding SelectedStockItemTypeProperties}"
-				  Background="Transparent"
+				  Style="{StaticResource DefaultListViewStyle}"
+				  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
 				  ItemTemplate="{StaticResource StockItemTypeExcelImportListViewItems}"/>
 	</Grid>
 </UserControl>

@@ -23,9 +23,37 @@
 		<ListView Margin="5"
 				  ItemsSource="{Binding FilteredStockItems}"
 				  Style="{StaticResource DefaultListViewStyle}"
-				  SelectedItem="{Binding SelectedStockItem}"
-				  ItemTemplate="{StaticResource DefaultListViewItemTemplate}" />
-		
+				  SelectedItem="{Binding SelectedStockItem}">
+			<ListView.View>
+				<GridView>
+					<GridView.Columns>
+						<GridViewColumn Header="{DynamicResource lang_name}" Width="Auto" DisplayMemberBinding="{Binding Name}"/>
+						<GridViewColumn Header="{DynamicResource lang_code}" Width="200" DisplayMemberBinding="{Binding Code}"/>
+						<GridViewColumn Header="{DynamicResource lang_quantity}" Width="75" DisplayMemberBinding="{Binding Quantity}"/>
+						<GridViewColumn Header="{DynamicResource lang_price}" Width="100" DisplayMemberBinding="{Binding Price}"/>
+						<GridViewColumn Header="{DynamicResource lang_manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}"/>
+						<GridViewColumn Header="{DynamicResource lang_location}" Width="200" DisplayMemberBinding="{Binding Location}"/>
+						<GridViewColumn>
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<Button	Grid.Column="10"
+											HorizontalAlignment="Right"
+											Content="{DynamicResource lang_more}"
+											Style="{StaticResource BaseButtonStyle}"
+											Height="Auto"
+											FontSize="15"
+											Margin="0"
+											Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
+											Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
+											CommandParameter="{Binding }"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+					</GridView.Columns>
+				</GridView>
+			</ListView.View>
+		</ListView>
+
 		<!-- Search Bar -->
 		<StackPanel Grid.Row="0" Grid.Column="2">
 			<TextBlock Text="{DynamicResource lang_search}"
