@@ -14,6 +14,19 @@
 		<Setter Property="BorderThickness" Value="0" />
 	</Style>
 
+	<DataTemplate x:Key="MainListViewAdditionalInfoButtonTemplate">
+		<Button	Grid.Column="10"
+				HorizontalAlignment="Right"
+				Content="{DynamicResource lang_more}"
+				Style="{StaticResource BaseButtonStyle}"
+				Height="Auto"
+				FontSize="15"
+				Margin="0"
+				Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
+				Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
+				CommandParameter="{Binding }"/>
+	</DataTemplate>
+
 	<DataTemplate x:Key="StockItemTypeExcelImportListViewItems">
 		<Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsPresenter}, Path=ActualWidth}">
 			<Grid.ColumnDefinitions>

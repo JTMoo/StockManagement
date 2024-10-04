@@ -33,22 +33,7 @@
 						<GridViewColumn Header="{DynamicResource lang_price}" Width="100" DisplayMemberBinding="{Binding Price}"/>
 						<GridViewColumn Header="{DynamicResource lang_manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}"/>
 						<GridViewColumn Header="{DynamicResource lang_location}" Width="200" DisplayMemberBinding="{Binding Location}"/>
-						<GridViewColumn>
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<Button	Grid.Column="10"
-											HorizontalAlignment="Right"
-											Content="{DynamicResource lang_more}"
-											Style="{StaticResource BaseButtonStyle}"
-											Height="Auto"
-											FontSize="15"
-											Margin="0"
-											Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
-											Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
-											CommandParameter="{Binding }"/>
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</GridViewColumn>
+						<GridViewColumn CellTemplate="{StaticResource MainListViewAdditionalInfoButtonTemplate}"/>
 					</GridView.Columns>
 				</GridView>
 			</ListView.View>
