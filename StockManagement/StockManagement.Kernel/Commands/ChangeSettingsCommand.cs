@@ -9,7 +9,7 @@ public class ChangeSettingsCommand : ICommand
 	public CommandData Data { get; set; }
 	public bool Execute()
 	{
-		if (Data.Value is not Language value) return false;
+		if (Data.Value is not AvailableLanguages value) return false;
 
 		MainManager.Instance.Settings.SelectedLanguage = value;
 		Database.SettingsDataAccess.Update();

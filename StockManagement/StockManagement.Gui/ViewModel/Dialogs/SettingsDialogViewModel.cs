@@ -1,4 +1,7 @@
-﻿using StockManagement.Kernel;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
+using StockManagement.Kernel;
 using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Model.ExtensionMethods;
@@ -9,19 +12,27 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 
 public class SettingsDialogViewModel : DialogViewModelBase
 {
-	private Language _selectedLanguage;
+	private AvailableLanguages _selectedLanguage;
+	private bool languageChangedOnce = false;
 
 	public SettingsDialogViewModel()
 	{
 		this.SelectedLanguage = MainManagerFacade.SelectedLanguage;
+		this.PropertyChanged += this.OnPropertyChangedEvent;
 	}
 
-	public Language SelectedLanguage
+	public AvailableLanguages SelectedLanguage
 	{
 		get => _selectedLanguage;
 		set => this.SetField(ref this._selectedLanguage, value);
 	}
 
+	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName != nameof(this.SelectedLanguage) || languageChangedOnce) return;
+
+		MessageBox.Show(Language.Resources.languageChangedMessage, string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
+	}
 
 	public override void Confirm(string obj)
 	{
@@ -33,7 +44,6 @@ public class SettingsDialogViewModel : DialogViewModelBase
 			}
 		};
 
-		GuiManager.Instance.ChangeLanguage(this.SelectedLanguage.GetEnumDescription());
 		MainManagerFacade.PushCommand(command);
 		base.Confirm(obj);
 	}

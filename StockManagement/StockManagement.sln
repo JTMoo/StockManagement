@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Language", "StockManagement.Language\StockManagement.Language.csproj", "{50F297FB-853A-4320-A064-6F332218104F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{C2CEDA4A-255D-46AF-99E8-1C2A823565EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2CEDA4A-255D-46AF-99E8-1C2A823565EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2CEDA4A-255D-46AF-99E8-1C2A823565EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F297FB-853A-4320-A064-6F332218104F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F297FB-853A-4320-A064-6F332218104F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F297FB-853A-4320-A064-6F332218104F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F297FB-853A-4320-A064-6F332218104F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

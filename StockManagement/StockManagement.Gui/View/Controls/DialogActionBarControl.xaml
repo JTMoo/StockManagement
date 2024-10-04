@@ -1,9 +1,10 @@
 ﻿<UserControl x:Class="StockManagement.Gui.View.Controls.DialogActionBarControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:lang="clr-namespace:StockManagement.Language;assembly=StockManagement.Language"
              xmlns:local="clr-namespace:StockManagement.Gui.View.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              mc:Ignorable="d"
 			 x:Name="parent"
              d:DesignHeight="80" d:DesignWidth="800">
@@ -21,13 +22,13 @@
 				Margin="10"
 				DataContext="{Binding ElementName=parent}">
 		<Button Style="{StaticResource BaseDialogButtonStyle}"
-				Content="{DynamicResource lang_confirm}"
+				Content="{x:Static lang:Resources.confirm}"
 				Width="100"
 				Margin="10"
 				Visibility="{Binding ConfirmVisibility}"
 				Command="{Binding ConfirmCommand}"/>
 		<Button Style="{StaticResource BaseDialogButtonStyle}"
-				Content="{DynamicResource lang_cancel}"
+				Content="{x:Static lang:Resources.cancel}"
 				Width="100"
 				Margin="10"
 				Visibility="{Binding CancelVisibility}"

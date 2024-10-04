@@ -9,6 +9,11 @@
 			<x:Type TypeName="types:ManufacturerType"/>
 		</ObjectDataProvider.MethodParameters>
 	</ObjectDataProvider>
+	<ObjectDataProvider x:Key="ItemsFromLanguages" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+		<ObjectDataProvider.MethodParameters>
+			<x:Type TypeName="types:AvailableLanguages"/>
+		</ObjectDataProvider.MethodParameters>
+	</ObjectDataProvider>
 
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />

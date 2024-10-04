@@ -3,7 +3,7 @@
 namespace StockManagement.Kernel.Model.Types;
 
 
-public enum Language
+public enum AvailableLanguages
 {
 	[Description("de-DE")]
 	German,

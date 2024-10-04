@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using StockManagement.Kernel.Model.ExtensionMethods;
+using StockManagement.Gui.View;
 
 namespace StockManagement.Gui;
 
@@ -35,24 +36,12 @@ internal class GuiManager
 			this.AssignDialogs();
 			_directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-			SetLanguageResourceDictionary(GetLocXamlFilePath(MainManagerFacade.SelectedLanguage.GetEnumDescription()));
+			this.SetLanguage(MainManagerFacade.SelectedLanguage.GetEnumDescription());
 		}
 		catch(Exception ex)
 		{
 			MessageBox.Show(ex.Message);
 		}
-	}
-
-	public void ChangeLanguage(string inFiveCharLang)
-	{
-		if (CultureInfo.CurrentCulture.Name.Equals(inFiveCharLang))
-			return;
-
-		var ci = new CultureInfo(inFiveCharLang);
-		Thread.CurrentThread.CurrentCulture = ci;
-		Thread.CurrentThread.CurrentUICulture = ci;
-
-		SetLanguageResourceDictionary(GetLocXamlFilePath(inFiveCharLang));
 	}
 
 	private void AssignDialogs()
@@ -77,30 +66,14 @@ internal class GuiManager
 		return ReflectionManager.GetTypesOfBase(kernelAssembly, typeof(StockItem));
 	}
 
-	private string GetLocXamlFilePath(string inFiveCharLang)
+	private bool SetLanguage(string inFiveCharLang)
 	{
-		string locXamlFile = "LocalizationDictionary." + inFiveCharLang + ".xaml";
-		if (_directory != null) return Path.Combine(_directory, FolderName, locXamlFile);
+		if (CultureInfo.CurrentCulture.Name.Equals(inFiveCharLang)) return false;
 
-		return string.Empty;
-	}
-
-	private static void SetLanguageResourceDictionary(string inFile)
-	{
-		if (!File.Exists(inFile))
-		{
-			Trace.WriteLine("Couldn't find Language File.");
-			return;
-		}
-
-		var languageDictionary = new ResourceDictionary
-		{
-			Source = new Uri(inFile)
-		};
-
-		var name = "ResourceDictionaryName";
-		var dict = Application.Current.Resources.MergedDictionaries.FirstOrDefault(dict => dict.Contains(name));
-		Application.Current.Resources.MergedDictionaries.Remove(dict);
-		Application.Current.Resources.MergedDictionaries.Add(languageDictionary);
+		var ci = new CultureInfo(inFiveCharLang);
+		Thread.CurrentThread.CurrentCulture = ci;
+		Thread.CurrentThread.CurrentUICulture = ci;
+		Language.Resources.Culture = ci;
+		return true;
 	}
 }

@@ -20,7 +20,7 @@ public static class MainManagerFacade
 	{
 		get { return MainManager.Instance.MachineManager.Machines; }
 	}
-	public static Language SelectedLanguage
+	public static AvailableLanguages SelectedLanguage
 	{
 		get { return MainManager.Instance.Settings.SelectedLanguage; }
 	}

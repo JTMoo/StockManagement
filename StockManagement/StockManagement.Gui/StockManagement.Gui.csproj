@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
+    <ProjectReference Include="..\StockManagement.Language\StockManagement.Language.csproj" />
   </ItemGroup>
 
 </Project>
