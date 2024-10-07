@@ -211,7 +211,7 @@
     <value>Salir</value>
   </data>
   <data name="rimDiameter" xml:space="preserve">
-    <value>Diámetro del cubierto</value>
+    <value>Diámetro del neumático</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Configuracion</value>
@@ -231,5 +231,26 @@
   </data>
   <data name="spanish" xml:space="preserve">
     <value>Espanol</value>
+  </data>
+  <data name="factor" xml:space="preserve">
+    <value>Factor</value>
+  </data>
+  <data name="none" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="stockItem" xml:space="preserve">
+    <value>Artículo</value>
+  </data>
+  <data name="machine" xml:space="preserve">
+    <value>máquina</value>
+  </data>
+  <data name="tireDimensions" xml:space="preserve">
+    <value>Demsions de los neumáticos</value>
+  </data>
+  <data name="sparePart" xml:space="preserve">
+    <value>Repuesto</value>
+  </data>
+  <data name="tire" xml:space="preserve">
+    <value>neumático</value>
   </data>
 </root>

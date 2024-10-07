@@ -36,7 +36,7 @@
 		<ComboBox Grid.Column="1"
 				  Grid.Row="3"
 				  ItemsSource="{Binding StockItemTypes}"
-				  DisplayMemberPath="Name"
+				  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
 				  Style="{StaticResource CustomComboBoxStyle}"
 				  SelectedItem="{Binding SelectedStockItemType}" />
 

@@ -169,6 +169,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Factor ähnelt.
+        /// </summary>
+        public static string factor {
+            get {
+                return ResourceManager.GetString("factor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die German ähnelt.
         /// </summary>
         public static string german {
@@ -192,6 +201,15 @@ namespace StockManagement.Language {
         public static string location {
             get {
                 return ResourceManager.GetString("location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Machine ähnelt.
+        /// </summary>
+        public static string machine {
+            get {
+                return ResourceManager.GetString("machine", resourceCulture);
             }
         }
         
@@ -228,6 +246,15 @@ namespace StockManagement.Language {
         public static string name {
             get {
                 return ResourceManager.GetString("name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die None ähnelt.
+        /// </summary>
+        public static string none {
+            get {
+                return ResourceManager.GetString("none", resourceCulture);
             }
         }
         
@@ -390,6 +417,42 @@ namespace StockManagement.Language {
         public static string spanish {
             get {
                 return ResourceManager.GetString("spanish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Spare part ähnelt.
+        /// </summary>
+        public static string sparePart {
+            get {
+                return ResourceManager.GetString("sparePart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stock item ähnelt.
+        /// </summary>
+        public static string stockItem {
+            get {
+                return ResourceManager.GetString("stockItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tire ähnelt.
+        /// </summary>
+        public static string tire {
+            get {
+                return ResourceManager.GetString("tire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tire dimensions ähnelt.
+        /// </summary>
+        public static string tireDimensions {
+            get {
+                return ResourceManager.GetString("tireDimensions", resourceCulture);
             }
         }
         

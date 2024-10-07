@@ -45,7 +45,7 @@
 				</i:Interaction.Triggers>
 			</ComboBox>
 			<TextBlock Grid.Column="1" Style="{StaticResource ArrowTextBlockStyle}" />
-			<TextBlock Grid.Column="2"  Text="{Binding Name}" FontSize="30"
+			<TextBlock Grid.Column="2"  Text="{Binding Converter={StaticResource Value2DisplayName}}" FontSize="30"
 					   HorizontalAlignment="Left"
 					   VerticalAlignment="Center" />
 		</Grid>

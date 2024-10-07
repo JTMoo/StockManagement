@@ -1,10 +1,12 @@
-﻿using MongoDB.Bson;
+﻿using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
 
+[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.stockItem))]
 public abstract class StockItem : NotificationBase
 {
 	private string _code = string.Empty;
@@ -34,48 +36,56 @@ public abstract class StockItem : NotificationBase
 	[BsonRepresentation(BsonType.ObjectId)]
 	public string Id { get; internal set; }
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.name))]
 	public string Name
 	{
 		get { return _name; }
 		set { this.SetField(ref _name, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.code))]
 	public string Code
 	{
 		get { return _code; }
 		set { this.SetField(ref _code, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.amount))]
 	public int Amount
 	{
 		get { return _amount; }
 		set { this.SetField(ref _amount, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.description))]
 	public string Description
 	{
 		get { return _description; }
 		set { this.SetField(ref _description, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.location))]
 	public string Location
 	{
 		get { return _location; }
 		set { this.SetField(ref _location, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.price))]
 	public int Price
 	{
 		get { return _price; }
 		set { this.SetField(ref _price, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.factor))]
 	public double Factor
 	{
 		get { return _factor; }
 		set { this.SetField(ref _factor, value); }
 	}
 
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.manufacturer))]
 	public ManufacturerType Manufacturer
 	{
 		get { return _manufacturer; }

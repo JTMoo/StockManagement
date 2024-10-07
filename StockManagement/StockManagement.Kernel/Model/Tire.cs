@@ -1,8 +1,10 @@
-﻿using StockManagement.Kernel.Model.Types;
+﻿using System.ComponentModel.DataAnnotations;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
 
+[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.tire))]
 public class Tire : StockItem
 {
 	public Tire() : base()

@@ -3,7 +3,6 @@ using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,15 +10,12 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using StockManagement.Kernel.Model.ExtensionMethods;
-using StockManagement.Gui.View;
-using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Gui;
 
 
 internal class GuiManager
 {
-	private static string? _directory;
 	public readonly string FolderName = "Resources";
 
 
@@ -35,9 +31,8 @@ internal class GuiManager
 		{
 			this.MainViewModel.StockItemTypes = GetStockItemTypes();
 			this.AssignDialogs();
-			_directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-			this.SetLanguage(MainManagerFacade.SelectedLanguage.GetEnumDescription());
+			SetLanguage(MainManagerFacade.SelectedLanguage.GetEnumDescription());
 		}
 		catch(Exception ex)
 		{
@@ -67,7 +62,7 @@ internal class GuiManager
 		return ReflectionManager.GetTypesOfBase(kernelAssembly, typeof(StockItem));
 	}
 
-	private bool SetLanguage(string inFiveCharLang)
+	private static bool SetLanguage(string inFiveCharLang)
 	{
 		if (CultureInfo.CurrentCulture.Name.Equals(inFiveCharLang)) return false;
 

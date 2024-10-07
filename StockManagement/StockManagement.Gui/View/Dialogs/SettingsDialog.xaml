@@ -37,7 +37,7 @@
 		          Grid.Row="3"
 				  Style="{StaticResource CustomComboBoxStyle}"
 		          ItemsSource="{Binding Source={StaticResource ItemsFromLanguages}}"
-				  ItemTemplate="{StaticResource EnumDisplayNameDataTemplate}"
+				  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
 		          SelectedItem="{Binding SelectedLanguage}"/>
 
 		<controls:DialogActionBarControl Grid.Row="99"

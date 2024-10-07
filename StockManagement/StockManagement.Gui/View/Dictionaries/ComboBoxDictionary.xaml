@@ -288,8 +288,8 @@
 		<Setter Property="Margin" Value="5" />
 	</Style>
 
-	<DataTemplate x:Key="EnumDisplayNameDataTemplate">
-		<TextBlock Text="{Binding Converter={StaticResource EnumValues2DisplayName}}" />
+	<DataTemplate x:Key="DisplayNameDataTemplate">
+		<TextBlock Text="{Binding Converter={StaticResource Value2DisplayName}}" />
 	</DataTemplate>
 	
 </ResourceDictionary>

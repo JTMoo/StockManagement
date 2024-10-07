@@ -16,7 +16,7 @@
 		</ObjectDataProvider.MethodParameters>
 	</ObjectDataProvider>
 
-	<converter:EnumValueToDisplayNameAttributeConverter x:Key="EnumValues2DisplayName" />
+	<converter:ValueToDisplayNameAttributeConverter x:Key="Value2DisplayName" />
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
 

@@ -231,4 +231,25 @@
   <data name="spanish" xml:space="preserve">
     <value>Spanisch</value>
   </data>
+  <data name="factor" xml:space="preserve">
+    <value>Faktor</value>
+  </data>
+  <data name="none" xml:space="preserve">
+    <value>Keiner</value>
+  </data>
+  <data name="stockItem" xml:space="preserve">
+    <value>Lagerartikel</value>
+  </data>
+  <data name="machine" xml:space="preserve">
+    <value>Maschine</value>
+  </data>
+  <data name="tireDimensions" xml:space="preserve">
+    <value>Radabmessungen</value>
+  </data>
+  <data name="sparePart" xml:space="preserve">
+    <value>Ersatzteil</value>
+  </data>
+  <data name="tire" xml:space="preserve">
+    <value>Reifen</value>
+  </data>
 </root>
