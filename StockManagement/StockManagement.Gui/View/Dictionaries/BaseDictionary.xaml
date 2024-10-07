@@ -3,6 +3,7 @@
 					xmlns:selectors="clr-namespace:StockManagement.Gui.Selectors"
 					xmlns:system="clr-namespace:System;assembly=mscorlib"
 					xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
+					xmlns:em="clr-namespace:StockManagement.Kernel.Model.ExtensionMethods;assembly=StockManagement.Kernel"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<ObjectDataProvider x:Key="typesFromManufacturers" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
 		<ObjectDataProvider.MethodParameters>
@@ -15,6 +16,7 @@
 		</ObjectDataProvider.MethodParameters>
 	</ObjectDataProvider>
 
+	<converter:EnumValueToDisplayNameAttributeConverter x:Key="EnumValues2DisplayName" />
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
 

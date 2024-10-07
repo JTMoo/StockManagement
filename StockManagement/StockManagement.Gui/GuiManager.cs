@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows;
 using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Gui.View;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Gui;
 

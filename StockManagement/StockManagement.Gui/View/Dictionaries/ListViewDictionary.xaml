@@ -6,7 +6,6 @@
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="ButtonDictionary.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
-	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 
 	<Style x:Key="DefaultListViewStyle"
 		   TargetType="{x:Type ListView}">

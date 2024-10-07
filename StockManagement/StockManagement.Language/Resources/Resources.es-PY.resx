@@ -219,4 +219,17 @@
   <data name="width" xml:space="preserve">
     <value>Ancho</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="languageChangedMessage" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="german" xml:space="preserve">
+    <value>Aléman</value>
+  </data>
+  <data name="english" xml:space="preserve">
+    <value>Inglés</value>
+  </data>
+  <data name="spanish" xml:space="preserve">
+    <value>Espanol</value>
+  </data>
 </root>

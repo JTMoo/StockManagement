@@ -222,4 +222,13 @@
   <data name="languageChangedMessage" xml:space="preserve">
     <value>Damit die Sprache der Applikation geändert wird, starten Sie diese bitte neu.</value>
   </data>
+  <data name="german" xml:space="preserve">
+    <value>Deutsch</value>
+  </data>
+  <data name="english" xml:space="preserve">
+    <value>Englisch</value>
+  </data>
+  <data name="spanish" xml:space="preserve">
+    <value>Spanisch</value>
+  </data>
 </root>

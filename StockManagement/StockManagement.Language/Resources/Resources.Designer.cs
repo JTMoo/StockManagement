@@ -151,11 +151,29 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die English ähnelt.
+        /// </summary>
+        public static string english {
+            get {
+                return ResourceManager.GetString("english", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Excel Import ähnelt.
         /// </summary>
         public static string excelImport {
             get {
                 return ResourceManager.GetString("excelImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die German ähnelt.
+        /// </summary>
+        public static string german {
+            get {
+                return ResourceManager.GetString("german", resourceCulture);
             }
         }
         
@@ -363,6 +381,15 @@ namespace StockManagement.Language {
         public static string showPicture {
             get {
                 return ResourceManager.GetString("showPicture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Spanish ähnelt.
+        /// </summary>
+        public static string spanish {
+            get {
+                return ResourceManager.GetString("spanish", resourceCulture);
             }
         }
         
