@@ -16,6 +16,7 @@
 		</ObjectDataProvider.MethodParameters>
 	</ObjectDataProvider>
 
+	<converter:MultiParameterCommandConverter x:Key="MultiParamCommand" />
 	<converter:ValueToDisplayNameAttributeConverter x:Key="Value2DisplayName" />
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />

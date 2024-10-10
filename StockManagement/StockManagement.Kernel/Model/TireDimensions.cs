@@ -28,4 +28,9 @@ public class TireDimensions(double rimDiameter, double profile, double width)
 	{
 		get { return this._width; }
 	}
+
+	public override string ToString()
+	{
+		return $"{this.RimDiameter}x{this.Profile}x{this.Width}";
+	}
 }

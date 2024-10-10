@@ -13,6 +13,11 @@ public class SparePart(string name, string code = "", string description = "", i
 		this.Location = location;
 	}
 
+	public override string ToString()
+	{
+		return $"{Language.Resources.sparePart}: {this.Name}, {this.Manufacturer}, {this.Amount}, {this.Location}";
+	}
+
 	internal override void Register()
 	{
 		MainManager.Instance.SparePartManager.Register(this);

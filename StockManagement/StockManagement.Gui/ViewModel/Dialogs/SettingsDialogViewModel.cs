@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Commands.Data;
-using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
@@ -31,6 +29,7 @@ public class SettingsDialogViewModel : DialogViewModelBase
 	{
 		if (e.PropertyName != nameof(this.SelectedLanguage) || languageChangedOnce) return;
 
+		languageChangedOnce = true;
 		MessageBox.Show(Language.Resources.languageChangedMessage, string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
 	}
 

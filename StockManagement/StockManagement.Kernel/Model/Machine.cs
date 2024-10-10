@@ -16,6 +16,11 @@ public class Machine : StockItem
 	{
 	}
 
+	public override string ToString()
+	{
+		return $"{Language.Resources.machine}: {this.Name}, {this.Manufacturer}, {this.Amount}, {this.Location}";
+	}
+
 	internal override void Register()
 	{
 		MainManager.Instance.MachineManager.Register(this);

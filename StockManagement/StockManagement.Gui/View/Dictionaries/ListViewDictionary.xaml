@@ -35,12 +35,18 @@
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 
-			<ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TableNames}"
+			<ComboBox x:Name="ComboBoxWithTableNames" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TableNames}"
 					  Style="{StaticResource CustomComboBoxStyle}">
 				<i:Interaction.Triggers>
 					<i:EventTrigger EventName="SelectionChanged">
-						<i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectedItemChangedCommand}"
-											   CommandParameter="{Binding .}"/>
+						<i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectedItemChangedCommand}">
+							<i:InvokeCommandAction.CommandParameter>
+								<MultiBinding Converter="{StaticResource MultiParamCommand}">
+									<Binding />
+									<Binding Path="SelectedItem" ElementName="ComboBoxWithTableNames" />
+								</MultiBinding>
+							</i:InvokeCommandAction.CommandParameter>
+						</i:InvokeCommandAction>
 					</i:EventTrigger>
 				</i:Interaction.Triggers>
 			</ComboBox>

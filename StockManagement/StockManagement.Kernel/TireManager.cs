@@ -1,4 +1,5 @@
-﻿using StockManagement.Kernel.Model;
+﻿using DocumentFormat.OpenXml.Office.PowerPoint.Y2021.M06.Main;
+using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -25,12 +26,16 @@ public class TireManager : NotificationBase
 	{
 		this._editableTires.Clear();
 		var tires = await Database.TireDataAccess.GetAll();
-		tires.ForEach(tire => this._editableTires.Add(tire));
+		tires.ForEach(this._editableTires.Add);
 	}
 
 	internal void Register(Tire tire)
 	{
 		if (tire == null) return;
+		if (this.Tires.Any(existingTire => existingTire.Code == tire.Code))
+		{
+			Trace.WriteLine($"{Language.Resources.tire} with the same {Language.Resources.code} already exists: {tire}");
+		}
 
 		_editableTires.Add(tire);
 		Database.TireDataAccess.Add(tire);

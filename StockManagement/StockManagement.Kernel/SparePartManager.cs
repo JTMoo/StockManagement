@@ -1,4 +1,5 @@
-﻿using StockManagement.Kernel.Model;
+﻿using DocumentFormat.OpenXml.Drawing;
+using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -25,12 +26,16 @@ public class SparePartManager : NotificationBase
 	{
 		this._editableSpareParts.Clear();
 		var spareParts = await Database.SparePartDataAccess.GetAll();
-		spareParts.ForEach(sparePart => this._editableSpareParts.Add(sparePart));
+		spareParts.ForEach(this._editableSpareParts.Add);
 	}
 
 	internal void Register(SparePart sparePart)
 	{
 		if (sparePart == null) return;
+		if (this.SpareParts.Any(existingSparePart => existingSparePart.Code == sparePart.Code))
+		{
+			Trace.WriteLine($"{Language.Resources.sparePart} with the same {Language.Resources.code} already exists: {sparePart}");
+		}
 
 		_editableSpareParts.Add(sparePart);
 		Database.SparePartDataAccess.Add(sparePart);

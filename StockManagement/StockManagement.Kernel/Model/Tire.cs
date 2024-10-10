@@ -19,6 +19,12 @@ public class Tire : StockItem
 
 	public TireDimensions Dimensions { get; set; }
 
+
+	public override string ToString()
+	{
+		return $"{Language.Resources.tire}: {this.Name}, {this.Manufacturer}, {this.Amount}, {this.Location}, {this.Dimensions}";
+	}
+
 	internal override void Register()
 	{
 		MainManager.Instance.TireManager.Register(this);

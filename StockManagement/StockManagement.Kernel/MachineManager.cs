@@ -31,6 +31,10 @@ public class MachineManager : NotificationBase
 	internal void Register(Machine machine)
 	{
 		if (_editableMachines.Contains(machine)) return;
+		if (this.Machines.Any(existingMachine => existingMachine.Code == machine.Code))
+		{
+			Trace.WriteLine($"{Language.Resources.machine} with the same {Language.Resources.code} already exists: {machine}");
+		}
 
 		_editableMachines.Add(machine);
 		Database.MachineDataAccess.Add(machine);

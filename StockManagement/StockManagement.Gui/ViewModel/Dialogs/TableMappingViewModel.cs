@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using StockManagement.Gui.Commands;
+using StockManagement.Kernel;
+using StockManagement.Kernel.Commands.StockItemCommands;
+using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
@@ -15,6 +17,7 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 
 public partial class TableMappingViewModel : DialogViewModelBase
 {
+	private readonly Dictionary<PropertyInfo, string> tableNamesToProperties = [];
 	private Type selectedStockItemType;
 	private readonly IXLWorksheet worksheet;
 
@@ -24,7 +27,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		this.worksheet = worksheet;
 		this.GetTableDataFromWorksheet();
 
-		this.SelectedItemChangedCommand = new RelayCommand<PropertyInfo>(this.OnSelectedItemChangedCommand);
+		this.SelectedItemChangedCommand = new RelayCommand<object>(this.OnSelectedItemChangedCommand);
 
 		this.PropertyChanged += OnPropertyChangedEvent;
 	}
@@ -40,34 +43,68 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		set { this.SetField(ref this.selectedStockItemType, value); }
 	}
 
-	public RelayCommand<PropertyInfo> SelectedItemChangedCommand { get; }
+	public RelayCommand<object> SelectedItemChangedCommand { get; }
 	#endregion Properties
+
+	public override void Confirm(string param)
+	{
+		var headerRowRange = this.worksheet.FirstRowUsed().RowUsed();
+		var matchingActions = CreatePropertyMatchingActionsFromTableHeaders(headerRowRange);
+
+		var currentRow = headerRowRange.RowBelow();
+		while (!currentRow.IsEmpty())
+		{
+			if (Activator.CreateInstance(this.SelectedStockItemType) is not StockItem stockItem) continue;
+
+			matchingActions.ForEach(action => action(currentRow, stockItem));
+			var command = new StockItemCreationCommand()
+			{
+				Data = new Kernel.Commands.Data.CommandData()
+				{
+					Value = stockItem
+				}
+			};
+			MainManagerFacade.PushCommand(command);
+			Trace.WriteLine(stockItem);
+
+			currentRow = currentRow.RowBelow();
+		}
+
+		base.Confirm(param);
+	}
+
+	private List<Action<IXLRangeRow, StockItem>> CreatePropertyMatchingActionsFromTableHeaders(IXLRangeRow headerRowRange)
+	{
+		List<Action<IXLRangeRow, StockItem>> matchingActions = [];
+		foreach (var pair in this.tableNamesToProperties)
+		{
+			bool cellContentMatchesTableHeader(IXLCell cell) => cell.GetString().ReplaceLineBreakWithWhitespace().Equals(pair.Value, StringComparison.InvariantCultureIgnoreCase);
+			var columnLetterOfMatch = headerRowRange.Cells().First(cellContentMatchesTableHeader).WorksheetColumn().ColumnLetter();
+			matchingActions.Add((row, stockItem) =>
+			{
+				try
+				{
+					if (row.Cell(columnLetterOfMatch).GetString() is not string cellValue || string.IsNullOrEmpty(cellValue)) return;
+					if (TypeDescriptor.GetConverter(pair.Key.PropertyType).ConvertFromString(cellValue) is not object propertyValue) return;
+					pair.Key.SetValue(stockItem, propertyValue);
+				}
+				catch (Exception ex)
+				{
+					Trace.WriteLine($"Exception durch matchingActions: {ex.Message}");
+					return;
+				}
+			});
+		}
+
+		return matchingActions;
+	}
 
 	private void GetTableDataFromWorksheet()
 	{
-		if (TryGetTableHeadersFromTables()) return;
-
 		foreach (var cell in this.worksheet.FirstRowUsed().CellsUsed())
 		{
-			this.TableNames.Add(LineBreakDetection().Replace(cell.GetString(), " "));
+			this.TableNames.Add(cell.GetString().ReplaceLineBreakWithWhitespace());
 		}
-	}
-
-	private bool TryGetTableHeadersFromTables()
-	{
-		var tableAmount = this.worksheet.Tables.Count();
-		if (tableAmount > 1 || tableAmount <= 0)
-		{
-			return false;
-		}
-
-		var table = this.worksheet.Tables.Table(0);
-		foreach (var cell in table.FirstRowUsed().CellsUsed())
-		{
-			this.TableNames.Add(LineBreakDetection().Replace(cell.GetString(), " "));
-		}
-
-		return true;
 	}
 
 	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
@@ -75,13 +112,15 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		if (e.PropertyName != nameof(this.SelectedStockItemType)) return;
 
 		this.SelectedStockItemTypeProperties.EqualizeTo(this.SelectedStockItemType.GetProperties());
+		tableNamesToProperties.Clear();
 	}
 
-	private void OnSelectedItemChangedCommand(PropertyInfo info)
+	private void OnSelectedItemChangedCommand(object arg)
 	{
-		Trace.WriteLine("Works so far");
-	}
+		if (arg is not object[] args || args.Length != 2) return;
+		if (args[0] is not PropertyInfo info) return;
+		if (args[1] is not string selectedTableName) return;
 
-	[GeneratedRegex(@"\t|\n|\r")]
-	private static partial Regex LineBreakDetection();
+		this.tableNamesToProperties[info] = selectedTableName;
+	}
 }

@@ -14,7 +14,7 @@ public abstract class StockItem : NotificationBase
 	private string _location = string.Empty;
 	private string _name = string.Empty;
 	private ManufacturerType _manufacturer;
-	private int _price;
+	private double _price;
 	private double _factor;
 	private int _amount;
 
@@ -34,7 +34,7 @@ public abstract class StockItem : NotificationBase
 
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public string Id { get; internal set; }
+	internal string Id { get; set; }
 
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.name))]
 	public string Name
@@ -72,7 +72,7 @@ public abstract class StockItem : NotificationBase
 	}
 
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.price))]
-	public int Price
+	public double Price
 	{
 		get { return _price; }
 		set { this.SetField(ref _price, value); }
@@ -92,6 +92,7 @@ public abstract class StockItem : NotificationBase
 		set { this.SetField(ref _manufacturer, value); }
 	}
 
+	public override abstract string ToString();
 	internal abstract void Register();
 	internal abstract void Update(Action callback);
 }
