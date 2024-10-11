@@ -8,6 +8,7 @@ using System.Reflection;
 using ClosedXML.Excel;
 using StockManagement.Gui.Commands;
 using StockManagement.Kernel;
+using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Commands.StockItemCommands;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
@@ -57,11 +58,11 @@ public partial class TableMappingViewModel : DialogViewModelBase
 			if (Activator.CreateInstance(this.SelectedStockItemType) is not StockItem stockItem) continue;
 
 			matchingActions.ForEach(action => action(currentRow, stockItem));
-			var command = new StockItemCreationCommand()
+			var command = new StockItemCreationCommand
 			{
-				Data = new Kernel.Commands.Data.CommandData()
+				Data = new StockItemCommandData()
 				{
-					Value = stockItem
+					StockItem = stockItem
 				}
 			};
 			MainManagerFacade.PushCommand(command);
@@ -78,13 +79,12 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		List<Action<IXLRangeRow, StockItem>> matchingActions = [];
 		foreach (var pair in this.tableNamesToProperties)
 		{
-			bool cellContentMatchesTableHeader(IXLCell cell) => cell.GetString().ReplaceLineBreakWithWhitespace().Equals(pair.Value, StringComparison.InvariantCultureIgnoreCase);
-			var columnLetterOfMatch = headerRowRange.Cells().First(cellContentMatchesTableHeader).WorksheetColumn().ColumnLetter();
+			if (!TryGetColumnLetterFrom(pair.Value, headerRowRange, out string columnLetter)) continue;
 			matchingActions.Add((row, stockItem) =>
 			{
 				try
 				{
-					if (row.Cell(columnLetterOfMatch).GetString() is not string cellValue || string.IsNullOrEmpty(cellValue)) return;
+					if (row.Cell(columnLetter).GetString() is not string cellValue || string.IsNullOrEmpty(cellValue)) return;
 					if (TypeDescriptor.GetConverter(pair.Key.PropertyType).ConvertFromString(cellValue) is not object propertyValue) return;
 					pair.Key.SetValue(stockItem, propertyValue);
 				}
@@ -122,5 +122,16 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		if (args[1] is not string selectedTableName) return;
 
 		this.tableNamesToProperties[info] = selectedTableName;
+	}
+
+	private static bool TryGetColumnLetterFrom(string value, IXLRangeRow headerRowRange, out string columnLetter)
+	{
+		columnLetter = string.Empty;
+
+		var matchingCell = headerRowRange.Cells().FirstOrDefault(cell => cell.GetString().ReplaceLineBreakWithWhitespace().Equals(value, StringComparison.InvariantCultureIgnoreCase));
+		if (matchingCell == null) return false;
+
+		columnLetter = matchingCell.WorksheetColumn().ColumnLetter();
+		return true;
 	}
 }

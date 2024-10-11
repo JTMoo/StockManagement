@@ -1,6 +1,7 @@
 ﻿<Window x:Class="StockManagement.Gui.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dialogControls="clr-namespace:StockManagement.Gui.View.Dialogs"
         xmlns:lang="clr-namespace:StockManagement.Language;assembly=StockManagement.Language"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -97,10 +98,16 @@
 					Command="{Binding ExcelImportCommand}"/>
 		</StackPanel>
 
-		<ContentControl Grid.ColumnSpan="3"
-						Grid.RowSpan="3"
+		<ContentControl Grid.ColumnSpan="99"
+						Grid.RowSpan="99"
 						Content="{Binding Dialog}"
 						Style="{StaticResource BaseDialogStyle}"
 						Panel.ZIndex="1000" />
+
+		<dialogControls:WaitDialog Grid.ColumnSpan="99"
+								   Grid.RowSpan="99"
+								   Style="{StaticResource BaseDialogStyle}"
+								   Visibility="{Binding IsWaitDialogVisible, Converter={StaticResource Bool2Collabsed}}"
+								   Panel.ZIndex="9999" />
 	</Grid>
 </Window>

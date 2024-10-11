@@ -13,6 +13,7 @@
 	<DataTemplate DataType="{x:Type creationVMs:TireCreationDialogViewModel}">
 		<creationControls:TireCreationDialog />
 	</DataTemplate>
+	
 	<DataTemplate DataType="{x:Type dialogVMs:StockItemTypeSelectionDialogViewModel}">
 		<dialogControls:StockItemTypeSelectionDialog />
 	</DataTemplate>

@@ -39,6 +39,22 @@ internal class GuiManager
 		}
 	}
 
+	internal void ShowWaitDialog()
+	{
+		Application.Current.Dispatcher.Invoke(() =>
+		{
+			this.MainViewModel.IsWaitDialogVisible = true;
+		});
+	}
+
+	internal void HideWaitDialog()
+	{
+		Application.Current.Dispatcher.Invoke(() =>
+		{
+			this.MainViewModel.IsWaitDialogVisible = false;
+		});
+	}
+
 	private void AssignDialogs()
 	{
 		var guiAssembly = Assembly.GetExecutingAssembly();

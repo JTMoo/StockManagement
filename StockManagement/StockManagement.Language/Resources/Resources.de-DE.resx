@@ -252,4 +252,7 @@
   <data name="tire" xml:space="preserve">
     <value>Reifen</value>
   </data>
+  <data name="loading" xml:space="preserve">
+    <value>Lade</value>
+  </data>
 </root>

@@ -12,7 +12,9 @@ public class ExcelImportDialogViewModel : DialogViewModelBase
 
 	public ExcelImportDialogViewModel(string filePath)
 	{
+		GuiManager.Instance.ShowWaitDialog();
 		this.GetExcelSheetNames(filePath);
+		GuiManager.Instance.HideWaitDialog();
 	}
 
 	public ObservableCollection<string> WorksheetNames { get; } = [];

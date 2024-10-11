@@ -253,4 +253,7 @@
   <data name="tire" xml:space="preserve">
     <value>neumático</value>
   </data>
+  <data name="loading" xml:space="preserve">
+    <value>Cargando</value>
+  </data>
 </root>

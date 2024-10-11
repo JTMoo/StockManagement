@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
