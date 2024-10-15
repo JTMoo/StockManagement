@@ -85,7 +85,7 @@ public class TireCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new StockItemCommandData
 			{
-				StockItem = new Tire(rimDiameter: this.RimDiameter, 
+				DataToRegister = new Tire(rimDiameter: this.RimDiameter, 
 					profile: this.Profile, 
 					width: this.Width,
 					name: this.Name,

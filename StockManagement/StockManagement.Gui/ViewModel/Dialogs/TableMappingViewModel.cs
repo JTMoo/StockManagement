@@ -49,29 +49,41 @@ public partial class TableMappingViewModel : DialogViewModelBase
 
 	public override void Confirm(string param)
 	{
+		GuiManager.Instance.ShowWaitDialog();
+
+		var stockItems = this.ExtractStockItemsFromExcelSheet();
+		var command = new StockItemCreationCommand
+		{
+			Data = new StockItemCommandData()
+			{
+				DataToRegister = stockItems,
+				Type = StockItemCommandData.CreationCommandType.Multiple,
+				Callback = _ => GuiManager.Instance.HideWaitDialog()
+			}
+		};
+		MainManagerFacade.PushCommand(command);
+
+		base.Confirm(param);
+	}
+
+	private IEnumerable<StockItem> ExtractStockItemsFromExcelSheet()
+	{
 		var headerRowRange = this.worksheet.FirstRowUsed().RowUsed();
 		var matchingActions = CreatePropertyMatchingActionsFromTableHeaders(headerRowRange);
 
 		var currentRow = headerRowRange.RowBelow();
+		var stockItems = new List<StockItem>();
 		while (!currentRow.IsEmpty())
 		{
 			if (Activator.CreateInstance(this.SelectedStockItemType) is not StockItem stockItem) continue;
 
 			matchingActions.ForEach(action => action(currentRow, stockItem));
-			var command = new StockItemCreationCommand
-			{
-				Data = new StockItemCommandData()
-				{
-					StockItem = stockItem
-				}
-			};
-			MainManagerFacade.PushCommand(command);
-			Trace.WriteLine(stockItem);
+			stockItems.Add(stockItem);
 
 			currentRow = currentRow.RowBelow();
 		}
 
-		base.Confirm(param);
+		return stockItems;
 	}
 
 	private List<Action<IXLRangeRow, StockItem>> CreatePropertyMatchingActionsFromTableHeaders(IXLRangeRow headerRowRange)

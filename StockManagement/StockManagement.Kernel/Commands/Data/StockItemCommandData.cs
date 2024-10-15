@@ -3,5 +3,16 @@
 
 public class StockItemCommandData : CommandData
 {
-	public Model.StockItem StockItem { get; set; }
+	public object DataToRegister { get; set; }
+
+	public CreationCommandType Type { get; set; }
+
+	public enum CreationCommandType
+	{
+		None,
+
+		Single,
+
+		Multiple
+	}
 }

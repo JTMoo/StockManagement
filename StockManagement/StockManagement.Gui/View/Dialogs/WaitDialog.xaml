@@ -7,29 +7,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<StackPanel Orientation="Horizontal"
-				   VerticalAlignment="Center" 
-				   HorizontalAlignment="Center">
-		<TextBlock FontSize="16pt"
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<TextBlock Grid.Column="0" FontSize="16pt"
+				   HorizontalAlignment="Right"
+				   VerticalAlignment="Center"
 				   Text="{x:Static lang:Resources.loading}"/>
-		<TextBlock Name="waitTextBlock" FontSize="16pt">
+		<TextBlock Grid.Column="1" Name="waitTextBlock" FontSize="16pt"
+				   HorizontalAlignment="Left"
+				   VerticalAlignment="Center">
 			<TextBlock.Triggers>
 				<EventTrigger RoutedEvent="TextBlock.Loaded">
 					<BeginStoryboard>
 						<Storyboard>
 							<StringAnimationUsingKeyFrames Storyboard.TargetName="waitTextBlock" 
 														   Storyboard.TargetProperty="Text"
-														   Duration="0:0:3"
-														   AutoReverse="True"
+														   Duration="0:0:1.5"
 														   RepeatBehavior="Forever">
 								<DiscreteStringKeyFrame Value="." KeyTime="0:0:0" />
-								<DiscreteStringKeyFrame Value=".." KeyTime="0:0:1" />
-								<DiscreteStringKeyFrame Value="..." KeyTime="0:0:2" />
+								<DiscreteStringKeyFrame Value=".." KeyTime="0:0:.5" />
+								<DiscreteStringKeyFrame Value="..." KeyTime="0:0:1" />
 							</StringAnimationUsingKeyFrames>
 						</Storyboard>
 					</BeginStoryboard>
 				</EventTrigger>
 			</TextBlock.Triggers>
 		</TextBlock>
-	</StackPanel>
+	</Grid>
 </UserControl>

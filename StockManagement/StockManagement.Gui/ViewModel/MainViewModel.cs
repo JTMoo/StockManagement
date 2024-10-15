@@ -136,7 +136,7 @@ internal class MainViewModel : NotificationBase
 		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
 	}
 
-	private void OnExcelImportCommand(string obj)
+	private async void OnExcelImportCommand(string obj)
 	{
 		var dialog = new OpenFileDialog
 		{
@@ -144,7 +144,9 @@ internal class MainViewModel : NotificationBase
 		};
 		if (dialog.ShowDialog() is bool isTrue && isTrue)
 		{
-			this.Dialog = new ExcelImportDialogViewModel(dialog.FileName);
+			GuiManager.Instance.ShowWaitDialog();
+			this.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName);
+			GuiManager.Instance.HideWaitDialog();
 		}
 	}
 

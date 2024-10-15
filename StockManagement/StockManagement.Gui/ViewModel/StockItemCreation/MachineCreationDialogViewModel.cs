@@ -57,7 +57,7 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new StockItemCommandData
 			{
-				StockItem = new Machine(name: this.Name,
+				DataToRegister = new Machine(name: this.Name,
 					description: this.Description,
 					amount: this.Amount,
 					price: this.Price,

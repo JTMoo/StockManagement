@@ -72,7 +72,7 @@ public class SparePartCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new StockItemCommandData
 			{
-				StockItem = new SparePart(name: this.Name,
+				DataToRegister = new SparePart(name: this.Name,
 					description: this.Description,
 					code: this.Code,
 					location: this.Location,

@@ -17,7 +17,7 @@ public class StockItemChangeAmountCommand : ICommand
 		if (Data.Value is not int) return false;
 
 		var amount = (int)Data.Value;
-		var stockItem = ((StockItemCommandData)Data).StockItem;
+		var stockItem = ((StockItemCommandData)Data).DataToRegister;
 		if (this.SelectedChangeType == ChangeType.Checkout)
 		{
 			amount *= -1;

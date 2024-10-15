@@ -52,7 +52,7 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 			SelectedChangeType = StockItemChangeAmountCommand.ChangeType.Checkout,
 			Data = new StockItemCommandData()
 			{
-				StockItem = this.StockItem,
+				DataToRegister = this.StockItem,
 				Value = amount
 			}
 		};
@@ -73,7 +73,7 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 			SelectedChangeType = StockItemChangeAmountCommand.ChangeType.Checkin,
 			Data = new StockItemCommandData()
 			{
-				StockItem = this.StockItem,
+				DataToRegister = this.StockItem,
 				Value = amount
 			}
 		};
