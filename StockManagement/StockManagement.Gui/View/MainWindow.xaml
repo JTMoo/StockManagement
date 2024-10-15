@@ -26,6 +26,18 @@
 				  ItemsSource="{Binding FilteredStockItems}"
 				  Style="{StaticResource DefaultListViewStyle}"
 				  SelectedItem="{Binding SelectedStockItem}">
+			<ListView.Resources>
+				<ContextMenu x:Key="ItemContextMenu">
+					<MenuItem Header="{x:Static lang:Resources.additionalInformation}" 
+							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
+							  CommandParameter="{Binding }" />
+				</ContextMenu>
+			</ListView.Resources>
+			<ListView.ItemContainerStyle>
+				<Style TargetType="{x:Type ListViewItem}" >
+					<Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+				</Style>
+			</ListView.ItemContainerStyle>
 			<ListView.View>
 				<GridView>
 					<GridView.Columns>
@@ -35,7 +47,6 @@
 						<GridViewColumn Header="{x:Static lang:Resources.price}" Width="100" DisplayMemberBinding="{Binding Price}"/>
 						<GridViewColumn Header="{x:Static lang:Resources.manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}"/>
 						<GridViewColumn Header="{x:Static lang:Resources.location}" Width="200" DisplayMemberBinding="{Binding Location}"/>
-						<GridViewColumn CellTemplate="{StaticResource MainListViewAdditionalInfoButtonTemplate}"/>
 					</GridView.Columns>
 				</GridView>
 			</ListView.View>

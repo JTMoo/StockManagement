@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using StockManagement.Gui.Commands;
 using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Kernel;
@@ -9,11 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Data;
 
 namespace StockManagement.Gui.ViewModel;
 
@@ -29,7 +26,6 @@ internal class MainViewModel : NotificationBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private bool isWaitDialogVisible = false;
-	private readonly ICollectionView stockItems;
 
 
 	public MainViewModel()

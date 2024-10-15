@@ -149,7 +149,6 @@
 
 		<controls:DialogActionBarControl Grid.Row="99"
 										 Grid.ColumnSpan="99"
-										 ConfirmCommand="{Binding ConfirmCommand}"
 										 ConfirmVisibility="Collapsed"
 										 CancelCommand="{Binding CancelDialogCommand}"/>
 	</Grid>
