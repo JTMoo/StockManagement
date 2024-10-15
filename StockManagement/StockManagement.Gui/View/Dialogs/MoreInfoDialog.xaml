@@ -35,7 +35,7 @@
 			<ColumnDefinition Width="{StaticResource largeSpacingGridDialog}"/>
 			<ColumnDefinition Width="40"/>
 			<ColumnDefinition Width="{StaticResource smallSpacingGridDialog}"/>
-			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
+			<ColumnDefinition Width="{StaticResource mediumGridColumnDialog}"/>
 			<ColumnDefinition Width="{StaticResource smallSpacingGridDialog}"/>
 			<ColumnDefinition Width="*" MinWidth="290"/>
 			<ColumnDefinition Width="{StaticResource smallSpacingGridDialog}"/>

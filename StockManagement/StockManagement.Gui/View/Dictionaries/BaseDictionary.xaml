@@ -25,6 +25,7 @@
 	<GridLength x:Key="largeSpacingGridDialog">30</GridLength>
 	<GridLength x:Key="smallGridRowDialog">50</GridLength>
 	<GridLength x:Key="smallGridColumnDialog">120</GridLength>
+	<GridLength x:Key="mediumGridColumnDialog">200</GridLength>
 
 	<Color x:Key="Blue">#071c31</Color>
 	<Color x:Key="LightGray">#e0e0e0</Color>
