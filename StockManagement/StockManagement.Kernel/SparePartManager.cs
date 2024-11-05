@@ -1,4 +1,5 @@
-﻿using StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -24,7 +25,7 @@ public class SparePartManager : NotificationBase
 	internal async void Init()
 	{
 		this._editableSpareParts.Clear();
-		var spareParts = await Database.SparePartDataAccess.GetAll();
+		var spareParts = await DatabaseManager.GetAll<SparePart>();
 		spareParts.ForEach(this._editableSpareParts.Add);
 	}
 
@@ -37,14 +38,23 @@ public class SparePartManager : NotificationBase
 		}
 
 		_editableSpareParts.Add(sparePart);
-		Database.SparePartDataAccess.Add(sparePart);
+		DatabaseManager.Add<SparePart>(sparePart);
 		Trace.WriteLine("Spare Part added.");
+	}
+
+	internal void Deregister(SparePart sparePart)
+	{
+		if (sparePart == null) return;
+
+		_editableSpareParts.Remove(sparePart);
+		DatabaseManager.Delete<SparePart>(sparePart);
+		Trace.WriteLine("Spare Part deleted.");
 	}
 
 	internal void Update(SparePart sparePart, Action callback)
 	{
 		if (!_editableSpareParts.Contains(sparePart)) return;
 
-		Database.SparePartDataAccess.Update(sparePart).ContinueWith(_ => callback.Invoke());
+		DatabaseManager.Update<SparePart>(sparePart).ContinueWith(_ => callback.Invoke());
 	}
 }

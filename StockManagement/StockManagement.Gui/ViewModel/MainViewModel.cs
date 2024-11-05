@@ -150,7 +150,6 @@ internal class MainViewModel : NotificationBase
 	{
 		var cartDialog = new ShoppingCartDialogViewModel(this.ShoppingCartItems);
 		this.Dialog = cartDialog;
-		cartDialog.ShoppingCartChanged += (_, __) => this.ShoppingCartItems.Clear();
 	}
 
 	private async void OnExcelImportCommand(string obj)

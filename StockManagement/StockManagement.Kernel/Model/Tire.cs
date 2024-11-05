@@ -30,6 +30,11 @@ public class Tire : StockItem
 		MainManager.Instance.TireManager.Register(this);
 	}
 
+	internal override void Deregister()
+	{
+		MainManager.Instance.TireManager.Deregister(this);
+	}
+
 	internal override void Update(Action callback)
 	{
 		MainManager.Instance.TireManager.Update(this, callback);

@@ -267,4 +267,7 @@
   <data name="total" xml:space="preserve">
     <value>Total</value>
   </data>
+  <data name="deleteItem" xml:space="preserve">
+    <value>Delete Item</value>
+  </data>
 </root>

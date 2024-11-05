@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
 
 [Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.stockItem))]
-public abstract class StockItem : NotificationBase
+public abstract class StockItem : BaseDocument
 {
 	private string _code = string.Empty;
 	private string _description = string.Empty;
@@ -31,10 +30,6 @@ public abstract class StockItem : NotificationBase
 		this.Price = price;
 		this.Manufacturer = manufacturer;
 	}
-
-	[BsonId]
-	[BsonRepresentation(BsonType.ObjectId)]
-	internal string Id { get; set; }
 
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.name))]
 	public string Name
@@ -94,5 +89,6 @@ public abstract class StockItem : NotificationBase
 
 	public override abstract string ToString();
 	internal abstract void Register();
+	internal abstract void Deregister();
 	internal abstract void Update(Action callback);
 }

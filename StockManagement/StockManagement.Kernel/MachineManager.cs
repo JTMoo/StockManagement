@@ -1,4 +1,5 @@
-﻿using StockManagement.Kernel.Model;
+﻿using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -24,7 +25,7 @@ public class MachineManager : NotificationBase
 	internal async void Init ()
 	{
 		this._editableMachines.Clear();
-		var machines = await Database.MachineDataAccess.GetAll();
+		var machines = await DatabaseManager.GetAll<Machine>();
 		machines.ForEach(this._editableMachines.Add);
 	}
 
@@ -37,14 +38,23 @@ public class MachineManager : NotificationBase
 		}
 
 		_editableMachines.Add(machine);
-		Database.MachineDataAccess.Add(machine);
+		DatabaseManager.Add<Machine>(machine);
 		Trace.WriteLine("Machine added.");
+	}
+
+	internal void Deregister(Machine machine)
+	{
+		if (machine == null) return;
+
+		_editableMachines.Remove(machine);
+		DatabaseManager.Delete<Machine>(machine);
+		Trace.WriteLine("Machine deleted.");
 	}
 
 	internal void Update(Machine machine, Action callback)
 	{
 		if (!_editableMachines.Contains(machine)) return;
 
-		Database.MachineDataAccess.Update(machine).ContinueWith(_ => callback.Invoke());
+		DatabaseManager.Update<Machine>(machine).ContinueWith(_ => callback.Invoke());
 	}
 }

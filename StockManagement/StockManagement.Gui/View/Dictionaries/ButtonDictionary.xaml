@@ -68,6 +68,13 @@
 		</Setter>
 	</Style>
 
+	<Style x:Key="RedBaseDialogButtonStyle"
+		   TargetType="{x:Type Button}"
+		   BasedOn="{StaticResource RedBaseButtonStyle}">
+		<Setter Property="Width" Value="Auto" />
+		<Setter Property="Height" Value="Auto" />
+	</Style>
+
 	<Style x:Key="BaseDialogButtonStyle"
 		   TargetType="{x:Type Button}"
 		   BasedOn="{StaticResource BaseButtonStyle}">

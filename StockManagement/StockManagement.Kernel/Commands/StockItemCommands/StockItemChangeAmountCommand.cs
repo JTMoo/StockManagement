@@ -1,4 +1,5 @@
 ﻿using StockManagement.Kernel.Commands.Data;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Commands.StockItemCommands;
@@ -21,7 +22,7 @@ public class StockItemChangeAmountCommand : ICommand
 			amount *= -1;
 		}
 
-		var transaction = new Transaction(stockItem.Name, DateTime.Now, Transaction.Kind.Amount, amount);
+		var transaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount);
 		stockItem.Amount += amount;
 		stockItem.Update(() => OnUpdateCompleted(transaction));
 
@@ -41,7 +42,7 @@ public class StockItemChangeAmountCommand : ICommand
 	{
 		if (transaction == null) return;
 
-		Database.TransactionDataAccess.Add(transaction);
+		DatabaseManager.Add<Transaction>(transaction);
 	}
 
 	public enum ChangeType

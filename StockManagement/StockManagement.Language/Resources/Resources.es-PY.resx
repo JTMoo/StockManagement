@@ -268,4 +268,7 @@
   <data name="total" xml:space="preserve">
     <value>Total</value>
   </data>
+  <data name="deleteItem" xml:space="preserve">
+    <value>Eliminar artículo</value>
+  </data>
 </root>

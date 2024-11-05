@@ -2,7 +2,6 @@
 using StockManagement.Kernel.Database;
 using System.Diagnostics;
 using StockManagement.Kernel.Model;
-using System.Runtime.CompilerServices;
 
 namespace StockManagement.Kernel;
 
@@ -17,7 +16,7 @@ public class MainManager : NotificationBase, IDisposable
 
 	public MainManager() 
     {
-		this.Settings = SettingsDataAccess.Get() ?? new();
+		this.Settings = DatabaseManager.GetFirst<Settings>() ?? new();
     }
 
     ~MainManager()

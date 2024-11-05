@@ -1,4 +1,6 @@
-﻿using StockManagement.Kernel.Commands.Data;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using StockManagement.Kernel.Commands.Data;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Commands;
@@ -12,7 +14,7 @@ public class ChangeSettingsCommand : ICommand
 		if (Data.Value is not AvailableLanguages value) return false;
 
 		MainManager.Instance.Settings.SelectedLanguage = value;
-		Database.SettingsDataAccess.Update();
+		DatabaseManager.Update<Settings>(MainManager.Instance.Settings);
 		return true;
 	}
 }

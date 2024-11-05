@@ -4,6 +4,7 @@ using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Commands.StockItemCommands;
 using StockManagement.Kernel.Model;
 using System;
+using static MongoDB.Driver.WriteConcern;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
@@ -18,10 +19,14 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 	{
 		this.StockItem = stockItem;
 
+		this.DeleteItemCommand = new RelayCommand<string>(this.OnDeleteItemCommand);
 		this.CheckoutCommand = new RelayCommand<string>(this.OnCheckoutCommand);
 		this.CheckinCommand = new RelayCommand<string>(this.OnCheckinCommand);
 	}
 
+
+	#region Properties
+	public RelayCommand<string> DeleteItemCommand { get; }
 	public RelayCommand<string> CheckoutCommand { get; }
 	public RelayCommand<string> CheckinCommand { get; }
 
@@ -38,7 +43,22 @@ public class MoreInfoDialogViewModel : DialogViewModelBase
 		get { return this._checkinAmount; }
 		set { this.SetField(ref this._checkinAmount, value); }
 	}
+	#endregion Properties
 
+
+	private void OnDeleteItemCommand(string obj)
+	{
+		var command = new StockItemDeletionCommand()
+		{
+			Data = new StockItemCommandData()
+			{
+				Value = this.StockItem,
+				Callback = Close
+			}
+		};
+
+		MainManagerFacade.PushCommand(command);
+	}
 
 	private void OnCheckoutCommand(string param)
 	{

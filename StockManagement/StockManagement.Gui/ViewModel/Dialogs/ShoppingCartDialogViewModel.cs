@@ -11,8 +11,6 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 
 public class ShoppingCartDialogViewModel : DialogViewModelBase
 {
-	public event EventHandler? ShoppingCartChanged;
-
 	private double total;
 
 

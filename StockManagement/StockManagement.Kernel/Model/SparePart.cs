@@ -27,6 +27,11 @@ public class SparePart(string name, string code = "", string description = "", i
 		MainManager.Instance.SparePartManager.Register(this);
 	}
 
+	internal override void Deregister()
+	{
+		MainManager.Instance.SparePartManager.Deregister(this);
+	}
+
 	internal override void Update(Action callback)
 	{
 		MainManager.Instance.SparePartManager.Update(this, callback);

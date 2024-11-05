@@ -151,6 +151,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Item.
+        /// </summary>
+        public static string deleteItem {
+            get {
+                return ResourceManager.GetString("deleteItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Descritpion.
         /// </summary>
         public static string description {

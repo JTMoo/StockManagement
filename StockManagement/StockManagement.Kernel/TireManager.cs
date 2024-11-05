@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Office.PowerPoint.Y2021.M06.Main;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -25,7 +26,7 @@ public class TireManager : NotificationBase
 	internal async void Init()
 	{
 		this._editableTires.Clear();
-		var tires = await Database.TireDataAccess.GetAll();
+		var tires = await DatabaseManager.GetAll<Tire>();
 		tires.ForEach(this._editableTires.Add);
 	}
 
@@ -38,14 +39,23 @@ public class TireManager : NotificationBase
 		}
 
 		_editableTires.Add(tire);
-		Database.TireDataAccess.Add(tire);
+		DatabaseManager.Add<Tire>(tire);
 		Trace.WriteLine("Tire added.");
+	}
+
+	internal void Deregister(Tire tire)
+	{
+		if (tire == null) return;
+
+		_editableTires.Remove(tire);
+		DatabaseManager.Delete<Tire>(tire);
+		Trace.WriteLine("Tire deleted.");
 	}
 
 	internal void Update(Tire tire, Action callback)
 	{
 		if (!_editableTires.Contains(tire)) return;
 
-		Database.TireDataAccess.Update(tire).ContinueWith(_ => callback.Invoke());
+		DatabaseManager.Update<Tire>(tire).ContinueWith(_ => callback.Invoke());
 	}
 }

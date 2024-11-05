@@ -26,6 +26,11 @@ public class Machine : StockItem
 		MainManager.Instance.MachineManager.Register(this);
 	}
 
+	internal override void Deregister()
+	{
+		MainManager.Instance.MachineManager.Deregister(this);
+	}
+
 	internal override void Update(Action callback)
 	{
 		MainManager.Instance.MachineManager.Update(this, callback);

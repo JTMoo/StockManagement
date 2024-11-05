@@ -27,6 +27,8 @@
 			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
 			<RowDefinition Height="{StaticResource smallSpacingGridDialog}"/>
 			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="{StaticResource smallSpacingGridDialog}"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
@@ -110,13 +112,18 @@
 				IsEnabled="False"
 				Content="{x:Static lang:Resources.showPicture}" />
 
+		<!-- Delete Item -->
+		<Button Style="{StaticResource RedBaseDialogButtonStyle}"
+				Grid.Row="11" Grid.Column="3"
+				Command="{Binding DeleteItemCommand}"
+				Content="{x:Static lang:Resources.deleteItem}" />
+
 		<!-- Info -->
-		<Border Grid.Column="7"
-				Grid.Row="2"
-				Grid.RowSpan="99"
+		<Border Grid.Column="7" Grid.Row="2" Grid.RowSpan="99"
 				BorderThickness="2"
+				CornerRadius="10"
 				Padding="5"
-				BorderBrush="#071c31">
+				BorderBrush="{StaticResource BorderBlack}">
 			<StackPanel Orientation="Vertical"
 						CanVerticallyScroll="True">
 				<TextBlock Text="{x:Static lang:Resources.name}"
