@@ -430,6 +430,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shopping Cart Items.
+        /// </summary>
+        public static string shoppingCartItems {
+            get {
+                return ResourceManager.GetString("shoppingCartItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show picture.
         /// </summary>
         public static string showPicture {
@@ -480,6 +489,15 @@ namespace StockManagement.Language {
         public static string tireDimensions {
             get {
                 return ResourceManager.GetString("tireDimensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        public static string total {
+            get {
+                return ResourceManager.GetString("total", resourceCulture);
             }
         }
         

@@ -10,12 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace StockManagement.Gui.ViewModel;
 
@@ -31,7 +28,6 @@ internal class MainViewModel : NotificationBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private bool isWaitDialogVisible = false;
-	private List<StockItem> shoppingCartItems = new();
 
 
 	public MainViewModel()
@@ -85,6 +81,8 @@ internal class MainViewModel : NotificationBase
 		get => this._filteredStockItems;
 		set => this.SetField(ref this._filteredStockItems, value);
 	}
+
+	public ObservableCollection<ShoppingCartItem> ShoppingCartItems { get; } = [];
 
 	public StockItem SelectedStockItem
 	{
@@ -143,12 +141,16 @@ internal class MainViewModel : NotificationBase
 
 	private  void OnAddToShoppingCartCommand(IEnumerable selectedItems)
 	{
-		var items = selectedItems.OfType<StockItem>();
-		this.shoppingCartItems.EqualizeTo(items);
+		var items = selectedItems.OfType<StockItem>().ConvertToShoppingCartList();
+		
+		this.ShoppingCartItems.EqualizeTo(items);
 	}
 
 	private  void OnShoppingCartCommand(string obj)
 	{
+		var cartDialog = new ShoppingCartDialogViewModel(this.ShoppingCartItems);
+		this.Dialog = cartDialog;
+		cartDialog.ShoppingCartChanged += (_, __) => this.ShoppingCartItems.Clear();
 	}
 
 	private async void OnExcelImportCommand(string obj)

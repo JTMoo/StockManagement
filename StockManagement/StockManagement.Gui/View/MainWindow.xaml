@@ -22,15 +22,17 @@
 			<ColumnDefinition Width="250"/>
 		</Grid.ColumnDefinitions>
 
-		<ListView x:Name="MainItemListView" Margin="5"
+		<ListView Margin="5"
 				  ItemsSource="{Binding FilteredStockItems}"
 				  Style="{StaticResource DefaultListViewStyle}">
 			<ListView.Resources>
 				<ContextMenu x:Key="ItemContextMenu">
-					<MenuItem Header="{x:Static lang:Resources.additionalInformation}" 
+					<MenuItem Header="{x:Static lang:Resources.additionalInformation}"
+							  FontSize="16"
 							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
 							  CommandParameter="{Binding }" />
 					<MenuItem Header="{x:Static lang:Resources.addToShoppingCart}"
+							  FontSize="16"
 							  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItems}"
 							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.AddToShoppingCartCommand}" />
 				</ContextMenu>
@@ -111,9 +113,24 @@
 			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{x:Static lang:Resources.excelImport}"
 					Command="{Binding ExcelImportCommand}"/>
-			<Button Style="{StaticResource BaseButtonStyle}"
-					Content="{x:Static lang:Resources.shoppingCart}"
-					Command="{Binding ShoppingCartCommand}"/>
+			<StackPanel VerticalAlignment="Center"
+						Margin="0,10,0,0">
+				<Button Style="{StaticResource BaseButtonStyle}"
+						Content="{x:Static lang:Resources.shoppingCart}"
+						Command="{Binding ShoppingCartCommand}"/>
+				<Border BorderThickness="2"
+						BorderBrush="{StaticResource BorderBlack}"
+						CornerRadius="15"
+						Background="{StaticResource MainElementBackground}"
+						HorizontalAlignment="Right"
+						Margin="0,-80,0,60">
+					<TextBlock Text="{Binding ShoppingCartItems.Count}"
+							   Padding="2"
+							   Foreground="{StaticResource MainBlue}"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center" />
+				</Border>
+			</StackPanel>
 		</StackPanel>
 
 		<ContentControl Grid.ColumnSpan="99"

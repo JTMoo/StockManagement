@@ -262,4 +262,10 @@
   <data name="shoppingCart" xml:space="preserve">
     <value>Carrito</value>
   </data>
+  <data name="shoppingCartItems" xml:space="preserve">
+    <value>Artículos en carrito</value>
+  </data>
+  <data name="total" xml:space="preserve">
+    <value>Total</value>
+  </data>
 </root>

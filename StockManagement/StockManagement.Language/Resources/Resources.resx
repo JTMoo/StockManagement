@@ -261,4 +261,10 @@
   <data name="shoppingCart" xml:space="preserve">
     <value>Shopping Cart</value>
   </data>
+  <data name="shoppingCartItems" xml:space="preserve">
+    <value>Shopping Cart Items</value>
+  </data>
+  <data name="total" xml:space="preserve">
+    <value>Total</value>
+  </data>
 </root>

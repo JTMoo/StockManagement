@@ -35,6 +35,38 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	
+	<Style x:Key="RedBaseButtonStyle"
+		   TargetType="{x:Type Button}"
+		   BasedOn="{StaticResource BaseControlStyle}">
+		<Setter Property="FontWeight" Value="DemiBold" />
+		<Setter Property="Foreground" Value="{StaticResource MainBlue}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border CornerRadius="5"
+							BorderThickness="1"
+							BorderBrush="{StaticResource BorderBlack}">
+						<ContentPresenter VerticalAlignment="Center"
+										  HorizontalAlignment="Center"
+										  Content="{TemplateBinding Content}" />
+						<Border.Style>
+							<Style>
+								<Setter Property="Border.Background"
+										Value="Red" />
+								<Style.Triggers>
+									<Trigger Property="Border.IsMouseOver" Value="True">
+										<Setter Property="Border.Background"
+												Value="OrangeRed" />
+									</Trigger>
+								</Style.Triggers>
+							</Style>
+						</Border.Style>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
 	<Style x:Key="BaseDialogButtonStyle"
 		   TargetType="{x:Type Button}"
@@ -43,5 +75,23 @@
 				Value="Auto" />
 		<Setter Property="Height"
 				Value="Auto" />
+	</Style>
+	
+	<Style x:Key="ShoppingCartDialogButtonStyle"
+		   TargetType="{x:Type Button}"
+		   BasedOn="{StaticResource BaseButtonStyle}">
+		<Setter Property="Width" Value="20" />
+		<Setter Property="Height" Value="Auto" />
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+	</Style>
+	
+	<Style x:Key="RedShoppingCartDialogButtonStyle"
+		   TargetType="{x:Type Button}"
+		   BasedOn="{StaticResource RedBaseButtonStyle}">
+		<Setter Property="Width" Value="20" />
+		<Setter Property="Height" Value="Auto" />
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center" />
 	</Style>
 </ResourceDictionary>
