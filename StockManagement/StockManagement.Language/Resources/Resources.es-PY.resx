@@ -256,4 +256,10 @@
   <data name="loading" xml:space="preserve">
     <value>Cargando</value>
   </data>
+  <data name="addToShoppingCart" xml:space="preserve">
+    <value>Agregar en carrito</value>
+  </data>
+  <data name="shoppingCart" xml:space="preserve">
+    <value>Carrito</value>
+  </data>
 </root>

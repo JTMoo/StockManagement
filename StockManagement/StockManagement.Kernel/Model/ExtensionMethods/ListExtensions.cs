@@ -1,9 +1,7 @@
-﻿using System.Collections.ObjectModel;
-
-namespace StockManagement.Kernel.Model.ExtensionMethods;
+﻿namespace StockManagement.Kernel.Model.ExtensionMethods;
 
 
-public static class ObservableCollectionExtensions
+public static class ListExtensions
 {
 	/// <summary>
 	/// Equalizes the items of <paramref name="collection1"/> to the items of <paramref name="collection2"/>
@@ -12,7 +10,7 @@ public static class ObservableCollectionExtensions
 	/// <param name="collection1"></param>
 	/// <param name="collection2"></param>
 	/// <returns>True, if the <paramref name="collection1"/> changed.</returns>
-	public static bool EqualizeTo<T>(this ObservableCollection<T> collection1, IEnumerable<T> collection2)
+	public static bool EqualizeTo<T>(this List<T> collection1, IEnumerable<T> collection2)
 	{
 		if (collection1 == null || collection2 == null) return false;
 

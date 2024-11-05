@@ -22,15 +22,17 @@
 			<ColumnDefinition Width="250"/>
 		</Grid.ColumnDefinitions>
 
-		<ListView Margin="5"
+		<ListView x:Name="MainItemListView" Margin="5"
 				  ItemsSource="{Binding FilteredStockItems}"
-				  Style="{StaticResource DefaultListViewStyle}"
-				  SelectedItem="{Binding SelectedStockItem}">
+				  Style="{StaticResource DefaultListViewStyle}">
 			<ListView.Resources>
 				<ContextMenu x:Key="ItemContextMenu">
 					<MenuItem Header="{x:Static lang:Resources.additionalInformation}" 
 							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
 							  CommandParameter="{Binding }" />
+					<MenuItem Header="{x:Static lang:Resources.addToShoppingCart}"
+							  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItems}"
+							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.AddToShoppingCartCommand}" />
 				</ContextMenu>
 			</ListView.Resources>
 			<ListView.ItemContainerStyle>
@@ -88,6 +90,7 @@
 					   Margin="5"/>
 		</StackPanel>
 
+		<!-- Settings -->
 		<StackPanel Grid.Row="2"
 					Grid.Column="2">
 			<Button Style="{StaticResource BaseButtonStyle}"
@@ -99,6 +102,7 @@
 					Command="{Binding QuitCommand}"/>
 		</StackPanel>
 
+		<!-- Action Bar -->
 		<StackPanel Grid.Row="2"
 					Orientation="Horizontal">
 			<Button Style="{StaticResource BaseButtonStyle}"
@@ -107,6 +111,9 @@
 			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{x:Static lang:Resources.excelImport}"
 					Command="{Binding ExcelImportCommand}"/>
+			<Button Style="{StaticResource BaseButtonStyle}"
+					Content="{x:Static lang:Resources.shoppingCart}"
+					Command="{Binding ShoppingCartCommand}"/>
 		</StackPanel>
 
 		<ContentControl Grid.ColumnSpan="99"

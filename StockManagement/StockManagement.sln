@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Language", "StockManagement.Language\StockManagement.Language.csproj", "{50F297FB-853A-4320-A064-6F332218104F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockManagement.Language", "StockManagement.Language\StockManagement.Language.csproj", "{50F297FB-853A-4320-A064-6F332218104F}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "StockManagement.Setup", "StockManagement.Setup\StockManagement.Setup.vdproj", "{04CAA2CA-D4E2-4520-B3E3-B1DB04806EB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,8 @@ Global
 		{50F297FB-853A-4320-A064-6F332218104F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50F297FB-853A-4320-A064-6F332218104F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50F297FB-853A-4320-A064-6F332218104F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04CAA2CA-D4E2-4520-B3E3-B1DB04806EB3}.Debug|Any CPU.ActiveCfg = Debug
+		{04CAA2CA-D4E2-4520-B3E3-B1DB04806EB3}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

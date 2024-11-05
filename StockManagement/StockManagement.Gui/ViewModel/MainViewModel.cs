@@ -3,14 +3,19 @@ using StockManagement.Gui.Commands;
 using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Kernel.Model.Types;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace StockManagement.Gui.ViewModel;
 
@@ -26,6 +31,7 @@ internal class MainViewModel : NotificationBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private bool isWaitDialogVisible = false;
+	private List<StockItem> shoppingCartItems = new();
 
 
 	public MainViewModel()
@@ -35,6 +41,8 @@ internal class MainViewModel : NotificationBase
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 		ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
+		AddToShoppingCartCommand = new RelayCommand<IEnumerable>(this.OnAddToShoppingCartCommand);
+		ShoppingCartCommand = new RelayCommand<string>(this.OnShoppingCartCommand);
 
 		((INotifyCollectionChanged)MainManagerFacade.Machines).CollectionChanged += (_, __) => this.OnRefreshSearch();
 		((INotifyCollectionChanged)MainManagerFacade.SpareParts).CollectionChanged += (_, __) => this.OnRefreshSearch();
@@ -45,7 +53,8 @@ internal class MainViewModel : NotificationBase
 
 	#region Properties
 	public RelayCommand<string> ExcelImportCommand { get; }
-
+	public RelayCommand<IEnumerable> AddToShoppingCartCommand { get; }
+	public RelayCommand<string> ShoppingCartCommand { get; }
 	public RelayCommand<string> QuitCommand { get; }
 	public RelayCommand<StockItem> MoreInfoCommand { get; }
 	public RelayCommand<string> CreateStockItemCommand { get; }
@@ -130,6 +139,16 @@ internal class MainViewModel : NotificationBase
 			return;
 
 		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
+	}
+
+	private  void OnAddToShoppingCartCommand(IEnumerable selectedItems)
+	{
+		var items = selectedItems.OfType<StockItem>();
+		this.shoppingCartItems.EqualizeTo(items);
+	}
+
+	private  void OnShoppingCartCommand(string obj)
+	{
 	}
 
 	private async void OnExcelImportCommand(string obj)
