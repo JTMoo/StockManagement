@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="zero" xml:space="preserve">
+    <value>CERO</value>
+  </data>
+  <data name="one" xml:space="preserve">
+    <value>UNO</value>
+  </data>
+  <data name="two" xml:space="preserve">
+    <value>DOS</value>
+  </data>
+  <data name="three" xml:space="preserve">
+    <value>TRES</value>
+  </data>
+  <data name="four" xml:space="preserve">
+    <value>CUATRO</value>
+  </data>
+  <data name="five" xml:space="preserve">
+    <value>CINCO</value>
+  </data>
+  <data name="six" xml:space="preserve">
+    <value>SEIS</value>
+  </data>
+  <data name="seven" xml:space="preserve">
+    <value>SIETE</value>
+  </data>
+  <data name="eight" xml:space="preserve">
+    <value>OCHO</value>
+  </data>
+  <data name="nine" xml:space="preserve">
+    <value>NUEVE</value>
+  </data>
+  <data name="ten" xml:space="preserve">
+    <value>DIEZ</value>
+  </data>
+  <data name="eleven" xml:space="preserve">
+    <value>ONCE</value>
+  </data>
+  <data name="twelve" xml:space="preserve">
+    <value>DOCE</value>
+  </data>
+  <data name="thirteen" xml:space="preserve">
+    <value>TRECE</value>
+  </data>
+  <data name="fourteen" xml:space="preserve">
+    <value>CATORCE</value>
+  </data>
+  <data name="fifteen" xml:space="preserve">
+    <value>QUINCE</value>
+  </data>
+  <data name="sixteen" xml:space="preserve">
+    <value>DIECISÉIS</value>
+  </data>
+  <data name="seventeen" xml:space="preserve">
+    <value>DIECISIETE</value>
+  </data>
+  <data name="eighteen" xml:space="preserve">
+    <value>DIECIOCHO</value>
+  </data>
+  <data name="nineteen" xml:space="preserve">
+    <value>DIECINUEVE</value>
+  </data>
+  <data name="twenty" xml:space="preserve">
+    <value>VEINTE</value>
+  </data>
+  <data name="twentyone" xml:space="preserve">
+    <value>VEINTIUNO</value>
+  </data>
+  <data name="twentytwo" xml:space="preserve">
+    <value>VEINTIDÓS</value>
+  </data>
+  <data name="twentythree" xml:space="preserve">
+    <value>VEINTITRÉS</value>
+  </data>
+  <data name="twentyfour" xml:space="preserve">
+    <value>VEINTICUATRO</value>
+  </data>
+  <data name="twentyfive" xml:space="preserve">
+    <value>VEINTICINCO</value>
+  </data>
+  <data name="twentysix" xml:space="preserve">
+    <value>VEINTISÉIS</value>
+  </data>
+  <data name="twentyseven" xml:space="preserve">
+    <value>VEINTISIETE</value>
+  </data>
+  <data name="twentyeight" xml:space="preserve">
+    <value>VEINTIOCHO</value>
+  </data>
+  <data name="twentynine" xml:space="preserve">
+    <value>VEINTINUEVE</value>
+  </data>
+  <data name="thirty" xml:space="preserve">
+    <value>TREINTA</value>
+  </data>
+  <data name="fourty" xml:space="preserve">
+    <value>CUARENTA</value>
+  </data>
+  <data name="fifty" xml:space="preserve">
+    <value>CINCUENTA</value>
+  </data>
+  <data name="sixty" xml:space="preserve">
+    <value>SESENTA</value>
+  </data>
+  <data name="seventy" xml:space="preserve">
+    <value>SETENTA</value>
+  </data>
+  <data name="eighty" xml:space="preserve">
+    <value>OCHENTA</value>
+  </data>
+  <data name="ninety" xml:space="preserve">
+    <value>NOVENTA</value>
+  </data>
+  <data name="hundred" xml:space="preserve">
+    <value>CIEN</value>
+  </data>
+  <data name="hundredSomething" xml:space="preserve">
+    <value>CIENTO</value>
+  </data>
+  <data name="twohundred" xml:space="preserve">
+    <value>DOSCIENTOS</value>
+  </data>
+  <data name="threehundred" xml:space="preserve">
+    <value>TRESCIENTOS</value>
+  </data>
+  <data name="fourhundred" xml:space="preserve">
+    <value>CUATROCIENTOS</value>
+  </data>
+  <data name="fivehundred" xml:space="preserve">
+    <value>QUINIENTOS</value>
+  </data>
+  <data name="sixhundred" xml:space="preserve">
+    <value>SEISCIENTOS</value>
+  </data>
+  <data name="sevenhundred" xml:space="preserve">
+    <value>SETECIENTOS</value>
+  </data>
+  <data name="eighthundred" xml:space="preserve">
+    <value>OCHOCIENTOS</value>
+  </data>
+  <data name="ninehundred" xml:space="preserve">
+    <value>NOVECIENTOS</value>
+  </data>
+  <data name="thousand" xml:space="preserve">
+    <value>MIL</value>
+  </data>
+  <data name="million" xml:space="preserve">
+    <value>MILLÓN</value>
+  </data>
+  <data name="multipleMillions" xml:space="preserve">
+    <value>MILLONES</value>
+  </data>
+  <data name="trillion" xml:space="preserve">
+    <value>BILLÓN</value>
+  </data>
+  <data name="multipleTrillions" xml:space="preserve">
+    <value>BILLONES</value>
+  </data>
+  <data name="billion" xml:space="preserve">
+    <value>MILMILLIONES</value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>Y</value>
+  </data>
+</root>
