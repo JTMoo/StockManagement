@@ -270,4 +270,25 @@
   <data name="deleteItem" xml:space="preserve">
     <value>Lagerartikel löschen</value>
   </data>
+  <data name="customerId" xml:space="preserve">
+    <value>Kundennummer</value>
+  </data>
+  <data name="lastname" xml:space="preserve">
+    <value>Nachname</value>
+  </data>
+  <data name="address" xml:space="preserve">
+    <value>Anschrift</value>
+  </data>
+  <data name="phoneNumber" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="identificationNumber" xml:space="preserve">
+    <value>Identifikationsnnummer (C.I. / RUC)</value>
+  </data>
+  <data name="postboxNumber" xml:space="preserve">
+    <value>Postfachnummer</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
 </root>

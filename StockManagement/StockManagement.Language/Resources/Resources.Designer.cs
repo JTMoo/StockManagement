@@ -70,6 +70,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address.
+        /// </summary>
+        public static string address {
+            get {
+                return ResourceManager.GetString("address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to Shopping Cart.
         /// </summary>
         public static string addToShoppingCart {
@@ -151,6 +160,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer ID.
+        /// </summary>
+        public static string customerId {
+            get {
+                return ResourceManager.GetString("customerId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Item.
         /// </summary>
         public static string deleteItem {
@@ -165,6 +183,15 @@ namespace StockManagement.Language {
         public static string description {
             get {
                 return ResourceManager.GetString("description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string email {
+            get {
+                return ResourceManager.GetString("email", resourceCulture);
             }
         }
         
@@ -205,11 +232,29 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identification number (C.I. / RUC).
+        /// </summary>
+        public static string identificationNumber {
+            get {
+                return ResourceManager.GetString("identificationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For language changes to take effect, please restart the application..
         /// </summary>
         public static string languageChangedMessage {
             get {
                 return ResourceManager.GetString("languageChangedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lastname.
+        /// </summary>
+        public static string lastname {
+            get {
+                return ResourceManager.GetString("lastname", resourceCulture);
             }
         }
         
@@ -282,6 +327,24 @@ namespace StockManagement.Language {
         public static string none {
             get {
                 return ResourceManager.GetString("none", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number.
+        /// </summary>
+        public static string phoneNumber {
+            get {
+                return ResourceManager.GetString("phoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postbox number.
+        /// </summary>
+        public static string postboxNumber {
+            get {
+                return ResourceManager.GetString("postboxNumber", resourceCulture);
             }
         }
         
