@@ -2,16 +2,19 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using StockManagement.Gui.Commands;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Util;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
 
 public class ShoppingCartDialogViewModel : DialogViewModelBase
 {
-	private double total;
+	private long total;
+	private string totalInWords;
 
 
 	public ShoppingCartDialogViewModel(ObservableCollection<ShoppingCartItem> shoppingCartItems)
@@ -33,10 +36,15 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	#region Properties
 	public ObservableCollection<ShoppingCartItem> Items { get; }
 
-	public double Total
+	public long Total
 	{
 		get { return this.total; }
 		set { this.SetField(ref this.total, value); }
+	}
+	public string TotalInWords
+	{
+		get { return this.totalInWords; }
+		set { this.SetField(ref this.totalInWords, value); }
 	}
 
 	public RelayCommand<ShoppingCartItem> IncreaseAmountCommand { get; }
@@ -91,6 +99,16 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 
 	private void UpdateTotalPrice()
 	{
-		this.Total = this.Items.Sum(item => item.Amount * item.StockItem.Price);
+		try
+		{
+			this.Total = this.Items.Sum(item => item.Amount * Convert.ToInt64(Math.Round(item.StockItem.Price, 0)));
+		}
+		catch (Exception e)
+		{
+			this.Total = 0;
+			Trace.WriteLine(e.Message);
+		}
+
+		this.TotalInWords = ConversionHelper.ConvertToWords(this.Total);
 	}
 }

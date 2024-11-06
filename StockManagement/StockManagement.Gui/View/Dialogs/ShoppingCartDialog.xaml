@@ -120,7 +120,8 @@
 			<TextBlock Text="{x:Static lang:Resources.total}" />
 			<TextBlock Text=": " />
 			<TextBlock Text="{Binding Total}" />
-			<TextBlock Text=" Gs." />
+			<TextBlock Text=" Gs. - " />
+			<TextBlock Text="{Binding TotalInWords}" />
 		</StackPanel>
 
 		<controls:DialogActionBarControl Grid.Row="99"
