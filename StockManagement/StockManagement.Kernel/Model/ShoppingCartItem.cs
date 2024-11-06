@@ -4,7 +4,13 @@
 public class ShoppingCartItem(StockItem item) : NotificationBase
 {
 	private int amount = 1;
+	private int discount = 0;
 
+	public int Discount
+	{
+		get { return this.discount; }
+		set { this.SetField(ref this.discount, value); }
+	}
 
 	public int Amount
 	{
