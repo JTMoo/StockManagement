@@ -24,25 +24,9 @@ public class StockItemChangeAmountCommand : ICommand
 
 		var transaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount);
 		stockItem.Amount += amount;
-		stockItem.Update(() => OnUpdateCompleted(transaction));
+		stockItem.Update(() => DatabaseManager.Add<Transaction>(transaction));
 
 		return false;
-	}
-
-	/// ----------------------------------------------------------------------------------------------
-	/// <summary>
-	/// Callback that is executed after the update of the stock item worked.
-	/// This makes sure, that the transaction is only saved, if the update was successful.
-	/// If the update fails, it results in an exception and this callback is ignored.
-	/// </summary>
-	/// ----------------------------------------------------------------------------------------------
-	/// <param name="transaction">Transaction that documents change to stock item</param>
-	/// ----------------------------------------------------------------------------------------------
-	private static void OnUpdateCompleted(Transaction transaction)
-	{
-		if (transaction == null) return;
-
-		DatabaseManager.Add<Transaction>(transaction);
 	}
 
 	public enum ChangeType
