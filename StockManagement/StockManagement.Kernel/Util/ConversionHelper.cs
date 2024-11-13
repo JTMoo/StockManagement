@@ -3,12 +3,12 @@
 
 public static class ConversionHelper
 {
-	private static readonly string[] Ones = { string.Empty, Language.Numbers.one, Language.Numbers.two, Language.Numbers.three, Language.Numbers.four, Language.Numbers.five, Language.Numbers.six, Language.Numbers.seven, Language.Numbers.eight, Language.Numbers.ten };
-	private static readonly string[] Teens = { Language.Numbers.ten, Language.Numbers.eleven, Language.Numbers.twelve, Language.Numbers.thirteen, Language.Numbers.fourteen, Language.Numbers.fifteen, Language.Numbers.sixteen, Language.Numbers.seventeen, Language.Numbers.eighteen, Language.Numbers.nineteen };
-	private static readonly string[] Twentys = { Language.Numbers.twenty, Language.Numbers.twentyone, Language.Numbers.twentytwo, Language.Numbers.twentythree, Language.Numbers.twentyfour, Language.Numbers.twentyfive, Language.Numbers.twentysix, Language.Numbers.twentyseven, Language.Numbers.twentyeight, Language.Numbers.twentynine };
-	private static readonly string[] Tens = { string.Empty, string.Empty, string.Empty, Language.Numbers.thirty, Language.Numbers.fourty, Language.Numbers.fifty, Language.Numbers.sixty, Language.Numbers.seventy, Language.Numbers.eighty, Language.Numbers.ninety };
-	private static readonly string[] Hundreds = { string.Empty, Language.Numbers.hundredSomething, Language.Numbers.twohundred, Language.Numbers.threehundred, Language.Numbers.fourhundred, Language.Numbers.fivehundred, Language.Numbers.sixhundred, Language.Numbers.sevenhundred, Language.Numbers.eighthundred, Language.Numbers.ninehundred };
-	private static readonly string[] Thousands = { string.Empty, Language.Numbers.thousand, Language.Numbers.million, Language.Numbers.billion, Language.Numbers.trillion };
+	private static readonly string[] Ones = [string.Empty, Language.Numbers.one, Language.Numbers.two, Language.Numbers.three, Language.Numbers.four, Language.Numbers.five, Language.Numbers.six, Language.Numbers.seven, Language.Numbers.eight, Language.Numbers.ten];
+	private static readonly string[] Teens = [Language.Numbers.ten, Language.Numbers.eleven, Language.Numbers.twelve, Language.Numbers.thirteen, Language.Numbers.fourteen, Language.Numbers.fifteen, Language.Numbers.sixteen, Language.Numbers.seventeen, Language.Numbers.eighteen, Language.Numbers.nineteen];
+	private static readonly string[] Twentys = [Language.Numbers.twenty, Language.Numbers.twentyone, Language.Numbers.twentytwo, Language.Numbers.twentythree, Language.Numbers.twentyfour, Language.Numbers.twentyfive, Language.Numbers.twentysix, Language.Numbers.twentyseven, Language.Numbers.twentyeight, Language.Numbers.twentynine];
+	private static readonly string[] Tens = [string.Empty, string.Empty, string.Empty, Language.Numbers.thirty, Language.Numbers.fourty, Language.Numbers.fifty, Language.Numbers.sixty, Language.Numbers.seventy, Language.Numbers.eighty, Language.Numbers.ninety];
+	private static readonly string[] Hundreds = [string.Empty, Language.Numbers.hundredSomething, Language.Numbers.twohundred, Language.Numbers.threehundred, Language.Numbers.fourhundred, Language.Numbers.fivehundred, Language.Numbers.sixhundred, Language.Numbers.sevenhundred, Language.Numbers.eighthundred, Language.Numbers.ninehundred];
+	private static readonly string[] Thousands = [string.Empty, Language.Numbers.thousand, Language.Numbers.million, Language.Numbers.billion, Language.Numbers.trillion];
 
 
 	public static string ConvertToWords(long number)
