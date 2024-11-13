@@ -10,6 +10,7 @@ public class Invoice : BaseDocument
 	private DateTime date;
 	private DateTime expirationDate;
 	private long total;
+	private int number;
 
 
 	public Invoice()
@@ -18,6 +19,11 @@ public class Invoice : BaseDocument
 
 
 	#region Properties
+	public int Number
+	{
+		get { return this.number; }
+		set { this.SetField(ref this.number, value); }
+	}
 	public DateTime Date
 	{
 		get { return this.date; }
@@ -25,8 +31,8 @@ public class Invoice : BaseDocument
 	}
 	public DateTime ExpirationDate
 	{
-		get { return this.date; }
-		set { this.SetField(ref this.date, value); }
+		get { return this.expirationDate; }
+		set { this.SetField(ref this.expirationDate, value); }
 	}
 	public long Total
 	{
