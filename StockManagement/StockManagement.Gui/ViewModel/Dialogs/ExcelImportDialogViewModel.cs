@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
-using SharpCompress.Common;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
@@ -16,6 +15,7 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 	{
 	}
 
+	#region Properties
 	public ObservableCollection<string> WorksheetNames { get; } = [];
 
 	public string SelectedWorksheetName
@@ -23,21 +23,12 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 		get { return this.selectedWorksheetName; }
 		set { this.SetField(ref this.selectedWorksheetName, value); }
 	}
+	#endregion Properties
 
 	public override void Confirm(string param)
 	{
 		GuiManager.Instance.MainViewModel.Dialog = new TableMappingViewModel(this.workbook.Worksheet(this.SelectedWorksheetName));
 	}
-
-	private async Task GetExcelSheetNames(string filePath)
-	{
-		await Task.Run(() => this.workbook = new XLWorkbook(filePath));
-		foreach (var sheet in this.workbook.Worksheets)
-		{
-			this.WorksheetNames.Add(sheet.Name);
-		}
-	}
-
 
 	public static Task<ExcelImportDialogViewModel> CreateAsync(string filePath)
 	{
@@ -47,7 +38,16 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 
 	private async Task<ExcelImportDialogViewModel> InitializeAsync(string filePath)
 	{
-		await Task.Run(() => this.workbook = new XLWorkbook(filePath));
+		await Task.Run(async () => await this.GetExcelSheetNames(filePath));
 		return this;
+	}
+
+	private async Task GetExcelSheetNames(string filePath)
+	{
+		await Task.Run(() => this.workbook = new XLWorkbook(filePath));
+		foreach (var sheet in this.workbook.Worksheets)
+		{
+			this.WorksheetNames.Add(sheet.Name);
+		}
 	}
 }
