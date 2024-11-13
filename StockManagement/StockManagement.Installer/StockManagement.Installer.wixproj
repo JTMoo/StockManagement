@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+		<ProductVersion>3.10</ProductVersion>
+		<ProjectGuid>ffba066d-a4bb-4c1d-8686-737d0ad6b61d</ProjectGuid>
+		<SchemaVersion>2.0</SchemaVersion>
+		<OutputName>StockManagement-$(Configuration)-$(Platform)</OutputName>
+		<OutputType>Package</OutputType>
+		<!-- Remove this to support localization -->
+		<Cultures>;</Cultures>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+		<DefineConstants>Debug</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+		<DefineConstants>Debug</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="Components.wxs" />
+		<Compile Include="ComponentsGenerated.wxs" />
+		<Compile Include="Directories.wxs" />
+		<Compile Include="Product.wxs" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Common.wxl" />
+	</ItemGroup>
+	<ItemGroup>
+		<WixExtension Include="WixUIExtension">
+			<HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+			<Name>WixUIExtension</Name>
+		</WixExtension>
+	</ItemGroup>
+	<Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+	<Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+	<Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+		<Error Text="The WiX Toolset v3.11 build tools must be installed to build this project. To download the WiX Toolset, see https://wixtoolset.org/releases/v3.11/stable" />
+	</Target>
+
+	<Target Name="BeforeBuild">
+		<!-- Clean previous publish folder -->
+		<Exec Command="rd /s /q ..\StockManagement.Gui\bin\$(Configuration)\net8.0-windows\win-$(Platform)" />
+		<Exec Command="rd /s /q ..\publish" />
+		<Exec Command="dotnet publish ..\StockManagement.Gui\StockManagement.Gui.csproj -c $(Configuration) -r win-$(Platform) -o ..\publish" />
+		<!-- Get assembly version from output file -->
+		<GetAssemblyIdentity AssemblyFiles="..\StockManagement.Gui\bin\$(Configuration)\net8.0-windows\win-$(Platform)\StockManagement.Gui.dll">
+			<Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+		</GetAssemblyIdentity>
+		<!-- Get the BuildVersion from the specified file -->
+		<PropertyGroup>
+			<DefineConstants>BuildVersion=%(AssemblyVersion.Version);BasePath=..\publish</DefineConstants>
+		</PropertyGroup>
+		<!-- Harvest file components from publish folder -->
+		<HeatDirectory OutputFile="ComponentsGenerated.wxs"
+					   PreprocessorVariable="var.BasePath"
+					   DirectoryRefId="INSTALLFOLDER"
+					   ComponentGroupName="PublishedComponents"
+					   RunAsSeparateProcess="true"
+					   SuppressCom="true"
+					   SuppressFragments="true"
+					   SuppressRegistry="true"
+					   SuppressRootDirectory="true"
+					   AutoGenerateGuids="false"
+					   GenerateGuidsNow="true"
+					   ToolPath="$(WixToolPath)"
+					   Directory="..\publish" />
+	</Target>
+
+	<Target Name="AfterBuild">
+		<!-- Get assembly version from output file -->
+		<GetAssemblyIdentity AssemblyFiles="..\StockManagement.Gui\bin\$(Configuration)\net8.0-windows\win-$(Platform)\StockManagement.Gui.dll">
+			<Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+		</GetAssemblyIdentity>
+
+		<!-- Rename to final .msi-->
+		<Exec Command="if not exist Installer mkdir Installer" />
+		<Exec Command="move bin\$(Configuration)\$(OutputName).msi Installer\$(OutputName)-%(AssemblyVersion.Version).msi" />
+	</Target>
+</Project>

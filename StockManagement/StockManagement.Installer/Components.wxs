@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents">
+
+			<!-- Shortcut inclusion -->
+			<ComponentRef Id="StartMenuShortcut" />
+			<ComponentRef Id="DesktopShortcut" />
+			
+		</ComponentGroup>
+
+		<!-- Installed Files -->
+		<DirectoryRef Id="InstallProgramMenuFolder" FileSource="..\StockManagement.Gui\bin\Release\net8.0-windows\">
+			<Component Id="StartMenuShortcut" Guid="{DB759FED-90E2-4064-B9AF-2360D69A24F5}">
+				<Shortcut Id="StartMenuShortcut"
+						  Name="!(loc.ProductName_$(var.Platform))"
+						  Target="[INSTALLFOLDER]StockManagement.Gui.exe"
+						  WorkingDirectory="INSTALLFOLDER" />
+				<!--Icon="WAWIAssistant.Icon.ico"/> -->
+
+				<!-- Unique Key for the Component-->
+				<RegistryValue Root="HKCU" Key="SOFTWARE\!(loc.InstallFolderName)" Name="ProgramsShortcut" Value="1" Type="integer" KeyPath="yes" />
+
+				<RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall"/>
+			</Component>
+		</DirectoryRef>
+		
+		<DirectoryRef Id="DesktopFolder" FileSource="..\StockManagement.Gui\bin\Release\net8.0-windows\">
+			<Component Id="DesktopShortcut" Guid="{8043F632-3953-4336-B079-A5F3404F5852}">
+				<Shortcut Id="DesktopShortcut" 
+						  Name="!(loc.ProductName_$(var.Platform))"
+						  Target="[INSTALLFOLDER]StockManagement.Gui.exe"
+						  WorkingDirectory="INSTALLFOLDER" />
+				<!--Icon="WAWIAssistant.Icon.ico"/> -->
+
+				<RegistryValue Root="HKCU" Key="Software\!(loc.InstallFolderName)" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+		
+	</Fragment>
+</Wix>

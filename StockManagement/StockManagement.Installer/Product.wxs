@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+	<!-- Give product a unique ID per platform (Tools -> New GUID -> New -> Copy) -->
+	<?if $(var.Platform) = x64 ?>
+	<?define ProductCode = "{2AEBB6BB-D850-4AA5-BFA9-60A74FB4AD02}" ?>
+	<?else?>
+	<?define ProductCode = "{EBDB8338-8914-48E1-8D2B-E51CE43B2EFA}" ?>
+	<?endif?>
+
+	<!-- Fixed upgrade id -->
+	<?define UpgradeCode = "{719F8B36-EC9C-4719-B0DA-5BFE3B438B03}"?>
+
+	<!-- Define main product -->
+	<Product Id="$(var.ProductCode)"
+			 Name="!(loc.ProductName_$(var.Platform))"
+			 Language="!(loc.Language)"
+			 Version="$(var.BuildVersion)"
+			 Manufacturer="!(loc.Company)"
+			 UpgradeCode="$(var.UpgradeCode)">
+
+		<!-- Provide package details -->
+		<Package InstallerVersion="200"
+				 InstallPrivileges="elevated"
+				 Compressed="yes"
+				 Manufacturer="!(loc.Company)"
+				 Description="!(loc.Description)"
+				 Keywords="!(loc.Keywords)"
+				 Comments="!(loc.Comments)" />
+
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
+
+		<!-- Include .cab-file in .msi-file -->
+		<MediaTemplate EmbedCab="yes" />
+
+		<!--<Icon Id="WAWIAssistant.Icon.ico"
+			  SourceFile="$(var.WAWIAssistant.Kernel.ProjectDir)\Resources\WAWIAssistantIcon.ico"/>-->
+		<!-- Use WAWIAssistant.Icon.ico for the installer -->
+		<!--<Property Id="ARPPRODUCTICON">WAWIAssistant.Icon.ico</Property>-->
+
+		<Property Id="ARPURLINFOABOUT">https://lacosecha.com.py/</Property>
+
+		<!-- Require Admin Privileges for the installer to run -->
+		<Property Id="MSIUSEREALADMINDETECTION" Value="1" />
+		<Property Id="ALLUSERS" Value="0" />
+
+		<!-- Basic UI -->
+		<UIRef Id="WixUI_Minimal"/>
+		<!-- Background Size: 493x312
+		<WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\Assests\Background.bmp"/>-->
+		<!-- Banner Size: 493x58
+		<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\Assests\Banner.bmp"/>
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\Assests\Lizenz.rtf"/>-->
+
+		<!-- Define components, shortcuts, files etc... -->
+		<Feature Id="ProductFeature" Title="StockManagement.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="PublishedComponents" />
+		</Feature>
+	</Product>
+</Wix>

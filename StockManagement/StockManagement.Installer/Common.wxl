@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="de-de" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	
+	<String Id="InstallFolderName">StockManagement</String>
+	
+	<String Id="ProductName_x86">StockManagement (x86)</String>
+	<String Id="ProductName_x64">StockManagement (x64)</String>
+	<String Id="Language">1033</String>
+	<String Id="Company">La Cosecha S.A.</String>
+	
+	<String Id="Description">Lagerverwaltung mit Niveau</String>
+	<String Id="Keywords">Lagerverwaltung, ERP, Stock, Management, Lager, Verwaltung, Aufträge</String>
+	<String Id="Comments">Fortschritt heißt Veränderung!</String>
+	
+	<String Id="DowngradeErrorMessage">Eine neuere Version des StockManagements ist bereits installiert.</String>
+	<String Id="RunAsAdmin">Dieses Installationsprogramm, muss als Administrator ausgeführt werden.</String>
+</WixLocalization>
