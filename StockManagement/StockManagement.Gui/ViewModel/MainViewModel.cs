@@ -176,7 +176,7 @@ internal class MainViewModel : NotificationBase
 
 	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool codes = false)
 	{
-		var filteredItems = this.GetStockItems();
+		var filteredItems = GetStockItems();
 		if (manufacturer)
 			filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? filteredItems : filteredItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
 		else if (type)
@@ -189,7 +189,7 @@ internal class MainViewModel : NotificationBase
 		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
 	}
 
-	private IEnumerable<StockItem> GetStockItems()
+	private static IEnumerable<StockItem> GetStockItems()
 	{
 		var machines = MainManagerFacade.Machines.Cast<StockItem>();
 		var spareParts = MainManagerFacade.SpareParts.Cast<StockItem>();
