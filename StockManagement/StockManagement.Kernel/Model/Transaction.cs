@@ -19,6 +19,8 @@ public class Transaction(StockItem stockItem, DateTime time, Transaction.Kind ki
 	{
 		Price = 0,
 
-		Amount
+		Amount,
+
+		Deletion
 	}
 }
