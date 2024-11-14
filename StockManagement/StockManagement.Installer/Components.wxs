@@ -16,8 +16,8 @@
 				<Shortcut Id="StartMenuShortcut"
 						  Name="!(loc.ProductName_$(var.Platform))"
 						  Target="[INSTALLFOLDER]StockManagement.Gui.exe"
-						  WorkingDirectory="INSTALLFOLDER" />
-				<!--Icon="WAWIAssistant.Icon.ico"/> -->
+						  WorkingDirectory="INSTALLFOLDER"
+						  Icon="Icon.ico"/>
 
 				<!-- Unique Key for the Component-->
 				<RegistryValue Root="HKCU" Key="SOFTWARE\!(loc.InstallFolderName)" Name="ProgramsShortcut" Value="1" Type="integer" KeyPath="yes" />
@@ -31,8 +31,8 @@
 				<Shortcut Id="DesktopShortcut" 
 						  Name="!(loc.ProductName_$(var.Platform))"
 						  Target="[INSTALLFOLDER]StockManagement.Gui.exe"
-						  WorkingDirectory="INSTALLFOLDER" />
-				<!--Icon="WAWIAssistant.Icon.ico"/> -->
+						  WorkingDirectory="INSTALLFOLDER"
+						  Icon="Icon.ico"/>
 
 				<RegistryValue Root="HKCU" Key="Software\!(loc.InstallFolderName)" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
 			</Component>

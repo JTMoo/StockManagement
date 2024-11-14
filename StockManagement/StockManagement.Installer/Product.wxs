@@ -33,10 +33,10 @@
 		<!-- Include .cab-file in .msi-file -->
 		<MediaTemplate EmbedCab="yes" />
 
-		<!--<Icon Id="WAWIAssistant.Icon.ico"
-			  SourceFile="$(var.WAWIAssistant.Kernel.ProjectDir)\Resources\WAWIAssistantIcon.ico"/>-->
+		<Icon Id="Icon.ico"
+			  SourceFile="$(var.StockManagement.Gui.ProjectDir)\Resources\Icon.ico"/>
 		<!-- Use WAWIAssistant.Icon.ico for the installer -->
-		<!--<Property Id="ARPPRODUCTICON">WAWIAssistant.Icon.ico</Property>-->
+		<Property Id="ARPPRODUCTICON">Icon.ico</Property>
 
 		<Property Id="ARPURLINFOABOUT">https://lacosecha.com.py/</Property>
 
