@@ -1,6 +1,6 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using StockManagement.Kernel.Commands.Data;
+﻿using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Commands;
