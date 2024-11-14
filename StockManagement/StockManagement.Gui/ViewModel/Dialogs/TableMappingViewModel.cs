@@ -66,7 +66,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		base.Confirm(param);
 	}
 
-	private IEnumerable<StockItem> ExtractStockItemsFromExcelSheet()
+	private List<StockItem> ExtractStockItemsFromExcelSheet()
 	{
 		var headerRowRange = this.worksheet.FirstRowUsed().RowUsed();
 		var matchingActions = CreatePropertyMatchingActionsFromTableHeaders(headerRowRange);
