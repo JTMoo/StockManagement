@@ -41,7 +41,7 @@
 	<SolidColorBrush x:Key="LightBorder" Color="{StaticResource LightBorderColor}" />
 
 	<DataTemplate x:Key="DialogContentTemplate">
-		<Border BorderThickness="200"
+		<Border BorderThickness="{Binding DataContext.ResponsiveDialogBorderThickness, RelativeSource={RelativeSource AncestorType=Window}}"
 				Background="{StaticResource MainBackground}"
 				BorderBrush="{StaticResource DialogBackground}">
 			<Border BorderThickness="5"

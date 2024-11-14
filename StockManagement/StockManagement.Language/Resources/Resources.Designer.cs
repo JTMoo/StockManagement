@@ -88,6 +88,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adjust size of border for inner window.
+        /// </summary>
+        public static string adjustDialogBorderSize {
+            get {
+                return ResourceManager.GetString("adjustDialogBorderSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amount.
         /// </summary>
         public static string amount {

@@ -31,7 +31,7 @@ internal class GuiManager
 			this.MainViewModel.StockItemTypes = GetStockItemTypes();
 			this.AssignDialogs();
 
-			SetLanguage(MainManagerFacade.SelectedLanguage.GetEnumDescription());
+			SetLanguage(MainManagerFacade.Settings.SelectedLanguage.GetEnumDescription());
 		}
 		catch(Exception ex)
 		{

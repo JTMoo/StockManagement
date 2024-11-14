@@ -16,6 +16,9 @@
 			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
 			<RowDefinition Height="10"/>
 			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="10"/>
+			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+			<RowDefinition Height="10"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
@@ -32,13 +35,25 @@
 		           Style="{StaticResource BaseDialogTextBlockStyle}"
 		           Text="{x:Static lang:Resources.selectLanguage}" />
 
-		<!-- Stock Item Type -->
+		<!-- Available Languages -->
 		<ComboBox Grid.Column="1"
 		          Grid.Row="3"
 				  Style="{StaticResource CustomComboBoxStyle}"
 		          ItemsSource="{Binding Source={StaticResource ItemsFromLanguages}}"
 				  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
 		          SelectedItem="{Binding SelectedLanguage}"/>
+
+		<TextBlock Grid.Row="5" Grid.Column="1" FontSize="20"
+				   HorizontalAlignment="Center"
+		           Style="{StaticResource BaseDialogTextBlockStyle}"
+		           Text="{x:Static lang:Resources.adjustDialogBorderSize}" />
+
+		<Slider Grid.Row="7" Grid.Column="1"
+				Minimum="5" Maximum="50"
+				IsSnapToTickEnabled="True"
+				AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0"
+				TickFrequency="5" TickPlacement="BottomRight"
+				Value="{Binding BorderAreaInPercent}" />
 
 		<controls:DialogActionBarControl Grid.Row="99"
 										 Grid.ColumnSpan="99"

@@ -219,9 +219,8 @@
   <data name="width" xml:space="preserve">
     <value>Ancho</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="languageChangedMessage" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="languageChangedMessage" xml:space="preserve">
+    <value>Para que los cambios de idioma surtan efecto, reinicie la aplicación.</value>
   </data>
   <data name="german" xml:space="preserve">
     <value>Aléman</value>
@@ -291,5 +290,8 @@
   </data>
   <data name="email" xml:space="preserve">
     <value>Email</value>
+  </data>
+  <data name="adjustDialogBorderSize" xml:space="preserve">
+    <value>Ajustar tamaño del borde de la ventana interior</value>
   </data>
 </root>

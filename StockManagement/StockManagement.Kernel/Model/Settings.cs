@@ -7,11 +7,39 @@ namespace StockManagement.Kernel.Model;
 public class Settings : BaseDocument
 {
 	private AvailableLanguages _selectedLanguage;
+	private int _dialogBorderThickness = 100;
+
+
+	public Settings()
+	{
+	}
+
+	public Settings(AvailableLanguages selectedLanguage, int dialogBorderThickness)
+	{
+		this.SelectedLanguage = selectedLanguage;
+		this.DialogBorderThickness = dialogBorderThickness;
+	}
 
 
 	public AvailableLanguages SelectedLanguage
 	{
 		get => this._selectedLanguage;
 		internal set => this.SetField(ref this._selectedLanguage, value);
+	}
+	
+	public int DialogBorderThickness
+	{
+		get => this._dialogBorderThickness;
+		internal set => this.SetField(ref this._dialogBorderThickness, value);
+	}
+
+	internal Task Update(Settings settings)
+	{
+		foreach (var pi in this.GetType().GetProperties())
+		{
+			pi.SetValue(this, pi.GetValue(settings));
+		}
+
+		return DatabaseManager.Update<Settings>(this);
 	}
 }

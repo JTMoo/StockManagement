@@ -20,9 +20,9 @@ public static class MainManagerFacade
 	{
 		get { return MainManager.Instance.MachineManager.Machines; }
 	}
-	public static AvailableLanguages SelectedLanguage
+	public static Settings Settings
 	{
-		get { return MainManager.Instance.Settings.SelectedLanguage; }
+		get { return MainManager.Instance.Settings; }
 	}
 	public static bool PushCommand(ICommand command)
 	{

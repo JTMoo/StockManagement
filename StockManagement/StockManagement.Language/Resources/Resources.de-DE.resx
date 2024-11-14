@@ -291,4 +291,7 @@
   <data name="email" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="adjustDialogBorderSize" xml:space="preserve">
+    <value>Größe des Randes für das innere Fenster anpassen</value>
+  </data>
 </root>

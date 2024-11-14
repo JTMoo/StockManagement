@@ -33,7 +33,7 @@ public class MainManager : NotificationBase, IDisposable
 	public MachineManager MachineManager { get; } = new();
 	public SparePartManager SparePartManager { get; } = new();
 	public TireManager TireManager { get; } = new();
-	public Settings Settings { get; }
+	public Settings Settings { get; internal set; }
 
 
     public static void Initialize()

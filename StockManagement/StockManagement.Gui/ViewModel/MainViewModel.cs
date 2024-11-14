@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -28,6 +29,7 @@ internal class MainViewModel : NotificationBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private bool isWaitDialogVisible = false;
+	private int responsiveDialogBorderThickness;
 
 
 	public MainViewModel()
@@ -43,6 +45,9 @@ internal class MainViewModel : NotificationBase
 		((INotifyCollectionChanged)MainManagerFacade.Machines).CollectionChanged += (_, __) => this.OnRefreshSearch();
 		((INotifyCollectionChanged)MainManagerFacade.SpareParts).CollectionChanged += (_, __) => this.OnRefreshSearch();
 		((INotifyCollectionChanged)MainManagerFacade.Tires).CollectionChanged += (_, __) => this.OnRefreshSearch();
+
+		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
+		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
 
 		this.OnRefreshSearch();
 	}
@@ -69,6 +74,12 @@ internal class MainViewModel : NotificationBase
 		}
 	}
 	public List<Type> StockItemTypes { get; internal set; }
+
+	public int ResponsiveDialogBorderThickness
+	{
+		get => this.responsiveDialogBorderThickness;
+		set => this.SetField(ref this.responsiveDialogBorderThickness, value);
+	}
 
 	public bool IsWaitDialogVisible
 	{
@@ -195,5 +206,18 @@ internal class MainViewModel : NotificationBase
 		var spareParts = MainManagerFacade.SpareParts.Cast<StockItem>();
 		var tires = MainManagerFacade.Tires.Cast<StockItem>();
 		return machines.Concat(spareParts).Concat(tires);
+	}
+
+	private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		switch (e.PropertyName)
+		{
+			case nameof(Settings.DialogBorderThickness):
+				Application.Current.Dispatcher.Invoke(() =>
+				{
+					this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
+				});
+				break;
+		}
 	}
 }
