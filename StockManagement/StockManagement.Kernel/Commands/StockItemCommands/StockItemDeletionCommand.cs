@@ -8,7 +8,12 @@ public class StockItemDeletionCommand : ICommand
 {
 	public CommandData Data { get; set; }
 
-	public bool Execute()
+	public Task<bool> Execute()
+	{
+		return Task.Factory.StartNew(this.DeregisterStockItem);
+	}
+
+	public bool DeregisterStockItem()
 	{
 		if (Data.Value is not StockItem item) return false;
 

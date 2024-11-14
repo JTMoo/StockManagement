@@ -11,7 +11,13 @@ public class StockItemChangeAmountCommand : ICommand
 
 	public ChangeType SelectedChangeType { get; set; }
 
-	public bool Execute()
+
+	public Task<bool> Execute()
+	{
+		return Task.Factory.StartNew(this.UpdateStockItem);
+	}
+
+	private bool UpdateStockItem()
 	{
 		if (Data == null) return false;
 		if (Data is not StockItemCommandData data || data.DataToRegister is not StockItem stockItem) return false;

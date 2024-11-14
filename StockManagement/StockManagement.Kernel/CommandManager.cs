@@ -52,7 +52,7 @@ internal class CommandManager : IDisposable
 
     private void StartCommandExecutionTask(CancellationToken cancellationToken)
     {
-		MainManager.StartObservedTask(() =>
+		MainManager.StartObservedTask(async () =>
         {
             while(!this._commandExecutionCancellation.IsCancellationRequested)
             {
@@ -60,7 +60,7 @@ internal class CommandManager : IDisposable
                 var command = _queue.Pop();
                 if (command == null) continue;
 
-                var result = command.Execute();
+                var result = await command.Execute();
                 command.Data.InvokeCallback(result);
             }
         }, cancellationToken);

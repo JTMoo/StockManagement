@@ -10,7 +10,13 @@ public class StockItemCreationCommand : ICommand
 {
 	public CommandData Data { get; set; }
 
-	public bool Execute()
+
+	public Task<bool> Execute()
+	{
+		return Task.Factory.StartNew(this.RegisterStockItem);
+	}
+
+	private bool RegisterStockItem()
 	{
 		if (Data == null) return false;
 		if (Data is not StockItemCommandData data)
@@ -19,7 +25,7 @@ public class StockItemCreationCommand : ICommand
 			return false;
 		}
 
-		switch(data.Type)
+		switch (data.Type)
 		{
 			case StockItemCommandData.CreationCommandType.Single:
 				if (data.DataToRegister is not StockItem item) return false;
