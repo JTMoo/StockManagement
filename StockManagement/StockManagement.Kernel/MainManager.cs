@@ -2,6 +2,7 @@
 using StockManagement.Kernel.Database;
 using System.Diagnostics;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Diagnostics;
 
 namespace StockManagement.Kernel;
 
@@ -14,8 +15,12 @@ public class MainManager : NotificationBase, IDisposable
 	private static bool _isInitialized = false;
 	private static bool _disposed;
 
-	public MainManager() 
+	private readonly string logFilePath = Path.Combine(AppContext.BaseDirectory, DateTime.Now.ToString("MM") + "_log.txt");
+
+
+	private MainManager() 
     {
+		Trace.Listeners.Add(new DateTimeTextWriterTraceListener(new FileStream(this.logFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)));
 		this.Settings = DatabaseManager.GetFirst<Settings>() ?? new();
     }
 
