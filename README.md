@@ -7,3 +7,6 @@ This basis has:
 - Checking Stock Items in and out
 - Create a transaction history of all those checkin /-outs
 - Coming soon: Multilanguage support through settings
+
+## Mongo-DB Installer Download
+https://www.mongodb.com/try/download/community
