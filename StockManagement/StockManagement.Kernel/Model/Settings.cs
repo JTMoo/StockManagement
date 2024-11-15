@@ -4,6 +4,11 @@ using StockManagement.Kernel.Model.Types;
 namespace StockManagement.Kernel.Model;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Model-class containing all information regarding Settings
+/// </summary>
+/// ********************************************************************************************************************************
 public class Settings : BaseDocument
 {
 	private AvailableLanguages _selectedLanguage;

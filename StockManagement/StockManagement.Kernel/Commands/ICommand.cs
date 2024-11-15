@@ -3,6 +3,11 @@
 namespace StockManagement.Kernel.Commands;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Interface for commands for inter-project communication
+/// </summary>
+/// ********************************************************************************************************************************
 public interface ICommand
 {
     public CommandData Data { get; }

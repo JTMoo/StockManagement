@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office.PowerPoint.Y2021.M06.Main;
-using StockManagement.Kernel.Database;
+﻿using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,6 +6,11 @@ using System.Diagnostics;
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Contains all Logic regarding <see cref="Tire"/>-Objects
+/// </summary>
+/// ********************************************************************************************************************************
 public class TireManager : NotificationBase
 {
 	private readonly ObservableCollection<Tire> _editableTires = [];
@@ -17,6 +21,7 @@ public class TireManager : NotificationBase
 	{
 		this._tires = new(_editableTires);
 	}
+
 
 	public ReadOnlyObservableCollection<Tire> Tires
 	{

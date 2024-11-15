@@ -6,6 +6,11 @@ using System.Diagnostics;
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Manages all code regarding <see cref="Machine">-Objects
+/// </summary>
+/// ********************************************************************************************************************************
 public class MachineManager : NotificationBase
 {
 	private readonly ObservableCollection<Machine> _editableMachines = [];
@@ -16,6 +21,7 @@ public class MachineManager : NotificationBase
 	{
 		this._machines = new(this._editableMachines);
 	}
+
 
 	public ReadOnlyObservableCollection<Machine> Machines
 	{

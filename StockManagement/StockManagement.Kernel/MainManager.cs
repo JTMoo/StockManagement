@@ -7,6 +7,11 @@ using StockManagement.Kernel.Diagnostics;
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Singleton - Main - Central hub for logic inside the Kernel
+/// </summary>
+/// ********************************************************************************************************************************
 public class MainManager : NotificationBase, IDisposable
 {
     internal static readonly MainManager Instance = new();

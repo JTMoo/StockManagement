@@ -6,6 +6,11 @@ using System.Diagnostics;
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Contains all Logic regarding <see cref="SparePart"/>-Objects
+/// </summary>
+/// ********************************************************************************************************************************
 public class SparePartManager : NotificationBase
 {
 	private readonly ObservableCollection<SparePart> _editableSpareParts = [];
@@ -16,6 +21,7 @@ public class SparePartManager : NotificationBase
 	{
 		this._spareParts = new(_editableSpareParts);
 	}
+
 
 	public ReadOnlyObservableCollection<SparePart> SpareParts
 	{

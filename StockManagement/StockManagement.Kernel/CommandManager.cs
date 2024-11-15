@@ -3,6 +3,11 @@
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Executing commands that are sent to the Kernel
+/// </summary>
+/// ********************************************************************************************************************************
 internal class CommandManager : IDisposable
 {
     private readonly CancellationTokenSource _commandExecutionCancellation;

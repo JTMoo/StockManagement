@@ -4,9 +4,15 @@ using System.Runtime.CompilerServices;
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Base class for <see cref="INotifyPropertyChanged"/>-Implementation
+/// </summary>
+/// ********************************************************************************************************************************
 public class NotificationBase : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
+
 
 	protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{

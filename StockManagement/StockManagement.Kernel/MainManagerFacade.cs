@@ -1,11 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Model;
-using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel;
 
 
+/// ********************************************************************************************************************************
+/// <summary>
+/// Publishes certain Objects of the MainManager to other projects
+/// </summary>
+/// ********************************************************************************************************************************
 public static class MainManagerFacade
 {
 	public static ReadOnlyObservableCollection<Tire> Tires
