@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using StockManagement.Gui.Commands;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Commands.Data;
@@ -68,7 +69,13 @@ public partial class TableMappingViewModel : DialogViewModelBase
 
 	private List<StockItem> ExtractStockItemsFromExcelSheet()
 	{
-		var headerRowRange = this.worksheet.FirstRowUsed().RowUsed();
+		if (this.worksheet.FirstRowUsed() is not IXLRow row)
+		{
+			Trace.WriteLine($"First row could not be found in {this.worksheet.Name}");
+			return [];
+		}
+
+		var headerRowRange = row.RowUsed();
 		var matchingActions = CreatePropertyMatchingActionsFromTableHeaders(headerRowRange);
 
 		var currentRow = headerRowRange.RowBelow();
@@ -113,7 +120,13 @@ public partial class TableMappingViewModel : DialogViewModelBase
 
 	private void GetTableDataFromWorksheet()
 	{
-		foreach (var cell in this.worksheet.FirstRowUsed().CellsUsed())
+		if (this.worksheet.FirstRowUsed() is not IXLRow row)
+		{
+			Trace.WriteLine($"First Row used could not be found in {this.worksheet.Name}");
+			return;
+		}
+
+		foreach (var cell in row.CellsUsed())
 		{
 			this.TableNames.Add(cell.GetString().ReplaceLineBreakWithWhitespace());
 		}
