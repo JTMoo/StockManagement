@@ -1,0 +1,73 @@
+name:  CI StockManagement
+
+# Trigger on every master branch push and pull request
+on:
+  push:
+    branches:
+      #- master
+  pull_request:
+    branches:
+      #- master
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        targetplatform: [x86, x64]
+
+    runs-on: windows-latest
+
+    env:
+      Solution_Path: StockManagement.sln
+      Test_Project_Path: StockManagement.Tests\WAWIAssistant.Tests.csproj
+      Wpf_Project_Path: StockManagement.Gui\WAWIAssistant.Gui.csproj
+#      Installer_Project_Path: WAWIAssistant.Installer\WAWIAssistant.Installer.wixproj
+#      Installer_Project_Directory: WAWIAssistant.Installer
+#      Installer_Foldername: Installer
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get current version
+      id: package_version 
+      uses: kzrnm/get-net-sdk-project-versions-action@v2 # Create own PS Skript!
+      with:
+        proj-path:  ${{ env.Wpf_Project_Path }}
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.1
+
+    # Test
+    - name: Execute Unit Tests
+      run: dotnet test $env:Test_Project_Path
+
+    # Restore the application
+#    - name:  Restore the Wpf application
+#      run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration /p:RuntimeIdentifier=$env:RuntimeIdentifier
+#      env:
+#        Configuration: Release
+#        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+
+    # Build the Wix Installer project
+#    - name: Build the Wix Installer Project (wixproj)
+#      run: msbuild $env:Installer_Project_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration
+#      env:
+#        Configuration: Release
+#        TargetPlatform: ${{ matrix.targetplatform }}
+
+    # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
+#    - name: Upload build artifacts
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: WAWIAssistant-${{ matrix.targetplatform }}
+#        path: ${{ env.Installer_Project_Directory }}\${{ env.Installer_Foldername }}\*${{ steps.package_version.outputs.assembly-version }}.msi

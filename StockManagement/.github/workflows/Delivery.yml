@@ -1,0 +1,82 @@
+name:  CD StockManagement
+
+# Trigger on any push with a git tag
+# To create a git tag, run the following commands on the branch you wish to release:
+#   git tag 1.0.0.0
+#   git push origin --tags
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+
+  build:
+
+    strategy:
+    # To build across multiple channels: https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+      matrix:
+        targetPlatform: [x64] # x86 could be added
+
+    runs-on: windows-latest
+    
+    env:
+      Project_Name: StockManagement
+      Solution_Path: StockManagement.sln
+      Wpf_Project_Path: StockManagement.Gui\StockManagement.Gui.csproj
+      Installer_Project_Path: StockManagement.Installer\StockManagement.Installer.wixproj
+      Installer_Project_Directory: StockManagement.Installer
+      Installer_Foldername: Installer
+      Configuration: Release
+      
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get current version
+      id: package_version 
+      uses: kzrnm/get-net-sdk-project-versions-action@v2 # Create own PS Skript!
+      with:
+        proj-path:  ${{ env.Wpf_Project_Path }}
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.1
+
+    # Build the Wix Installer project
+    - name: Build the Wix Installer Project (wixproj)
+      run: msbuild $env:Installer_Project_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ env.Configuration }}
+        TargetPlatform: ${{ matrix.targetplatform }}
+
+    # Create the release:  https://github.com/actions/create-release
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref}}
+        release_name:  ${{ github.ref }}-${{ matrix.targetplatform }}
+        draft: false
+        prerelease: false
+
+    # Upload release asset:   https://github.com/actions/upload-release-asset
+    - name: Update release asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}  # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ env.Installer_Project_Directory }}\${{ env.Installer_Foldername }}\${{ env.Project_Name }}-${{ env.Configuration }}-${{ matrix.targetplatform }}-${{ steps.package_version.outputs.assembly-version }}.msi
+        asset_name: ${{ env.Project_Name }}-${{ env.Configuration }}-${{ matrix.targetplatform }}-${{ steps.package_version.outputs.assembly-version }}.msi
+        asset_content_type: application/msi
