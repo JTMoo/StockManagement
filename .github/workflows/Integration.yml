@@ -4,10 +4,10 @@ name:  CI StockManagement
 on:
   push:
     branches:
-      #- master
+      - master
   pull_request:
     branches:
-      #- master
+      - master
 
 jobs:
 
@@ -15,16 +15,16 @@ jobs:
 
     strategy:
       matrix:
-        targetplatform: [x86, x64]
+        targetplatform: [x64]
 
     runs-on: windows-latest
 
     env:
       Solution_Path: StockManagement.sln
-      Test_Project_Path: StockManagement.Tests\WAWIAssistant.Tests.csproj
-      Wpf_Project_Path: StockManagement.Gui\WAWIAssistant.Gui.csproj
-#      Installer_Project_Path: WAWIAssistant.Installer\WAWIAssistant.Installer.wixproj
-#      Installer_Project_Directory: WAWIAssistant.Installer
+      Test_Project_Path: StockManagement.Tests\StockManagement.Tests.csproj
+      Wpf_Project_Path: StockManagement.Gui\StockManagement.Gui.csproj
+#      Installer_Project_Path: StockManagement.Installer\StockManagement.Installer.wixproj
+#      Installer_Project_Directory: StockManagement.Installer
 #      Installer_Foldername: Installer
 
     steps:
