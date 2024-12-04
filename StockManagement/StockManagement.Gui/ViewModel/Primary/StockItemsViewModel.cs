@@ -12,6 +12,7 @@ using StockManagement.Kernel.Model.Types;
 using StockManagement.Kernel;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -25,6 +26,7 @@ public class StockItemsViewModel : ViewModelBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private bool _isSearchBarVisible = false;
+	private List<Func<StockItem, bool>> _filterFunctions = [];
 
 	public StockItemsViewModel()
 	{
@@ -39,7 +41,10 @@ public class StockItemsViewModel : ViewModelBase
 		((INotifyCollectionChanged)MainManagerFacade.SpareParts).CollectionChanged += (_, __) => this.OnRefreshSearch();
 		((INotifyCollectionChanged)MainManagerFacade.Tires).CollectionChanged += (_, __) => this.OnRefreshSearch();
 
+		this.PropertyChanged += this.OnPropertyChangedEvent;
+
 		this.OnRefreshSearch();
+		this.SetupFilterConditions();
 	}
 
 
@@ -74,56 +79,44 @@ public class StockItemsViewModel : ViewModelBase
 	public string SearchNames
 	{
 		get { return _searchNames; }
-		set
-		{
-			this.SetField(ref _searchNames, value);
-			this.OnRefreshSearch(names: true);
-		}
+		set { this.SetField(ref _searchNames, value); }
 	}
 
 	public string SearchCodes
 	{
 		get { return _searchCodes; }
-		set
-		{
-			this.SetField(ref _searchCodes, value);
-			this.OnRefreshSearch(codes: true);
-		}
+		set { this.SetField(ref _searchCodes, value); }
 	}
 
 	public ManufacturerType SelectedSearchManufacturer
 	{
 		get { return _selectedSearchManufacturer; }
-		set
-		{
-			this.SetField(ref _selectedSearchManufacturer, value);
-			this.OnRefreshSearch(manufacturer: true);
-		}
+		set { this.SetField(ref _selectedSearchManufacturer, value); }
 	}
 
 	public Type SelectedSearchStockItemType
 	{
 		get { return _selectedSearchStockItemType; }
-		set
-		{
-			this.SetField(ref _selectedSearchStockItemType, value);
-			this.OnRefreshSearch(type: true);
-		}
+		set { this.SetField(ref _selectedSearchStockItemType, value); }
 	}
 	#endregion Properties
 
-	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool codes = false)
+	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
 	{
-		var filteredItems = GetStockItems();
-		if (manufacturer)
-			filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? filteredItems : filteredItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
-		else if (type)
-			filteredItems = this.SelectedSearchStockItemType == null ? filteredItems : filteredItems.Where(item => item.GetType() == this.SelectedSearchStockItemType);
-		else if (names)
-			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Name.ToLower(), this.SearchNames.ToLower()));
-		else if (codes)
-			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Code.ToLower(), this.SearchCodes.ToLower()));
+		switch(e.PropertyName)
+		{
+			case nameof(this.SelectedSearchStockItemType):
+			case nameof(this.SelectedSearchManufacturer):
+			case nameof(this.SearchNames):
+			case nameof(this.SearchCodes):
+				this.OnRefreshSearch();
+				break;
+		}
+	}
 
+	private void OnRefreshSearch()
+	{
+		var filteredItems = GetStockItems().Where(_filterFunctions);
 		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
 	}
 
@@ -168,5 +161,25 @@ public class StockItemsViewModel : ViewModelBase
 			GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName);
 			GuiManager.Instance.HideWaitDialog();
 		}
+	}
+
+	private void SetupFilterConditions()
+	{
+		_filterFunctions.Add(item =>
+		{
+			return this.SelectedSearchManufacturer == ManufacturerType.None || item.Manufacturer == this.SelectedSearchManufacturer;
+		});
+		_filterFunctions.Add(item =>
+		{
+			return this.SelectedSearchStockItemType == null || item.GetType() == this.SelectedSearchStockItemType;
+		});
+		_filterFunctions.Add(item =>
+		{
+			return string.IsNullOrEmpty(this.SearchNames) || Regex.IsMatch(item.Name.ToLower(), this.SearchNames.ToLower());
+		});
+		_filterFunctions.Add(item =>
+		{
+			return string.IsNullOrEmpty(this.SearchCodes) ||Regex.IsMatch(item.Code.ToLower(), this.SearchCodes.ToLower());
+		});
 	}
 }

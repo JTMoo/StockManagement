@@ -103,7 +103,7 @@
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
 					  ItemsSource="{Binding Source={x:Static main:GuiManager.Instance}, Path=StockItemTypes}"
-					  DisplayMemberPath="Name"
+					  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
 					  SelectedItem="{Binding SelectedSearchStockItemType}"/>
 			<TextBlock Text="{x:Static lang:Resources.searchLocation}"
 					   Margin="5"/>
