@@ -35,7 +35,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 	}
 
 	#region Properties
-	public List<Type> StockItemTypes { get; } = new(GuiManager.Instance.MainViewModel.StockItemTypes);
+	public List<Type> StockItemTypes { get; } = new(GuiManager.Instance.StockItemTypes);
 	public ObservableCollection<PropertyInfo> SelectedStockItemTypeProperties { get; } = [];
 	public ObservableCollection<string> TableNames { get; } = [];
 

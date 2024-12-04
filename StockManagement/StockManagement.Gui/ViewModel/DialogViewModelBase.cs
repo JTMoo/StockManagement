@@ -1,12 +1,11 @@
 ﻿using StockManagement.Gui.Commands;
-using StockManagement.Kernel;
 
 namespace StockManagement.Gui.ViewModel;
 
 
 public delegate void DialogClosingEventHandler(bool success);
 
-public class DialogViewModelBase : NotificationBase
+public class DialogViewModelBase : ViewModelBase
 {
 	public event DialogClosingEventHandler DialogClosing;
 

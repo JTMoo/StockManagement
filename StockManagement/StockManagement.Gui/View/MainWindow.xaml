@@ -13,124 +13,30 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="20"/>
-			<RowDefinition Height="150"/>
+			<RowDefinition Height="{StaticResource ActionBarHeight}"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="20"/>
 			<ColumnDefinition Width="250"/>
 		</Grid.ColumnDefinitions>
 
-		<ListView Margin="5"
-				  ItemsSource="{Binding FilteredStockItems}"
-				  Style="{StaticResource DefaultListViewStyle}">
-			<ListView.Resources>
-				<ContextMenu x:Key="ItemContextMenu">
-					<MenuItem Header="{x:Static lang:Resources.additionalInformation}"
-							  FontSize="16"
-							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
-							  CommandParameter="{Binding }" />
-					<MenuItem Header="{x:Static lang:Resources.addToShoppingCart}"
-							  FontSize="16"
-							  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItems}"
-							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.AddToShoppingCartCommand}" />
-				</ContextMenu>
-			</ListView.Resources>
-			<ListView.ItemContainerStyle>
-				<Style TargetType="{x:Type ListViewItem}" >
-					<Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-				</Style>
-			</ListView.ItemContainerStyle>
-			<ListView.View>
-				<GridView>
-					<GridView.Columns>
-						<GridViewColumn Header="{x:Static lang:Resources.name}" Width="Auto" DisplayMemberBinding="{Binding Name}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.code}" Width="200" DisplayMemberBinding="{Binding Code}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.quantity}" Width="75" DisplayMemberBinding="{Binding Amount}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.price}" Width="100" DisplayMemberBinding="{Binding Price}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.location}" Width="200" DisplayMemberBinding="{Binding Location}"/>
-					</GridView.Columns>
-				</GridView>
-			</ListView.View>
-		</ListView>
-
-		<!-- Search Bar -->
-		<StackPanel Grid.Row="0" Grid.Column="2">
-			<TextBlock Text="{x:Static lang:Resources.search}"
-					   FontSize="30"
-					   HorizontalAlignment="Center"
-					   Margin="5"/>
-			<TextBlock Text="{x:Static lang:Resources.searchNames}"
-					   Margin="5"/>
-			<Border Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-				<TextBox Style="{StaticResource SearchTextBoxStyle}"
-					 Height="30"
-					 Text="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
-			</Border>
-			<TextBlock Text="{x:Static lang:Resources.searchCodes}"
-					   Margin="5"/>
-			<Border Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-				<TextBox Style="{StaticResource SearchTextBoxStyle}"
-					 Height="30"
-					 Text="{Binding SearchCodes, UpdateSourceTrigger=PropertyChanged}" />
-			</Border>
-			<TextBlock Text="{x:Static lang:Resources.selectManufacturer}"
-					   Margin="5"/>
-			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
-					  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
-					  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
-					  SelectedItem="{Binding SelectedSearchManufacturer}" />
-			<TextBlock Text="{x:Static lang:Resources.selectType}"
-					   Margin="5"/>
-			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
-					  ItemsSource="{Binding StockItemTypes}"
-					  DisplayMemberPath="Name"
-					  SelectedItem="{Binding SelectedSearchStockItemType}"/>
-			<TextBlock Text="{x:Static lang:Resources.searchLocation}"
-					   Margin="5"/>
-		</StackPanel>
-
+		<ContentControl Grid.RowSpan="2" 
+						Content="{Binding CurrentView}"
+						Style="{StaticResource BaseViewStyle}"
+						Margin="0,0,20,0"/>
+		
 		<!-- Settings -->
-		<StackPanel Grid.Row="2"
-					Grid.Column="2">
+		<StackPanel Grid.Row="1"
+					Grid.Column="1">
 			<Button Style="{StaticResource BaseButtonStyle}"
 					Content="{x:Static lang:Resources.settings}"
+					Height="60"
 					Command="{Binding OpenSettingsCommand}"/>
 
 			<Button Style="{StaticResource BaseButtonStyle}"
+					Height="60"
 					Content="{x:Static lang:Resources.quit}"
 					Command="{Binding QuitCommand}"/>
-		</StackPanel>
-
-		<!-- Action Bar -->
-		<StackPanel Grid.Row="2"
-					Orientation="Horizontal">
-			<Button Style="{StaticResource BaseButtonStyle}"
-					Content="{x:Static lang:Resources.createItem}"
-					Command="{Binding CreateStockItemCommand}" />
-			<Button Style="{StaticResource BaseButtonStyle}"
-					Content="{x:Static lang:Resources.excelImport}"
-					Command="{Binding ExcelImportCommand}"/>
-			<StackPanel VerticalAlignment="Center"
-						Margin="0,10,0,0">
-				<Button Style="{StaticResource BaseButtonStyle}"
-						Content="{x:Static lang:Resources.shoppingCart}"
-						Command="{Binding ShoppingCartCommand}"/>
-				<Border BorderThickness="2"
-						BorderBrush="{StaticResource BorderBlack}"
-						CornerRadius="15"
-						Background="{StaticResource MainElementBackground}"
-						HorizontalAlignment="Right"
-						Margin="0,-80,0,60">
-					<TextBlock Text="{Binding ShoppingCartItems.Count}"
-							   Padding="2"
-							   Foreground="{StaticResource MainBlue}"
-							   HorizontalAlignment="Center"
-							   VerticalAlignment="Center" />
-				</Border>
-			</StackPanel>
 		</StackPanel>
 
 		<ContentControl Grid.ColumnSpan="99"

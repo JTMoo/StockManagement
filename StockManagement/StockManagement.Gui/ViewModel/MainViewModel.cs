@@ -1,18 +1,9 @@
-﻿using Microsoft.Win32;
-using StockManagement.Gui.Commands;
+﻿using StockManagement.Gui.Commands;
 using StockManagement.Gui.ViewModel.Dialogs;
+using StockManagement.Gui.ViewModel.Primary;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Model;
-using StockManagement.Kernel.Model.ExtensionMethods;
-using StockManagement.Kernel.Model.Types;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace StockManagement.Gui.ViewModel;
@@ -20,45 +11,24 @@ namespace StockManagement.Gui.ViewModel;
 
 internal class MainViewModel : NotificationBase
 {
-	private ObservableCollection<StockItem> _filteredStockItems = [];
-
 	private DialogViewModelBase? _dialog;
-	private StockItem _selectedStockItem;
-	private string _searchNames;
-	private string _searchCodes;
-	private ManufacturerType _selectedSearchManufacturer;
-	private Type _selectedSearchStockItemType;
+	private ViewModelBase _currentView;
 	private bool isWaitDialogVisible = false;
 	private int responsiveDialogBorderThickness;
 
 
 	public MainViewModel()
 	{
+		this.CurrentView = new StockItemsViewModel();
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
-		MoreInfoCommand = new RelayCommand<StockItem>(stockItem => this.Dialog = new MoreInfoDialogViewModel(stockItem));
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
-		CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
-		ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
-		AddToShoppingCartCommand = new RelayCommand<IEnumerable>(this.OnAddToShoppingCartCommand);
-		ShoppingCartCommand = new RelayCommand<string>(this.OnShoppingCartCommand);
-
-		((INotifyCollectionChanged)MainManagerFacade.Machines).CollectionChanged += (_, __) => this.OnRefreshSearch();
-		((INotifyCollectionChanged)MainManagerFacade.SpareParts).CollectionChanged += (_, __) => this.OnRefreshSearch();
-		((INotifyCollectionChanged)MainManagerFacade.Tires).CollectionChanged += (_, __) => this.OnRefreshSearch();
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
-
-		this.OnRefreshSearch();
 	}
 
 	#region Properties
-	public RelayCommand<string> ExcelImportCommand { get; }
-	public RelayCommand<IEnumerable> AddToShoppingCartCommand { get; }
-	public RelayCommand<string> ShoppingCartCommand { get; }
 	public RelayCommand<string> QuitCommand { get; }
-	public RelayCommand<StockItem> MoreInfoCommand { get; }
-	public RelayCommand<string> CreateStockItemCommand { get; }
 	public RelayCommand<string> OpenSettingsCommand { get; }
 	public DialogViewModelBase? Dialog
 	{
@@ -73,7 +43,11 @@ internal class MainViewModel : NotificationBase
 			}
 		}
 	}
-	public List<Type> StockItemTypes { get; internal set; }
+	public ViewModelBase CurrentView
+	{
+		get { return _currentView; }
+		internal set { this.SetField(ref _currentView, value); }
+	}
 
 	public int ResponsiveDialogBorderThickness
 	{
@@ -86,96 +60,8 @@ internal class MainViewModel : NotificationBase
 		get => this.isWaitDialogVisible;
 		set => this.SetField(ref this.isWaitDialogVisible, value);
 	}
-
-	public ObservableCollection<StockItem> FilteredStockItems
-	{
-		get => this._filteredStockItems;
-		set => this.SetField(ref this._filteredStockItems, value);
-	}
-
-	public ObservableCollection<ShoppingCartItem> ShoppingCartItems { get; } = [];
-
-	public StockItem SelectedStockItem
-	{
-		get { return _selectedStockItem; }
-		set { this.SetField(ref _selectedStockItem, value); }
-	}
-
-	public string SearchNames
-	{
-		get { return _searchNames; }
-		set
-		{
-			this.SetField(ref _searchNames, value);
-			this.OnRefreshSearch(names: true);
-		}
-	}
-
-	public string SearchCodes
-	{
-		get { return _searchCodes; }
-		set
-		{
-			this.SetField(ref _searchCodes, value);
-			this.OnRefreshSearch(codes: true);
-		}
-	}
-
-	public ManufacturerType SelectedSearchManufacturer
-	{
-		get { return _selectedSearchManufacturer; }
-		set
-		{
-			this.SetField(ref _selectedSearchManufacturer, value);
-			this.OnRefreshSearch(manufacturer: true);
-		}
-	}
-
-	public Type SelectedSearchStockItemType
-	{
-		get { return _selectedSearchStockItemType; }
-		set
-		{
-			this.SetField(ref _selectedSearchStockItemType, value);
-			this.OnRefreshSearch(type: true);
-		}
-	}
 	#endregion Properties
 
-	private void OnCreateStockItemCommand(string param)
-	{
-		if (this.StockItemTypes == null)
-			return;
-
-		this.Dialog = new StockItemTypeSelectionDialogViewModel(this.StockItemTypes);
-	}
-
-	private  void OnAddToShoppingCartCommand(IEnumerable selectedItems)
-	{
-		var items = selectedItems.OfType<StockItem>().ConvertToShoppingCartList();
-		
-		this.ShoppingCartItems.EqualizeTo(items);
-	}
-
-	private  void OnShoppingCartCommand(string obj)
-	{
-		var cartDialog = new ShoppingCartDialogViewModel(this.ShoppingCartItems);
-		this.Dialog = cartDialog;
-	}
-
-	private async void OnExcelImportCommand(string obj)
-	{
-		var dialog = new OpenFileDialog
-		{
-			Filter = "Excel files (*.xlsx)|*.xlsx"
-		};
-		if (dialog.ShowDialog() is bool isTrue && isTrue)
-		{
-			GuiManager.Instance.ShowWaitDialog();
-			this.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName);
-			GuiManager.Instance.HideWaitDialog();
-		}
-	}
 
 	private void OnDialogClosing(bool success)
 	{
@@ -183,29 +69,6 @@ internal class MainViewModel : NotificationBase
 
 		this.Dialog.DialogClosing -= this.OnDialogClosing;
 		this.Dialog = null;
-	}
-
-	private void OnRefreshSearch(bool names = false, bool manufacturer = false, bool type = false, bool codes = false)
-	{
-		var filteredItems = GetStockItems();
-		if (manufacturer)
-			filteredItems = this.SelectedSearchManufacturer == ManufacturerType.None ? filteredItems : filteredItems.Where(item => item.Manufacturer == this.SelectedSearchManufacturer);
-		else if (type)
-			filteredItems = this.SelectedSearchStockItemType == null ? filteredItems : filteredItems.Where(item => item.GetType() == this.SelectedSearchStockItemType);
-		else if (names)
-			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Name.ToLower(), this.SearchNames.ToLower()));
-		else if (codes)
-			filteredItems = filteredItems.Where(item => Regex.IsMatch(item.Code.ToLower(), this.SearchCodes.ToLower()));
-		
-		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
-	}
-
-	private static IEnumerable<StockItem> GetStockItems()
-	{
-		var machines = MainManagerFacade.Machines.Cast<StockItem>();
-		var spareParts = MainManagerFacade.SpareParts.Cast<StockItem>();
-		var tires = MainManagerFacade.Tires.Cast<StockItem>();
-		return machines.Concat(spareParts).Concat(tires);
 	}
 
 	private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)

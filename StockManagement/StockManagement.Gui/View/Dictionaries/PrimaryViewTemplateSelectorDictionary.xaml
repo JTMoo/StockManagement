@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:primaryVMs="clr-namespace:StockManagement.Gui.ViewModel.Primary"
+					xmlns:primaryViews="clr-namespace:StockManagement.Gui.View.Primary"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<DataTemplate DataType="{x:Type primaryVMs:StockItemsViewModel}">
+		<primaryViews:StockItemsView />
+	</DataTemplate>
+</ResourceDictionary>

@@ -21,11 +21,14 @@
 	<converter:ValueToDisplayNameAttributeConverter x:Key="Value2DisplayName" />
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
+	<selectors:ViewTemplateSelector x:Key="ViewTemplateSelector" />
 
 	<GridLength x:Key="smallSpacingGridDialog">10</GridLength>
 	<GridLength x:Key="largeSpacingGridDialog">30</GridLength>
 	<GridLength x:Key="smallGridRowDialog">50</GridLength>
 	<GridLength x:Key="smallGridColumnDialog">120</GridLength>
+	<GridLength x:Key="ActionBarHeight">150</GridLength>
+	<GridLength x:Key="MenuBarWidth">250</GridLength>
 	<GridLength x:Key="mediumGridColumnDialog">200</GridLength>
 
 	<Color x:Key="Blue">#071c31</Color>
@@ -80,7 +83,6 @@
 
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">
-		<Setter Property="Height" Value="60" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="Margin" Value="5" />
 	</Style>

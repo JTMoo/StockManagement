@@ -13,22 +13,23 @@ using StockManagement.Kernel.Model.ExtensionMethods;
 namespace StockManagement.Gui;
 
 
-internal class GuiManager
+public class GuiManager
 {
 	public readonly string FolderName = "Resources";
 
 
-	internal static readonly GuiManager Instance = new();
+	public static readonly GuiManager Instance = new();
 	internal MainViewModel MainViewModel { get; private set; }
+	public List<Type> StockItemTypes { get; internal set; }
 	internal Dictionary<Type, DialogViewModelBase> StockItemToViewModel { get; } = [];
 
-	public void Init(MainViewModel mainViewModel)
+	internal void Init(MainViewModel mainViewModel)
 	{
 		this.MainViewModel = mainViewModel;
 
 		try
 		{
-			this.MainViewModel.StockItemTypes = GetStockItemTypes();
+			this.StockItemTypes = GetStockItemTypes();
 			this.AssignDialogs();
 
 			SetLanguage(MainManagerFacade.Settings.SelectedLanguage.GetEnumDescription());
@@ -61,17 +62,17 @@ internal class GuiManager
 		var stockItemCreationViewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.StockItemCreation")
 			.Where(type => type.Name.Contains("ViewModel")).ToList();
 
-		if (this.MainViewModel.StockItemTypes.Count != stockItemCreationViewModels.Count)
+		if (this.StockItemTypes.Count != stockItemCreationViewModels.Count)
 			throw new ArgumentOutOfRangeException("The amount of StockItemTypes and Creation ViewModels do not match.", innerException: null);
 
-		for (int i = 0; i < this.MainViewModel.StockItemTypes.Count; i++)
+		for (int i = 0; i < this.StockItemTypes.Count; i++)
 		{
 			var vm = Activator.CreateInstance(stockItemCreationViewModels[i]) as DialogViewModelBase;
-			this.StockItemToViewModel[this.MainViewModel.StockItemTypes[i]] = vm ?? throw new ArgumentNullException("Failed to create Instance of Creation ViewModel.", innerException: null);
+			this.StockItemToViewModel[this.StockItemTypes[i]] = vm ?? throw new ArgumentNullException("Failed to create Instance of Creation ViewModel.", innerException: null);
 		}
 	}
 
-	private static List<Type> GetStockItemTypes()
+	internal static List<Type> GetStockItemTypes()
 	{
 		var kernelAssembly = Assembly.Load(new AssemblyName("Stockmanagement.Kernel"));
 		return ReflectionManager.GetTypesOfBase(kernelAssembly, typeof(StockItem));
