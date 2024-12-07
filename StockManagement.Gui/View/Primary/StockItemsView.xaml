@@ -1,11 +1,11 @@
 ﻿<UserControl x:Class="StockManagement.Gui.View.Primary.StockItemsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:lang="clr-namespace:StockManagement.Language;assembly=StockManagement.Language"
 			 xmlns:main="clr-namespace:StockManagement.Gui"
-             xmlns:local="clr-namespace:StockManagement.Gui.View.Primary"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -20,7 +20,7 @@
 		</Grid.ColumnDefinitions>
 
 		<ListView ItemsSource="{Binding FilteredStockItems}"
-				  Style="{StaticResource DefaultListViewStyle}">
+				  Style="{StaticResource DarkListViewStyle}">
 			<ListView.Resources>
 				<ContextMenu x:Key="ItemContextMenu">
 					<MenuItem Header="{x:Static lang:Resources.additionalInformation}"
@@ -36,17 +36,28 @@
 			<ListView.ItemContainerStyle>
 				<Style TargetType="{x:Type ListViewItem}" >
 					<Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+					<Setter Property="Background" Value="Transparent" />
+					<Style.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="{StaticResource SelectedMainBlue}" />
+							<Setter Property="BorderBrush" Value="{StaticResource MainBorder}" />
+						</Trigger>
+						<Trigger Property="IsSelected" Value="True">
+							<Setter Property="Background" Value="{StaticResource SelectedMainBlue}" />
+							<Setter Property="BorderBrush" Value="{StaticResource MainBorder}" />
+						</Trigger>
+					</Style.Triggers>
 				</Style>
 			</ListView.ItemContainerStyle>
 			<ListView.View>
-				<GridView>
+				<GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
 					<GridView.Columns>
-						<GridViewColumn Header="{x:Static lang:Resources.name}" Width="Auto" DisplayMemberBinding="{Binding Name}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.code}" Width="200" DisplayMemberBinding="{Binding Code}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.quantity}" Width="75" DisplayMemberBinding="{Binding Amount}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.price}" Width="100" DisplayMemberBinding="{Binding Price}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}"/>
-						<GridViewColumn Header="{x:Static lang:Resources.location}" Width="200" DisplayMemberBinding="{Binding Location}"/>
+						<GridViewColumn Header="{x:Static lang:Resources.name}" Width="Auto" DisplayMemberBinding="{Binding Name}" />
+						<GridViewColumn Header="{x:Static lang:Resources.code}" Width="200" DisplayMemberBinding="{Binding Code}" />
+						<GridViewColumn Header="{x:Static lang:Resources.quantity}" Width="75" DisplayMemberBinding="{Binding Amount}" />
+						<GridViewColumn Header="{x:Static lang:Resources.price}" Width="100" DisplayMemberBinding="{Binding Price}" />
+						<GridViewColumn Header="{x:Static lang:Resources.manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}" />
+						<GridViewColumn Header="{x:Static lang:Resources.location}" Width="200" DisplayMemberBinding="{Binding Location}" />
 					</GridView.Columns>
 				</GridView>
 			</ListView.View>
@@ -75,37 +86,37 @@
 		<StackPanel Grid.Column="2" Grid.RowSpan="99"
 					Width="200"
 					Visibility="{Binding IsSearchBarVisible, Converter={StaticResource Bool2Collabsed}}">
-			<TextBlock Text="{x:Static lang:Resources.search}"
+			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.search}"
 					   FontSize="30"
 					   HorizontalAlignment="Center"
 					   Margin="5"/>
-			<TextBlock Text="{x:Static lang:Resources.searchNames}"
+			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.searchNames}"
 					   Margin="5"/>
-			<Border Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-				<TextBox Style="{StaticResource SearchTextBoxStyle}"
-						 Height="30"
-						 Text="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
-			</Border>
-			<TextBlock Text="{x:Static lang:Resources.searchCodes}"
+			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
+												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.searchCodes}"
 					   Margin="5"/>
-			<Border Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-				<TextBox Style="{StaticResource SearchTextBoxStyle}"
-						 Height="30"
-						 Text="{Binding SearchCodes, UpdateSourceTrigger=PropertyChanged}" />
-			</Border>
-			<TextBlock Text="{x:Static lang:Resources.selectManufacturer}"
+			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
+												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.selectManufacturer}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
 					  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
 					  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
 					  SelectedItem="{Binding SelectedSearchManufacturer}" />
-			<TextBlock Text="{x:Static lang:Resources.selectType}"
+			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.selectType}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
 					  ItemsSource="{Binding Source={x:Static main:GuiManager.Instance}, Path=StockItemTypes}"
 					  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
 					  SelectedItem="{Binding SelectedSearchStockItemType}"/>
-			<TextBlock Text="{x:Static lang:Resources.searchLocation}"
+			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.searchLocation}"
 					   Margin="5"/>
 		</StackPanel>
 
@@ -127,14 +138,14 @@
 						Content="{x:Static lang:Resources.shoppingCart}"
 						Command="{Binding ShoppingCartCommand}"/>
 				<Border BorderThickness="2"
-						BorderBrush="{StaticResource BorderBlack}"
+						BorderBrush="{StaticResource MainBorder}"
 						CornerRadius="15"
-						Background="{StaticResource MainElementBackground}"
+						Background="{StaticResource ButtonBackground}"
 						HorizontalAlignment="Right"
 						Margin="0,-80,0,60">
 					<TextBlock Text="{Binding ShoppingCartItems.Count}"
 							   Padding="2"
-							   Foreground="{StaticResource MainBlue}"
+							   Foreground="{StaticResource InactiveForeground}"
 							   HorizontalAlignment="Center"
 							   VerticalAlignment="Center" />
 				</Border>

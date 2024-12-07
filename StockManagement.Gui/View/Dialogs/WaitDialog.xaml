@@ -15,9 +15,11 @@
 		<TextBlock Grid.Column="0" FontSize="16pt"
 				   HorizontalAlignment="Right"
 				   VerticalAlignment="Center"
+				   Style="{StaticResource BaseTextBlockStyle}"
 				   Text="{x:Static lang:Resources.loading}"/>
 		<TextBlock Grid.Column="1" Name="waitTextBlock" FontSize="16pt"
 				   HorizontalAlignment="Left"
+				   Style="{StaticResource BaseTextBlockStyle}"
 				   VerticalAlignment="Center">
 			<TextBlock.Triggers>
 				<EventTrigger RoutedEvent="TextBlock.Loaded">

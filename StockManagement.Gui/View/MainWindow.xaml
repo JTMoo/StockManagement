@@ -10,45 +10,52 @@
 		WindowStyle="None"
 		FontSize="18"
         Title="Stock Management" Height="800" Width="1200">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="{StaticResource ActionBarHeight}"/>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="250"/>
-		</Grid.ColumnDefinitions>
+	<Border Background="{StaticResource MainBlue}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="{StaticResource ActionBarHeight}"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="250"/>
+			</Grid.ColumnDefinitions>
 
-		<ContentControl Grid.RowSpan="2" 
-						Content="{Binding CurrentView}"
-						Style="{StaticResource BaseViewStyle}"
-						Margin="0,0,20,0"/>
-		
-		<!-- Settings -->
-		<StackPanel Grid.Row="1"
-					Grid.Column="1">
-			<Button Style="{StaticResource BaseButtonStyle}"
-					Content="{x:Static lang:Resources.settings}"
-					Height="60"
-					Command="{Binding OpenSettingsCommand}"/>
+			<ContentControl Grid.RowSpan="2" 
+							Content="{Binding CurrentView}"
+							Style="{StaticResource BaseViewStyle}"
+							Margin="0,0,20,0"/>
 
-			<Button Style="{StaticResource BaseButtonStyle}"
-					Height="60"
-					Content="{x:Static lang:Resources.quit}"
-					Command="{Binding QuitCommand}"/>
-		</StackPanel>
+			<!-- Menu -->
+			<StackPanel Grid.Column="1" Grid.RowSpan="2"
+						VerticalAlignment="Bottom">
+				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
+							 Content="{x:Static lang:Resources.stockItem}"
+							 IsEnabled="False"
+							 Command="{Binding OpenSettingsCommand}" />
+				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
+							 IsChecked="True"
+							 Content="{x:Static lang:Resources.stockItem}"
+							 Command="{Binding OpenSettingsCommand}" />
+				<Button Style="{StaticResource MenuButtonStyle}"
+						Content="{x:Static lang:Resources.settings}"
+						Command="{Binding OpenSettingsCommand}" />
+				<Button Style="{StaticResource MenuButtonStyle}"
+						Content="{x:Static lang:Resources.quit}"
+						Command="{Binding QuitCommand}" />
+			</StackPanel>
 
-		<ContentControl Grid.ColumnSpan="99"
-						Grid.RowSpan="99"
-						Content="{Binding Dialog}"
-						Style="{StaticResource BaseDialogStyle}"
-						Panel.ZIndex="1000" />
+			<ContentControl Grid.ColumnSpan="99"
+							Grid.RowSpan="99"
+							Content="{Binding Dialog}"
+							Style="{StaticResource BaseDialogStyle}"
+							Panel.ZIndex="1000" />
 
-		<dialogControls:WaitDialog Grid.ColumnSpan="99"
-								   Grid.RowSpan="99"
-								   Style="{StaticResource BaseDialogStyle}"
-								   Visibility="{Binding IsWaitDialogVisible, Converter={StaticResource Bool2Collabsed}}"
-								   Panel.ZIndex="9999" />
-	</Grid>
+			<dialogControls:WaitDialog Grid.ColumnSpan="99"
+									   Grid.RowSpan="99"
+									   Style="{StaticResource BaseDialogStyle}"
+									   Visibility="{Binding IsWaitDialogVisible, Converter={StaticResource Bool2Collabsed}}"
+									   Panel.ZIndex="9999" />
+		</Grid>
+	</Border>
 </Window>

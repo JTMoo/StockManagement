@@ -3,29 +3,27 @@
 	<Style x:Key="BaseButtonStyle"
 		   TargetType="{x:Type Button}"
 		   BasedOn="{StaticResource BaseControlStyle}">
-		<Setter Property="FontWeight"
-				Value="DemiBold" />
-		<Setter Property="Foreground"
-				Value="{StaticResource MainBlue}" />
+		<Setter Property="FontWeight" Value="DemiBold" />
+		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
+		<Setter Property="Foreground" Value="{StaticResource InactiveForeground}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
 					<Border CornerRadius="5"
 							BorderThickness="1"
-							BorderBrush="{StaticResource BorderBlack}">
+							BorderBrush="{StaticResource MainBorder}">
 						<ContentPresenter VerticalAlignment="Center"
 										  HorizontalAlignment="Center"
 										  Content="{TemplateBinding Content}" />
 						<Border.Style>
 							<Style>
-								<Setter Property="Border.Background"
-										Value="{StaticResource MainElementBackground}" />
+								<Setter Property="Border.Background" Value="{StaticResource ButtonBackground}" />
 								<Style.Triggers>
 									<Trigger Property="Border.IsMouseOver" Value="True">
 										<Setter Property="Border.Background"
-												Value="{StaticResource MainBlue}" />
+												Value="{StaticResource Focus}" />
 										<Setter Property="Button.Foreground"
-												Value="{StaticResource MainElementBackground}" />
+												Value="{StaticResource MainForeground}" />
 									</Trigger>
 								</Style.Triggers>
 							</Style>
@@ -36,28 +34,61 @@
 		</Setter>
 	</Style>
 	
+	<Style x:Key="BaseMenuButtonStyle"
+		   TargetType="{x:Type Button}">
+		<Style.Setters>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Grid VerticalAlignment="Stretch"
+							  HorizontalAlignment="Stretch"
+							  Background="{TemplateBinding Background}">
+
+							<TextBlock VerticalAlignment="Center"
+									   Margin="50,0,0,0"
+									   Foreground="{TemplateBinding Foreground}"
+									   Text="{TemplateBinding Content}"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="Foreground" Value="{StaticResource InactiveForeground}" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="0" />
+		</Style.Setters>
+
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Foreground" Value="{StaticResource MainForeground}" />
+				<Setter Property="Background" Value="{StaticResource SelectedMainBlue}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	
 	<Style x:Key="RedBaseButtonStyle"
 		   TargetType="{x:Type Button}"
 		   BasedOn="{StaticResource BaseControlStyle}">
 		<Setter Property="FontWeight" Value="DemiBold" />
-		<Setter Property="Foreground" Value="{StaticResource MainBlue}" />
+		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
+		<Setter Property="Foreground" Value="OrangeRed" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
 					<Border CornerRadius="5"
 							BorderThickness="1"
-							BorderBrush="{StaticResource BorderBlack}">
+							BorderBrush="{StaticResource MainBorder}">
 						<ContentPresenter VerticalAlignment="Center"
 										  HorizontalAlignment="Center"
 										  Content="{TemplateBinding Content}" />
 						<Border.Style>
 							<Style>
-								<Setter Property="Border.Background"
-										Value="Red" />
+								<Setter Property="Border.Background" Value="{StaticResource ButtonBackground}" />
 								<Style.Triggers>
 									<Trigger Property="Border.IsMouseOver" Value="True">
 										<Setter Property="Border.Background"
-												Value="OrangeRed" />
+												Value="{StaticResource Focus}" />
+										<Setter Property="Button.Foreground"
+												Value="Red" />
 									</Trigger>
 								</Style.Triggers>
 							</Style>
@@ -73,6 +104,15 @@
 		   BasedOn="{StaticResource RedBaseButtonStyle}">
 		<Setter Property="Width" Value="Auto" />
 		<Setter Property="Height" Value="Auto" />
+	</Style>
+
+	<Style x:Key="MenuButtonStyle"
+		   TargetType="{x:Type Button}"
+		   BasedOn="{StaticResource BaseMenuButtonStyle}">
+		<Setter Property="FontWeight" Value="Bold" />
+		<Setter Property="FontSize" Value="18" />
+		<Setter Property="Height" Value="60" />
+		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
 	</Style>
 
 	<Style x:Key="BaseDialogButtonStyle"

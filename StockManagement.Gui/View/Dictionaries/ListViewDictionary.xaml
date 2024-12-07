@@ -10,8 +10,41 @@
 	<Style x:Key="DefaultListViewStyle"
 		   TargetType="{x:Type ListView}">
 		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Foreground" Value="{StaticResource MainForeground}" />
 		<Setter Property="HorizontalAlignment" Value="Stretch" />
 		<Setter Property="BorderThickness" Value="0" />
+	</Style>
+
+	<Style x:Key="DarkListViewStyle"
+		   TargetType="{x:Type ListView}"
+		   BasedOn="{StaticResource DefaultListViewStyle}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ListView}">
+					<ScrollViewer Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}">
+						<ItemsPresenter />
+					</ScrollViewer>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="GridViewColumnHeaderStyle"
+		   TargetType="{x:Type GridViewColumnHeader}"
+		   BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+		<Setter Property="Background" Value="{StaticResource ButtonBackground}" />
+		<Setter Property="OverridesDefaultStyle" Value="True" />
+		<Setter Property="FontSize" Value="22" />
+		<Setter Property="Height" Value="40" />
+		<Setter Property="FontWeight" Value="Bold" />
+		<Setter Property="ContentTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<TextBlock Text="{TemplateBinding Content}"
+							   Style="{StaticResource BaseTextBlockStyle}"/>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 	<DataTemplate x:Key="MainListViewAdditionalInfoButtonTemplate">

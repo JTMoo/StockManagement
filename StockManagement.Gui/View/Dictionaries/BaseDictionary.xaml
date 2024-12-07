@@ -31,65 +31,56 @@
 	<GridLength x:Key="MenuBarWidth">250</GridLength>
 	<GridLength x:Key="mediumGridColumnDialog">200</GridLength>
 
+	<!-- La Cosecha Brandboard -->
+	<Color x:Key="WhiteGray">#e0e0e0</Color>
+	<Color x:Key="LightGray">#9ba7aa</Color>
+	<Color x:Key="GrayBlue">#4a5c6a</Color>
+	<Color x:Key="LightBlue">#253745</Color>
 	<Color x:Key="Blue">#071c31</Color>
-	<Color x:Key="LightGray">#e0e0e0</Color>
+	
 	<Color x:Key="Black">#000</Color>
 	<Color x:Key="LightBorderColor">#405668</Color>
 
 	<SolidColorBrush x:Key="MainBlue" Color="{StaticResource Blue}" />
-	<SolidColorBrush x:Key="DialogBackground" Color="{StaticResource Blue}" Opacity=".7" />
-	<SolidColorBrush x:Key="MainElementBackground" Color="{StaticResource LightGray}" />
-	<SolidColorBrush x:Key="MainBackground" Color="GhostWhite" />
-	<SolidColorBrush x:Key="BorderBlack" Color="{StaticResource Black}" />
-	<SolidColorBrush x:Key="LightBorder" Color="{StaticResource LightBorderColor}" />
-
-	<DataTemplate x:Key="DialogContentTemplate">
-		<Border BorderThickness="{Binding DataContext.ResponsiveDialogBorderThickness, RelativeSource={RelativeSource AncestorType=Window}}"
-				Background="{StaticResource MainBackground}"
-				BorderBrush="{StaticResource DialogBackground}">
-			<Border BorderThickness="5"
-					BorderBrush="{StaticResource BorderBlack}"
-					CornerRadius="6"
-					Margin="-3">
-				<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
-								  Content="{Binding}"
-								  VerticalAlignment="Stretch"
-								  HorizontalAlignment="Stretch" />
-			</Border>
-		</Border>
-	</DataTemplate>
-
-	<Style x:Key="BaseDialogTextBlockStyle"
-		   TargetType="{x:Type TextBlock}">
-		<Setter Property="HorizontalAlignment" Value="Right" />
-		<Setter Property="VerticalAlignment" Value="Center" />
-		<Setter Property="TextWrapping" Value="WrapWithOverflow" />
-	</Style>
+	<SolidColorBrush x:Key="SelectedMainBlue" Color="{StaticResource LightBlue}" />
+	<SolidColorBrush x:Key="ButtonBackground" Color="{StaticResource GrayBlue}" />
+	<SolidColorBrush x:Key="Focus" Color="{StaticResource LightGray}" />
 	
-	<Style x:Key="AdditionInfoTextBlockStyle"
-		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"
-		   TargetType="{x:Type TextBlock}">
-		<Setter Property="Margin" Value="0,10,0,0" />
-		<Setter Property="HorizontalAlignment" Value="Center" />
-	</Style>
-
-	<Style x:Key="ArrowTextBlockStyle"
-		   TargetType="{x:Type TextBlock}">
-		<Setter Property="Text" Value="&#x2794;" />
-		<Setter Property="FontSize" Value="25" />
-		<Setter Property="VerticalAlignment" Value="Center" />
-		<Setter Property="HorizontalAlignment" Value="Center" />
-	</Style>
-
+	<SolidColorBrush x:Key="MainForeground" Color="White" />
+	
+	<SolidColorBrush x:Key="DialogBackground" Color="{StaticResource WhiteGray}" Opacity=".7" />
+	<SolidColorBrush x:Key="InactiveForeground" Color="{StaticResource WhiteGray}" />
+	<SolidColorBrush x:Key="MainBorder" Color="{StaticResource LightBorderColor}" />
+	
 	<Style x:Key="BaseControlStyle"
 		   TargetType="{x:Type Control}">
+		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="Margin" Value="5" />
 	</Style>
 
 	<Style x:Key="BaseDialogStyle"
 		   TargetType="{x:Type ContentControl}">
-		<Setter Property="ContentTemplate" Value="{StaticResource DialogContentTemplate}" />
+		<Setter Property="ContentTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<Border BorderThickness="{Binding DataContext.ResponsiveDialogBorderThickness, RelativeSource={RelativeSource AncestorType=Window}}"
+							Background="{StaticResource MainBlue}"
+							BorderBrush="{StaticResource DialogBackground}">
+						<Border BorderThickness="5"
+								BorderBrush="{StaticResource MainBorder}"
+								CornerRadius="6"
+								Margin="-3">
+							<ContentPresenter ContentTemplateSelector="{StaticResource DialogTemplateSelector}"
+											  Content="{Binding}"
+											  VerticalAlignment="Stretch"
+											  HorizontalAlignment="Stretch" />
+						</Border>
+					</Border>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+		
 		<Setter Property="Visibility" Value="Visible" />
 		<Style.Triggers>
 			<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Value="{x:Null}">
@@ -103,6 +94,6 @@
 		<Setter Property="Margin" Value="2" />
 		<Setter Property="CornerRadius" Value="4" />
 		<Setter Property="BorderThickness" Value="2" />
-		<Setter Property="BorderBrush" Value="{StaticResource LightBorder}" />
+		<Setter Property="BorderBrush" Value="{StaticResource MainBorder}" />
 	</Style>
 </ResourceDictionary>

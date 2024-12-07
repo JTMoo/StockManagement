@@ -6,10 +6,12 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="\View\Dictionaries\BaseDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ComboBoxDictionary.xaml" />
-				<ResourceDictionary Source="\View\Dictionaries\TextBoxDictionary.xaml" />
+				<ResourceDictionary Source="\View\Dictionaries\TextBlockDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ButtonDictionary.xaml" />
+				<ResourceDictionary Source="\View\Dictionaries\ToggleButtonDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ListViewDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ViewDictionary.xaml" />
+				<ResourceDictionary Source="\View\Dictionaries\ScrollBarDictionary.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style x:Key="BaseTextBlockStyle"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
+		<Setter Property="Foreground" Value="{StaticResource MainForeground}" />
+	</Style>
+	
+	<Style x:Key="BaseDialogTextBlockStyle"
+		   BasedOn="{StaticResource BaseTextBlockStyle}"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="HorizontalAlignment" Value="Right" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="TextWrapping" Value="WrapWithOverflow" />
+	</Style>
+
+	<Style x:Key="AdditionInfoTextBlockStyle"
+		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="Margin" Value="0,10,0,0" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+	</Style>
+
+	<Style x:Key="ArrowTextBlockStyle"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="Text" Value="&#x2794;" />
+		<Setter Property="FontSize" Value="25" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+	</Style>
+</ResourceDictionary>
