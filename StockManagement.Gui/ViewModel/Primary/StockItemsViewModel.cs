@@ -13,6 +13,7 @@ using StockManagement.Kernel;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -158,7 +159,14 @@ public class StockItemsViewModel : ViewModelBase
 		if (dialog.ShowDialog() is bool isTrue && isTrue)
 		{
 			GuiManager.Instance.ShowWaitDialog();
-			GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName);
+			try
+			{
+				GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName);
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(Language.Resources.selectedFileInUse);
+			}
 			GuiManager.Instance.HideWaitDialog();
 		}
 	}

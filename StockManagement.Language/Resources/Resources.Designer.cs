@@ -466,6 +466,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected File is currently being used by another process and cannot be opened..
+        /// </summary>
+        public static string selectedFileInUse {
+            get {
+                return ResourceManager.GetString("selectedFileInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Excel-sheet:.
         /// </summary>
         public static string selectExcelSheet {

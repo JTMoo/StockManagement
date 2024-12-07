@@ -303,4 +303,7 @@
   <data name="invoices" xml:space="preserve">
     <value>Facturación</value>
   </data>
+  <data name="selectedFileInUse" xml:space="preserve">
+    <value>El archivo seleccionado está siendo utilizado por otro proceso y no se puede abrir.</value>
+  </data>
 </root>

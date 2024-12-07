@@ -303,4 +303,7 @@
   <data name="invoices" xml:space="preserve">
     <value>Rechnungen</value>
   </data>
+  <data name="selectedFileInUse" xml:space="preserve">
+    <value>Die ausgewählte Datei wird aktuell von einem anderen Prozess verwendet und kann deshalb nicht geöffnet werden.</value>
+  </data>
 </root>
