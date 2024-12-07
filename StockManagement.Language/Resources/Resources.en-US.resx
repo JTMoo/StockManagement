@@ -294,4 +294,13 @@
   <data name="adjustDialogBorderSize" xml:space="preserve">
     <value>Adjust size of border for inner window</value>
   </data>
+  <data name="stockItems" xml:space="preserve">
+    <value>Stock items</value>
+  </data>
+  <data name="clients" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="invoices" xml:space="preserve">
+    <value>Invoices</value>
+  </data>
 </root>

@@ -30,12 +30,14 @@
 			<StackPanel Grid.Column="1" Grid.RowSpan="2"
 						VerticalAlignment="Bottom">
 				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
-							 Content="{x:Static lang:Resources.stockItem}"
-							 IsEnabled="False"
-							 Command="{Binding OpenSettingsCommand}" />
+							 Content="{x:Static lang:Resources.invoices}"
+							 IsEnabled="False" />
+				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
+							 Content="{x:Static lang:Resources.clients}"
+							 IsEnabled="False" />
 				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
 							 IsChecked="True"
-							 Content="{x:Static lang:Resources.stockItem}"
+							 Content="{x:Static lang:Resources.stockItems}"
 							 Command="{Binding OpenSettingsCommand}" />
 				<Button Style="{StaticResource MenuButtonStyle}"
 						Content="{x:Static lang:Resources.settings}"

@@ -294,4 +294,13 @@
   <data name="adjustDialogBorderSize" xml:space="preserve">
     <value>Größe des Randes für das innere Fenster anpassen</value>
   </data>
+  <data name="stockItems" xml:space="preserve">
+    <value>Lagerartikel</value>
+  </data>
+  <data name="clients" xml:space="preserve">
+    <value>Kunden</value>
+  </data>
+  <data name="invoices" xml:space="preserve">
+    <value>Rechnungen</value>
+  </data>
 </root>

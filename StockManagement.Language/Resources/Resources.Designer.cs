@@ -142,6 +142,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clients.
+        /// </summary>
+        public static string clients {
+            get {
+                return ResourceManager.GetString("clients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         public static string code {
@@ -246,6 +255,15 @@ namespace StockManagement.Language {
         public static string identificationNumber {
             get {
                 return ResourceManager.GetString("identificationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoices.
+        /// </summary>
+        public static string invoices {
+            get {
+                return ResourceManager.GetString("invoices", resourceCulture);
             }
         }
         
@@ -552,6 +570,15 @@ namespace StockManagement.Language {
         public static string stockItem {
             get {
                 return ResourceManager.GetString("stockItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stock items.
+        /// </summary>
+        public static string stockItems {
+            get {
+                return ResourceManager.GetString("stockItems", resourceCulture);
             }
         }
         
