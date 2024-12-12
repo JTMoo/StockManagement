@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
+using System.Diagnostics;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -166,6 +167,7 @@ public class StockItemsViewModel : ViewModelBase
 			catch(Exception ex)
 			{
 				MessageBox.Show(Language.Resources.selectedFileInUse);
+				Trace.WriteLine(ex.Message);
 			}
 			GuiManager.Instance.HideWaitDialog();
 		}
