@@ -306,4 +306,16 @@
   <data name="selectedFileInUse" xml:space="preserve">
     <value>Die ausgewählte Datei wird aktuell von einem anderen Prozess verwendet und kann deshalb nicht geöffnet werden.</value>
   </data>
+  <data name="createCustomer" xml:space="preserve">
+    <value>Kunde anlegen</value>
+  </data>
+  <data name="searchLastnames" xml:space="preserve">
+    <value>Suche in Nachnamen:</value>
+  </data>
+  <data name="searchCustomerIds" xml:space="preserve">
+    <value>Suche in Kunden-IDs:</value>
+  </data>
+  <data name="customer" xml:space="preserve">
+    <value>Kunde</value>
+  </data>
 </root>

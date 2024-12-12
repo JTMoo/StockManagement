@@ -169,11 +169,29 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Customer.
+        /// </summary>
+        public static string createCustomer {
+            get {
+                return ResourceManager.GetString("createCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Stock item.
         /// </summary>
         public static string createItem {
             get {
                 return ResourceManager.GetString("createItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer.
+        /// </summary>
+        public static string customer {
+            get {
+                return ResourceManager.GetString("customer", resourceCulture);
             }
         }
         
@@ -444,6 +462,24 @@ namespace StockManagement.Language {
         public static string searchCodes {
             get {
                 return ResourceManager.GetString("searchCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search customer IDs:.
+        /// </summary>
+        public static string searchCustomerIds {
+            get {
+                return ResourceManager.GetString("searchCustomerIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search lastnames:.
+        /// </summary>
+        public static string searchLastnames {
+            get {
+                return ResourceManager.GetString("searchLastnames", resourceCulture);
             }
         }
         
