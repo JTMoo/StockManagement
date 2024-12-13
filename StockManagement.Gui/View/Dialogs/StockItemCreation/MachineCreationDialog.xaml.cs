@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace StockManagement.Gui.View.StockItemCreation;
+namespace StockManagement.Gui.View.Dialogs.StockItemCreation;
 
 
 public partial class MachineCreationDialog : UserControl

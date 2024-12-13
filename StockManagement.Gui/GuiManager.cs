@@ -59,7 +59,7 @@ public class GuiManager
 	private void AssignDialogs()
 	{
 		var guiAssembly = Assembly.GetExecutingAssembly();
-		var stockItemCreationViewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.StockItemCreation")
+		var stockItemCreationViewModels = ReflectionManager.GetTypesInNamespace(guiAssembly, "StockManagement.Gui.ViewModel.Dialogs.StockItemCreation")
 			.Where(type => type.Name.Contains("ViewModel")).ToList();
 
 		if (this.StockItemTypes.Count != stockItemCreationViewModels.Count)

@@ -4,7 +4,7 @@ using StockManagement.Kernel.Commands.StockItemCommands;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 
-namespace StockManagement.Gui.ViewModel.StockItemCreation;
+namespace StockManagement.Gui.ViewModel.Dialogs.StockItemCreation;
 
 
 public class SparePartCreationDialogViewModel : DialogViewModelBase

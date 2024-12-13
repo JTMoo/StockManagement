@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:creationControls="clr-namespace:StockManagement.Gui.View.StockItemCreation"
-                    xmlns:creationVMs="clr-namespace:StockManagement.Gui.ViewModel.StockItemCreation"
+					xmlns:creationControls="clr-namespace:StockManagement.Gui.View.Dialogs.StockItemCreation"
+                    xmlns:creationVMs="clr-namespace:StockManagement.Gui.ViewModel.Dialogs.StockItemCreation"
 					xmlns:dialogControls="clr-namespace:StockManagement.Gui.View.Dialogs"
                     xmlns:dialogVMs="clr-namespace:StockManagement.Gui.ViewModel.Dialogs"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">

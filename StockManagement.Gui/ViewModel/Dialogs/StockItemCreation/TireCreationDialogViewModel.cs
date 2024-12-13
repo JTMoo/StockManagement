@@ -1,21 +1,26 @@
 ﻿using StockManagement.Kernel;
-using StockManagement.Kernel.Model;
-using StockManagement.Kernel.Model.Types;
 using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Commands.StockItemCommands;
+using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.Types;
 
-namespace StockManagement.Gui.ViewModel.StockItemCreation;
+namespace StockManagement.Gui.ViewModel.Dialogs.StockItemCreation;
 
 
-public class MachineCreationDialogViewModel : DialogViewModelBase
+public class TireCreationDialogViewModel : DialogViewModelBase
 {
 	private string _description;
 	private string _name;
+	private string _code;
 	private int _price;
+	private int _profile;
+	private int _rimDiameter;
+	private int _width;
 	private ManufacturerType _selectedManufacturer;
 	private int _amount;
 
-	public MachineCreationDialogViewModel() : base()
+
+	public TireCreationDialogViewModel() : base()
 	{
 	}
 
@@ -25,13 +30,6 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		get { return _description; }
 		set { this.SetField(ref _description, value); }
 	}
-
-	public int Amount
-	{
-		get { return _amount; }
-		set { this.SetField(ref _amount, value); }
-	}
-
 	public ManufacturerType SelectedManufacturer
 	{
 		get { return _selectedManufacturer; }
@@ -44,10 +42,40 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		set { this.SetField(ref _name, value); }
 	}
 
+	public string Code
+	{
+		get { return _code; }
+		set { this.SetField(ref _code, value); }
+	}
+
+	public int Amount
+	{
+		get { return _amount; }
+		set { this.SetField(ref _amount, value); }
+	}
+
 	public int Price
 	{
 		get { return _price; }
 		set { this.SetField(ref _price, value); }
+	}
+
+	public int Profile
+	{
+		get { return _profile; }
+		set { this.SetField(ref _profile, value); }
+	}
+
+	public int RimDiameter
+	{
+		get { return _rimDiameter; }
+		set { this.SetField(ref _rimDiameter, value); }
+	}
+
+	public int Width
+	{
+		get { return _width; }
+		set { this.SetField(ref _width, value); }
 	}
 	#endregion
 
@@ -57,7 +85,11 @@ public class MachineCreationDialogViewModel : DialogViewModelBase
 		{
 			Data = new StockItemCommandData
 			{
-				DataToRegister = new Machine(name: this.Name,
+				DataToRegister = new Tire(rimDiameter: this.RimDiameter,
+					profile: this.Profile,
+					width: this.Width,
+					name: this.Name,
+					code: this.Code,
 					description: this.Description,
 					amount: this.Amount,
 					price: this.Price,
