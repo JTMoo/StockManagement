@@ -26,4 +26,10 @@
     <ProjectReference Include="..\StockManagement.Language\StockManagement.Language.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="View\Controls\LargeTextBoxWithPreviewControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
