@@ -26,7 +26,6 @@ public class MainManager : NotificationBase, IDisposable
 	private MainManager() 
     {
 		Trace.Listeners.Add(new DateTimeTextWriterTraceListener(new FileStream(this.logFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)));
-		this.Settings = DatabaseManager.GetFirst<Settings>() ?? new();
     }
 
     ~MainManager()
@@ -41,11 +40,11 @@ public class MainManager : NotificationBase, IDisposable
 	public Settings Settings { get; internal set; }
 
 
-    public static void Initialize()
+    public static async Task Initialize()
     {
         if (_isInitialized) return;
 
-        Instance.Init();
+        await Instance.Init();
     }
 
 
@@ -99,8 +98,9 @@ public class MainManager : NotificationBase, IDisposable
         return _commandManager.Push(command);
 	}
 
-	private void Init()
+	private async Task Init()
 	{
+        this.Settings = await DatabaseManager.GetOneAsync<Settings>(_ => true).ContinueWith(task => task.Result ?? new());
 		this._commandManager.Init();
 		this.MachineManager.Init();
 		this.TireManager.Init();

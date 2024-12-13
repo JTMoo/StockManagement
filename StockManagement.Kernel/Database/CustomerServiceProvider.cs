@@ -18,6 +18,11 @@ public class CustomerServiceProvider(IDatabase database) : ICustomerServiceProvi
 		return _database.Delete<Customer>(customer);
 	}
 
+	public Task<Customer> GetCustomerAsync(int customerId)
+	{
+		return _database.GetOneAsync<Customer>(customer => customer.CustomerId == customerId);
+	}
+
 	public Task<IEnumerable<Customer>> GetCustomersAsync()
 	{
 		return _database.GetAll<Customer>();

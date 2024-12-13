@@ -11,9 +11,9 @@ public partial class App
     private MainViewModel _mainViewModel;
 
 
-	protected override void OnStartup(StartupEventArgs e)
+	protected override async void OnStartup(StartupEventArgs e)
     {
-        MainManager.Initialize();
+        await MainManager.Initialize();
 
         _mainViewModel = new MainViewModel();
         GuiManager.Instance.Init(_mainViewModel);
