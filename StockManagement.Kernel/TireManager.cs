@@ -31,7 +31,7 @@ public class TireManager : NotificationBase
 	internal async void Init()
 	{
 		this._editableTires.Clear();
-		var tires = await MainManager.Instance.DatabaseManager.GetAll<Tire>();
+		var tires = await MainManager.Instance.DatabaseManager.GetAll<Tire>().ContinueWith(task => task.Result.ToList());
 		tires.ForEach(this._editableTires.Add);
 	}
 

@@ -31,7 +31,7 @@ public class SparePartManager : NotificationBase
 	internal async void Init()
 	{
 		this._editableSpareParts.Clear();
-		var spareParts = await MainManager.Instance.DatabaseManager.GetAll<SparePart>();
+		var spareParts = await MainManager.Instance.DatabaseManager.GetAll<SparePart>().ContinueWith(task => task.Result.ToList());
 		spareParts.ForEach(this._editableSpareParts.Add);
 	}
 

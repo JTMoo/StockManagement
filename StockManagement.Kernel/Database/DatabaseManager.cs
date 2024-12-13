@@ -9,11 +9,11 @@ public class DatabaseManager : IDatabase
     private const string DatabaseName = "LaCosecha_StockManagement";
 
 
-	public async Task<List<T>> GetAll<T>()
+	public async Task<IEnumerable<T>> GetAll<T>()
 	{
 		var collection = ConnectToMongo<T>(typeof(T).ToString());
 		var list = await collection.FindAsync(_ => true);
-		return list.ToList();
+		return list.ToEnumerable();
 	}
 
 	public T GetFirst<T>()
@@ -29,7 +29,7 @@ public class DatabaseManager : IDatabase
 		return col.InsertOneAsync(item);
 	}
 
-	public Task Delete<T>(BaseDocument item)
+	public Task<DeleteResult> Delete<T>(BaseDocument item)
 	{
 		var col = ConnectToMongo<BaseDocument>(typeof(T).ToString());
 		var filter = Builders<BaseDocument>.Filter.Eq("Id", item.Id);
@@ -37,7 +37,7 @@ public class DatabaseManager : IDatabase
 		return col.DeleteOneAsync(filter);
 	}
 
-	public Task Update<T>(BaseDocument item)
+	public Task<ReplaceOneResult> Update<T>(BaseDocument item)
 	{
 		var col = ConnectToMongo<BaseDocument>(typeof(T).ToString());
 		var filter = Builders<BaseDocument>.Filter.Eq("Id", item.Id);

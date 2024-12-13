@@ -3,9 +3,9 @@
 namespace StockManagement.Gui.View.Primary;
 
 
-public partial class ClientsView : UserControl
+public partial class CustomerView : UserControl
 {
-	public ClientsView()
+	public CustomerView()
 	{
 		InitializeComponent();
 	}

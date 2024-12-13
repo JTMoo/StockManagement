@@ -28,7 +28,7 @@ public class StockItemsViewModel : ViewModelBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private bool _isSearchBarVisible = false;
-	private List<Func<StockItem, bool>> _filterFunctions = [];
+	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
 
 	public StockItemsViewModel()
 	{

@@ -4,28 +4,35 @@ using System;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using StockManagement.Kernel.Database;
+using System.Threading.Tasks;
+using System.Linq;
+using StockManagement.Kernel.Model.ExtensionMethods;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
 
-public class ClientsViewModel : ViewModelBase
+public class CustomerViewModel : ViewModelBase
 {
-	private List<Func<Customer, bool>> _filterFunctions = [];
+	private readonly List<Func<Customer, bool>> _filterFunctions = [];
 	private string _searchNames;
 	private string _searchCustomerIds;
 	private string _searchLastnames;
-	private ObservableCollection<StockItem> _filteredCustomers;
+	private ObservableCollection<Customer> _filteredCustomers;
+	private readonly ICustomerServiceProvider _customerServiceProvider;
 
 
-	public ClientsViewModel()
+	private CustomerViewModel(ICustomerServiceProvider customerServiceProvider)
 	{
+		_customerServiceProvider = customerServiceProvider;
 
 		this.PropertyChanged += this.OnPropertyChangedEvent;
 		this.SetupFilterConditions();
 	}
 
 
-	public ObservableCollection<StockItem> FilteredCustomers
+	#region Properties
+	public ObservableCollection<Customer> FilteredCustomers
 	{
 		get => this._filteredCustomers;
 		set => this.SetField(ref this._filteredCustomers, value);
@@ -48,6 +55,20 @@ public class ClientsViewModel : ViewModelBase
 		get { return _searchCustomerIds; }
 		set { this.SetField(ref _searchCustomerIds, value); }
 	}
+	#endregion Properties
+
+
+	public static Task<CustomerViewModel> CreateAsync(ICustomerServiceProvider customerServiceProvider)
+	{
+		var ret = new CustomerViewModel(customerServiceProvider);
+		return ret.InitializeAsync();
+	}
+
+	private async Task<CustomerViewModel> InitializeAsync()
+	{
+		this.FilteredCustomers = new(await _customerServiceProvider.GetCustomersAsync());
+		return this;
+	}
 
 
 	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
@@ -63,8 +84,7 @@ public class ClientsViewModel : ViewModelBase
 	}
 	private void OnRefreshSearch()
 	{
-		//var filteredItems = GetClients().Where(_filterFunctions);
-		//this.FilteredCustomers = new ObservableCollection<StockItem>(filteredItems);
+		this.FilteredCustomers = new(this.FilteredCustomers.Where(_filterFunctions));
 	}
 
 	private void SetupFilterConditions()

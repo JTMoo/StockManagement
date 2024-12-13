@@ -5,4 +5,7 @@
 	<DataTemplate DataType="{x:Type primaryVMs:StockItemsViewModel}">
 		<primaryViews:StockItemsView />
 	</DataTemplate>
+	<DataTemplate DataType="{x:Type primaryVMs:CustomerViewModel}">
+		<primaryViews:CustomerView />
+	</DataTemplate>
 </ResourceDictionary>

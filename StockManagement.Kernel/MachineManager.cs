@@ -31,7 +31,7 @@ public class MachineManager : NotificationBase
 	internal async void Init ()
 	{
 		this._editableMachines.Clear();
-		var machines = await MainManager.Instance.DatabaseManager.GetAll<Machine>();
+		var machines = await MainManager.Instance.DatabaseManager.GetAll<Machine>().ContinueWith(task => task.Result.ToList());
 		machines.ForEach(this._editableMachines.Add);
 	}
 
