@@ -6,7 +6,7 @@ namespace StockManagement.Kernel.Model;
 
 public class Customer : BaseDocument
 {
-	private string customerId = string.Empty;
+	private int customerId = -1;
 	private string name = string.Empty;
 	private string lastname = string.Empty;
 	private string address = string.Empty;
@@ -23,7 +23,7 @@ public class Customer : BaseDocument
 
 	#region Properties
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.customerId))]
-	public string CustomerId
+	public int CustomerId
 	{
 		get { return this.customerId; }
 		set { this.SetField(ref this.customerId, value); }

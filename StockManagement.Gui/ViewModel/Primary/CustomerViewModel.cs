@@ -99,7 +99,7 @@ public class CustomerViewModel : ViewModelBase
 		});
 		_filterFunctions.Add(customer =>
 		{
-			return string.IsNullOrEmpty(this.SearchCustomerIds) || Regex.IsMatch(customer.CustomerId.ToLower(), this.SearchCustomerIds.ToLower());
+			return string.IsNullOrEmpty(this.SearchCustomerIds) || !int.TryParse(this.SearchCustomerIds, out int customerId) || customer.CustomerId == customerId;
 		});
 	}
 }
