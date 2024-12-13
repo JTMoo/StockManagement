@@ -318,4 +318,7 @@
   <data name="customer" xml:space="preserve">
     <value>Kunde</value>
   </data>
+  <data name="unexpectedError" xml:space="preserve">
+    <value>Es ist ein unvorhergesehener Fehler aufgetreten. Bitte kontaktieren Sie den Support, um diesen zu beheben.</value>
+  </data>
 </root>

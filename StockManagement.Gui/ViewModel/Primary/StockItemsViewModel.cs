@@ -27,12 +27,11 @@ public class StockItemsViewModel : ViewModelBase
 	private string _searchCodes;
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
-	private bool _isSearchBarVisible = false;
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
+
 
 	public StockItemsViewModel()
 	{
-		this.ToggleSearchBarCommand = new RelayCommand<string>(_ => this.IsSearchBarVisible = !this.IsSearchBarVisible);
 		this.MoreInfoCommand = new RelayCommand<StockItem>(stockItem => GuiManager.Instance.MainViewModel.Dialog = new MoreInfoDialogViewModel(stockItem));
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 		this.ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
@@ -51,7 +50,6 @@ public class StockItemsViewModel : ViewModelBase
 
 
 	#region Properties
-	public RelayCommand<string> ToggleSearchBarCommand { get; }
 	public RelayCommand<string> ExcelImportCommand { get; }
 	public RelayCommand<IEnumerable> AddToShoppingCartCommand { get; }
 	public RelayCommand<string> ShoppingCartCommand { get; }
@@ -70,12 +68,6 @@ public class StockItemsViewModel : ViewModelBase
 	{
 		get { return _selectedStockItem; }
 		set { this.SetField(ref _selectedStockItem, value); }
-	}
-
-	public bool IsSearchBarVisible
-	{
-		get { return _isSearchBarVisible; }
-		set { this.SetField(ref _isSearchBarVisible, value); }
 	}
 
 	public string SearchNames

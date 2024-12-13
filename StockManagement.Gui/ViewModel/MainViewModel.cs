@@ -2,6 +2,7 @@
 using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Gui.ViewModel.Primary;
 using StockManagement.Kernel;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 using System.ComponentModel;
 using System.Windows;
@@ -22,6 +23,8 @@ internal class MainViewModel : NotificationBase
 		this.CurrentView = new StockItemsViewModel();
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
+		OpenStockItemsViewCommand = new RelayCommand<string>(_ => this.CurrentView = new StockItemsViewModel());
+		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(new CustomerServiceProvider(MainManagerFacade.Database)));
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
@@ -30,6 +33,8 @@ internal class MainViewModel : NotificationBase
 	#region Properties
 	public RelayCommand<string> QuitCommand { get; }
 	public RelayCommand<string> OpenSettingsCommand { get; }
+	public RelayCommand<string> OpenStockItemsViewCommand { get; }
+	public RelayCommand<string> OpenCustomerViewCommand { get; }
 	public DialogViewModelBase? Dialog
 	{
 		get { return _dialog; }

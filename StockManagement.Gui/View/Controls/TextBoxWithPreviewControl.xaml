@@ -26,7 +26,7 @@
 					   FontFamily="/Fonts/#Poppins"
 					   VerticalAlignment="Center"
 					   HorizontalAlignment="Left"
-					   Margin="10,0,0,0"
+					   Margin="5,0,0,0"
 					   d:Text="Test Preview Text"
 					   Foreground="{StaticResource InactiveForeground}">
 				<TextBlock.Style>

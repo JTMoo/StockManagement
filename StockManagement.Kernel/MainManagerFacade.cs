@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using StockManagement.Kernel.Commands;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel;
@@ -23,6 +24,10 @@ public static class MainManagerFacade
 	public static ReadOnlyObservableCollection<Machine> Machines
 	{
 		get { return MainManager.Instance.MachineManager.Machines; }
+	}
+	public static IDatabase Database
+	{
+		get { return MainManager.Instance.DatabaseManager; }
 	}
 	public static Settings Settings
 	{

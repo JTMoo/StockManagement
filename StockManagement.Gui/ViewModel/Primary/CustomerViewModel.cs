@@ -8,6 +8,10 @@ using StockManagement.Kernel.Database;
 using System.Threading.Tasks;
 using System.Linq;
 using StockManagement.Kernel.Model.ExtensionMethods;
+using StockManagement.Gui.Commands;
+using StockManagement.Gui.ViewModel.Dialogs;
+using System.Windows;
+using System.Diagnostics;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -24,6 +28,9 @@ public class CustomerViewModel : ViewModelBase
 
 	private CustomerViewModel(ICustomerServiceProvider customerServiceProvider)
 	{
+		this.CreateCustomerCommand = new RelayCommand<string>(this.OnCreateCustomerCommand);
+		this.MoreInfoCommand = new RelayCommand<Customer>(this.OpenCustomerCreationDialogWithCustomer);
+
 		_customerServiceProvider = customerServiceProvider;
 
 		this.PropertyChanged += this.OnPropertyChangedEvent;
@@ -32,6 +39,9 @@ public class CustomerViewModel : ViewModelBase
 
 
 	#region Properties
+	public RelayCommand<string> CreateCustomerCommand { get; }
+	public RelayCommand<Customer> MoreInfoCommand { get; }
+
 	public ObservableCollection<Customer> FilteredCustomers
 	{
 		get => this._filteredCustomers;
@@ -66,7 +76,7 @@ public class CustomerViewModel : ViewModelBase
 
 	private async Task<CustomerViewModel> InitializeAsync()
 	{
-		this.FilteredCustomers = new(await _customerServiceProvider.GetCustomersAsync());
+		await this.UpdateCustomersAsync();
 		return this;
 	}
 
@@ -82,6 +92,52 @@ public class CustomerViewModel : ViewModelBase
 				break;
 		}
 	}
+
+	private async void OnCreateCustomerCommand(string obj)
+	{
+		try
+		{
+			var newId = await GetNewCustomerId();
+			this.OpenCustomerCreationDialogWithId(newId);
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show(Language.Resources.unexpectedError);
+			Trace.WriteLine(ex.Message);
+		}
+	}
+
+	private void OpenCustomerCreationDialogWithCustomer(Customer customer)
+	{
+		GuiManager.Instance.MainViewModel.Dialog = new CustomerCreationDialogViewModel(_customerServiceProvider, customer);
+		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += async _ => await this.UpdateCustomersAsync();
+	}
+
+	private void OpenCustomerCreationDialogWithId(int newId)
+	{
+		GuiManager.Instance.MainViewModel.Dialog = new CustomerCreationDialogViewModel(_customerServiceProvider, newId);
+		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += async _ => await this.UpdateCustomersAsync();
+	}
+
+	private async Task UpdateCustomersAsync()
+	{
+		var filteredCustomers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result.Where(_filterFunctions));
+		this.FilteredCustomers = new(filteredCustomers);
+	}
+
+	private async Task<int> GetNewCustomerId()
+	{
+		var customers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result);
+		try
+		{
+			return customers.Max(customer => customer.CustomerId) + 1;
+		}
+		catch(ArgumentNullException)
+		{
+			return 1;
+		}
+	}
+
 	private void OnRefreshSearch()
 	{
 		this.FilteredCustomers = new(this.FilteredCustomers.Where(_filterFunctions));

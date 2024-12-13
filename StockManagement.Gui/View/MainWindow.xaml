@@ -34,11 +34,11 @@
 							 IsEnabled="False" />
 				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
 							 Content="{x:Static lang:Resources.clients}"
-							 IsEnabled="False" />
+							 Command="{Binding OpenCustomerViewCommand}" />
 				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
 							 IsChecked="True"
 							 Content="{x:Static lang:Resources.stockItems}"
-							 Command="{Binding OpenSettingsCommand}" />
+							 Command="{Binding OpenStockItemsViewCommand}" />
 				<Button Style="{StaticResource MenuButtonStyle}"
 						Content="{x:Static lang:Resources.settings}"
 						Command="{Binding OpenSettingsCommand}" />

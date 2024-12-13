@@ -318,4 +318,7 @@
   <data name="customer" xml:space="preserve">
     <value>Customer</value>
   </data>
+  <data name="unexpectedError" xml:space="preserve">
+    <value>An unexpected error occured. Please contact the support to resolve the issue.</value>
+  </data>
 </root>

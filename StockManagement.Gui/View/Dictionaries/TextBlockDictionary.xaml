@@ -13,6 +13,14 @@
 		<Setter Property="VerticalAlignment" Value="Center" />
 		<Setter Property="TextWrapping" Value="WrapWithOverflow" />
 	</Style>
+	
+	<Style x:Key="IndentedDialogTextBlockStyle"
+		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"
+		   TargetType="{x:Type TextBlock}">
+		<Setter Property="VerticalAlignment" Value="Top" />
+		<Setter Property="HorizontalAlignment" Value="Left" />
+		<Setter Property="Margin" Value="20,15,0,0" />
+	</Style>
 
 	<Style x:Key="AdditionInfoTextBlockStyle"
 		   BasedOn="{StaticResource BaseDialogTextBlockStyle}"

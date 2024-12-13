@@ -32,4 +32,7 @@
 	<DataTemplate DataType="{x:Type dialogVMs:ShoppingCartDialogViewModel}">
 		<dialogControls:ShoppingCartDialog />
 	</DataTemplate>
+	<DataTemplate DataType="{x:Type dialogVMs:CustomerCreationDialogViewModel}">
+		<dialogControls:CustomerCreationDialog />
+	</DataTemplate>
 </ResourceDictionary>

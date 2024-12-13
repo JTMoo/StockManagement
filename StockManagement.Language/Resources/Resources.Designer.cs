@@ -655,6 +655,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occured. Please contact the support to resolve the issue..
+        /// </summary>
+        public static string unexpectedError {
+            get {
+                return ResourceManager.GetString("unexpectedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Width.
         /// </summary>
         public static string width {

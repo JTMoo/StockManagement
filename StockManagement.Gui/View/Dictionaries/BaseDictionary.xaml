@@ -26,7 +26,9 @@
 	<GridLength x:Key="smallSpacingGridDialog">10</GridLength>
 	<GridLength x:Key="largeSpacingGridDialog">30</GridLength>
 	<GridLength x:Key="smallGridRowDialog">50</GridLength>
-	<GridLength x:Key="smallGridColumnDialog">120</GridLength>
+	<GridLength x:Key="smallGridColumnDialog">150</GridLength>
+	<GridLength x:Key="TextBlockDialogColumnWidth">250</GridLength>
+	<GridLength x:Key="DialogGridRowHeight">60</GridLength>
 	<GridLength x:Key="ActionBarHeight">150</GridLength>
 	<GridLength x:Key="MenuBarWidth">250</GridLength>
 	<GridLength x:Key="mediumGridColumnDialog">200</GridLength>
