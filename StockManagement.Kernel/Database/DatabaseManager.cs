@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using System.Linq.Expressions;
+using MongoDB.Driver;
 
 namespace StockManagement.Kernel.Database;
 
@@ -16,11 +17,11 @@ public class DatabaseManager : IDatabase
 		return list.ToEnumerable();
 	}
 
-	public T GetFirst<T>()
+	public async Task<T> GetOneAsync<T>(Expression<Func<T, bool>> filter)
 	{
-		var settingsCollection = ConnectToMongo<T>(typeof(T).ToString());
-		var settings = settingsCollection.Find(_ => true);
-		return settings.FirstOrDefault();
+		var collection = ConnectToMongo<T>(typeof(T).ToString());
+		var element = await collection.FindAsync(filter);
+		return element.FirstOrDefault();
 	}
 
 	public Task Add<T>(BaseDocument item)
@@ -50,5 +51,10 @@ public class DatabaseManager : IDatabase
 		var client = new MongoClient(ConnectionString);
 		var db = client.GetDatabase(DatabaseName);
 		return db.GetCollection<T>(collectionName);
+	}
+
+	public Task<T> GetOneAsync<T>()
+	{
+		throw new NotImplementedException();
 	}
 }
