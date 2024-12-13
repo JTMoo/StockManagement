@@ -30,7 +30,7 @@ public class StockItemChangeAmountCommand : ICommand
 
 		var transaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount);
 		stockItem.Amount += amount;
-		stockItem.Update(() => DatabaseManager.Add<Transaction>(transaction));
+		stockItem.Update(() => MainManager.Instance.DatabaseManager.Add<Transaction>(transaction));
 
 		return false;
 	}

@@ -31,7 +31,7 @@ public class TireManager : NotificationBase
 	internal async void Init()
 	{
 		this._editableTires.Clear();
-		var tires = await DatabaseManager.GetAll<Tire>();
+		var tires = await MainManager.Instance.DatabaseManager.GetAll<Tire>();
 		tires.ForEach(this._editableTires.Add);
 	}
 
@@ -44,7 +44,7 @@ public class TireManager : NotificationBase
 		}
 
 		_editableTires.Add(tire);
-		DatabaseManager.Add<Tire>(tire);
+		MainManager.Instance.DatabaseManager.Add<Tire>(tire);
 		Trace.WriteLine("Tire added.");
 	}
 
@@ -53,7 +53,7 @@ public class TireManager : NotificationBase
 		if (tire == null) return;
 
 		_editableTires.Remove(tire);
-		DatabaseManager.Delete<Tire>(tire);
+		MainManager.Instance.DatabaseManager.Delete<Tire>(tire);
 		Trace.WriteLine("Tire deleted.");
 	}
 
@@ -61,6 +61,6 @@ public class TireManager : NotificationBase
 	{
 		if (!_editableTires.Contains(tire)) return;
 
-		DatabaseManager.Update<Tire>(tire).ContinueWith(_ => callback.Invoke());
+		MainManager.Instance.DatabaseManager.Update<Tire>(tire).ContinueWith(_ => callback.Invoke());
 	}
 }

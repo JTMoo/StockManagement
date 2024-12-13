@@ -31,7 +31,7 @@ public class SparePartManager : NotificationBase
 	internal async void Init()
 	{
 		this._editableSpareParts.Clear();
-		var spareParts = await DatabaseManager.GetAll<SparePart>();
+		var spareParts = await MainManager.Instance.DatabaseManager.GetAll<SparePart>();
 		spareParts.ForEach(this._editableSpareParts.Add);
 	}
 
@@ -44,7 +44,7 @@ public class SparePartManager : NotificationBase
 		}
 
 		_editableSpareParts.Add(sparePart);
-		DatabaseManager.Add<SparePart>(sparePart);
+		MainManager.Instance.DatabaseManager.Add<SparePart>(sparePart);
 		Trace.WriteLine("Spare Part added.");
 	}
 
@@ -53,7 +53,7 @@ public class SparePartManager : NotificationBase
 		if (sparePart == null) return;
 
 		_editableSpareParts.Remove(sparePart);
-		DatabaseManager.Delete<SparePart>(sparePart);
+		MainManager.Instance.DatabaseManager.Delete<SparePart>(sparePart);
 		Trace.WriteLine("Spare Part deleted.");
 	}
 
@@ -61,6 +61,6 @@ public class SparePartManager : NotificationBase
 	{
 		if (!_editableSpareParts.Contains(sparePart)) return;
 
-		DatabaseManager.Update<SparePart>(sparePart).ContinueWith(_ => callback.Invoke());
+		MainManager.Instance.DatabaseManager.Update<SparePart>(sparePart).ContinueWith(_ => callback.Invoke());
 	}
 }

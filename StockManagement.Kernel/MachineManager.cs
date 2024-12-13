@@ -31,7 +31,7 @@ public class MachineManager : NotificationBase
 	internal async void Init ()
 	{
 		this._editableMachines.Clear();
-		var machines = await DatabaseManager.GetAll<Machine>();
+		var machines = await MainManager.Instance.DatabaseManager.GetAll<Machine>();
 		machines.ForEach(this._editableMachines.Add);
 	}
 
@@ -44,7 +44,7 @@ public class MachineManager : NotificationBase
 		}
 
 		_editableMachines.Add(machine);
-		DatabaseManager.Add<Machine>(machine);
+		MainManager.Instance.DatabaseManager.Add<Machine>(machine);
 		Trace.WriteLine("Machine added.");
 	}
 
@@ -53,7 +53,7 @@ public class MachineManager : NotificationBase
 		if (machine == null) return;
 
 		_editableMachines.Remove(machine);
-		DatabaseManager.Delete<Machine>(machine);
+		MainManager.Instance.DatabaseManager.Delete<Machine>(machine);
 		Trace.WriteLine("Machine deleted.");
 	}
 
@@ -61,6 +61,6 @@ public class MachineManager : NotificationBase
 	{
 		if (!_editableMachines.Contains(machine)) return;
 
-		DatabaseManager.Update<Machine>(machine).ContinueWith(_ => callback.Invoke());
+		MainManager.Instance.DatabaseManager.Update<Machine>(machine).ContinueWith(_ => callback.Invoke());
 	}
 }

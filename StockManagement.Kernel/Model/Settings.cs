@@ -45,6 +45,6 @@ public class Settings : BaseDocument
 			pi.SetValue(this, pi.GetValue(settings));
 		}
 
-		return DatabaseManager.Update<Settings>(this);
+		return MainManager.Instance.DatabaseManager.Update<Settings>(this);
 	}
 }
