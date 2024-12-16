@@ -4,30 +4,33 @@ using StockManagement.Kernel.Model;
 namespace StockManagement.Kernel.Database;
 
 
-public class InvoiceServiceProvider : IInvoiceServiceProvider
+public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvider
 {
-	public Task AddInvoiceAsync(Invoice customer)
+	private readonly IDatabase _database = database;
+
+
+	public Task AddInvoiceAsync(Invoice invoice)
 	{
-		throw new NotImplementedException();
+		return _database.Add<Invoice>(invoice);
 	}
 
-	public Task<DeleteResult> DeleteInvoiceAsync(Invoice customer)
+	public Task<DeleteResult> DeleteInvoiceAsync(Invoice invoice)
 	{
-		throw new NotImplementedException();
+		return _database.Delete<Invoice>(invoice);
 	}
 
-	public Task<Invoice> GetInvoiceAync(int invoiceId)
+	public Task<Invoice> GetInvoiceAync(int invoiceNumber)
 	{
-		throw new NotImplementedException();
+		return _database.GetOneAsync<Invoice>(invoice => invoice.Number == invoiceNumber);
 	}
 
 	public Task<IEnumerable<Invoice>> GetInvoicesAsync()
 	{
-		throw new NotImplementedException();
+		return _database.GetAll<Invoice>();
 	}
 
-	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice customer)
+	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice invoice)
 	{
-		throw new NotImplementedException();
+		return _database.Update<Invoice>(invoice);
 	}
 }

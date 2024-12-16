@@ -321,4 +321,16 @@
   <data name="unexpectedError" xml:space="preserve">
     <value>Es ist ein unvorhergesehener Fehler aufgetreten. Bitte kontaktieren Sie den Support, um diesen zu beheben.</value>
   </data>
+  <data name="invoiceId" xml:space="preserve">
+    <value>Rechnungsnummer</value>
+  </data>
+  <data name="searchInvoiceIds" xml:space="preserve">
+    <value>Suche in Rechnungsnummern:</value>
+  </data>
+  <data name="searchDates" xml:space="preserve">
+    <value>Suche in Erstellungsdaten:</value>
+  </data>
+  <data name="searchCustomers" xml:space="preserve">
+    <value>Suche in Kunden:</value>
+  </data>
 </root>

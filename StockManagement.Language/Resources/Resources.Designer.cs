@@ -277,6 +277,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invoice ID.
+        /// </summary>
+        public static string invoiceId {
+            get {
+                return ResourceManager.GetString("invoiceId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invoices.
         /// </summary>
         public static string invoices {
@@ -471,6 +480,33 @@ namespace StockManagement.Language {
         public static string searchCustomerIds {
             get {
                 return ResourceManager.GetString("searchCustomerIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search in customers:.
+        /// </summary>
+        public static string searchCustomers {
+            get {
+                return ResourceManager.GetString("searchCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search in dates:.
+        /// </summary>
+        public static string searchDates {
+            get {
+                return ResourceManager.GetString("searchDates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Invoice IDs:.
+        /// </summary>
+        public static string searchInvoiceIds {
+            get {
+                return ResourceManager.GetString("searchInvoiceIds", resourceCulture);
             }
         }
         

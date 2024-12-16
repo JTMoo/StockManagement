@@ -6,9 +6,9 @@ namespace StockManagement.Kernel.Database;
 
 public interface IInvoiceServiceProvider
 {
-	public Task<Invoice> GetInvoiceAync(int invoiceId);
+	public Task<Invoice> GetInvoiceAync(int invoiceNumber);
 	public Task<IEnumerable<Invoice>> GetInvoicesAsync();
-	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice customer);
-	public Task<DeleteResult> DeleteInvoiceAsync(Invoice customer);
-	public Task AddInvoiceAsync(Invoice customer);
+	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice invoice);
+	public Task<DeleteResult> DeleteInvoiceAsync(Invoice invoice);
+	public Task AddInvoiceAsync(Invoice invoice);
 }

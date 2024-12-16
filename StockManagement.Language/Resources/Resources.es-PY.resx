@@ -283,7 +283,7 @@
     <value>Teléfono</value>
   </data>
   <data name="identificationNumber" xml:space="preserve">
-    <value>Numero de identificacion (C.I. / RUC)</value>
+    <value>Número de identificacion (C.I. / RUC)</value>
   </data>
   <data name="postboxNumber" xml:space="preserve">
     <value>Casilla de correo</value>
@@ -320,5 +320,17 @@
   </data>
   <data name="unexpectedError" xml:space="preserve">
     <value>Se ha producido un error inesperado. Póngase en contacto con el soporte para resolver el problema.</value>
+  </data>
+  <data name="invoiceId" xml:space="preserve">
+    <value>Número de factura</value>
+  </data>
+  <data name="searchInvoiceIds" xml:space="preserve">
+    <value>Buscar en números de factura</value>
+  </data>
+  <data name="searchDates" xml:space="preserve">
+    <value>Buscar en fechas:</value>
+  </data>
+  <data name="searchCustomers" xml:space="preserve">
+    <value>Buscar en clientes:</value>
   </data>
 </root>
