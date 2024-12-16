@@ -25,6 +25,7 @@ internal class MainViewModel : NotificationBase
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 		OpenStockItemsViewCommand = new RelayCommand<string>(_ => this.CurrentView = new StockItemsViewModel());
 		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(new CustomerServiceProvider(MainManagerFacade.Database)));
+		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(new InvoiceServiceProvider()));
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
@@ -34,6 +35,7 @@ internal class MainViewModel : NotificationBase
 	public RelayCommand<string> QuitCommand { get; }
 	public RelayCommand<string> OpenSettingsCommand { get; }
 	public RelayCommand<string> OpenStockItemsViewCommand { get; }
+	public RelayCommand<string> OpenInvoiceViewCommand { get; }
 	public RelayCommand<string> OpenCustomerViewCommand { get; }
 	public DialogViewModelBase? Dialog
 	{

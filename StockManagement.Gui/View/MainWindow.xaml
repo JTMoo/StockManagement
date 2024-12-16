@@ -31,6 +31,7 @@
 						VerticalAlignment="Bottom">
 				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
 							 Content="{x:Static lang:Resources.invoices}"
+							 Command="{Binding OpenInvoiceViewCommand}" 
 							 IsEnabled="False" />
 				<RadioButton Style="{StaticResource MenuToggleButtonStyle}"
 							 Content="{x:Static lang:Resources.clients}"
