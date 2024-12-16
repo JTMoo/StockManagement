@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
 
@@ -38,16 +39,20 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 
 	private async Task<ExcelImportDialogViewModel> InitializeAsync(string filePath)
 	{
-		await Task.Run(async () => await this.GetExcelSheetNames(filePath));
+		await this.GetExcelSheetNames(filePath);
 		return this;
 	}
 
-	private async Task GetExcelSheetNames(string filePath)
+	private Task GetExcelSheetNames(string filePath)
 	{
-		await Task.Run(() => this.workbook = new XLWorkbook(filePath));
-		foreach (var sheet in this.workbook.Worksheets)
+		return Task.Run(() =>
 		{
-			this.WorksheetNames.Add(sheet.Name);
-		}
+			this.workbook = new XLWorkbook(filePath);
+
+			foreach (var sheet in this.workbook.Worksheets)
+			{
+				this.WorksheetNames.Add(sheet.Name);
+			}
+		});
 	}
 }

@@ -259,6 +259,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed the conversion process for a given excel column to the specified parameter. This happened for the parameter {0} and the column with the letter {1}..
+        /// </summary>
+        public static string failedConversion {
+            get {
+                return ResourceManager.GetString("failedConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to German.
         /// </summary>
         public static string german {

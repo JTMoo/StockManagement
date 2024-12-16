@@ -32,7 +32,6 @@ public class InvoiceViewModel : ViewModelBase
 
 
 	#region Properties
-	public RelayCommand<string> CreateCustomerCommand { get; }
 	public RelayCommand<Customer> MoreInfoCommand { get; }
 
 	public ObservableCollection<Invoice> FilteredInvoices
@@ -69,7 +68,6 @@ public class InvoiceViewModel : ViewModelBase
 
 	private async Task<InvoiceViewModel> InitializeAsync()
 	{
-
 		await _invoiceServiceProvider.GetInvoicesAsync();
 		return this;
 	}

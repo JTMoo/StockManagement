@@ -5,12 +5,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
 using StockManagement.Gui.Commands;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Commands.Data;
 using StockManagement.Kernel.Commands.StockItemCommands;
+using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
 
@@ -52,17 +54,25 @@ public partial class TableMappingViewModel : DialogViewModelBase
 	{
 		GuiManager.Instance.ShowWaitDialog();
 
-		var stockItems = this.ExtractStockItemsFromExcelSheet();
-		var command = new StockItemCreationCommand
+		try
 		{
-			Data = new StockItemCommandData()
+			var stockItems = this.ExtractStockItemsFromExcelSheet();
+			var command = new StockItemCreationCommand
 			{
-				DataToRegister = stockItems,
-				Type = StockItemCommandData.CreationCommandType.Multiple,
-				Callback = _ => GuiManager.Instance.HideWaitDialog()
-			}
-		};
-		MainManagerFacade.PushCommand(command);
+				Data = new StockItemCommandData()
+				{
+					DataToRegister = stockItems,
+					Type = StockItemCommandData.CreationCommandType.Multiple,
+					Callback = _ => GuiManager.Instance.HideWaitDialog()
+				}
+			};
+			MainManagerFacade.PushCommand(command);
+		}
+		catch(FailedConversionException ex)
+		{
+			MessageBox.Show(ex.Message);
+			GuiManager.Instance.HideWaitDialog();
+		}
 
 		base.Confirm(param);
 	}
@@ -98,16 +108,20 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		List<Action<IXLRangeRow, StockItem>> matchingActions = [];
 		foreach (var pair in this.tableNamesToProperties)
 		{
-			if (!TryGetColumnLetterFrom(pair.Value, headerRowRange, out string columnLetter)) continue;
+			if (!TryGetColumnNumberFrom(pair.Value, headerRowRange, out int columnNumber)) continue;
 			matchingActions.Add((row, stockItem) =>
 			{
 				try
 				{
-					if (row.Cell(columnLetter).GetString() is not string cellValue || string.IsNullOrEmpty(cellValue)) return;
+					if (row.Cell(columnNumber).GetString() is not string cellValue || string.IsNullOrEmpty(cellValue)) return;
 					if (TypeDescriptor.GetConverter(pair.Key.PropertyType).ConvertFromString(cellValue) is not object propertyValue) return;
 					pair.Key.SetValue(stockItem, propertyValue);
 				}
-				catch (Exception ex)
+				catch (ArgumentException argEx)
+				{
+					throw new FailedConversionException(string.Concat(string.Format(Language.Resources.failedConversion, argEx.ParamName, columnNumber), $" ({argEx.Message})"));
+				}
+				catch(Exception ex)
 				{
 					Trace.WriteLine($"Exception durch matchingActions: {ex.Message}");
 					return;
@@ -149,14 +163,19 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		this.tableNamesToProperties[info] = selectedTableName;
 	}
 
-	private static bool TryGetColumnLetterFrom(string value, IXLRangeRow headerRowRange, out string columnLetter)
+	private static bool TryGetColumnNumberFrom(string value, IXLRangeRow headerRowRange, out int columnNumber)
 	{
-		columnLetter = string.Empty;
+		columnNumber = -1;
 
-		var matchingCell = headerRowRange.Cells().FirstOrDefault(cell => cell.GetString().ReplaceLineBreakWithWhitespace().Equals(value, StringComparison.InvariantCultureIgnoreCase));
-		if (matchingCell == null) return false;
+		foreach (var cell in headerRowRange.Cells())
+		{
+			columnNumber++;
+			if(cell.GetString().ReplaceLineBreakWithWhitespace().Equals(value, StringComparison.InvariantCultureIgnoreCase))
+			{
+				return true;
+			}
+		}
 
-		columnLetter = matchingCell.WorksheetColumn().ColumnLetter();
-		return true;
+		return false;
 	}
 }

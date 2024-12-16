@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Database;
@@ -11,6 +12,10 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 
 	public Task AddInvoiceAsync(Invoice invoice)
 	{
+		// This is not ideal - the add process should fail if the number is taken!
+		var invoiceExistsCheck = this.GetInvoiceAync(invoice.Number).ContinueWith(task => task.Result != null).Result;
+		if (invoiceExistsCheck) throw new InvoiceNumberAlreadyExistsException();
+
 		return _database.Add<Invoice>(invoice);
 	}
 
