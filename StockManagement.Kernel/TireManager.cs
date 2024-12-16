@@ -41,6 +41,7 @@ public class TireManager : NotificationBase
 		if (this.Tires.Any(existingTire => existingTire.Code == tire.Code))
 		{
 			Trace.WriteLine($"{Language.Resources.tire} with the same {Language.Resources.code} already exists: {tire}");
+			return;
 		}
 
 		_editableTires.Add(tire);

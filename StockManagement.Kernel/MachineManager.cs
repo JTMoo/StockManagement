@@ -41,6 +41,7 @@ public class MachineManager : NotificationBase
 		if (this.Machines.Any(existingMachine => existingMachine.Code == machine.Code))
 		{
 			Trace.WriteLine($"{Language.Resources.machine} with the same {Language.Resources.code} already exists: {machine}");
+			return;
 		}
 
 		_editableMachines.Add(machine);

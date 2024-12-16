@@ -41,6 +41,7 @@ public class SparePartManager : NotificationBase
 		if (this.SpareParts.Any(existingSparePart => existingSparePart.Code == sparePart.Code))
 		{
 			Trace.WriteLine($"{Language.Resources.sparePart} with the same {Language.Resources.code} already exists: {sparePart}");
+			return;
 		}
 
 		_editableSpareParts.Add(sparePart);
