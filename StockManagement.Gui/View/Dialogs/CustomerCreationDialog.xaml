@@ -25,6 +25,7 @@
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
 					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
 					<RowDefinition Height="80"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
@@ -89,11 +90,19 @@
 													IsEnabled="False"
 													ActualText="{Binding Customer.CustomerId, Mode=TwoWay}" />
 
-				<!-- Adress -->
+				<!-- Miscellaneous -->
 				<TextBlock Grid.Row="7" Grid.Column="0"
 						   Style="{StaticResource IndentedDialogTextBlockStyle}"
-						   Text="{x:Static lang:Resources.address}" />
+						   Text="{x:Static lang:Resources.miscellaneous}" />
 				<controls:LargeTextBoxWithPreviewControl Grid.Row="7" Grid.Column="1"
+														 Margin="3"
+														 ActualText="{Binding Customer.Miscellaneous, Mode=TwoWay}" />
+
+				<!-- Adress -->
+				<TextBlock Grid.Row="8" Grid.Column="0"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.address}" />
+				<controls:LargeTextBoxWithPreviewControl Grid.Row="8" Grid.Column="1"
 														 Margin="3"
 														 ActualText="{Binding Customer.Address, Mode=TwoWay}" />
 			</Grid>

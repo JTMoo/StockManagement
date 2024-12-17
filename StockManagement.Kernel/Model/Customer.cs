@@ -14,6 +14,7 @@ public class Customer : BaseDocument
 	private string identificationNumber = string.Empty;
 	private string postboxNumber = string.Empty;
 	private string email = string.Empty;
+	private string miscellaneous = string.Empty;
 
 
 	public Customer()
@@ -69,6 +70,12 @@ public class Customer : BaseDocument
 	{
 		get { return this.email; }
 		set { this.SetField(ref this.email, value); }
+	}
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.miscellaneous))]
+	public string Miscellaneous
+	{
+		get { return this.miscellaneous; }
+		set { this.SetField(ref this.miscellaneous, value); }
 	}
 	#endregion Properties
 }
