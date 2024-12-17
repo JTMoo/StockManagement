@@ -49,8 +49,8 @@
 				<GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
 					<GridView.Columns>
 						<GridViewColumn Header="{x:Static lang:Resources.name}" Width="Auto" DisplayMemberBinding="{Binding Name}" />
-						<GridViewColumn Header="{x:Static lang:Resources.lastname}" Width="200" DisplayMemberBinding="{Binding Lastname}" />
-						<GridViewColumn Header="{x:Static lang:Resources.customerId}" Width="75" DisplayMemberBinding="{Binding CustomerId}" />
+						<GridViewColumn Header="{x:Static lang:Resources.lastname}" Width="Auto" DisplayMemberBinding="{Binding Lastname}" />
+						<GridViewColumn Header="{x:Static lang:Resources.customerId}" Width="Auto" DisplayMemberBinding="{Binding CustomerId}" />
 					</GridView.Columns>
 				</GridView>
 			</ListView.View>
