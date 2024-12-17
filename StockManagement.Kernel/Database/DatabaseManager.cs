@@ -52,9 +52,4 @@ public class DatabaseManager : IDatabase
 		var db = client.GetDatabase(DatabaseName);
 		return db.GetCollection<T>(collectionName);
 	}
-
-	public Task<T> GetOneAsync<T>()
-	{
-		throw new NotImplementedException();
-	}
 }
