@@ -123,7 +123,7 @@
 				BorderThickness="2"
 				CornerRadius="10"
 				Padding="5"
-				BorderBrush="{StaticResource BorderBlack}">
+				BorderBrush="{StaticResource MainBorder}">
 			<StackPanel Orientation="Vertical"
 						CanVerticallyScroll="True">
 				<TextBlock Text="{x:Static lang:Resources.name}"
