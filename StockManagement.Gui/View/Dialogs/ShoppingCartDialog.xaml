@@ -34,16 +34,18 @@
 		<!-- Shopping Cart Items List -->
 		<ListView Grid.Column="1"
 				  Grid.Row="3"
-				  ItemsSource="{Binding Items}">
+				  ItemsSource="{Binding Items}"
+				  Style="{StaticResource DarkListViewStyle}">
 			<ListView.View>
-				<GridView>
+				<GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
 					<GridView.Columns>
 						<!-- Amount Column -->
 						<GridViewColumn Header="{x:Static lang:Resources.amount}" Width="Auto">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
 									<StackPanel Orientation="Horizontal">
-										<TextBox Text="{Binding Amount}"/>
+										<controls:TextBoxWithPreviewControl Margin="3"
+																			ActualText="{Binding Amount}"/>
 									</StackPanel>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
@@ -117,11 +119,16 @@
 		<!-- Total Price -->
 		<StackPanel Grid.Column="1" Grid.Row="4"
 					Orientation="Horizontal">
-			<TextBlock Text="{x:Static lang:Resources.total}" />
-			<TextBlock Text=": " />
-			<TextBlock Text="{Binding Total}" />
-			<TextBlock Text=" Gs. - " />
-			<TextBlock Text="{Binding TotalInWords}" />
+			<TextBlock Text="{x:Static lang:Resources.total}"
+					   Style="{StaticResource BaseTextBlockStyle}"/>
+			<TextBlock Text=": "
+					   Style="{StaticResource BaseTextBlockStyle}" />
+			<TextBlock Text="{Binding Total}"
+					   Style="{StaticResource BaseTextBlockStyle}" />
+			<TextBlock Text=" Gs. - "
+					   Style="{StaticResource BaseTextBlockStyle}" />
+			<TextBlock Text="{Binding TotalInWords}"
+					   Style="{StaticResource BaseTextBlockStyle}" />
 		</StackPanel>
 
 		<controls:DialogActionBarControl Grid.Row="99"

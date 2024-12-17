@@ -30,19 +30,9 @@
 				</ContextMenu>
 			</ListView.Resources>
 			<ListView.ItemContainerStyle>
-				<Style TargetType="{x:Type ListViewItem}" >
+				<Style TargetType="{x:Type ListViewItem}"
+					   BasedOn="{StaticResource DarkListViewItemStyle}" >
 					<Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-					<Setter Property="Background" Value="Transparent" />
-					<Style.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{StaticResource SelectedMainBlue}" />
-							<Setter Property="BorderBrush" Value="{StaticResource MainBorder}" />
-						</Trigger>
-						<Trigger Property="IsSelected" Value="True">
-							<Setter Property="Background" Value="{StaticResource SelectedMainBlue}" />
-							<Setter Property="BorderBrush" Value="{StaticResource MainBorder}" />
-						</Trigger>
-					</Style.Triggers>
 				</Style>
 			</ListView.ItemContainerStyle>
 			<ListView.View>
