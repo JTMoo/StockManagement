@@ -3,6 +3,7 @@ using StockManagement.Kernel.Database;
 using System.Diagnostics;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Diagnostics;
+using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Kernel;
 
@@ -40,12 +41,14 @@ public class MainManager : NotificationBase, IDisposable
 	public Settings Settings { get; internal set; }
 
 
-    public static async Task Initialize()
+    public static async Task<IDatabase> Initialize()
     {
-        if (_isInitialized) return;
+        if (_isInitialized) return Instance.DatabaseManager;
 
         await Instance.Init();
-    }
+        return Instance.DatabaseManager;
+
+	}
 
 
     public static void Dispose(bool disposing)

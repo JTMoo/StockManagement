@@ -13,9 +13,9 @@ public partial class App
 
 	protected override async void OnStartup(StartupEventArgs e)
     {
-        await MainManager.Initialize();
+        var databaseAccess = await MainManager.Initialize();
 
-        _mainViewModel = new MainViewModel();
+        _mainViewModel = await MainViewModel.CreateAsync(databaseAccess);
         GuiManager.Instance.Init(_mainViewModel);
 
         new MainWindow()

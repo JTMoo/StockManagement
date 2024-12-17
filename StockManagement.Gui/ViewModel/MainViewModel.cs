@@ -3,8 +3,10 @@ using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Gui.ViewModel.Primary;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace StockManagement.Gui.ViewModel;
@@ -18,14 +20,14 @@ internal class MainViewModel : NotificationBase
 	private int responsiveDialogBorderThickness;
 
 
-	public MainViewModel()
+	private MainViewModel(IDatabase database)
 	{
-		this.CurrentView = new StockItemsViewModel();
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
-		OpenStockItemsViewCommand = new RelayCommand<string>(_ => this.CurrentView = new StockItemsViewModel());
-		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(new CustomerServiceProvider(MainManagerFacade.Database)));
-		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(new InvoiceServiceProvider(MainManagerFacade.Database)));
+
+		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database)));
+		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(new CustomerServiceProvider(database)));
+		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(new InvoiceServiceProvider(database)));
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
@@ -69,6 +71,17 @@ internal class MainViewModel : NotificationBase
 	}
 	#endregion Properties
 
+	public static Task<MainViewModel> CreateAsync(IDatabase database)
+	{
+		var ret = new MainViewModel(database);
+		return ret.InitializeAsync(database);
+	}
+
+	private async Task<MainViewModel> InitializeAsync(IDatabase database)
+	{
+		this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database));
+		return this;
+	}
 
 	private void OnDialogClosing(bool success)
 	{

@@ -31,6 +31,10 @@
 							  FontSize="16"
 							  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItems}"
 							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.AddToShoppingCartCommand}" />
+					<MenuItem Header="{x:Static lang:Resources.deleteSelectedItems}"
+							  FontSize="16"
+							  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=SelectedItems}"
+							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DeleteSelectedItemsCommand}" />
 				</ContextMenu>
 			</ListView.Resources>
 			<ListView.ItemContainerStyle>

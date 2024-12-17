@@ -9,12 +9,12 @@ using System.Collections.Generic;
 using System;
 using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Kernel.Model.Types;
-using StockManagement.Kernel;
 using System.Text.RegularExpressions;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Diagnostics;
+using StockManagement.Kernel.Database.Interfaces;
+using System.Threading.Tasks;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -28,29 +28,29 @@ public class StockItemsViewModel : ViewModelBase
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
+	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 
 
-	public StockItemsViewModel()
+	private StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider)
 	{
+		_stockItemServiceProvider = stockItemServiceProvider;
+
 		this.MoreInfoCommand = new RelayCommand<StockItem>(stockItem => GuiManager.Instance.MainViewModel.Dialog = new MoreInfoDialogViewModel(stockItem));
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 		this.ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
 		this.AddToShoppingCartCommand = new RelayCommand<IEnumerable>(this.OnAddToShoppingCartCommand);
+		this.DeleteSelectedItemsCommand = new RelayCommand<IEnumerable>(this.OnDeleteSelectedItemsCommand);
 		this.ShoppingCartCommand = new RelayCommand<string>(this.OnShoppingCartCommand);
-
-		((INotifyCollectionChanged)MainManagerFacade.Machines).CollectionChanged += (_, __) => this.OnRefreshSearch();
-		((INotifyCollectionChanged)MainManagerFacade.SpareParts).CollectionChanged += (_, __) => this.OnRefreshSearch();
-		((INotifyCollectionChanged)MainManagerFacade.Tires).CollectionChanged += (_, __) => this.OnRefreshSearch();
 
 		this.PropertyChanged += this.OnPropertyChangedEvent;
 
-		this.OnRefreshSearch();
 		this.SetupFilterConditions();
 	}
 
 
 	#region Properties
 	public RelayCommand<string> ExcelImportCommand { get; }
+	public RelayCommand<IEnumerable> DeleteSelectedItemsCommand { get; }
 	public RelayCommand<IEnumerable> AddToShoppingCartCommand { get; }
 	public RelayCommand<string> ShoppingCartCommand { get; }
 	public RelayCommand<StockItem> MoreInfoCommand { get; }
@@ -95,7 +95,19 @@ public class StockItemsViewModel : ViewModelBase
 	}
 	#endregion Properties
 
-	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
+	public static Task<StockItemsViewModel> CreateAsync(IStockItemServiceProvider stockItemServiceProvider)
+	{
+		var ret = new StockItemsViewModel(stockItemServiceProvider);
+		return ret.InitializeAsync();
+	}
+
+	private async Task<StockItemsViewModel> InitializeAsync()
+	{
+		await this.UpdateStockItemsAsync();
+		return this;
+	}
+
+	private async void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
 	{
 		switch(e.PropertyName)
 		{
@@ -103,23 +115,21 @@ public class StockItemsViewModel : ViewModelBase
 			case nameof(this.SelectedSearchManufacturer):
 			case nameof(this.SearchNames):
 			case nameof(this.SearchCodes):
-				this.OnRefreshSearch();
+				await this.UpdateStockItemsAsync();
 				break;
 		}
 	}
 
-	private void OnRefreshSearch()
+	private async Task UpdateStockItemsAsync()
 	{
-		var filteredItems = GetStockItems().Where(_filterFunctions);
-		this.FilteredStockItems = new ObservableCollection<StockItem>(filteredItems);
+		var filteredStockItems = await _stockItemServiceProvider.GetAllStockItemsAsync().ContinueWith(task => task.Result.Where(_filterFunctions));
+		this.FilteredStockItems = new(filteredStockItems);
 	}
 
-	private static IEnumerable<StockItem> GetStockItems()
+	private async void UpdateStockItemsOnSuccess(bool success)
 	{
-		var machines = MainManagerFacade.Machines.Cast<StockItem>();
-		var spareParts = MainManagerFacade.SpareParts.Cast<StockItem>();
-		var tires = MainManagerFacade.Tires.Cast<StockItem>();
-		return machines.Concat(spareParts).Concat(tires);
+		if (!success) return;
+		await this.UpdateStockItemsAsync();
 	}
 
 	private void OnCreateStockItemCommand(string param)
@@ -128,6 +138,7 @@ public class StockItemsViewModel : ViewModelBase
 			return;
 
 		GuiManager.Instance.MainViewModel.Dialog = new StockItemTypeSelectionDialogViewModel(GuiManager.Instance.StockItemTypes);
+		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
 
 	private void OnAddToShoppingCartCommand(IEnumerable selectedItems)
@@ -135,6 +146,32 @@ public class StockItemsViewModel : ViewModelBase
 		var items = selectedItems.OfType<StockItem>().ConvertToShoppingCartList();
 
 		this.ShoppingCartItems.EqualizeTo(items);
+	}
+
+	private async void OnDeleteSelectedItemsCommand(IEnumerable selectedItems)
+	{
+		var items = selectedItems.OfType<StockItem>().ToList();
+		var result = MessageBox.Show(string.Format(Language.Resources.selectedItemsDeletionPrompt, items.Count), Language.Resources.deleteSelectedItems, MessageBoxButton.YesNo);
+		if (result != MessageBoxResult.Yes) return;
+
+		GuiManager.Instance.ShowWaitDialog();
+		foreach (var item in items)
+		{
+			if(item is Machine)
+			{
+				await _stockItemServiceProvider.DeleteStockItemAsync<Machine>(item);
+			}
+			else if (item is SparePart)
+			{
+				await _stockItemServiceProvider.DeleteStockItemAsync<SparePart>(item);
+			}
+			else
+			{
+				await _stockItemServiceProvider.DeleteStockItemAsync<Tire>(item);
+			}
+		}
+		await this.UpdateStockItemsAsync();
+		GuiManager.Instance.HideWaitDialog();
 	}
 
 	private void OnShoppingCartCommand(string obj)

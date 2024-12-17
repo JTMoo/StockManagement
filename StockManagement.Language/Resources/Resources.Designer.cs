@@ -214,6 +214,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete selected Items.
+        /// </summary>
+        public static string deleteSelectedItems {
+            get {
+                return ResourceManager.GetString("deleteSelectedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Descritpion.
         /// </summary>
         public static string description {
@@ -561,6 +570,15 @@ namespace StockManagement.Language {
         public static string selectedFileInUse {
             get {
                 return ResourceManager.GetString("selectedFileInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} items will be deleted. Are you sure?.
+        /// </summary>
+        public static string selectedItemsDeletionPrompt {
+            get {
+                return ResourceManager.GetString("selectedItemsDeletionPrompt", resourceCulture);
             }
         }
         

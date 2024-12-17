@@ -80,7 +80,6 @@ public class CustomerViewModel : ViewModelBase
 		return this;
 	}
 
-
 	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
 	{
 		switch (e.PropertyName)
