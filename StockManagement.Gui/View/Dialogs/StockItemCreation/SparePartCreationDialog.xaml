@@ -9,110 +9,80 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="..\Dictionaries\ComboBoxDictionary.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-			<ObjectDataProvider x:Key="typeFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-				<ObjectDataProvider.MethodParameters>
-					<x:Type TypeName="types:ManufacturerType"/>
-				</ObjectDataProvider.MethodParameters>
-			</ObjectDataProvider>
-		</ResourceDictionary>
-	</UserControl.Resources>
-	
-	<Grid Margin="10">
+	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="10"/>
-			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
-			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
-			<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition />
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
-		
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
-			<ColumnDefinition />
-			<ColumnDefinition Width="{StaticResource smallGridColumnDialog}"/>
-			<ColumnDefinition />
-		</Grid.ColumnDefinitions>
+		<ScrollViewer Style="{StaticResource DarkScrollViewerStyle}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+					<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+					<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+					<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+					<RowDefinition Height="{StaticResource smallGridRowDialog}"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="{StaticResource TextBlockDialogColumnWidth}"/>
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
 
-		<!-- Name -->
-		<TextBlock Grid.Row="1"
-				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{x:Static lang:Resources.name}" />
-		<Border Grid.Row="1"
-				Grid.Column="1"
-				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Name}"
-					 VerticalContentAlignment="Center" />
-		</Border>
+				<!-- Name -->
+				<TextBlock Grid.Row="0"
+					   Style="{StaticResource IndentedDialogTextBlockStyle}"
+					   Text="{x:Static lang:Resources.name}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="0" Grid.Column="1"
+												Margin="3"
+												ActualText="{Binding Name, Mode=TwoWay}" />
 
-		<!-- Price -->
-		<TextBlock Grid.Row="2"
-				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{x:Static lang:Resources.price}" />
-		<Border Grid.Row="2"
-				Grid.Column="1"
-				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Price}"
-					 VerticalContentAlignment="Center" />
-		</Border>
+				<!-- Price -->
+				<TextBlock Grid.Row="1"
+					   Style="{StaticResource IndentedDialogTextBlockStyle}"
+					   Text="{x:Static lang:Resources.price}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="1" Grid.Column="1"
+												Margin="3"
+												ActualText="{Binding Price, Mode=TwoWay}" />
 
-		<!-- Manufacturer Type -->
-		<TextBlock Grid.Row="3"
-				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{x:Static lang:Resources.manufacturer}" />
-		<ComboBox Grid.Row="3"
-				  Grid.Column="1"
-				  Style="{StaticResource CustomComboBoxStyle}"
-				  ItemsSource="{Binding Source={StaticResource typeFromEnum}}"
-				  SelectedItem="{Binding SelectedManufacturer}"/>
+				<!-- Code -->
+				<TextBlock Grid.Row="2"
+					   Style="{StaticResource IndentedDialogTextBlockStyle}"
+					   Text="{x:Static lang:Resources.code}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="2" Grid.Column="1"
+												Margin="3"
+												ActualText="{Binding Code, Mode=TwoWay}" />
 
-		<!-- Description -->
-		<TextBlock Grid.Row="4"
-				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{x:Static lang:Resources.description}"
-				   TextWrapping="Wrap" />
-		<Border Grid.Row="4"
-				Grid.Column="1"
-				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Description}"
-					 TextWrapping="Wrap"
-					 VerticalScrollBarVisibility="Auto" />
-		</Border>
-		
-		<!-- Code -->
-		<TextBlock Grid.Column="2"
-				   Grid.Row="1"
-				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{x:Static lang:Resources.code}"
-				   TextWrapping="Wrap" />
-		<Border Grid.Row="1"
-				Grid.Column="3"
-				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Code}"
-					 VerticalContentAlignment="Center" />
-		</Border>
-		
-		<!-- Location -->
-		<TextBlock Grid.Column="2"
-				   Grid.Row="2"
-				   Style="{StaticResource BaseDialogTextBlockStyle}"
-				   Text="{x:Static lang:Resources.location}"
-				   TextWrapping="Wrap" />
-		<Border Grid.Row="2"
-				Grid.Column="3"
-				Style="{StaticResource BaseDialogTextBoxBorderStyle}">
-			<TextBox Text="{Binding Location}"
-					 VerticalContentAlignment="Center" />
-		</Border>
+				<!-- Manufacturer Type -->
+				<TextBlock Grid.Row="3"
+					   Style="{StaticResource IndentedDialogTextBlockStyle}"
+					   Text="{x:Static lang:Resources.manufacturer}" />
+				<ComboBox Grid.Row="3" Grid.Column="1"
+					  Style="{StaticResource CustomComboBoxStyle}"
+					  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
+					  SelectedItem="{Binding SelectedManufacturer}"/>
 
-		<controls:DialogActionBarControl Grid.Row="99"
-										 Grid.ColumnSpan="99"
-										 ConfirmCommand="{Binding ConfirmDialogCommand}"
-										 CancelCommand="{Binding CancelDialogCommand}" />
+				<!-- Rim Diameter -->
+				<TextBlock Grid.Row="4"
+					   Style="{StaticResource IndentedDialogTextBlockStyle}"
+					   Text="{x:Static lang:Resources.location}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="4" Grid.Column="1"
+												Margin="3"
+												ActualText="{Binding Location, Mode=TwoWay}" />
+
+				<!-- Description -->
+				<TextBlock Grid.Row="7"
+					   Style="{StaticResource IndentedDialogTextBlockStyle}"
+					   Text="{x:Static lang:Resources.description}" />
+				<controls:LargeTextBoxWithPreviewControl Grid.Row="7" Grid.Column="1"
+													 Margin="3"
+													 ActualText="{Binding Description, Mode=TwoWay}" />
+
+			</Grid>
+		</ScrollViewer>
+
+		<controls:DialogActionBarControl Grid.Row="1"
+									 ConfirmCommand="{Binding ConfirmDialogCommand}"
+									 CancelCommand="{Binding CancelDialogCommand}" />
 	</Grid>
 </UserControl>
