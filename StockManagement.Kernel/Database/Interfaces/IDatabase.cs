@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using MongoDB.Driver;
 
-namespace StockManagement.Kernel.Database;
+namespace StockManagement.Kernel.Database.Interfaces;
 
 
 public interface IDatabase

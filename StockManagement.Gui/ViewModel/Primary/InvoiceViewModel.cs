@@ -5,9 +5,9 @@ using System.Linq;
 using System;
 using System.Threading.Tasks;
 using StockManagement.Gui.Commands;
-using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
+using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 

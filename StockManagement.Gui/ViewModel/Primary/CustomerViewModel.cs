@@ -4,7 +4,6 @@ using System;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using StockManagement.Kernel.Database;
 using System.Threading.Tasks;
 using System.Linq;
 using StockManagement.Kernel.Model.ExtensionMethods;
@@ -12,6 +11,7 @@ using StockManagement.Gui.Commands;
 using StockManagement.Gui.ViewModel.Dialogs;
 using System.Windows;
 using System.Diagnostics;
+using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 

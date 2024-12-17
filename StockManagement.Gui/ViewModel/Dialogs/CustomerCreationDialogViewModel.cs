@@ -1,6 +1,6 @@
 ﻿using StockManagement.Kernel.Model;
-using StockManagement.Kernel.Database;
 using System.Threading.Tasks;
+using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 

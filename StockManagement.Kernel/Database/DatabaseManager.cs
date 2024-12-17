@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using MongoDB.Driver;
+using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Kernel.Database;
 

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using StockManagement.Kernel.Model;
 
-namespace StockManagement.Kernel.Database;
+namespace StockManagement.Kernel.Database.Interfaces;
 
 
 public interface IInvoiceServiceProvider

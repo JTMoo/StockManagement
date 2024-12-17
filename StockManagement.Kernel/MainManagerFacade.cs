@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using StockManagement.Kernel.Commands;
-using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel;

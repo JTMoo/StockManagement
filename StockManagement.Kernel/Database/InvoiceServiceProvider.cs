@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 
