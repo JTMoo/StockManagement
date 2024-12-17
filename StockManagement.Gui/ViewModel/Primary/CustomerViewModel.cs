@@ -127,12 +127,16 @@ public class CustomerViewModel : ViewModelBase
 
 	private async Task<int> GetNewCustomerId()
 	{
-		var customers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result);
 		try
 		{
+			var customers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result);
 			return customers.Max(customer => customer.CustomerId) + 1;
 		}
-		catch(ArgumentNullException)
+		catch (ArgumentNullException)
+		{
+			return 1;
+		}
+		catch (InvalidOperationException)
 		{
 			return 1;
 		}
