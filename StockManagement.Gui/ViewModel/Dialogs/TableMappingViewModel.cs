@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
 using StockManagement.Gui.Commands;
-using StockManagement.Kernel;
-using StockManagement.Kernel.Commands.Data;
-using StockManagement.Kernel.Commands.StockItemCommands;
+using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
@@ -21,137 +17,143 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 
 public partial class TableMappingViewModel : DialogViewModelBase
 {
-	private readonly Dictionary<PropertyInfo, string> tableNamesToProperties = [];
-	private Type selectedStockItemType;
-	private readonly IXLWorksheet worksheet;
+	private readonly Dictionary<PropertyInfo, string> _tableHeaderPropertyPairs = [];
+	private readonly IXLWorksheet _worksheet;
+	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 
 
-	public TableMappingViewModel(IXLWorksheet worksheet)
+	public TableMappingViewModel(IXLWorksheet worksheet, IStockItemServiceProvider stockItemServiceProvider)
 	{
-		this.worksheet = worksheet;
+		_stockItemServiceProvider = stockItemServiceProvider;
+		_worksheet = worksheet;
+
 		this.GetTableDataFromWorksheet();
 
 		this.SelectedItemChangedCommand = new RelayCommand<object>(this.OnSelectedItemChangedCommand);
 
-		this.PropertyChanged += OnPropertyChangedEvent;
+		this.StockItemProperties.EqualizeTo(typeof(StockItem).GetProperties());
 	}
 
 	#region Properties
-	public List<Type> StockItemTypes { get; } = new(GuiManager.Instance.StockItemTypes);
-	public ObservableCollection<PropertyInfo> SelectedStockItemTypeProperties { get; } = [];
-	public ObservableCollection<string> TableNames { get; } = [];
-
-	public Type SelectedStockItemType
-	{
-		get { return this.selectedStockItemType; }
-		set { this.SetField(ref this.selectedStockItemType, value); }
-	}
+	public ObservableCollection<PropertyInfo> StockItemProperties { get; } = [];
+	public ObservableCollection<string> TableHeaders { get; } = [];
 
 	public RelayCommand<object> SelectedItemChangedCommand { get; }
 	#endregion Properties
 
-	public override void Confirm(string param)
+	public override async void Confirm(string param)
 	{
 		GuiManager.Instance.ShowWaitDialog();
 
-		try
+		var items = this.ExtractStockItemsFromExcelSheet().ToList();
+		var dupCount = await _stockItemServiceProvider.RemoveDuplicates(items);
+		var result = MessageBox.Show($"Extracted {items.Count + dupCount} elements. {dupCount} are duplicates. Do you want to complete the import with the remaining {items.Count} elements?", Language.Resources.excelImport, MessageBoxButton.YesNo);
+		if (result != MessageBoxResult.Yes)
 		{
-			var stockItems = this.ExtractStockItemsFromExcelSheet();
-			var command = new StockItemCreationCommand
-			{
-				Data = new StockItemCommandData()
-				{
-					DataToRegister = stockItems,
-					Type = StockItemCommandData.CreationCommandType.Multiple,
-					Callback = _ => GuiManager.Instance.HideWaitDialog()
-				}
-			};
-			MainManagerFacade.PushCommand(command);
-		}
-		catch(FailedConversionException ex)
-		{
-			MessageBox.Show(ex.Message);
 			GuiManager.Instance.HideWaitDialog();
+			this.Close(false);
+			return;
 		}
 
+		await _stockItemServiceProvider.AddManyStockItemsAsync(items);
+
+		GuiManager.Instance.HideWaitDialog();
 		base.Confirm(param);
 	}
 
-	private List<StockItem> ExtractStockItemsFromExcelSheet()
+	private IList<StockItem> ExtractStockItemsFromExcelSheet()
 	{
-		if (this.worksheet.FirstRowUsed() is not IXLRow row)
+		if (this._worksheet.FirstRowUsed() is not IXLRow row)
 		{
-			Trace.WriteLine($"First row could not be found in {this.worksheet.Name}");
+			Trace.WriteLine($"First row could not be found in {this._worksheet.Name}");
 			return [];
 		}
 
 		var headerRowRange = row.RowUsed();
-		var matchingActions = CreatePropertyMatchingActionsFromTableHeaders(headerRowRange);
+		var matchingActions = CreateTableHeaderToPropertyMatchingActions(headerRowRange);
+		return ExtractStockItemsFromExcelRows(matchingActions, firstDataRow: headerRowRange.RowBelow());
+	}
 
-		var currentRow = headerRowRange.RowBelow();
-		var stockItems = new List<StockItem>();
+	private IList<StockItem> ExtractStockItemsFromExcelRows(IList<Action<IXLRangeRow, StockItem>> matchingActions, IXLRangeRow firstDataRow)
+	{
+		var currentRow = firstDataRow;
+		var items = new List<StockItem>();
 		while (!currentRow.IsEmpty())
 		{
-			if (Activator.CreateInstance(this.SelectedStockItemType) is not StockItem stockItem) continue;
-
-			matchingActions.ForEach(action => action(currentRow, stockItem));
-			stockItems.Add(stockItem);
+			try
+			{
+				items.Add(CreateStockItem(matchingActions, currentRow));
+			}
+			catch (FailedExcelConversionException)
+			{
+			}
 
 			currentRow = currentRow.RowBelow();
 		}
 
-		return stockItems;
+		return items;
 	}
 
-	private List<Action<IXLRangeRow, StockItem>> CreatePropertyMatchingActionsFromTableHeaders(IXLRangeRow headerRowRange)
+	private static StockItem CreateStockItem(IList<Action<IXLRangeRow, StockItem>> matchingActions, IXLRangeRow currentRow)
+	{
+		var stockItem = new StockItem();
+		matchingActions.ToList().ForEach(action => action(currentRow, stockItem));
+		return stockItem;
+	}
+
+	private IList<Action<IXLRangeRow, StockItem>> CreateTableHeaderToPropertyMatchingActions(IXLRangeRow headerRowRange)
 	{
 		List<Action<IXLRangeRow, StockItem>> matchingActions = [];
-		foreach (var pair in this.tableNamesToProperties)
+		foreach (var tableHeaderPropertyPair in _tableHeaderPropertyPairs)
 		{
-			if (!TryGetColumnNumberFrom(pair.Value, headerRowRange, out int columnNumber)) continue;
-			matchingActions.Add((row, stockItem) =>
-			{
-				try
-				{
-					if (row.Cell(columnNumber).GetString() is not string cellValue || string.IsNullOrEmpty(cellValue)) return;
-					if (TypeDescriptor.GetConverter(pair.Key.PropertyType).ConvertFromString(cellValue) is not object propertyValue) return;
-					pair.Key.SetValue(stockItem, propertyValue);
-				}
-				catch (ArgumentException argEx)
-				{
-					throw new FailedConversionException(string.Concat(string.Format(Language.Resources.failedConversion, argEx.ParamName, columnNumber), $" ({argEx.Message})"));
-				}
-				catch(Exception ex)
-				{
-					Trace.WriteLine($"Exception durch matchingActions: {ex.Message}");
-					return;
-				}
-			});
+			if (!TryGetColumnNumberFromCellValue(tableHeaderPropertyPair.Value, headerRowRange, out int columnNumber)) continue;
+
+			matchingActions.Add(CreateTableHeaderToPropertyMatchingAction(tableHeaderPropertyPair, columnNumber));
 		}
 
 		return matchingActions;
 	}
 
+	private static Action<IXLRangeRow, StockItem> CreateTableHeaderToPropertyMatchingAction(KeyValuePair<PropertyInfo, string> tableHeaderPropertyPair, int columnNumber)
+	{
+		return (row, stockItem) =>
+		{
+			try
+			{
+				SetStockItemFromExcelRow(row, stockItem, tableHeaderPropertyPair, columnNumber);
+			}
+			catch (ArgumentException argEx)
+			{
+				throw new FailedExcelConversionException(argEx, columnNumber);
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine($"Exception durch matchingActions: {ex.Message}");
+				return;
+			}
+		};
+	}
+
+	private static void SetStockItemFromExcelRow(IXLRangeRow row, StockItem stockItem, KeyValuePair<PropertyInfo, string> tableHeaderPropertyPair, int columnNumber)
+	{
+		if (!row.Cell(columnNumber).TryGetValue(out string cellValue)) return;
+		if (!tableHeaderPropertyPair.Key.PropertyType.TryConvertFromString(cellValue, out object propertyValue)) return;
+
+		tableHeaderPropertyPair.Key.SetValue(stockItem, propertyValue);
+	}
+
 	private void GetTableDataFromWorksheet()
 	{
-		if (this.worksheet.FirstRowUsed() is not IXLRow row)
+		if (this._worksheet.FirstRowUsed() is not IXLRow row)
 		{
-			Trace.WriteLine($"First Row used could not be found in {this.worksheet.Name}");
+			Trace.WriteLine($"First Row used could not be found in {this._worksheet.Name}");
 			return;
 		}
 
 		foreach (var cell in row.CellsUsed())
 		{
-			this.TableNames.Add(cell.GetString().ReplaceLineBreakWithWhitespace());
+			this.TableHeaders.Add(cell.GetString().ReplaceLineBreakWithWhitespace());
 		}
-	}
-
-	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
-	{
-		if (e.PropertyName != nameof(this.SelectedStockItemType)) return;
-
-		this.SelectedStockItemTypeProperties.EqualizeTo(this.SelectedStockItemType.GetProperties());
-		tableNamesToProperties.Clear();
 	}
 
 	private void OnSelectedItemChangedCommand(object arg)
@@ -160,13 +162,12 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		if (args[0] is not PropertyInfo info) return;
 		if (args[1] is not string selectedTableName) return;
 
-		this.tableNamesToProperties[info] = selectedTableName;
+		_tableHeaderPropertyPairs[info] = selectedTableName;
 	}
 
-	private static bool TryGetColumnNumberFrom(string value, IXLRangeRow headerRowRange, out int columnNumber)
+	private static bool TryGetColumnNumberFromCellValue(string value, IXLRangeRow headerRowRange, out int columnNumber)
 	{
-		columnNumber = -1;
-
+		columnNumber = 0;
 		foreach (var cell in headerRowRange.Cells())
 		{
 			columnNumber++;

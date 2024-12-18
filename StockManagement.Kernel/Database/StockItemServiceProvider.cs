@@ -1,6 +1,5 @@
 ﻿using MongoDB.Driver;
 using StockManagement.Kernel.Database.Interfaces;
-using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Database;
@@ -11,46 +10,65 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 	private readonly IDatabase _database = database;
 
 
-	public Task AddStockItemAsync<T>(StockItem stockItem)
+	public async Task AddStockItemAsync(StockItem stockItem)
 	{
-		// This is not ideal - the add process should fail if the number is taken!
-		var stockItemExistsCheck = this.GetStockItemAsync<T>(stockItem.Code).ContinueWith(task => task.Result != null).Result;
-		if (stockItemExistsCheck) throw new StockItemCodeAlreadyExistsException();
+		await _database.Add<StockItem>(stockItem);
 
 		var addTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount);
-		_database.Add<Transaction>(addTransaction);
-		return _database.Add<T>(stockItem);
+		await _database.Add<Transaction>(addTransaction);
+		return;
 	}
 
-	public Task<DeleteResult> DeleteStockItemAsync<T>(StockItem stockItem)
+	public Task<DeleteResult> DeleteStockItemAsync(StockItem stockItem)
 	{
 		var deleteTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Deletion, 1);
 		_database.Add<Transaction>(deleteTransaction);
-		return _database.Delete<T>(stockItem);
+		return _database.Delete<StockItem>(stockItem);
 	}
 
 	public Task<IEnumerable<StockItem>> GetAllStockItemsAsync()
 	{
-		var machines = _database.GetAll<Machine>().ContinueWith(task => task.Result.Cast<StockItem>());
-		var tires = _database.GetAll<Tire>().ContinueWith(task => task.Result.Cast<StockItem>());
-		var spareParts = _database.GetAll<SparePart>().ContinueWith(task => task.Result.Cast<StockItem>());
-		return machines.ContinueWith(task => task.Result.Concat(tires.Result).Concat(spareParts.Result));
+		return _database.GetAll<StockItem>();
 	}
 
-	public Task<StockItem> GetStockItemAsync<T>(string code)
+	public Task<StockItem> GetStockItemAsync(string code)
 	{
-		return _database.GetOneAsync<T>(item => (item as StockItem).Code == code).ContinueWith(task => task.Result as StockItem);
+		return _database.GetOneAsync<StockItem>(item => item.Code == code);
 	}
 
-	public Task<ReplaceOneResult> UpdateStockItemAsync<T>(StockItem stockItem)
+	public Task<ReplaceOneResult> UpdateStockItemAsync(StockItem stockItem)
 	{
-		var item = this.GetStockItemAsync<T>(stockItem.Code).Result;
-		if (item.Amount != stockItem.Amount)
+		var item = this.GetStockItemAsync(stockItem.Code).Result;
+		if (item is StockItem existingItem && existingItem.Amount != stockItem.Amount)
 		{
 			var changeAmountTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - item.Amount);
 			_database.Add<Transaction>(changeAmountTransaction);
 		}
 
 		return _database.Update<StockItem>(stockItem);
+	}
+
+	public Task AddManyStockItemsAsync(IList<StockItem> stockItems)
+	{
+		var collection = _database.ConnectToMongo<StockItem>();
+		return collection.InsertManyAsync(stockItems);
+	}
+
+	public async Task<int> RemoveDuplicates(List<StockItem> stockItems)
+	{
+		var existingItems = await this.GetAllStockItemsAsync().ContinueWith(task => task.Result.ToList());
+		var count = 0;
+		stockItems = stockItems.Where(item =>
+		{
+			if (existingItems.Any(existingItem => item.Code == existingItem.Code))
+			{
+				count++;
+				return false;
+			}
+
+			return true;
+		}).ToList();
+
+		return count;
 	}
 }

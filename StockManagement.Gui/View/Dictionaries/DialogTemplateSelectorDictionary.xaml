@@ -1,21 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:creationControls="clr-namespace:StockManagement.Gui.View.Dialogs.StockItemCreation"
-                    xmlns:creationVMs="clr-namespace:StockManagement.Gui.ViewModel.Dialogs.StockItemCreation"
 					xmlns:dialogControls="clr-namespace:StockManagement.Gui.View.Dialogs"
                     xmlns:dialogVMs="clr-namespace:StockManagement.Gui.ViewModel.Dialogs"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<DataTemplate DataType="{x:Type creationVMs:MachineCreationDialogViewModel}">
-		<creationControls:MachineCreationDialog />
-	</DataTemplate>
-	<DataTemplate DataType="{x:Type creationVMs:SparePartCreationDialogViewModel}">
-		<creationControls:SparePartCreationDialog />
-	</DataTemplate>
-	<DataTemplate DataType="{x:Type creationVMs:TireCreationDialogViewModel}">
-		<creationControls:TireCreationDialog />
-	</DataTemplate>
-	
-	<DataTemplate DataType="{x:Type dialogVMs:StockItemTypeSelectionDialogViewModel}">
-		<dialogControls:StockItemTypeSelectionDialog />
+
+	<DataTemplate DataType="{x:Type dialogVMs:StockItemCreationDialogViewModel}">
+		<dialogControls:StockItemCreationDialog />
 	</DataTemplate>
 	<DataTemplate DataType="{x:Type dialogVMs:MoreInfoDialogViewModel}">
 		<dialogControls:MoreInfoDialog />

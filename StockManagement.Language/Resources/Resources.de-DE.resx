@@ -334,7 +334,7 @@
     <value>Suche in Kunden:</value>
   </data>
   <data name="failedConversion" xml:space="preserve">
-    <value>Der Umwandlungsprozess ist fehlgeschlagen, da die angegebene Excel Spalte nicht mit dem Parametertyp übereingestimmt hat. Der Parameter heißt {0} und die Spalte hat den Buchstaben {1}.</value>
+    <value>Der Umwandlungsprozess ist fehlgeschlagen, da die angegebene Excel Spalte nicht mit dem Parametertyp übereingestimmt hat. Der Parameter heißt {0} und die Spalte Nummer {1}.</value>
   </data>
   <data name="deleteSelectedItems" xml:space="preserve">
     <value>Ausgewählte Lagerartikel löschen</value>

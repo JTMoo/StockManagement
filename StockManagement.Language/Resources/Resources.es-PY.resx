@@ -334,7 +334,7 @@
     <value>Buscar en clientes:</value>
   </data>
   <data name="failedConversion" xml:space="preserve">
-    <value>Se produjo un error en el proceso de conversión de una columna de Excel determinada al parámetro especificado. Esto sucedió para el parámetro {0} y la columna con la letra {1}.</value>
+    <value>Se produjo un error en el proceso de conversión de una columna de Excel determinada al parámetro especificado. Esto sucedió para el parámetro {0} y la columna numeró {1}.</value>
   </data>
   <data name="deleteSelectedItems" xml:space="preserve">
     <value>Eliminar artículos seleccionados</value>

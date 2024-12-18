@@ -84,7 +84,7 @@
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 
-			<ComboBox x:Name="ComboBoxWithTableNames" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TableNames}"
+			<ComboBox x:Name="ComboBoxWithTableHeaders" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.TableHeaders}"
 					  Style="{StaticResource CustomComboBoxStyle}">
 				<i:Interaction.Triggers>
 					<i:EventTrigger EventName="SelectionChanged">
@@ -92,7 +92,7 @@
 							<i:InvokeCommandAction.CommandParameter>
 								<MultiBinding Converter="{StaticResource MultiParamCommand}">
 									<Binding />
-									<Binding Path="SelectedItem" ElementName="ComboBoxWithTableNames" />
+									<Binding Path="SelectedItem" ElementName="ComboBoxWithTableHeaders" />
 								</MultiBinding>
 							</i:InvokeCommandAction.CommandParameter>
 						</i:InvokeCommandAction>

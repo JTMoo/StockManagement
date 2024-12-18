@@ -35,9 +35,6 @@ public class MainManager : NotificationBase, IDisposable
     }
 
     public DatabaseManager DatabaseManager { get; } = new();
-	public MachineManager MachineManager { get; } = new();
-	public SparePartManager SparePartManager { get; } = new();
-	public TireManager TireManager { get; } = new();
 	public Settings Settings { get; internal set; }
 
 
@@ -47,7 +44,6 @@ public class MainManager : NotificationBase, IDisposable
 
         await Instance.Init();
         return Instance.DatabaseManager;
-
 	}
 
 
@@ -103,11 +99,20 @@ public class MainManager : NotificationBase, IDisposable
 
 	private async Task Init()
 	{
-        this.Settings = await DatabaseManager.GetOneAsync<Settings>(_ => true).ContinueWith(task => task.Result ?? new());
+		this.Settings = await DatabaseManager.GetOneAsync<Settings>(_ => true).ContinueWith(task => task.Result ?? new());
+		this.CreateCollectionIndeces();
+
 		this._commandManager.Init();
-		this.MachineManager.Init();
-		this.TireManager.Init();
-		this.SparePartManager.Init();
-        _isInitialized = true;
+		_isInitialized = true;
+	}
+
+	private void CreateCollectionIndeces()
+	{
+		if (!this.Settings.StockItemsIndexCreated)
+		{
+			var collection = this.DatabaseManager.ConnectToMongo<StockItem>();
+			collection.Indexes.CreateMany(UniquePropertyHelper.GetStockItemUniqueProperties());
+            this.Settings.StockItemsIndexCreated = true;
+		}
 	}
 }

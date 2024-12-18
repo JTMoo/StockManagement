@@ -30,6 +30,9 @@
     <Compile Update="View\Controls\LargeTextBoxWithPreviewControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Dialogs\StockItemCreationDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

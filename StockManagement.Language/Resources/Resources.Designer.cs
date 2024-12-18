@@ -268,7 +268,7 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed the conversion process for a given excel column to the specified parameter. This happened for the parameter {0} and the column with the letter {1}..
+        ///   Looks up a localized string similar to Failed the conversion process for a given excel column to the specified parameter. This happened for the parameter {0} and the column number {1}..
         /// </summary>
         public static string failedConversion {
             get {

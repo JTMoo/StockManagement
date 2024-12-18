@@ -14,8 +14,6 @@
 			<RowDefinition Height="10"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="10"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="10"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
@@ -32,23 +30,16 @@
 				   Style="{StaticResource BaseDialogTextBlockStyle}"
 				   Text="{x:Static lang:Resources.mapProperties}" />
 
-		<!-- Excel Sheet Names -->
-		<ComboBox Grid.Column="1"
-				  Grid.Row="3"
-				  ItemsSource="{Binding StockItemTypes}"
-				  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
-				  Style="{StaticResource CustomComboBoxStyle}"
-				  SelectedItem="{Binding SelectedStockItemType}" />
+		<!-- List for mapping properties -->
+		<ListView Grid.Row="3" Grid.Column="1" 
+				  ItemsSource="{Binding StockItemProperties}"
+				  Style="{StaticResource DefaultListViewStyle}"
+				  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+				  ItemTemplate="{StaticResource StockItemTypeExcelImportListViewItems}"/>
 
 		<controls:DialogActionBarControl Grid.Row="99"
 										 Grid.ColumnSpan="99"
 										 ConfirmCommand="{Binding ConfirmDialogCommand}"
 										 CancelCommand="{Binding CancelDialogCommand}"/>
-
-		<ListView Grid.Row="5" Grid.Column="1" 
-				  ItemsSource="{Binding SelectedStockItemTypeProperties}"
-				  Style="{StaticResource DefaultListViewStyle}"
-				  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-				  ItemTemplate="{StaticResource StockItemTypeExcelImportListViewItems}"/>
 	</Grid>
 </UserControl>

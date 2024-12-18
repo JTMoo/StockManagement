@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DocumentFormat.OpenXml.Spreadsheet;
+using MongoDB.Driver;
 using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model.Types;
 
@@ -6,12 +8,13 @@ namespace StockManagement.Kernel.Model;
 
 
 [Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.stockItem))]
-public abstract class StockItem : BaseDocument
+public class StockItem : BaseDocument
 {
 	private string _code = string.Empty;
 	private string _description = string.Empty;
 	private string _location = string.Empty;
 	private string _name = string.Empty;
+	private string _miscellaneous = string.Empty;
 	private ManufacturerType _manufacturer;
 	private double _price;
 	private double _factor;
@@ -21,7 +24,7 @@ public abstract class StockItem : BaseDocument
 	{
 	}
 
-	public StockItem (string name, string code = "", string description = "", int amount=1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None)
+	public StockItem (string name, string code = "", string description = "", int amount=1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None, string misc = "") 
 	{
 		this.Name = name;
 		this.Code = code;
@@ -29,6 +32,7 @@ public abstract class StockItem : BaseDocument
 		this.Amount = amount;
 		this.Price = price;
 		this.Manufacturer = manufacturer;
+		this.Miscellaneous = misc;
 	}
 
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.name))]
@@ -87,8 +91,31 @@ public abstract class StockItem : BaseDocument
 		set { this.SetField(ref _manufacturer, value); }
 	}
 
-	public override abstract string ToString();
-	internal abstract void Register();
-	internal abstract void Deregister();
-	internal abstract void Update(Action callback);
+	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.miscellaneous))]
+	public string Miscellaneous
+	{
+		get { return _miscellaneous; }
+		set { this.SetField(ref _miscellaneous, value); }
+	}
+
+
+	public override List<CreateIndexModel<StockItem>> GetIndexCreationModels<StockItem>()
+	{
+		var creationModels = new List<CreateIndexModel<StockItem>>();
+
+		var options = new CreateIndexOptions() { Unique = true };
+		List<StringFieldDefinition<StockItem>> uniqueProperties =
+		[
+			new StringFieldDefinition<StockItem>(nameof(this.Code))
+		];
+
+		uniqueProperties.ForEach(property =>
+		{
+			var indexDefinition = new IndexKeysDefinitionBuilder<StockItem>().Ascending(property);
+			var creationModel = new CreateIndexModel<StockItem>(indexDefinition, options);
+			creationModels.Add(creationModel);
+		});
+
+		return creationModels;
+	}
 }

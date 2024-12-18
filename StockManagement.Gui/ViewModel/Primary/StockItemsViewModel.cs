@@ -35,7 +35,7 @@ public class StockItemsViewModel : ViewModelBase
 	{
 		_stockItemServiceProvider = stockItemServiceProvider;
 
-		this.MoreInfoCommand = new RelayCommand<StockItem>(stockItem => GuiManager.Instance.MainViewModel.Dialog = new MoreInfoDialogViewModel(stockItem));
+		this.MoreInfoCommand = new RelayCommand<StockItem>(stockItem => GuiManager.Instance.MainViewModel.Dialog = new MoreInfoDialogViewModel(stockItem, _stockItemServiceProvider));
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 		this.ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
 		this.AddToShoppingCartCommand = new RelayCommand<IEnumerable>(this.OnAddToShoppingCartCommand);
@@ -137,7 +137,7 @@ public class StockItemsViewModel : ViewModelBase
 		if (GuiManager.Instance.StockItemTypes == null)
 			return;
 
-		GuiManager.Instance.MainViewModel.Dialog = new StockItemTypeSelectionDialogViewModel(GuiManager.Instance.StockItemTypes);
+		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider);
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
 
@@ -157,18 +157,7 @@ public class StockItemsViewModel : ViewModelBase
 		GuiManager.Instance.ShowWaitDialog();
 		foreach (var item in items)
 		{
-			if(item is Machine)
-			{
-				await _stockItemServiceProvider.DeleteStockItemAsync<Machine>(item);
-			}
-			else if (item is SparePart)
-			{
-				await _stockItemServiceProvider.DeleteStockItemAsync<SparePart>(item);
-			}
-			else
-			{
-				await _stockItemServiceProvider.DeleteStockItemAsync<Tire>(item);
-			}
+			await _stockItemServiceProvider.DeleteStockItemAsync(item);
 		}
 		await this.UpdateStockItemsAsync();
 		GuiManager.Instance.HideWaitDialog();
@@ -191,7 +180,8 @@ public class StockItemsViewModel : ViewModelBase
 			GuiManager.Instance.ShowWaitDialog();
 			try
 			{
-				GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName);
+				GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName, _stockItemServiceProvider);
+				GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 			}
 			catch(Exception ex)
 			{

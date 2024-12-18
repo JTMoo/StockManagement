@@ -13,27 +13,27 @@ public class DatabaseManager : IDatabase
 
 	public async Task<IEnumerable<T>> GetAll<T>()
 	{
-		var collection = ConnectToMongo<T>(typeof(T).ToString());
+		var collection = ConnectToMongo<T>();
 		var list = await collection.FindAsync(_ => true);
 		return list.ToEnumerable();
 	}
 
 	public async Task<T> GetOneAsync<T>(Expression<Func<T, bool>> filter)
 	{
-		var collection = ConnectToMongo<T>(typeof(T).ToString());
+		var collection = ConnectToMongo<T>();
 		var element = await collection.FindAsync(filter);
 		return element.FirstOrDefault();
 	}
 
 	public Task Add<T>(BaseDocument item)
 	{
-		var col = ConnectToMongo<BaseDocument>(typeof(T).ToString());
+		var col = ConnectToMongo<BaseDocument>();
 		return col.InsertOneAsync(item);
 	}
 
 	public Task<DeleteResult> Delete<T>(BaseDocument item)
 	{
-		var col = ConnectToMongo<BaseDocument>(typeof(T).ToString());
+		var col = ConnectToMongo<BaseDocument>();
 		var filter = Builders<BaseDocument>.Filter.Eq("Id", item.Id);
 
 		return col.DeleteOneAsync(filter);
@@ -41,7 +41,7 @@ public class DatabaseManager : IDatabase
 
 	public Task<ReplaceOneResult> Update<T>(BaseDocument item)
 	{
-		var col = ConnectToMongo<BaseDocument>(typeof(T).ToString());
+		var col = ConnectToMongo<BaseDocument>();
 		var filter = Builders<BaseDocument>.Filter.Eq("Id", item.Id);
 		// Upsert means: replace if existent - insert if not existent
 		return col.ReplaceOneAsync(filter, item, new ReplaceOptions { IsUpsert = true });
@@ -52,5 +52,12 @@ public class DatabaseManager : IDatabase
 		var client = new MongoClient(ConnectionString);
 		var db = client.GetDatabase(DatabaseName);
 		return db.GetCollection<T>(collectionName);
+	}
+
+	public IMongoCollection<T> ConnectToMongo<T>()
+	{
+		var client = new MongoClient(ConnectionString);
+		var db = client.GetDatabase(DatabaseName);
+		return db.GetCollection<T>(typeof(T).ToString());
 	}
 }
