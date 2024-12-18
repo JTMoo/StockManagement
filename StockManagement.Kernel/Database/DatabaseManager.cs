@@ -25,26 +25,12 @@ public class DatabaseManager : IDatabase
 		return element.FirstOrDefault();
 	}
 
-	public Task Add<T>(BaseDocument item)
-	{
-		var col = ConnectToMongo<BaseDocument>();
-		return col.InsertOneAsync(item);
-	}
-
 	public Task<DeleteResult> Delete<T>(BaseDocument item)
 	{
-		var col = ConnectToMongo<BaseDocument>();
-		var filter = Builders<BaseDocument>.Filter.Eq("Id", item.Id);
+		var col = ConnectToMongo<T>();
+		var filter = Builders<T>.Filter.Eq("Id", item.Id);
 
 		return col.DeleteOneAsync(filter);
-	}
-
-	public Task<ReplaceOneResult> Update<T>(BaseDocument item)
-	{
-		var col = ConnectToMongo<BaseDocument>();
-		var filter = Builders<BaseDocument>.Filter.Eq("Id", item.Id);
-		// Upsert means: replace if existent - insert if not existent
-		return col.ReplaceOneAsync(filter, item, new ReplaceOptions { IsUpsert = true });
 	}
 
 	public IMongoCollection<T> ConnectToMongo<T>(in string collectionName)

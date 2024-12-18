@@ -17,7 +17,8 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 		var invoiceExistsCheck = this.GetInvoiceAync(invoice.Number).ContinueWith(task => task.Result != null).Result;
 		if (invoiceExistsCheck) throw new InvoiceNumberAlreadyExistsException();
 
-		return _database.Add<Invoice>(invoice);
+		var collection = _database.ConnectToMongo<Invoice>();
+		return collection.InsertOneAsync(invoice);
 	}
 
 	public Task<DeleteResult> DeleteInvoiceAsync(Invoice invoice)
@@ -37,6 +38,9 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 
 	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice invoice)
 	{
-		return _database.Update<Invoice>(invoice);
+		var collection = _database.ConnectToMongo<Invoice>();
+		var filter = Builders<Invoice>.Filter.Eq("Id", invoice.Number);
+		// Upsert means: replace if existent - insert if not existent
+		return collection.ReplaceOneAsync(filter, invoice, new ReplaceOptions { IsUpsert = true });
 	}
 }

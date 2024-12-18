@@ -12,17 +12,20 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 
 	public async Task AddStockItemAsync(StockItem stockItem)
 	{
-		await _database.Add<StockItem>(stockItem);
+		var collection = _database.ConnectToMongo<StockItem>();
+		await collection.InsertOneAsync(stockItem);
 
 		var addTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount);
-		await _database.Add<Transaction>(addTransaction);
+		var collection2 = _database.ConnectToMongo<Transaction>();
+		await collection2.InsertOneAsync(addTransaction);
 		return;
 	}
 
 	public Task<DeleteResult> DeleteStockItemAsync(StockItem stockItem)
 	{
 		var deleteTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Deletion, 1);
-		_database.Add<Transaction>(deleteTransaction);
+		var collection = _database.ConnectToMongo<Transaction>();
+		collection.InsertOneAsync(deleteTransaction);
 		return _database.Delete<StockItem>(stockItem);
 	}
 
@@ -42,10 +45,14 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		if (item is StockItem existingItem && existingItem.Amount != stockItem.Amount)
 		{
 			var changeAmountTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - item.Amount);
-			_database.Add<Transaction>(changeAmountTransaction);
+			var collection2 = _database.ConnectToMongo<Transaction>();
+			collection2.InsertOneAsync(changeAmountTransaction);
 		}
 
-		return _database.Update<StockItem>(stockItem);
+		var collection = _database.ConnectToMongo<StockItem>();
+		var filter = Builders<StockItem>.Filter.Eq("Id", stockItem.Code);
+		// Upsert means: replace if existent - insert if not existent
+		return collection.ReplaceOneAsync(filter, stockItem, new ReplaceOptions { IsUpsert = true });
 	}
 
 	public Task AddManyStockItemsAsync(IList<StockItem> stockItems)

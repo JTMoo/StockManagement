@@ -1,4 +1,6 @@
-﻿using StockManagement.Kernel.Database;
+﻿using MongoDB.Driver;
+using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
@@ -46,6 +48,8 @@ public class Settings : BaseDocument
 			pi.SetValue(this, pi.GetValue(settings));
 		}
 
-		return MainManager.Instance.DatabaseManager.Update<Settings>(this);
+		var collection = MainManager.Instance.DatabaseManager.ConnectToMongo<Settings>();
+		var filter = Builders<Settings>.Filter.Eq("Id", this.Id);
+		return collection.ReplaceOneAsync(filter, this, new ReplaceOptions { IsUpsert = true });
 	}
 }

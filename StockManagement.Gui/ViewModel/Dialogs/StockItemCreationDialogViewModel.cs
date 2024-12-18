@@ -11,7 +11,7 @@ public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockIte
 
 
 	#region Properties
-	public StockItem StockItem { get; set; }
+	public StockItem StockItem { get; set; } = new();
 	#endregion
 
 	public override async void Confirm(string obj)
