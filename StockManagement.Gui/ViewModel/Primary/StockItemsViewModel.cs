@@ -29,11 +29,13 @@ public class StockItemsViewModel : ViewModelBase
 	private Type _selectedSearchStockItemType;
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
+	private readonly ICustomerServiceProvider _customerServiceProvider;
 
 
-	private StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider)
+	private StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider)
 	{
 		_stockItemServiceProvider = stockItemServiceProvider;
+		_customerServiceProvider = customerServiceProvider;
 
 		this.MoreInfoCommand = new RelayCommand<StockItem>(this.OnMoreInfoCommand);
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
@@ -95,9 +97,9 @@ public class StockItemsViewModel : ViewModelBase
 	}
 	#endregion Properties
 
-	public static Task<StockItemsViewModel> CreateAsync(IStockItemServiceProvider stockItemServiceProvider)
+	public static Task<StockItemsViewModel> CreateAsync(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider)
 	{
-		var ret = new StockItemsViewModel(stockItemServiceProvider);
+		var ret = new StockItemsViewModel(stockItemServiceProvider, customerServiceProvider);
 		return ret.InitializeAsync();
 	}
 
@@ -169,9 +171,9 @@ public class StockItemsViewModel : ViewModelBase
 		GuiManager.Instance.HideWaitDialog();
 	}
 
-	private void OnShoppingCartCommand(string obj)
+	private async void OnShoppingCartCommand(string obj)
 	{
-		var cartDialog = new ShoppingCartDialogViewModel(this.ShoppingCartItems);
+		var cartDialog = await ShoppingCartDialogViewModel.CreateAsync(this.ShoppingCartItems, _customerServiceProvider);
 		GuiManager.Instance.MainViewModel.Dialog = cartDialog;
 	}
 

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using StockManagement.Gui.Commands;
+using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Util;
 
@@ -15,11 +18,15 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 {
 	private long total;
 	private string totalInWords;
+	private Customer _selectedCustomer;
+	private ICustomerServiceProvider _customerServiceProvider;
 
 
-	public ShoppingCartDialogViewModel(ObservableCollection<ShoppingCartItem> shoppingCartItems)
+	public ShoppingCartDialogViewModel(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider)
 	{
-		this.Items = shoppingCartItems;
+		_customerServiceProvider = customerServiceProvider;
+
+		this.Items = new(shoppingCartItems);
 		foreach (var item in this.Items)
 		{
 			item.PropertyChanged += this.OnShoppingCartItemChanged;
@@ -35,7 +42,13 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 
 	#region Properties
 	public ObservableCollection<ShoppingCartItem> Items { get; }
+	public ObservableCollection<Customer> AvailableCustomers { get; private set; }
 
+	public Customer SelectedCustomer
+	{
+		get { return _selectedCustomer; }
+		set { this.SetField(ref this._selectedCustomer, value); }
+	}
 	public long Total
 	{
 		get { return this.total; }
@@ -62,6 +75,17 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	{
 		this.DeregisterFromEvents();
 		base.Cancel(param);
+	}
+	public static Task<ShoppingCartDialogViewModel> CreateAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider)
+	{
+		var ret = new ShoppingCartDialogViewModel(shoppingCartItems, customerServiceProvider);
+		return ret.InitializeAsync();
+	}
+
+	private async Task<ShoppingCartDialogViewModel> InitializeAsync()
+	{
+		this.AvailableCustomers = new(await _customerServiceProvider.GetCustomersAsync());
+		return this;
 	}
 
 	private void OnDeleteItemFromShoppingCartCommand(ShoppingCartItem item)

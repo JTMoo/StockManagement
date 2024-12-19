@@ -25,7 +25,7 @@ internal class MainViewModel : NotificationBase
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 
-		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database)));
+		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database), new CustomerServiceProvider(database)));
 		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(new CustomerServiceProvider(database)));
 		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(new InvoiceServiceProvider(database)));
 
@@ -79,7 +79,7 @@ internal class MainViewModel : NotificationBase
 
 	private async Task<MainViewModel> InitializeAsync(IDatabase database)
 	{
-		this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database));
+		this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database), new CustomerServiceProvider(database));
 		return this;
 	}
 

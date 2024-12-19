@@ -336,13 +336,16 @@
   <data name="failedConversion" xml:space="preserve">
     <value>Failed the conversion process for a given excel column to the specified parameter. This happened for the parameter {0} and the column number {1}.</value>
   </data>
+  <data name="miscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
   <data name="deleteSelectedItems" xml:space="preserve">
     <value>Delete selected Items</value>
   </data>
   <data name="selectedItemsDeletionPrompt" xml:space="preserve">
     <value>{0} items will be deleted. Are you sure?</value>
   </data>
-  <data name="miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+  <data name="selectCustomer" xml:space="preserve">
+    <value>Select Customer:</value>
   </data>
 </root>

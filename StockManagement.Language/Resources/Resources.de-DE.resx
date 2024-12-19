@@ -336,13 +336,16 @@
   <data name="failedConversion" xml:space="preserve">
     <value>Der Umwandlungsprozess ist fehlgeschlagen, da die angegebene Excel Spalte nicht mit dem Parametertyp übereingestimmt hat. Der Parameter heißt {0} und die Spalte Nummer {1}.</value>
   </data>
+  <data name="miscellaneous" xml:space="preserve">
+    <value>Verschiedenes</value>
+  </data>
   <data name="deleteSelectedItems" xml:space="preserve">
     <value>Ausgewählte Lagerartikel löschen</value>
   </data>
   <data name="selectedItemsDeletionPrompt" xml:space="preserve">
     <value>{0} Lagerartikel werden gelöscht. Sind Sie sicher?</value>
   </data>
-  <data name="miscellaneous" xml:space="preserve">
-    <value>Verschiedenes</value>
+  <data name="selectCustomer" xml:space="preserve">
+    <value>Kunde auswählen:</value>
   </data>
 </root>

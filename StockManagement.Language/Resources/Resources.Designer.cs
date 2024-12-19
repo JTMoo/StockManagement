@@ -565,6 +565,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Customer:.
+        /// </summary>
+        public static string selectCustomer {
+            get {
+                return ResourceManager.GetString("selectCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected File is currently being used by another process and cannot be opened..
         /// </summary>
         public static string selectedFileInUse {

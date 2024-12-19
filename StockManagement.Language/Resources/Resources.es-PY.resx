@@ -336,13 +336,16 @@
   <data name="failedConversion" xml:space="preserve">
     <value>Se produjo un error en el proceso de conversión de una columna de Excel determinada al parámetro especificado. Esto sucedió para el parámetro {0} y la columna numeró {1}.</value>
   </data>
+  <data name="miscellaneous" xml:space="preserve">
+    <value>Diverso</value>
+  </data>
   <data name="deleteSelectedItems" xml:space="preserve">
     <value>Eliminar artículos seleccionados</value>
   </data>
   <data name="selectedItemsDeletionPrompt" xml:space="preserve">
     <value>Se eliminarán {0} artículos en stock. ¿Está seguro?</value>
   </data>
-  <data name="miscellaneous" xml:space="preserve">
-    <value>Diverso</value>
+  <data name="selectCustomer" xml:space="preserve">
+    <value>Seleccionar cliente:</value>
   </data>
 </root>
