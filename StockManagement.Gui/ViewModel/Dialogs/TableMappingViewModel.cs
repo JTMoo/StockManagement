@@ -74,10 +74,10 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		return ExtractStockItemsFromExcelRows(matchingActions, firstDataRow: headerRowRange.RowBelow());
 	}
 
-	private IList<StockItem> ExtractStockItemsFromExcelRows(IList<Action<IXLRangeRow, StockItem>> matchingActions, IXLRangeRow firstDataRow)
+	private static IList<StockItem> ExtractStockItemsFromExcelRows(IList<Action<IXLRangeRow, StockItem>> matchingActions, IXLRangeRow firstDataRow)
 	{
 		var currentRow = firstDataRow;
-		var items = new List<StockItem>();
+		IList<StockItem> items = [];
 		while (!currentRow.IsEmpty())
 		{
 			try
@@ -103,7 +103,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 
 	private IList<Action<IXLRangeRow, StockItem>> CreateTableHeaderToPropertyMatchingActions(IXLRangeRow headerRowRange)
 	{
-		List<Action<IXLRangeRow, StockItem>> matchingActions = [];
+		IList<Action<IXLRangeRow, StockItem>> matchingActions = [];
 		foreach (var tableHeaderPropertyPair in _tableHeaderPropertyPairs)
 		{
 			if (!TryGetColumnNumberFromCellValue(tableHeaderPropertyPair.Value, headerRowRange, out int columnNumber)) continue;
