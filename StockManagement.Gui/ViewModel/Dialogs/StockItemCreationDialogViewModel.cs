@@ -5,13 +5,13 @@ using StockManagement.Kernel.Model;
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
 
-public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockItemServiceProvider) : DialogViewModelBase()
+public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockItemServiceProvider, StockItem stockItem) : DialogViewModelBase()
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
 
 
 	#region Properties
-	public StockItem StockItem { get; set; } = new();
+	public StockItem StockItem { get; set; } = stockItem;
 	#endregion
 
 	public override async void Confirm(string obj)

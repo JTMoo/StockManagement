@@ -6,9 +6,6 @@
 	<DataTemplate DataType="{x:Type dialogVMs:StockItemCreationDialogViewModel}">
 		<dialogControls:StockItemCreationDialog />
 	</DataTemplate>
-	<DataTemplate DataType="{x:Type dialogVMs:MoreInfoDialogViewModel}">
-		<dialogControls:MoreInfoDialog />
-	</DataTemplate>
 	<DataTemplate DataType="{x:Type dialogVMs:SettingsDialogViewModel}">
 		<dialogControls:SettingsDialog />
 	</DataTemplate>

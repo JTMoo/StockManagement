@@ -35,7 +35,7 @@ public class StockItemsViewModel : ViewModelBase
 	{
 		_stockItemServiceProvider = stockItemServiceProvider;
 
-		this.MoreInfoCommand = new RelayCommand<StockItem>(stockItem => GuiManager.Instance.MainViewModel.Dialog = new MoreInfoDialogViewModel(stockItem, _stockItemServiceProvider));
+		this.MoreInfoCommand = new RelayCommand<StockItem>(this.OnMoreInfoCommand);
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
 		this.ExcelImportCommand = new RelayCommand<string>(this.OnExcelImportCommand);
 		this.AddToShoppingCartCommand = new RelayCommand<IEnumerable>(this.OnAddToShoppingCartCommand);
@@ -137,7 +137,13 @@ public class StockItemsViewModel : ViewModelBase
 		if (GuiManager.Instance.StockItemTypes == null)
 			return;
 
-		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider);
+		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem: new());
+		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
+	}
+
+	private void OnMoreInfoCommand(StockItem stockItem)
+	{
+		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem);
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
 
