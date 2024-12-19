@@ -108,11 +108,23 @@ public class MainManager : NotificationBase, IDisposable
 
 	private void CreateCollectionIndeces()
 	{
-		if (!this.Settings.StockItemsIndexCreated)
+		if (!this.Settings.StockItemIndexCreated)
 		{
-			var collection = this.DatabaseManager.ConnectToMongo<StockItem>();
-			collection.Indexes.CreateMany(UniquePropertyHelper.GetStockItemUniqueProperties());
-            this.Settings.StockItemsIndexCreated = true;
+			var stockItemCollection = this.DatabaseManager.ConnectToMongo<StockItem>();
+			stockItemCollection.Indexes.CreateMany(UniquePropertyHelper.GetStockItemUniqueProperties());
+            this.Settings.StockItemIndexCreated = true;
+		}
+		if (!this.Settings.CustomerIndexCreated)
+		{
+			var customerCollection = this.DatabaseManager.ConnectToMongo<Customer>();
+			customerCollection.Indexes.CreateMany(UniquePropertyHelper.GetCustomerUniqueProperties());
+            this.Settings.CustomerIndexCreated = true;
+		}
+		if (!this.Settings.InvoiceIndexCreated)
+		{
+			var invoiceCollection = this.DatabaseManager.ConnectToMongo<Invoice>();
+			invoiceCollection.Indexes.CreateMany(UniquePropertyHelper.GetInvoiceUniqueProperties());
+			this.Settings.InvoiceIndexCreated = true;
 		}
 	}
 }

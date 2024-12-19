@@ -9,6 +9,13 @@ public class CustomerServiceProvider(IDatabase database) : ICustomerServiceProvi
 {
 	private readonly IDatabase _database = database;
 
+
+	/// <summary>
+	/// Tries to add <see cref="Customer"/> if its unique Property doesn't already exist in the database
+	/// </summary>
+	/// <param name="customer"></param>
+	/// <returns></returns>
+	/// <exception cref="MongoBulkWriteException">Thrown if unique Property already exists</exception>
 	public Task AddCustomerAsync(Customer customer)
 	{
 		var collection = _database.ConnectToMongo<Customer>();

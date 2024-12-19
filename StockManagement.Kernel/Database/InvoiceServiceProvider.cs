@@ -1,6 +1,5 @@
 ﻿using MongoDB.Driver;
 using StockManagement.Kernel.Database.Interfaces;
-using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Database;
@@ -11,12 +10,14 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 	private readonly IDatabase _database = database;
 
 
+	/// <summary>
+	/// Tries to add <see cref="Invoice"/> if its unique Property doesn't already exist in the database
+	/// </summary>
+	/// <param name="invoice"></param>
+	/// <returns></returns>
+	/// <exception cref="MongoBulkWriteException">Thrown when unique field already exists</exception>
 	public Task AddInvoiceAsync(Invoice invoice)
 	{
-		// This is not ideal - the add process should fail if the number is taken!
-		var invoiceExistsCheck = this.GetInvoiceAync(invoice.Number).ContinueWith(task => task.Result != null).Result;
-		if (invoiceExistsCheck) throw new InvoiceNumberAlreadyExistsException();
-
 		var collection = _database.ConnectToMongo<Invoice>();
 		return collection.InsertOneAsync(invoice);
 	}

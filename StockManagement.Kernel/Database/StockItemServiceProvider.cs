@@ -10,6 +10,12 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 	private readonly IDatabase _database = database;
 
 
+	/// <summary>
+	/// Tries to add <see cref="StockItem"/> if its unique Property doesn't already exist in the database
+	/// </summary>
+	/// <param name="invoice"></param>
+	/// <returns></returns>
+	/// <exception cref="MongoBulkWriteException">Thrown when unique field already exists</exception>
 	public async Task AddStockItemAsync(StockItem stockItem)
 	{
 		var collection = _database.ConnectToMongo<StockItem>();

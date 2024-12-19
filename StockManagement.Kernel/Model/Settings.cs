@@ -27,7 +27,9 @@ public class Settings : BaseDocument
 		this.DialogBorderThickness = dialogBorderThickness;
 	}
 
-	public bool StockItemsIndexCreated { get; set; } = false;
+	public bool StockItemIndexCreated { get; set; } = false;
+	public bool CustomerIndexCreated { get; set; } = false;
+	public bool InvoiceIndexCreated { get; set; } = false;
 
 	public AvailableLanguages SelectedLanguage
 	{
