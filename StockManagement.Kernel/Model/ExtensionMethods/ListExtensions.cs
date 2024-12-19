@@ -22,4 +22,19 @@ public static class ListExtensions
 
 		return itemsToAdd.Count != 0 || itemsToRemove.Count != 0;
 	}
+
+	public static int RemoveAndCountDuplicates(this List<StockItem> stockItems, IEnumerable<StockItem> existingItems)
+	{
+		var count = 0;
+		for (var index = stockItems.Count - 1; index >= 0; index--)
+		{
+			var currentItem = stockItems[index];
+			if (!existingItems.Any(existingItem => currentItem.Code == existingItem.Code) && stockItems.Count(item => currentItem.Code == item.Code) == 1) continue;
+
+			stockItems.Remove(currentItem);
+			count++;
+		}
+
+		return count;
+	}
 }

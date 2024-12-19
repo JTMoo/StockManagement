@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using ClosedXML.Excel;
 using StockManagement.Gui.Commands;
@@ -45,8 +46,10 @@ public partial class TableMappingViewModel : DialogViewModelBase
 	{
 		GuiManager.Instance.ShowWaitDialog();
 
-		var items = this.ExtractStockItemsFromExcelSheet().ToList();
-		var dupCount = await _stockItemServiceProvider.RemoveDuplicates(items);
+		var items = await Task.Run(this.ExtractStockItemsFromExcelSheet).ContinueWith(task => task.Result.ToList());
+		var existingItems = await _stockItemServiceProvider.GetAllStockItemsAsync().ContinueWith(task => task.Result.ToList());
+		var dupCount = items.RemoveAndCountDuplicates(existingItems);
+
 		var result = MessageBox.Show($"Extracted {items.Count + dupCount} elements. {dupCount} are duplicates. Do you want to complete the import with the remaining {items.Count} elements?", Language.Resources.excelImport, MessageBoxButton.YesNo);
 		if (result != MessageBoxResult.Yes)
 		{

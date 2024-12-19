@@ -12,5 +12,4 @@ public interface IStockItemServiceProvider
 	public Task<DeleteResult> DeleteStockItemAsync(StockItem stockItem);
 	public Task AddStockItemAsync(StockItem stockItem);
 	public Task AddManyStockItemsAsync(IList<StockItem> stockItem);
-	public Task<int> RemoveDuplicates(List<StockItem> stockItems);
 }

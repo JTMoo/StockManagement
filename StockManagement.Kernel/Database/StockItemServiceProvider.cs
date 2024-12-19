@@ -66,22 +66,4 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		var collection = _database.ConnectToMongo<StockItem>();
 		return collection.InsertManyAsync(stockItems);
 	}
-
-	public async Task<int> RemoveDuplicates(List<StockItem> stockItems)
-	{
-		var existingItems = await this.GetAllStockItemsAsync().ContinueWith(task => task.Result.ToList());
-		var count = 0;
-		stockItems = stockItems.Where(item =>
-		{
-			if (existingItems.Any(existingItem => item.Code == existingItem.Code))
-			{
-				count++;
-				return false;
-			}
-
-			return true;
-		}).ToList();
-
-		return count;
-	}
 }
