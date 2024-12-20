@@ -21,4 +21,7 @@
 	<DataTemplate DataType="{x:Type dialogVMs:CustomerCreationDialogViewModel}">
 		<dialogControls:CustomerCreationDialog />
 	</DataTemplate>
+	<DataTemplate DataType="{x:Type dialogVMs:InvoiceCreationDialogViewModel}">
+		<dialogControls:InvoiceCreationDialog />
+	</DataTemplate>
 </ResourceDictionary>

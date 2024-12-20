@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style TargetType="RadioButton"
+		   BasedOn="{StaticResource {x:Type RadioButton}}"
+		   x:Key="BaseRadioButtonStyle">
+		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
+		<Setter Property="Foreground" Value="{StaticResource MainForeground}" />
+		<Setter Property="FontSize" Value="12" />
+	</Style>
+</ResourceDictionary>

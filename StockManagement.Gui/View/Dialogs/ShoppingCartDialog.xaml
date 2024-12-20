@@ -39,7 +39,7 @@
 					  Style="{StaticResource CustomComboBoxStyle}"
 					  ItemsSource="{Binding AvailableCustomers}"
 					  SelectedItem="{Binding SelectedCustomer}"
-					  DisplayMemberPath="Lastname"/>
+					  DisplayMemberPath="Display"/>
 		</Grid>
 
 		<!-- Shopping Cart Items List -->
@@ -107,7 +107,7 @@
 							</GridViewColumn.CellTemplate>
 						</GridViewColumn>
 						<!-- Data Column -->
-						<GridViewColumn Header="{x:Static lang:Resources.name}" DisplayMemberBinding="{Binding StockItem.Name}"/>
+						<GridViewColumn Header="{x:Static lang:Resources.stockItem}" DisplayMemberBinding="{Binding StockItem.Name}"/>
 						<GridViewColumn Header="{x:Static lang:Resources.price}" DisplayMemberBinding="{Binding StockItem.Price}"/>
 						<!-- Remove Item Column -->
 						<GridViewColumn Width="Auto">

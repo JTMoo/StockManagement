@@ -19,12 +19,16 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	private long total;
 	private string totalInWords;
 	private Customer _selectedCustomer;
-	private ICustomerServiceProvider _customerServiceProvider;
+	private readonly ICustomerServiceProvider _customerServiceProvider;
+	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
+	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 
 
-	public ShoppingCartDialogViewModel(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider)
+	public ShoppingCartDialogViewModel(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
 	{
 		_customerServiceProvider = customerServiceProvider;
+		_invoiceServiceProvider = invoiceServiceProvider;
+		_stockItemServiceProvider = stockItemServiceProvider;
 
 		this.Items = new(shoppingCartItems);
 		foreach (var item in this.Items)
@@ -65,10 +69,20 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	public RelayCommand<ShoppingCartItem> DeleteItemFromShoppingCartCommand { get; }
 	#endregion Properties
 
-	public override void Confirm(string param)
+
+	public override async void Confirm(string param)
 	{
+		var invoice = new Invoice()
+		{
+			Customer = this.SelectedCustomer,
+			Date = DateTime.Now,
+			ExpirationDate = DateTime.Now.AddDays(30),
+			Items = new(this.Items),
+			Total = this.Total,
+			Tax = (long)Math.Round((double)this.Total / 11)
+		};
 		this.DeregisterFromEvents();
-		base.Confirm(param);
+		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _invoiceServiceProvider, _stockItemServiceProvider);
 	}
 
 	public override void Cancel(string param)
@@ -76,9 +90,9 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 		this.DeregisterFromEvents();
 		base.Cancel(param);
 	}
-	public static Task<ShoppingCartDialogViewModel> CreateAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider)
+	public static Task<ShoppingCartDialogViewModel> CreateAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
 	{
-		var ret = new ShoppingCartDialogViewModel(shoppingCartItems, customerServiceProvider);
+		var ret = new ShoppingCartDialogViewModel(shoppingCartItems, customerServiceProvider, invoiceServiceProvider, stockItemServiceProvider);
 		return ret.InitializeAsync();
 	}
 

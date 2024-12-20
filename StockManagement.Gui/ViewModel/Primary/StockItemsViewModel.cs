@@ -30,12 +30,14 @@ public class StockItemsViewModel : ViewModelBase
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 	private readonly ICustomerServiceProvider _customerServiceProvider;
+	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
 
 
-	private StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider)
+	private StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider)
 	{
 		_stockItemServiceProvider = stockItemServiceProvider;
 		_customerServiceProvider = customerServiceProvider;
+		_invoiceServiceProvider = invoiceServiceProvider;
 
 		this.MoreInfoCommand = new RelayCommand<StockItem>(this.OnMoreInfoCommand);
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
@@ -97,9 +99,9 @@ public class StockItemsViewModel : ViewModelBase
 	}
 	#endregion Properties
 
-	public static Task<StockItemsViewModel> CreateAsync(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider)
+	public static Task<StockItemsViewModel> CreateAsync(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider)
 	{
-		var ret = new StockItemsViewModel(stockItemServiceProvider, customerServiceProvider);
+		var ret = new StockItemsViewModel(stockItemServiceProvider, customerServiceProvider, invoiceServiceProvider);
 		return ret.InitializeAsync();
 	}
 
@@ -173,8 +175,9 @@ public class StockItemsViewModel : ViewModelBase
 
 	private async void OnShoppingCartCommand(string obj)
 	{
-		var cartDialog = await ShoppingCartDialogViewModel.CreateAsync(this.ShoppingCartItems, _customerServiceProvider);
+		var cartDialog = await ShoppingCartDialogViewModel.CreateAsync(this.ShoppingCartItems, _customerServiceProvider, _invoiceServiceProvider, _stockItemServiceProvider);
 		GuiManager.Instance.MainViewModel.Dialog = cartDialog;
+		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
 
 	private async void OnExcelImportCommand(string obj)

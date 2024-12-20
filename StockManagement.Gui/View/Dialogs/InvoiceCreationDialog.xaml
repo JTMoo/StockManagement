@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="StockManagement.Gui.View.Dialogs.InvoiceCreationDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:lang="clr-namespace:StockManagement.Language;assembly=StockManagement.Language"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="80"/>
+		</Grid.RowDefinitions>
+		<ScrollViewer Style="{StaticResource DarkScrollViewerStyle}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="{StaticResource TextBlockDialogColumnWidth}"/>
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
+
+				<!-- Number -->
+				<TextBlock Grid.Row="0"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.invoiceId}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="0" Grid.Column="1"
+													Margin="3"
+													IsEnabled="False"
+													ActualText="{Binding Invoice.Number}" />
+
+				<!-- Creation Date -->
+				<TextBlock Grid.Row="1"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.creationDate}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="1" Grid.Column="1"
+													Margin="3"
+													IsEnabled="False"
+													ActualText="{Binding Invoice.Date}" />
+
+				<!-- Customer RUC -->
+				<TextBlock Grid.Row="2"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.identificationNumber}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="2" Grid.Column="1"
+													Margin="3"
+													IsEnabled="False"
+													ActualText="{Binding Invoice.Code}" />
+
+				<!-- Customer -->
+				<TextBlock Grid.Row="3"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.customer}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="3" Grid.Column="1"
+													Margin="3"
+													IsEnabled="False"
+													ActualText="{Binding Invoice.Customer.Display}" />
+
+				<!-- Sale Condition -->
+				<TextBlock Grid.Row="4"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.saleCondition}" />
+				<StackPanel Grid.Row="4" Grid.Column="1" Margin="3">
+					<RadioButton Content="{x:Static lang:Resources.cash}"
+								 Style="{StaticResource BaseRadioButtonStyle}"
+								 Command="{Binding ChangeSaleConditionCommand}"
+								 CommandParameter="{x:Static types:SaleCondition.Cash}" />
+					<RadioButton Content="{x:Static lang:Resources.credit}"
+								 Style="{StaticResource BaseRadioButtonStyle}"
+								 Command="{Binding ChangeSaleConditionCommand}"
+								 CommandParameter="{x:Static types:SaleCondition.Credit}" />
+					<StackPanel Orientation="Horizontal">
+						<StackPanel.Style>
+							<Style TargetType="{x:Type StackPanel}">
+								<Setter Property="Visibility" Value="Collapsed" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Invoice.SaleCondition}" Value="{x:Static types:SaleCondition.Credit}">
+										<Setter Property="Visibility" Value="Visible" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</StackPanel.Style>
+						<TextBlock Style="{StaticResource BaseTextBlockStyle}"
+								   Text="{x:Static lang:Resources.expirationDate}"/>
+						<TextBlock Style="{StaticResource BaseTextBlockStyle}"
+								   Margin="5,0,0,0"
+								   Text="{Binding Invoice.ExpirationDate}"/>
+					</StackPanel>
+				</StackPanel>
+
+				<!-- Total -->
+				<TextBlock Grid.Row="5"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.total}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="5" Grid.Column="1"
+													Margin="3"
+													IsEnabled="False"
+													ActualText="{Binding Invoice.Total}" />
+
+				<!-- Tax -->
+				<TextBlock Grid.Row="6"
+						   Style="{StaticResource IndentedDialogTextBlockStyle}"
+						   Text="{x:Static lang:Resources.tax}" />
+				<controls:TextBoxWithPreviewControl Grid.Row="6" Grid.Column="1"
+													Margin="3"
+													IsEnabled="False"
+													ActualText="{Binding Invoice.Tax}" />
+
+				<!-- Shopping Cart Items List -->
+				<ListView Grid.ColumnSpan="2" Grid.Row="8" Margin="5"
+						  ItemsSource="{Binding Invoice.Items}"
+						  Style="{StaticResource DarkListViewStyle}">
+					<ListView.View>
+						<GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+							<GridView.Columns>
+								<!-- Amount Column -->
+								<GridViewColumn Header="{x:Static lang:Resources.amount}" Width="Auto">
+									<GridViewColumn.CellTemplate>
+										<DataTemplate>
+											<StackPanel Orientation="Horizontal">
+												<controls:TextBoxWithPreviewControl Margin="3"
+																					IsEnabled="False"
+																					ActualText="{Binding Amount}"/>
+											</StackPanel>
+										</DataTemplate>
+									</GridViewColumn.CellTemplate>
+								</GridViewColumn>
+								<!-- Data Column -->
+								<GridViewColumn Header="{x:Static lang:Resources.description}" DisplayMemberBinding="{Binding StockItem.Name}"/>
+								<GridViewColumn Header="{x:Static lang:Resources.price}" DisplayMemberBinding="{Binding StockItem.Price}"/>
+							</GridView.Columns>
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</Grid>
+		</ScrollViewer>
+
+		<controls:DialogActionBarControl Grid.Row="1"
+										 ConfirmCommand="{Binding ConfirmDialogCommand}"
+										 ConfirmVisibility="{Binding Exists, Converter={StaticResource Bool2Collabsed}}"
+										 CancelCommand="{Binding CancelDialogCommand}" />
+	</Grid>
+</UserControl>

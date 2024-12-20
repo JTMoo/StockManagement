@@ -348,4 +348,25 @@
   <data name="selectCustomer" xml:space="preserve">
     <value>Seleccionar cliente:</value>
   </data>
+  <data name="creationDate" xml:space="preserve">
+    <value>Fecha de Emisión</value>
+  </data>
+  <data name="expirationDate" xml:space="preserve">
+    <value>Fecha de Vencimiento</value>
+  </data>
+  <data name="invoice" xml:space="preserve">
+    <value>Factura</value>
+  </data>
+  <data name="saleCondition" xml:space="preserve">
+    <value>Condición de Venta</value>
+  </data>
+  <data name="cash" xml:space="preserve">
+    <value>Contado</value>
+  </data>
+  <data name="credit" xml:space="preserve">
+    <value>Credito</value>
+  </data>
+  <data name="tax" xml:space="preserve">
+    <value>IVA</value>
+  </data>
 </root>

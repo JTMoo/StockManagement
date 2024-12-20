@@ -8,6 +8,7 @@
 				<ResourceDictionary Source="\View\Dictionaries\ComboBoxDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\TextBlockDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ButtonDictionary.xaml" />
+				<ResourceDictionary Source="\View\Dictionaries\RadioButtonDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ToggleButtonDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ListViewDictionary.xaml" />
 				<ResourceDictionary Source="\View\Dictionaries\ViewDictionary.xaml" />

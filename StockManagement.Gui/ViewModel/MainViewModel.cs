@@ -18,16 +18,23 @@ internal class MainViewModel : NotificationBase
 	private ViewModelBase _currentView;
 	private bool isWaitDialogVisible = false;
 	private int responsiveDialogBorderThickness;
+	private IStockItemServiceProvider _stockItemServiceProvider;
+	private ICustomerServiceProvider _customerServiceProvider;
+	private IInvoiceServiceProvider _invoiceServiceProvider;
 
 
 	private MainViewModel(IDatabase database)
 	{
+		_stockItemServiceProvider = new StockItemServiceProvider(database);
+		_customerServiceProvider = new CustomerServiceProvider(database);
+		_invoiceServiceProvider = new InvoiceServiceProvider(database);
+
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 
-		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database), new CustomerServiceProvider(database)));
-		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(new CustomerServiceProvider(database)));
-		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(new InvoiceServiceProvider(database)));
+		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(_stockItemServiceProvider, _customerServiceProvider, _invoiceServiceProvider));
+		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(_customerServiceProvider));
+		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(_invoiceServiceProvider));
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
@@ -79,7 +86,7 @@ internal class MainViewModel : NotificationBase
 
 	private async Task<MainViewModel> InitializeAsync(IDatabase database)
 	{
-		this.CurrentView = await StockItemsViewModel.CreateAsync(new StockItemServiceProvider(database), new CustomerServiceProvider(database));
+		this.CurrentView = await StockItemsViewModel.CreateAsync(_stockItemServiceProvider, _customerServiceProvider, _invoiceServiceProvider);
 		return this;
 	}
 

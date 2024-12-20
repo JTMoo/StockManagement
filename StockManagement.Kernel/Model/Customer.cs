@@ -77,5 +77,9 @@ public class Customer : BaseDocument
 		get { return this.miscellaneous; }
 		set { this.SetField(ref this.miscellaneous, value); }
 	}
+	public string Display
+	{
+		get { return string.Join(" ", this.Name, this.Lastname, this.CustomerId); }
+	}
 	#endregion Properties
 }
