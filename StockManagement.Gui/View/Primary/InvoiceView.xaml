@@ -38,7 +38,7 @@
 						<GridViewColumn Header="{x:Static lang:Resources.invoiceId}" Width="Auto" DisplayMemberBinding="{Binding Number}" />
 						<GridViewColumn Header="{x:Static lang:Resources.name}" Width="Auto" DisplayMemberBinding="{Binding Customer.Name}" />
 						<GridViewColumn Header="{x:Static lang:Resources.lastname}" Width="Auto" DisplayMemberBinding="{Binding Customer.Lastname}" />
-						<GridViewColumn Header="{x:Static lang:Resources.customerId}" Width="Auto" DisplayMemberBinding="{Binding Customer.Id}" />
+						<GridViewColumn Header="{x:Static lang:Resources.customerId}" Width="Auto" DisplayMemberBinding="{Binding Customer.CustomerId}" />
 					</GridView.Columns>
 				</GridView>
 			</ListView.View>

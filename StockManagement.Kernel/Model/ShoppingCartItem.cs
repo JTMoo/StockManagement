@@ -6,6 +6,9 @@ public class ShoppingCartItem(StockItem item) : NotificationBase
 	private int amount = 1;
 	private int discount = 0;
 
+
+	public StockItem StockItem { get; set; } = item;
+
 	public int Discount
 	{
 		get { return this.discount; }
@@ -17,13 +20,11 @@ public class ShoppingCartItem(StockItem item) : NotificationBase
 		get { return this.amount; }
 		set 
 		{ 
-			if (value > this.StockItem.Amount)
+			if (this.StockItem != null && value > this.StockItem.Amount)
 			{
 				value = this.StockItem.Amount;
 			}
 			this.SetField(ref this.amount, value); 
 		}
 	}
-
-	public StockItem StockItem { get; set; } = item;
 }

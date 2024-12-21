@@ -19,7 +19,12 @@
 	<converter:EqualityConverter x:Key="EqualityConverter" />
 	<converter:MultiParameterCommandConverter x:Key="MultiParamCommand" />
 	<converter:ValueToDisplayNameAttributeConverter x:Key="Value2DisplayName" />
+	<converter:IsEqualConverter x:Key="IsEqual" />
+	<converter:IsNotEqualConverter x:Key="IsNotEqual" />
+	<converter:InverseBooleanConverter x:Key="InverseBoolean" />
 	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
+	<converter:MultiBoolToVisibilityCollabsedConverter x:Key="MultiBool2Collabsed" />
+	<converter:NullToVisibilityCollabsedConverter x:Key="Null2Collabsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
 	<selectors:ViewTemplateSelector x:Key="ViewTemplateSelector" />
 

@@ -8,6 +8,7 @@
              xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 mc:Ignorable="d" 
+			 x:Name="parent"
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
@@ -21,8 +22,7 @@
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
-					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
-					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
+					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
 					<RowDefinition Height="{StaticResource DialogGridRowHeight}"/>
 					<RowDefinition Height="*"/>
@@ -48,7 +48,7 @@
 				<controls:TextBoxWithPreviewControl Grid.Row="1" Grid.Column="1"
 													Margin="3"
 													IsEnabled="False"
-													ActualText="{Binding Invoice.Date}" />
+													ActualText="{Binding Invoice.Date, StringFormat='dd.MM.yyyy'}" />
 
 				<!-- Customer RUC -->
 				<TextBlock Grid.Row="2"
@@ -57,7 +57,7 @@
 				<controls:TextBoxWithPreviewControl Grid.Row="2" Grid.Column="1"
 													Margin="3"
 													IsEnabled="False"
-													ActualText="{Binding Invoice.Code}" />
+													ActualText="{Binding Invoice.Customer.IdentificationNumber}" />
 
 				<!-- Customer -->
 				<TextBlock Grid.Row="3"
@@ -96,7 +96,7 @@
 								   Text="{x:Static lang:Resources.expirationDate}"/>
 						<TextBlock Style="{StaticResource BaseTextBlockStyle}"
 								   Margin="5,0,0,0"
-								   Text="{Binding Invoice.ExpirationDate}"/>
+								   Text="{Binding Invoice.ExpirationDate, StringFormat='dd.MM.yyyy'}"/>
 					</StackPanel>
 				</StackPanel>
 
@@ -149,7 +149,15 @@
 
 		<controls:DialogActionBarControl Grid.Row="1"
 										 ConfirmCommand="{Binding ConfirmDialogCommand}"
-										 ConfirmVisibility="{Binding Exists, Converter={StaticResource Bool2Collabsed}}"
-										 CancelCommand="{Binding CancelDialogCommand}" />
+										 CancelCommand="{Binding CancelDialogCommand}">
+			<controls:DialogActionBarControl.ConfirmVisibility>
+				<MultiBinding Converter="{StaticResource MultiBool2Collabsed}">
+					<MultiBinding.Bindings>
+						<Binding Path="Exists" Converter="{StaticResource InverseBoolean}" />
+						<Binding Path="Invoice.SaleCondition" Converter="{StaticResource IsNotEqual}" ConverterParameter="{x:Static types:SaleCondition.None}" />
+					</MultiBinding.Bindings>
+				</MultiBinding>
+			</controls:DialogActionBarControl.ConfirmVisibility>
+		</controls:DialogActionBarControl>
 	</Grid>
 </UserControl>

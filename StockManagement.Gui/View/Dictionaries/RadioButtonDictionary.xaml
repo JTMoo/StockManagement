@@ -5,6 +5,5 @@
 		   x:Key="BaseRadioButtonStyle">
 		<Setter Property="FontFamily" Value="/Fonts/#Poppins" />
 		<Setter Property="Foreground" Value="{StaticResource MainForeground}" />
-		<Setter Property="FontSize" Value="12" />
 	</Style>
 </ResourceDictionary>

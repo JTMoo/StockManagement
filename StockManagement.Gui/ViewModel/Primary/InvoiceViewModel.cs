@@ -68,7 +68,7 @@ public class InvoiceViewModel : ViewModelBase
 
 	private async Task<InvoiceViewModel> InitializeAsync()
 	{
-		await _invoiceServiceProvider.GetInvoicesAsync();
+		this.FilteredInvoices = new(await _invoiceServiceProvider.GetInvoicesAsync());
 		return this;
 	}
 

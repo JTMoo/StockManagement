@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows;
+using System.Linq;
 
 namespace StockManagement.Gui.Converter;
 
 
-public class EqualityConverter : IMultiValueConverter
+internal class MultiBoolToVisibilityCollabsedConverter : IMultiValueConverter
 {
 	public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 	{
-		if (values.Length < 2) return false;
+		ArgumentNullException.ThrowIfNull(values);
+		if (values.Any(value => value is not bool)) return values;
 
+		var visibility = values.All(value => (bool)value);
 		if (parameter != null && parameter is string invert && invert.Equals("invert", StringComparison.InvariantCultureIgnoreCase))
-			return !values[0].Equals(values[1]);
+			return visibility ? Visibility.Collapsed : Visibility.Visible;
 
-		return values[0].Equals(values[1]);
+		return visibility ? Visibility.Visible : Visibility.Collapsed;
 	}
 
 	public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
