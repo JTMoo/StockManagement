@@ -55,7 +55,9 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 		{
 			var message = string.Join(" ", ex.Message, $"({ex.ParamName})");
 			MessageBox.Show(message, Language.Resources.invoices, MessageBoxButton.OK, MessageBoxImage.Error);
+			this.Cancel();
 		}
+
 		base.Confirm();
 	}
 }
