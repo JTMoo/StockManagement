@@ -121,7 +121,7 @@
     <value>Informaciones additionales</value>
   </data>
   <data name="changeInfo" xml:space="preserve">
-    <value>Cambio del artículo</value>
+    <value>Cambiar infomaciones de un artículo</value>
   </data>
   <data name="createItem" xml:space="preserve">
     <value>Crear artículo</value>
@@ -350,5 +350,26 @@
   </data>
   <data name="exceptionShoppingCartItemOutOfRange" xml:space="preserve">
     <value>El monto de un artículo vendido es demasiado. (Insufficiente artículos en el stock)</value>
+  </data>
+  <data name="invoice" xml:space="preserve">
+    <value>Factura</value>
+  </data>
+  <data name="tax" xml:space="preserve">
+    <value>IVA</value>
+  </data>
+  <data name="creationDate" xml:space="preserve">
+    <value>Fecha de emisión</value>
+  </data>
+  <data name="expirationDate" xml:space="preserve">
+    <value>Fecha de vencimiento</value>
+  </data>
+  <data name="saleCondition" xml:space="preserve">
+    <value>Condición de Venta</value>
+  </data>
+  <data name="cash" xml:space="preserve">
+    <value>Contado</value>
+  </data>
+  <data name="credit" xml:space="preserve">
+    <value>Credito</value>
   </data>
 </root>

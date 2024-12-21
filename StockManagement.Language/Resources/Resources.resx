@@ -351,4 +351,25 @@
   <data name="exceptionShoppingCartItemOutOfRange" xml:space="preserve">
     <value />
   </data>
+  <data name="invoice" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tax" xml:space="preserve">
+    <value />
+  </data>
+  <data name="creationDate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="expirationDate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="saleCondition" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cash" xml:space="preserve">
+    <value />
+  </data>
+  <data name="credit" xml:space="preserve">
+    <value />
+  </data>
 </root>

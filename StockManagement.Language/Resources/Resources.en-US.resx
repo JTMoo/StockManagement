@@ -351,4 +351,25 @@
   <data name="exceptionShoppingCartItemOutOfRange" xml:space="preserve">
     <value>The amount of sold items is too high. (Insufficient items in stock)</value>
   </data>
+  <data name="invoice" xml:space="preserve">
+    <value>Invoice</value>
+  </data>
+  <data name="tax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
+  <data name="creationDate" xml:space="preserve">
+    <value>Creation date</value>
+  </data>
+  <data name="expirationDate" xml:space="preserve">
+    <value>Expiration date</value>
+  </data>
+  <data name="saleCondition" xml:space="preserve">
+    <value>Sale condition</value>
+  </data>
+  <data name="cash" xml:space="preserve">
+    <value>Cash</value>
+  </data>
+  <data name="credit" xml:space="preserve">
+    <value>Credit</value>
+  </data>
 </root>
