@@ -70,7 +70,7 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	#endregion Properties
 
 
-	public override async void Confirm(string param)
+	public override async void Confirm()
 	{
 		var invoice = new Invoice()
 		{
@@ -85,10 +85,10 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _invoiceServiceProvider, _stockItemServiceProvider);
 	}
 
-	public override void Cancel(string param)
+	public override void Cancel()
 	{
 		this.DeregisterFromEvents();
-		base.Cancel(param);
+		base.Cancel();
 	}
 	public static Task<ShoppingCartDialogViewModel> CreateAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
 	{

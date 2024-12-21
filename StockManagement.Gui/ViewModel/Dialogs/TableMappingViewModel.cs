@@ -42,7 +42,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 	public RelayCommand<object> SelectedItemChangedCommand { get; }
 	#endregion Properties
 
-	public override async void Confirm(string param)
+	public override async void Confirm()
 	{
 		GuiManager.Instance.ShowWaitDialog();
 
@@ -61,7 +61,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 		await _stockItemServiceProvider.AddManyStockItemsAsync(items);
 
 		GuiManager.Instance.HideWaitDialog();
-		base.Confirm(param);
+		base.Confirm();
 	}
 
 	private IList<StockItem> ExtractStockItemsFromExcelSheet()

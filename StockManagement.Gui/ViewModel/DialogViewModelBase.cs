@@ -11,14 +11,14 @@ public class DialogViewModelBase : ViewModelBase
 
 	public DialogViewModelBase()
 	{
-		ConfirmDialogCommand = new RelayCommand<string>(this.Confirm);
-		CancelDialogCommand = new RelayCommand<string>(this.Cancel);
+		ConfirmDialogCommand = new RelayCommand<string>(_ => this.Confirm());
+		CancelDialogCommand = new RelayCommand<string>(_ => this.Cancel());
 	}
 
 	public RelayCommand<string> ConfirmDialogCommand { get; }
 	public RelayCommand<string> CancelDialogCommand { get; }
 
-	public virtual void Cancel(string param)
+	public virtual void Cancel()
 	{
 		this.Close(false);
 	}
@@ -28,7 +28,7 @@ public class DialogViewModelBase : ViewModelBase
 		DialogClosing?.Invoke(success);
 	}
 
-	public virtual void Confirm(string param)
+	public virtual void Confirm()
 	{
 		this.Close(true);
 	}

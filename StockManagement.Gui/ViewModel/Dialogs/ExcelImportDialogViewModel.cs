@@ -28,7 +28,7 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 	}
 	#endregion Properties
 
-	public override void Confirm(string param)
+	public override void Confirm()
 	{
 		GuiManager.Instance.MainViewModel.Dialog = new TableMappingViewModel(this.workbook.Worksheet(this.SelectedWorksheetName), _stockItemServiceProvider);
 	}

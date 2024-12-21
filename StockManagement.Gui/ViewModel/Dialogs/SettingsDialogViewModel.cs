@@ -41,7 +41,7 @@ public class SettingsDialogViewModel : DialogViewModelBase
 	}
 	#endregion Properties
 
-	public override void Confirm(string obj)
+	public override void Confirm()
 	{
 		var command = new ChangeSettingsCommand()
 		{
@@ -52,7 +52,7 @@ public class SettingsDialogViewModel : DialogViewModelBase
 		};
 
 		MainManagerFacade.PushCommand(command);
-		base.Confirm(obj);
+		base.Confirm();
 	}
 	private void OnPropertyChangedEvent(object? sender, PropertyChangedEventArgs e)
 	{

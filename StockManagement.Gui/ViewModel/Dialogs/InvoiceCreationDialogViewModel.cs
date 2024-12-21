@@ -44,7 +44,7 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 		return this;
 	}
 
-	public override async void Confirm(string obj)
+	public override async void Confirm()
 	{
 		try
 		{
@@ -56,6 +56,6 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 			var message = string.Join(" ", ex.Message, $"({ex.ParamName})");
 			MessageBox.Show(message, Language.Resources.invoices, MessageBoxButton.OK, MessageBoxImage.Error);
 		}
-		base.Confirm(obj);
+		base.Confirm();
 	}
 }

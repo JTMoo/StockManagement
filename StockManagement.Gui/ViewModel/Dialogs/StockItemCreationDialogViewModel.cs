@@ -14,10 +14,10 @@ public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockIte
 	public StockItem StockItem { get; set; } = stockItem;
 	#endregion
 
-	public override async void Confirm(string obj)
+	public override async void Confirm()
 	{
 		await CreateOrUpdateStockItem();
-		base.Confirm(obj);
+		base.Confirm();
 	}
 
 	private async Task CreateOrUpdateStockItem()
