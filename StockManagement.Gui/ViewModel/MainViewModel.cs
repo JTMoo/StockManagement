@@ -18,9 +18,9 @@ internal class MainViewModel : NotificationBase
 	private ViewModelBase _currentView;
 	private bool isWaitDialogVisible = false;
 	private int responsiveDialogBorderThickness;
-	private IStockItemServiceProvider _stockItemServiceProvider;
-	private ICustomerServiceProvider _customerServiceProvider;
-	private IInvoiceServiceProvider _invoiceServiceProvider;
+	private readonly IStockItemServiceProvider _stockItemServiceProvider;
+	private readonly ICustomerServiceProvider _customerServiceProvider;
+	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
 
 
 	private MainViewModel(IDatabase database)
