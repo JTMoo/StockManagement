@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.ExtensionMethods;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
@@ -43,8 +46,16 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 
 	public override async void Confirm(string obj)
 	{
-		await _invoiceServiceProvider.AddInvoiceAsync(this.Invoice);
-		//await _stockItemServiceProvider.UpdateStockItemsAsync(this.Invoice.Items);
+		try
+		{
+			await _invoiceServiceProvider.AddInvoiceAsync(this.Invoice);
+			await this.Invoice.Items.UpdateStockItems(_stockItemServiceProvider);
+		}
+		catch (ArgumentOutOfRangeException ex)
+		{
+			var message = string.Join(" ", ex.Message, $"({ex.ParamName})");
+			MessageBox.Show(message, Language.Resources.invoices, MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 		base.Confirm(obj);
 	}
 }

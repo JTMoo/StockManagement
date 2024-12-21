@@ -348,25 +348,7 @@
   <data name="selectCustomer" xml:space="preserve">
     <value>Kunde auswählen:</value>
   </data>
-  <data name="creationDate" xml:space="preserve">
-    <value>Austellungsdatum</value>
-  </data>
-  <data name="expirationDate" xml:space="preserve">
-    <value>Ablaufsdatum</value>
-  </data>
-  <data name="invoice" xml:space="preserve">
-    <value>Rechnung</value>
-  </data>
-  <data name="saleCondition" xml:space="preserve">
-    <value>Verkaufsbedingung</value>
-  </data>
-  <data name="cash" xml:space="preserve">
-    <value>Bar</value>
-  </data>
-  <data name="credit" xml:space="preserve">
-    <value>Kredit</value>
-  </data>
-  <data name="tax" xml:space="preserve">
-    <value>Steuer</value>
+  <data name="exceptionShoppingCartItemOutOfRange" xml:space="preserve">
+    <value>Die Anzahl der verkauften Artikel ist zu hoch. (Unzureichende Artikel auf Lager)</value>
   </data>
 </root>

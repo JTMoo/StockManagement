@@ -115,15 +115,6 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cash.
-        /// </summary>
-        public static string cash {
-            get {
-                return ResourceManager.GetString("cash", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Change item info.
         /// </summary>
         public static string changeInfo {
@@ -192,24 +183,6 @@ namespace StockManagement.Language {
         public static string createItem {
             get {
                 return ResourceManager.GetString("createItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Creation Date.
-        /// </summary>
-        public static string creationDate {
-            get {
-                return ResourceManager.GetString("creationDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Credit.
-        /// </summary>
-        public static string credit {
-            get {
-                return ResourceManager.GetString("credit", resourceCulture);
             }
         }
         
@@ -286,11 +259,11 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expiration Date.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string expirationDate {
+        public static string exceptionShoppingCartItemOutOfRange {
             get {
-                return ResourceManager.GetString("expirationDate", resourceCulture);
+                return ResourceManager.GetString("exceptionShoppingCartItemOutOfRange", resourceCulture);
             }
         }
         
@@ -327,15 +300,6 @@ namespace StockManagement.Language {
         public static string identificationNumber {
             get {
                 return ResourceManager.GetString("identificationNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invoice.
-        /// </summary>
-        public static string invoice {
-            get {
-                return ResourceManager.GetString("invoice", resourceCulture);
             }
         }
         
@@ -516,15 +480,6 @@ namespace StockManagement.Language {
         public static string rimDiameter {
             get {
                 return ResourceManager.GetString("rimDiameter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sale condition.
-        /// </summary>
-        public static string saleCondition {
-            get {
-                return ResourceManager.GetString("saleCondition", resourceCulture);
             }
         }
         
@@ -759,15 +714,6 @@ namespace StockManagement.Language {
         public static string stockItems {
             get {
                 return ResourceManager.GetString("stockItems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tax.
-        /// </summary>
-        public static string tax {
-            get {
-                return ResourceManager.GetString("tax", resourceCulture);
             }
         }
         
