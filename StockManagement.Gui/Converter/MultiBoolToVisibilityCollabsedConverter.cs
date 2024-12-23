@@ -12,7 +12,7 @@ internal class MultiBoolToVisibilityCollabsedConverter : IMultiValueConverter
 	public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 	{
 		ArgumentNullException.ThrowIfNull(values);
-		if (values.Any(value => value is not bool)) return values;
+		if (values.Any(value => value is not bool)) return Visibility.Collapsed;
 
 		var visibility = values.All(value => (bool)value);
 		if (parameter != null && parameter is string invert && invert.Equals("invert", StringComparison.InvariantCultureIgnoreCase))
