@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,12 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 
+
+	private InvoiceCreationDialogViewModel(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider)
+	{
+		this.Invoice = invoice;
+		_invoiceServiceProvider = invoiceServiceProvider;
+	}
 
 	private InvoiceCreationDialogViewModel(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
 	{
@@ -37,6 +44,12 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 	public bool Exists { get; set; }
 
 
+	public static Task<InvoiceCreationDialogViewModel> CreateAsync(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider)
+	{
+		var ret = new InvoiceCreationDialogViewModel(invoice, invoiceServiceProvider);
+		return ret.InitializeAsync();
+	}
+
 	public static Task<InvoiceCreationDialogViewModel> CreateAsync(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
 	{
 		var ret = new InvoiceCreationDialogViewModel(invoice, invoiceServiceProvider, stockItemServiceProvider);
@@ -50,8 +63,8 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 			this.Exists = true;
 		}
 
-		var invoices = await _invoiceServiceProvider.GetInvoicesAsync();
-		this.Invoice.Number = !invoices.Any() ? 1 : invoices.Max(invoice => invoice.Number) + 1;
+		List<Invoice> invoices = new(await _invoiceServiceProvider.GetInvoicesAsync());
+		this.Invoice.Number = invoices.Count == 0 ? 1 : invoices.Max(invoice => invoice.Number) + 1;
 		return this;
 	}
 

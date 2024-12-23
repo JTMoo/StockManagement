@@ -73,14 +73,47 @@
 						   Style="{StaticResource IndentedDialogTextBlockStyle}"
 						   Text="{x:Static lang:Resources.saleCondition}" />
 				<StackPanel Grid.Row="4" Grid.Column="1" Margin="3">
+					<StackPanel.Style>
+						<Style TargetType="{x:Type StackPanel}">
+							<Setter Property="IsEnabled" Value="True" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding Exists}" Value="True">
+									<Setter Property="IsEnabled" Value="False" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</StackPanel.Style>
+					
 					<RadioButton Content="{x:Static lang:Resources.cash}"
-								 Style="{StaticResource BaseRadioButtonStyle}"
 								 Command="{Binding ChangeSaleConditionCommand}"
-								 CommandParameter="{x:Static types:SaleCondition.Cash}" />
+								 CommandParameter="{x:Static types:SaleCondition.Cash}">
+						<RadioButton.Style>
+							<Style BasedOn="{StaticResource BaseRadioButtonStyle}"
+								   TargetType="{x:Type RadioButton}">
+								<Setter Property="IsChecked" Value="False" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Invoice.SaleCondition}" Value="{x:Static types:SaleCondition.Cash}">
+										<Setter Property="IsChecked" Value="True" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</RadioButton.Style>
+					</RadioButton>
 					<RadioButton Content="{x:Static lang:Resources.credit}"
-								 Style="{StaticResource BaseRadioButtonStyle}"
 								 Command="{Binding ChangeSaleConditionCommand}"
-								 CommandParameter="{x:Static types:SaleCondition.Credit}" />
+								 CommandParameter="{x:Static types:SaleCondition.Credit}">
+						<RadioButton.Style>
+							<Style BasedOn="{StaticResource BaseRadioButtonStyle}"
+								   TargetType="{x:Type RadioButton}">
+								<Setter Property="IsChecked" Value="False" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Invoice.SaleCondition}" Value="{x:Static types:SaleCondition.Credit}">
+										<Setter Property="IsChecked" Value="True" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</RadioButton.Style>
+					</RadioButton>
 					<StackPanel Orientation="Horizontal">
 						<StackPanel.Style>
 							<Style TargetType="{x:Type StackPanel}">

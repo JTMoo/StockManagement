@@ -8,6 +8,7 @@ using StockManagement.Gui.Commands;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Gui.ViewModel.Dialogs;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -26,13 +27,15 @@ public class InvoiceViewModel : ViewModelBase
 	{
 		_invoiceServiceProvider = invoiceServiceProvider;
 
+		this.MoreInfoCommand = new RelayCommand<Invoice>(this.OnMoreInfoCommand);
+
 		this.PropertyChanged += this.OnPropertyChangedEvent;
 		this.SetupFilterConditions();
 	}
 
 
 	#region Properties
-	public RelayCommand<Customer> MoreInfoCommand { get; }
+	public RelayCommand<Invoice> MoreInfoCommand { get; }
 
 	public ObservableCollection<Invoice> FilteredInvoices
 	{
@@ -87,6 +90,10 @@ public class InvoiceViewModel : ViewModelBase
 	private void OnRefreshSearch()
 	{
 		this.FilteredInvoices = new(this.FilteredInvoices.Where(_filterFunctions));
+	}
+	private async void OnMoreInfoCommand(Invoice invoice)
+	{
+		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _invoiceServiceProvider);
 	}
 
 	private void SetupFilterConditions()

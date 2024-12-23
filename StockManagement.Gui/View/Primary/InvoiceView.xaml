@@ -22,7 +22,6 @@
 					<MenuItem Header="{x:Static lang:Resources.additionalInformation}"
 							  FontSize="16"
 							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
-							  IsEnabled="False"
 							  CommandParameter="{Binding }" />
 				</ContextMenu>
 			</ListView.Resources>
