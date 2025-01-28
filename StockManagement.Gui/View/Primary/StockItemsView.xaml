@@ -3,6 +3,7 @@
 			 xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:lang="clr-namespace:StockManagement.Language;assembly=StockManagement.Language"
 			 xmlns:main="clr-namespace:StockManagement.Gui"
@@ -20,7 +21,14 @@
 		</Grid.ColumnDefinitions>
 
 		<ListView ItemsSource="{Binding FilteredStockItems}"
-				  Style="{StaticResource DarkListViewStyle}">
+				  Style="{StaticResource DarkListViewStyle}"
+				  x:Name="StockItemList">
+			<i:Interaction.Triggers>
+				<i:EventTrigger EventName="MouseDoubleClick">
+					<i:InvokeCommandAction Command="{Binding MoreInfoCommand}"
+										   CommandParameter="{Binding ElementName=StockItemList, Path=SelectedItem}"/>
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
 			<ListView.Resources>
 				<ContextMenu x:Key="ItemContextMenu">
 					<MenuItem Header="{x:Static lang:Resources.additionalInformation}"
