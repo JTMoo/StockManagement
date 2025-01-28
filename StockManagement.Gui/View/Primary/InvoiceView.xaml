@@ -17,7 +17,7 @@
 		</Grid.ColumnDefinitions>
 
 		<ListView ItemsSource="{Binding FilteredInvoices}"
-			  Style="{StaticResource DarkListViewStyle}"
+				  Style="{StaticResource DarkListViewStyle}"
 				  x:Name="InvoiceList">
 			<i:Interaction.Triggers>
 				<i:EventTrigger EventName="MouseDoubleClick">

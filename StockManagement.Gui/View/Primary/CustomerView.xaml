@@ -21,7 +21,7 @@
 		</Grid.ColumnDefinitions>
 
 		<ListView ItemsSource="{Binding FilteredCustomers}"
-			  Style="{StaticResource DarkListViewStyle}"
+				  Style="{StaticResource DarkListViewStyle}"
 				  x:Name="CustomerList">
 			<i:Interaction.Triggers>
 				<i:EventTrigger EventName="MouseDoubleClick">
@@ -32,9 +32,9 @@
 			<ListView.Resources>
 				<ContextMenu x:Key="ItemContextMenu">
 					<MenuItem Header="{x:Static lang:Resources.additionalInformation}"
-						  FontSize="16"
-						  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
-						  CommandParameter="{Binding }" />
+							  FontSize="16"
+							  Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.MoreInfoCommand}"
+							  CommandParameter="{Binding }" />
 				</ContextMenu>
 			</ListView.Resources>
 			<ListView.ItemContainerStyle>
