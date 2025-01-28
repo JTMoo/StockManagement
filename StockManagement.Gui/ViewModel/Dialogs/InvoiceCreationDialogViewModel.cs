@@ -61,6 +61,7 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 		if (this.Invoice.Number != 0)
 		{
 			this.Exists = true;
+			return this;
 		}
 
 		List<Invoice> invoices = new(await _invoiceServiceProvider.GetInvoicesAsync());
