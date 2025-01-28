@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DocumentFormat.OpenXml.Spreadsheet;
 using MongoDB.Driver;
 using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model.Types;

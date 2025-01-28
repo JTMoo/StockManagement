@@ -45,25 +45,30 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		return _database.GetOneAsync<StockItem>(item => item.Code == code);
 	}
 
-	public Task<ReplaceOneResult> UpdateStockItemAsync(StockItem stockItem)
+	public async Task<ReplaceOneResult> UpdateStockItemAsync(StockItem stockItem)
 	{
-		var item = this.GetStockItemAsync(stockItem.Code).Result;
-		if (item is StockItem existingItem && existingItem.Amount != stockItem.Amount)
+		var item = await this.GetStockItemAsync(stockItem.Code);
+		if (item.Amount != stockItem.Amount)
 		{
-			var changeAmountTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - item.Amount);
-			var collection2 = _database.ConnectToMongo<Transaction>();
-			collection2.InsertOneAsync(changeAmountTransaction);
+			SaveTransaction(stockItem, item);
 		}
 
 		var collection = _database.ConnectToMongo<StockItem>();
-		var filter = Builders<StockItem>.Filter.Eq("Id", stockItem.Code);
+		var filter = Builders<StockItem>.Filter.Eq("Id", stockItem.Id);
 		// Upsert means: replace if existent - insert if not existent
-		return collection.ReplaceOneAsync(filter, stockItem, new ReplaceOptions { IsUpsert = true });
+		return await collection.ReplaceOneAsync(filter, stockItem, new ReplaceOptions { IsUpsert = true });
 	}
 
 	public Task AddManyStockItemsAsync(IList<StockItem> stockItems)
 	{
 		var collection = _database.ConnectToMongo<StockItem>();
 		return collection.InsertManyAsync(stockItems);
+	}
+
+	private void SaveTransaction(StockItem stockItem, StockItem item)
+	{
+		var changeAmountTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - item.Amount);
+		var collection2 = _database.ConnectToMongo<Transaction>();
+		collection2.InsertOneAsync(changeAmountTransaction);
 	}
 }

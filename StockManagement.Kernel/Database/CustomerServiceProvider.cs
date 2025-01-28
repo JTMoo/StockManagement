@@ -40,7 +40,7 @@ public class CustomerServiceProvider(IDatabase database) : ICustomerServiceProvi
 	public Task<ReplaceOneResult> UpdateCustomerAsync(Customer customer)
 	{
 		var collection = _database.ConnectToMongo<Customer>();
-		var filter = Builders<Customer>.Filter.Eq("Id", customer.CustomerId);
+		var filter = Builders<Customer>.Filter.Eq("Id", customer.Id);
 		// Upsert means: replace if existent - insert if not existent
 		return collection.ReplaceOneAsync(filter, customer, new ReplaceOptions { IsUpsert = true });
 	}
