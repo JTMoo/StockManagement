@@ -17,6 +17,7 @@ internal class MainViewModel : NotificationBase
 	private DialogViewModelBase? _dialog;
 	private ViewModelBase _currentView;
 	private bool isWaitDialogVisible = false;
+	private bool _isMenuExtended = false;
 	private int responsiveDialogBorderThickness;
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 	private readonly ICustomerServiceProvider _customerServiceProvider;
@@ -29,6 +30,7 @@ internal class MainViewModel : NotificationBase
 		_customerServiceProvider = new CustomerServiceProvider(database);
 		_invoiceServiceProvider = new InvoiceServiceProvider(database);
 
+		ToggleMenuCommand = new RelayCommand<string>(_ => this.IsMenuExtended = !this.IsMenuExtended);
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 
@@ -42,6 +44,7 @@ internal class MainViewModel : NotificationBase
 
 	#region Properties
 	public RelayCommand<string> QuitCommand { get; }
+	public RelayCommand<string> ToggleMenuCommand { get; }
 	public RelayCommand<string> OpenSettingsCommand { get; }
 	public RelayCommand<string> OpenStockItemsViewCommand { get; }
 	public RelayCommand<string> OpenInvoiceViewCommand { get; }
@@ -75,6 +78,12 @@ internal class MainViewModel : NotificationBase
 	{
 		get => this.isWaitDialogVisible;
 		set => this.SetField(ref this.isWaitDialogVisible, value);
+	}
+
+	public bool IsMenuExtended
+	{
+		get => _isMenuExtended;
+		set => this.SetField(ref _isMenuExtended, value);
 	}
 	#endregion Properties
 
