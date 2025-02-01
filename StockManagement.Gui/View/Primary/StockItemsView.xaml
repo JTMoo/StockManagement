@@ -57,7 +57,7 @@
 						<GridViewColumn Header="{x:Static lang:Resources.name}" Width="Auto" DisplayMemberBinding="{Binding Name}" />
 						<GridViewColumn Header="{x:Static lang:Resources.code}" Width="200" DisplayMemberBinding="{Binding Code}" />
 						<GridViewColumn Header="{x:Static lang:Resources.quantity}" Width="Auto" DisplayMemberBinding="{Binding Amount}" />
-						<GridViewColumn Header="{x:Static lang:Resources.price}" Width="100" DisplayMemberBinding="{Binding Price}" />
+						<GridViewColumn Header="{x:Static lang:Resources.price}" Width="100" DisplayMemberBinding="{Binding Price, StringFormat='c0', ConverterCulture='es-py'}" />
 						<GridViewColumn Header="{x:Static lang:Resources.manufacturer}" Width="200" DisplayMemberBinding="{Binding Manufacturer}" />
 						<GridViewColumn Header="{x:Static lang:Resources.location}" Width="200" DisplayMemberBinding="{Binding Location}" />
 					</GridView.Columns>

@@ -134,9 +134,9 @@
 					   Style="{StaticResource BaseTextBlockStyle}"/>
 			<TextBlock Text=": "
 					   Style="{StaticResource BaseTextBlockStyle}" />
-			<TextBlock Text="{Binding Total}"
+			<TextBlock Text="{Binding Total, StringFormat='c0', ConverterCulture='es-py'}"
 					   Style="{StaticResource BaseTextBlockStyle}" />
-			<TextBlock Text=" Gs. - "
+			<TextBlock Text=" - "
 					   Style="{StaticResource BaseTextBlockStyle}" />
 			<TextBlock Text="{Binding TotalInWords}"
 					   Style="{StaticResource BaseTextBlockStyle}" />

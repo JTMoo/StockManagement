@@ -3,6 +3,7 @@
 			 xmlns:controls="clr-namespace:StockManagement.Gui.View.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:lang="clr-namespace:StockManagement.Language;assembly=StockManagement.Language"
+			 xmlns:sysglb="clr-namespace:System.Globalization;assembly=netstandard"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
@@ -46,7 +47,7 @@
 						   Text="{x:Static lang:Resources.price}" />
 				<controls:TextBoxWithPreviewControl Grid.Row="1" Grid.Column="1"
 													Margin="3"
-													ActualText="{Binding StockItem.Price, Mode=TwoWay}" />
+													ActualText="{Binding StockItem.Price, Mode=TwoWay, StringFormat='c0', ConverterCulture='es-py'}" />
 
 				<!-- Code -->
 				<TextBlock Grid.Row="2"
