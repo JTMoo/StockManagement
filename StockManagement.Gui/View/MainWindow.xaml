@@ -25,8 +25,7 @@
 
 			<ContentControl Grid.RowSpan="2" 
 							Content="{Binding CurrentView}"
-							Style="{StaticResource BaseViewStyle}"
-							Margin="0,0,20,0"/>
+							Style="{StaticResource BaseViewStyle}" />
 
 			<!-- Menu -->
 			<StackPanel Grid.Column="1" Grid.RowSpan="2"
@@ -70,11 +69,11 @@
 							Style="{StaticResource BaseDialogStyle}"
 							Panel.ZIndex="1000" />
 
-			<!--<dialogControls:WaitDialog Grid.ColumnSpan="99"
+			<dialogControls:WaitDialog Grid.ColumnSpan="99"
 									   Grid.RowSpan="99"
 									   Style="{StaticResource BaseDialogStyle}"
 									   Visibility="{Binding IsWaitDialogVisible, Converter={StaticResource Bool2Collabsed}}"
-									   Panel.ZIndex="9999"/>-->
+									   Panel.ZIndex="9999"/>
 		</Grid>
 	</Border>
 </Window>
