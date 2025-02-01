@@ -140,7 +140,7 @@
 				<controls:TextBoxWithPreviewControl Grid.Row="5" Grid.Column="1"
 													Margin="3"
 													IsEnabled="False"
-													ActualText="{Binding Invoice.Total}" />
+													ActualText="{Binding Invoice.Total, StringFormat='c0', ConverterCulture='es-py'}" />
 
 				<!-- Tax -->
 				<TextBlock Grid.Row="6"
@@ -149,7 +149,7 @@
 				<controls:TextBoxWithPreviewControl Grid.Row="6" Grid.Column="1"
 													Margin="3"
 													IsEnabled="False"
-													ActualText="{Binding Invoice.Tax}" />
+													ActualText="{Binding Invoice.Tax, StringFormat='c0', ConverterCulture='es-py'}" />
 
 				<!-- Shopping Cart Items List -->
 				<ListView Grid.ColumnSpan="2" Grid.Row="8" Margin="5"
@@ -172,7 +172,7 @@
 								</GridViewColumn>
 								<!-- Data Column -->
 								<GridViewColumn Header="{x:Static lang:Resources.description}" DisplayMemberBinding="{Binding StockItem.Name}"/>
-								<GridViewColumn Header="{x:Static lang:Resources.price}" DisplayMemberBinding="{Binding StockItem.Price}"/>
+								<GridViewColumn Header="{x:Static lang:Resources.price}" DisplayMemberBinding="{Binding StockItem.Price, StringFormat='c0', ConverterCulture='es-py'}"/>
 							</GridView.Columns>
 						</GridView>
 					</ListView.View>
