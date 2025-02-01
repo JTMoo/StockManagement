@@ -56,7 +56,7 @@
 								<DataTemplate>
 									<StackPanel Orientation="Horizontal">
 										<controls:TextBoxWithPreviewControl Margin="3"
-																			ActualText="{Binding Amount}"/>
+																			ActualText="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 									</StackPanel>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
