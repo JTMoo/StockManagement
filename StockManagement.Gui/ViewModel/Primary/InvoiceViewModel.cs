@@ -93,6 +93,8 @@ public class InvoiceViewModel : ViewModelBase
 	}
 	private async void OnMoreInfoCommand(Invoice invoice)
 	{
+		if (invoice == null) return;
+
 		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _invoiceServiceProvider);
 	}
 

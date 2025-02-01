@@ -108,6 +108,8 @@ public class CustomerViewModel : ViewModelBase
 
 	private void OpenCustomerCreationDialogWithCustomer(Customer customer)
 	{
+		if (customer == null) return;
+
 		GuiManager.Instance.MainViewModel.Dialog = new CustomerCreationDialogViewModel(_customerServiceProvider, customer);
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += async _ => await this.UpdateCustomersAsync();
 	}

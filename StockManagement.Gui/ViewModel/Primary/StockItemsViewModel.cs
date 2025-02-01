@@ -147,6 +147,8 @@ public class StockItemsViewModel : ViewModelBase
 
 	private void OnMoreInfoCommand(StockItem stockItem)
 	{
+		if (stockItem == null) return;
+
 		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem);
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
