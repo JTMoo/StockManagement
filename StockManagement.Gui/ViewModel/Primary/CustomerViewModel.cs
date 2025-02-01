@@ -133,11 +133,11 @@ public class CustomerViewModel : ViewModelBase
 		}
 		catch (ArgumentNullException)
 		{
-			return 1;
+			return 1001;
 		}
 		catch (InvalidOperationException)
 		{
-			return 1;
+			return 1001;
 		}
 	}
 
