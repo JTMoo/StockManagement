@@ -340,6 +340,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string information {
+            get {
+                return ResourceManager.GetString("information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string invoice {
@@ -768,6 +777,15 @@ namespace StockManagement.Language {
         public static string stockItems {
             get {
                 return ResourceManager.GetString("stockItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removed items due to them not being available in stock (Amount = 0)..
+        /// </summary>
+        public static string stockItemsRemoved {
+            get {
+                return ResourceManager.GetString("stockItemsRemoved", resourceCulture);
             }
         }
         

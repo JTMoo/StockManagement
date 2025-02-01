@@ -372,4 +372,10 @@
   <data name="credit" xml:space="preserve">
     <value>Kredit</value>
   </data>
+  <data name="stockItemsRemoved" xml:space="preserve">
+    <value>Es wurden Lagerartikel entfernt, da diese nicht vorhanden sind. (Anzahl = 0)</value>
+  </data>
+  <data name="information" xml:space="preserve">
+    <value>Information</value>
+  </data>
 </root>

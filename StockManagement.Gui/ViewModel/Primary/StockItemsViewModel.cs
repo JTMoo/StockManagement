@@ -154,6 +154,11 @@ public class StockItemsViewModel : ViewModelBase
 	private void OnAddToShoppingCartCommand(IEnumerable selectedItems)
 	{
 		var items = selectedItems.OfType<StockItem>().ConvertToShoppingCartList();
+		
+		if (items.RemoveUnavailableItems())
+		{
+			MessageBox.Show(Language.Resources.stockItemsRemoved, Language.Resources.information, MessageBoxButton.OK, MessageBoxImage.Information);
+		}
 
 		this.ShoppingCartItems.EqualizeTo(items);
 	}

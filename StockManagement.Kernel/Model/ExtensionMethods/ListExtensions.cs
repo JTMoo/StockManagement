@@ -37,4 +37,12 @@ public static class ListExtensions
 
 		return count;
 	}
+
+	public static bool RemoveUnavailableItems(this List<ShoppingCartItem> stockItems)
+	{
+		var originalCount = stockItems.Count;
+		stockItems.RemoveAll(item => item.StockItem.Amount == 0);
+
+		return originalCount != stockItems.Count;
+	}
 }

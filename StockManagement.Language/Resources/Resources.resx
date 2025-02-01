@@ -372,4 +372,10 @@
   <data name="credit" xml:space="preserve">
     <value />
   </data>
+  <data name="stockItemsRemoved" xml:space="preserve">
+    <value>Removed items due to them not being available in stock (Amount = 0).</value>
+  </data>
+  <data name="information" xml:space="preserve">
+    <value>Information</value>
+  </data>
 </root>
