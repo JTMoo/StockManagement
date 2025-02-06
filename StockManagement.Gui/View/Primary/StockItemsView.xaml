@@ -120,6 +120,8 @@
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.searchLocation}"
 					   Margin="5"/>
+			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
+												ActualText="{Binding SearchLocations, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 		</StackPanel>
 
 		<!-- Action Bar -->
