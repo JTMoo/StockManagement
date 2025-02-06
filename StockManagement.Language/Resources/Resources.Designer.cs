@@ -331,6 +331,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide unavailable items.
+        /// </summary>
+        public static string hideUnavailableItems {
+            get {
+                return ResourceManager.GetString("hideUnavailableItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identification number (C.I. / RUC).
         /// </summary>
         public static string identificationNumber {

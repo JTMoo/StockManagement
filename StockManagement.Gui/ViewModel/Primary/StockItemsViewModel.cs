@@ -26,6 +26,7 @@ public class StockItemsViewModel : ViewModelBase
 	private string _searchNames;
 	private string _searchCodes;
 	private string _searchLocations;
+	private bool _hideUnavailableItems;
 	private ManufacturerType _selectedSearchManufacturer;
 	private Type _selectedSearchStockItemType;
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
@@ -93,6 +94,12 @@ public class StockItemsViewModel : ViewModelBase
 		set { this.SetField(ref _searchLocations, value); }
 	}
 
+	public bool HideUnavailableItems
+	{
+		get { return _hideUnavailableItems; }
+		set { this.SetField(ref _hideUnavailableItems, value); }
+	}
+
 	public ManufacturerType SelectedSearchManufacturer
 	{
 		get { return _selectedSearchManufacturer; }
@@ -127,6 +134,7 @@ public class StockItemsViewModel : ViewModelBase
 			case nameof(this.SearchNames):
 			case nameof(this.SearchCodes):
 			case nameof(this.SearchLocations):
+			case nameof(this.HideUnavailableItems):
 				await this.UpdateStockItemsAsync();
 				break;
 		}
@@ -239,6 +247,10 @@ public class StockItemsViewModel : ViewModelBase
 		_filterFunctions.Add(item =>
 		{
 			return string.IsNullOrEmpty(this.SearchLocations) || Regex.IsMatch(item.Location.ToLower(), this.SearchLocations.ToLower());
+		});
+		_filterFunctions.Add(item =>
+		{
+			return !this.HideUnavailableItems || item.Amount != 0;
 		});
 	}
 }

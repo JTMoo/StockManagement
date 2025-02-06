@@ -369,4 +369,7 @@
   <data name="information" xml:space="preserve">
     <value>Information</value>
   </data>
+  <data name="hideUnavailableItems" xml:space="preserve">
+    <value>Nicht verfügbare Artikel verstecken</value>
+  </data>
 </root>

@@ -122,6 +122,18 @@
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
 												ActualText="{Binding SearchLocations, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+					   Text="{x:Static lang:Resources.hideUnavailableItems}"
+					   TextWrapping="WrapWithOverflow"
+					   Margin="5"/>
+				<CheckBox Grid.Column="1" VerticalAlignment="Center" Margin="5"
+						  IsChecked="{Binding HideUnavailableItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+			</Grid>
 		</StackPanel>
 
 		<!-- Action Bar -->
