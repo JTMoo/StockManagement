@@ -86,17 +86,17 @@
 					   Text="{x:Static lang:Resources.searchNames}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.searchLastnames}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchLastnames, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchLastnames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.searchCustomerIds}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchCustomerIds, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchCustomerIds, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 		</StackPanel>
 
 		<!-- Action Bar -->

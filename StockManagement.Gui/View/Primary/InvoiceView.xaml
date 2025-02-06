@@ -83,17 +83,17 @@
 					   Text="{x:Static lang:Resources.searchInvoiceIds}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchInvoiceNumber, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchInvoiceNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.searchDates}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchDates, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchDates, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.searchCustomers}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchCustomers, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchCustomers, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 		</StackPanel>
 	</Grid>
 </UserControl>

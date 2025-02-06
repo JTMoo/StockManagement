@@ -97,12 +97,12 @@
 					   Text="{x:Static lang:Resources.searchNames}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.searchCodes}"
 					   Margin="5"/>
 			<controls:TextBoxWithPreviewControl TextPreview="{x:Static lang:Resources.searchBoxDefault}"
-												ActualText="{Binding SearchNames, UpdateSourceTrigger=PropertyChanged}" />
+												ActualText="{Binding SearchCodes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.selectManufacturer}"
 					   Margin="5"/>
