@@ -22,6 +22,7 @@ internal class MainViewModel : NotificationBase
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 	private readonly ICustomerServiceProvider _customerServiceProvider;
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
+	private readonly IUserServiceProvider _userServiceProvider;
 
 
 	private MainViewModel(IDatabase database)
@@ -29,6 +30,7 @@ internal class MainViewModel : NotificationBase
 		_stockItemServiceProvider = new StockItemServiceProvider(database);
 		_customerServiceProvider = new CustomerServiceProvider(database);
 		_invoiceServiceProvider = new InvoiceServiceProvider(database);
+		_userServiceProvider = new UserServiceProvider(database);
 
 		ToggleMenuCommand = new RelayCommand<string>(_ => this.IsMenuExtended = !this.IsMenuExtended);
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
@@ -37,6 +39,7 @@ internal class MainViewModel : NotificationBase
 		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(_stockItemServiceProvider, _customerServiceProvider, _invoiceServiceProvider));
 		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(_customerServiceProvider));
 		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(_invoiceServiceProvider));
+		OpenLoginCommand = new RelayCommand<string>(async _ => this.CurrentView = await LoginViewModel.CreateAsync(_userServiceProvider));
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
@@ -48,6 +51,7 @@ internal class MainViewModel : NotificationBase
 	public RelayCommand<string> OpenSettingsCommand { get; }
 	public RelayCommand<string> OpenStockItemsViewCommand { get; }
 	public RelayCommand<string> OpenInvoiceViewCommand { get; }
+	public RelayCommand<string> OpenLoginCommand { get; }
 	public RelayCommand<string> OpenCustomerViewCommand { get; }
 	public DialogViewModelBase? Dialog
 	{
