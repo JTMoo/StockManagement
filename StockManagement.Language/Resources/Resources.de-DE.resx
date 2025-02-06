@@ -372,4 +372,7 @@
   <data name="hideUnavailableItems" xml:space="preserve">
     <value>Nicht verfügbare Artikel verstecken</value>
   </data>
+  <data name="userLogin" xml:space="preserve">
+    <value>Benutzeranmeldung</value>
+  </data>
 </root>

@@ -11,4 +11,7 @@
 	<DataTemplate DataType="{x:Type primaryVMs:InvoiceViewModel}">
 		<primaryViews:InvoiceView />
 	</DataTemplate>
+	<DataTemplate DataType="{x:Type primaryVMs:LoginViewModel}">
+		<primaryViews:LoginView />
+	</DataTemplate>
 </ResourceDictionary>

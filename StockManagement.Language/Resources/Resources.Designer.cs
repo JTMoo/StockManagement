@@ -844,6 +844,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User login.
+        /// </summary>
+        public static string userLogin {
+            get {
+                return ResourceManager.GetString("userLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Width.
         /// </summary>
         public static string width {
