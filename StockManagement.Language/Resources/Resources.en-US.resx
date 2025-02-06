@@ -222,15 +222,6 @@
   <data name="languageChangedMessage" xml:space="preserve">
     <value>For language changes to take effect, please restart the application.</value>
   </data>
-  <data name="german" xml:space="preserve">
-    <value>German</value>
-  </data>
-  <data name="english" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="spanish" xml:space="preserve">
-    <value>Spanish</value>
-  </data>
   <data name="factor" xml:space="preserve">
     <value>Factor</value>
   </data>

@@ -322,7 +322,7 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to German.
+        ///   Looks up a localized string similar to Deutsch.
         /// </summary>
         public static string german {
             get {
@@ -745,7 +745,7 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spanish.
+        ///   Looks up a localized string similar to Español.
         /// </summary>
         public static string spanish {
             get {
