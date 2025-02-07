@@ -94,10 +94,10 @@ internal class MainViewModel : NotificationBase
 	public static Task<MainViewModel> CreateAsync(IDatabase database)
 	{
 		var ret = new MainViewModel(database);
-		return ret.InitializeAsync(database);
+		return ret.InitializeAsync();
 	}
 
-	private async Task<MainViewModel> InitializeAsync(IDatabase database)
+	private async Task<MainViewModel> InitializeAsync()
 	{
 		this.CurrentView = await StockItemsViewModel.CreateAsync(_stockItemServiceProvider, _customerServiceProvider, _invoiceServiceProvider);
 		return this;
