@@ -384,4 +384,10 @@
   <data name="userLogin" xml:space="preserve">
     <value>User login</value>
   </data>
+  <data name="username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>Password</value>
+  </data>
 </root>

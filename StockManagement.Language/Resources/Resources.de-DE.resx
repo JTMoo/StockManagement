@@ -375,4 +375,10 @@
   <data name="userLogin" xml:space="preserve">
     <value>Benutzeranmeldung</value>
   </data>
+  <data name="username" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
 </root>

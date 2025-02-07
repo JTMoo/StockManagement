@@ -9,6 +9,8 @@ namespace StockManagement.Gui.ViewModel.Primary;
 public class LoginViewModel : ViewModelBase
 {
 	private readonly IUserServiceProvider _userServiceProvider;
+	private string _username = string.Empty;
+	private string _password = string.Empty;
 
 
 	private LoginViewModel(IUserServiceProvider userServiceProvider)
@@ -17,7 +19,21 @@ public class LoginViewModel : ViewModelBase
 	}
 
 
+	#region Properties
 	public ObservableCollection<User> AllUsers { get; private set; }
+
+	public string Username
+	{
+		get { return _username; }
+		set { this.SetField(ref _username, value); }
+	}
+
+	public string Password
+	{
+		get { return _password; }
+		set { this.SetField(ref _password, value); }
+	}
+	#region Properties
 
 
 	public static Task<LoginViewModel> CreateAsync(IUserServiceProvider userServiceProvider)

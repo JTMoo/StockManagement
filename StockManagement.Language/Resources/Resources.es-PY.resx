@@ -222,6 +222,10 @@
   <data name="languageChangedMessage" xml:space="preserve">
     <value>Para que los cambios de idioma surtan efecto, reinicie la aplicación.</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="spanish" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
   <data name="factor" xml:space="preserve">
     <value>Factor</value>
   </data>
@@ -374,5 +378,11 @@
   </data>
   <data name="userLogin" xml:space="preserve">
     <value>Todocoleccion</value>
+  </data>
+  <data name="username" xml:space="preserve">
+    <value>Usario</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>Contraseña</value>
   </data>
 </root>
