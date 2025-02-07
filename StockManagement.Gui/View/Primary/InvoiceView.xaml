@@ -52,9 +52,9 @@
 		</ListView>
 
 		<Button Grid.Column="1"
-			Margin="4"
-			Command="{Binding ToggleSearchBarCommand}"
-			VerticalAlignment="Stretch">
+				Margin="4"
+				Command="{Binding ToggleSearchBarCommand}"
+				VerticalAlignment="Stretch">
 			<Button.Style>
 				<Style BasedOn="{StaticResource BaseButtonStyle}"
 				   TargetType="{x:Type Button}">
