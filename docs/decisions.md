@@ -14,6 +14,7 @@ Read before an important decision. Update in the same PR.
 
 - Update by `Id`, never by business key ([#32](https://github.com/JTMoo/StockManagement/pull/32))
 - Cultures: de-DE, en-US, es-PY; all UI text via resources
+- Import: code repeated in one file → keep first, rest reported as duplicates (owner, 2026-09-24)
 
 ## Open
 
@@ -22,7 +23,6 @@ Read before an important decision. Update in the same PR.
 | Desktop shell | Tauri / Electron / WebView2 |
 | Money type | `decimal` + currency / integer minor units |
 | Sequential numbers | `$inc` counter / `Max + 1` |
-| Duplicate codes in one import file | drop all (current) / keep first ([#34](https://github.com/JTMoo/StockManagement/pull/34)) |
 | Import pipeline | read → map → clean → validate → preview → commit |
 | `#region` + banners in new code | keep / drop |
 | Nullable warnings as errors | yes / no |

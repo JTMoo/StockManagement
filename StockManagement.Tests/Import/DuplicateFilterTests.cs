@@ -36,17 +36,34 @@ public sealed class DuplicateFilterTests
 	}
 
 	[TestMethod]
-	public void Split_KeyRepeatedInImport_MarksEveryCopyAsDuplicate()
+	public void Split_KeyRepeatedInImport_KeepsFirstCopy()
 	{
 		// Arrange
-		List<string> candidates = ["A1", "B2", "A1"];
+		var first = new KeyValuePair<string, int>("A1", 1);
+		var second = new KeyValuePair<string, int>("A1", 2);
+		var other = new KeyValuePair<string, int>("B2", 3);
 
 		// Act
-		var result = DuplicateFilter.Split(candidates, [], code => code);
+		var result = DuplicateFilter.Split([first, other, second], [], pair => pair.Key);
 
 		// Assert
-		CollectionAssert.AreEqual(new[] { "B2" }, result.Unique.ToList());
-		CollectionAssert.AreEqual(new[] { "A1", "A1" }, result.Duplicates.ToList());
+		CollectionAssert.AreEqual(new[] { first, other }, result.Unique.ToList());
+		CollectionAssert.AreEqual(new[] { second }, result.Duplicates.ToList());
+	}
+
+	[TestMethod]
+	public void Split_KeyRepeatedAndAlreadyStored_MarksEveryCopyAsDuplicate()
+	{
+		// Arrange
+		List<string> candidates = ["A1", "A1"];
+		List<string> existing = ["A1"];
+
+		// Act
+		var result = DuplicateFilter.Split(candidates, existing, code => code);
+
+		// Assert
+		Assert.AreEqual(0, result.Unique.Count);
+		Assert.AreEqual(2, result.Duplicates.Count);
 	}
 
 	[TestMethod]
