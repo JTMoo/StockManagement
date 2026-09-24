@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { api } from "./api";
-import { invoice, mockApi } from "./test-utils";
+import { invoice, mockApi, screw } from "./test-utils";
 
 describe("api", () =>
 {
@@ -62,5 +62,41 @@ describe("api", () =>
 
 		// Assert
 		expect(result).toEqual({ ok: false, failure: { kind: "unexpected" } });
+	});
+
+	it("createStockItem_409_ReturnsDuplicate", async () =>
+	{
+		// Arrange
+		mockApi({ "POST /api/stock-items": { status: 409, body: { code: "A1" } } });
+
+		// Act
+		const result = await api.createStockItem({ code: "A1", name: "Screw" });
+
+		// Assert
+		expect(result).toEqual({ ok: false, failure: { kind: "duplicate", code: "A1" } });
+	});
+
+	it("deleteStockItem_204_ReturnsOk", async () =>
+	{
+		// Arrange
+		mockApi({ "DELETE /api/stock-items/1": { status: 204 } });
+
+		// Act
+		const result = await api.deleteStockItem(screw);
+
+		// Assert
+		expect(result).toEqual({ ok: true, value: undefined });
+	});
+
+	it("deleteStockItem_404_ReturnsNotFound", async () =>
+	{
+		// Arrange
+		mockApi({ "DELETE /api/stock-items/1": { status: 404 } });
+
+		// Act
+		const result = await api.deleteStockItem(screw);
+
+		// Assert
+		expect(result).toEqual({ ok: false, failure: { kind: "notFound" } });
 	});
 });

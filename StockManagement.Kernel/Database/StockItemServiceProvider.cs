@@ -46,6 +46,11 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		return _database.GetOneAsync<StockItem>(item => item.Code == code);
 	}
 
+	public Task<StockItem> GetStockItemByIdAsync(string id)
+	{
+		return _database.GetOneAsync<StockItem>(item => item.Id == id);
+	}
+
 	public async Task<int> UpdateStockItemAsync(StockItem stockItem)
 	{
 		var item = await _database.GetOneAsync<StockItem>(stored => stored.Id == stockItem.Id);

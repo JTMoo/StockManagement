@@ -80,6 +80,20 @@ public sealed class EfStockItemServiceProviderTests
 	}
 
 	[TestMethod]
+	public async Task GetStockItemByIdAsync_KnownId_ReturnsItem()
+	{
+		// Arrange
+		await this.UseAsync(provider => provider.AddStockItemAsync(new StockItem("Screw", code: "A1")));
+		var stored = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+
+		// Act
+		var stockItem = await this.UseAsync(provider => provider.GetStockItemByIdAsync(stored.Id));
+
+		// Assert
+		Assert.AreEqual("A1", stockItem.Code);
+	}
+
+	[TestMethod]
 	public async Task UpdateStockItemAsync_AmountChanged_RecordsDeltaTransaction()
 	{
 		// Arrange

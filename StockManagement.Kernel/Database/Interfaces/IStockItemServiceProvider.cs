@@ -6,6 +6,7 @@ namespace StockManagement.Kernel.Database.Interfaces;
 public interface IStockItemServiceProvider
 {
 	public Task<StockItem> GetStockItemAsync(string code);
+	public Task<StockItem> GetStockItemByIdAsync(string id);
 	public Task<IEnumerable<StockItem>> GetAllStockItemsAsync();
 
 	/// <returns>Rows affected; 1 on success</returns>

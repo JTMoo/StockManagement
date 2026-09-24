@@ -405,4 +405,16 @@
   <data name="show" xml:space="preserve">
     <value>Anzeigen</value>
   </data>
+  <data name="save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="itemAlreadyExists" xml:space="preserve">
+    <value>Ein Lagerartikel mit diesem Code existiert bereits:</value>
+  </data>
+  <data name="itemDeletionPrompt" xml:space="preserve">
+    <value>{0} löschen?</value>
+  </data>
 </root>
