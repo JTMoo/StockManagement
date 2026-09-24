@@ -381,4 +381,28 @@
   <data name="password" xml:space="preserve">
     <value>Passwort</value>
   </data>
+  <data name="newSale" xml:space="preserve">
+    <value>Neuer Verkauf</value>
+  </data>
+  <data name="sell" xml:space="preserve">
+    <value>Verkaufen</value>
+  </data>
+  <data name="customerNotFound" xml:space="preserve">
+    <value>Kunde nicht gefunden.</value>
+  </data>
+  <data name="invoiceNotFound" xml:space="preserve">
+    <value>Rechnung nicht gefunden.</value>
+  </data>
+  <data name="itemsUnavailable" xml:space="preserve">
+    <value>Nicht genug Bestand:</value>
+  </data>
+  <data name="invalidInput" xml:space="preserve">
+    <value>Bitte Eingaben prüfen.</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="show" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>
 </root>

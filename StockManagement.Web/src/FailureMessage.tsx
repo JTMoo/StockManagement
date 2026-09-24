@@ -1,0 +1,21 @@
+import type { ApiFailure } from "./api";
+import { isTextKey, useI18n, type TextKey } from "./i18n";
+
+export function FailureMessage({ failure, notFound = "unexpectedError" }: { failure?: ApiFailure; notFound?: TextKey })
+{
+	const { t } = useI18n();
+	if (!failure) return null;
+
+	return <p role="alert" className="failure">{text()}</p>;
+
+	function text(): string
+	{
+		switch (failure!.kind)
+		{
+			case "notFound": return t(notFound);
+			case "conflict": return `${t("itemsUnavailable")} ${failure!.unavailableItems.join(", ")}`;
+			case "invalid": return [...new Set(failure!.codes.map(code => t(isTextKey(code) ? code : "invalidInput")))].join(" ") || t("invalidInput");
+			default: return t("unexpectedError");
+		}
+	}
+}
