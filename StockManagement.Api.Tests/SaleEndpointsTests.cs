@@ -72,6 +72,19 @@ public sealed class SaleEndpointsTests
 	}
 
 	[TestMethod]
+	public async Task GetInvoice_Stored_SendsEnumsAsText()
+	{
+		// Arrange
+		var created = await _client.PostAsJsonAsync("/api/sales", new CreateSaleRequest(1001, SaleCondition.Credit, [new("A1", 1)]), ApiFactory.JsonOptions);
+
+		// Act
+		var json = await _client.GetStringAsync(created.Headers.Location);
+
+		// Assert
+		StringAssert.Contains(json, "\"saleCondition\":\"Credit\"");
+	}
+
+	[TestMethod]
 	public async Task CreateSale_TooLittleStock_Returns409AndKeepsStock()
 	{
 		// Act
