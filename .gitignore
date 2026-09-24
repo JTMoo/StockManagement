@@ -152,7 +152,8 @@ StockManagement/.vs/ProjectEvaluation/stockmanagement.projects.v8.bin
 /StockManagement/.vs
 .vs/StockManagement/v17/DocumentLayout.backup.json
 .vs/StockManagement/v17/DocumentLayout.json
-/StockManagement/StockManagement.Installer/Installer
-StockManagement/StockManagement.Installer/ComponentsGenerated.wxs
+/StockManagement.Installer/Installer/
+StockManagement.Installer/ComponentsGenerated.wxs
+*.msi
 /.vs
 StockManagement.Api/wwwroot/
