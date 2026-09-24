@@ -7,7 +7,7 @@ using System.Linq;
 namespace StockManagement.Gui.Converter;
 
 
-internal class MultiBoolToVisibilityCollabsedConverter : IMultiValueConverter
+internal class MultiBoolToVisibilityCollapsedConverter : IMultiValueConverter
 {
 	public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 	{

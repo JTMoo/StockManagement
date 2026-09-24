@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Customers.Core;
 using StockManagement.Gui.View;
 using StockManagement.Gui.ViewModel;
 using StockManagement.Import.Core;
 using StockManagement.Kernel;
+using StockManagement.Kernel.Database;
 using StockManagement.Sales.Core;
 
 namespace StockManagement.Gui;
@@ -17,7 +20,12 @@ public partial class App
 
 	protected override async void OnStartup(StartupEventArgs e)
 	{
-		var databaseAccess = await MainManager.Initialize();
+		var configuration = new ConfigurationBuilder()
+			.SetBasePath(AppContext.BaseDirectory)
+			.AddJsonFile("appsettings.json")
+			.AddJsonFile("appsettings.local.json", optional: true)
+			.Build();
+		var databaseAccess = await MainManager.Initialize(configuration.GetMongoDatabase());
 
 		_services = new ServiceCollection()
 			.AddKernel(databaseAccess)

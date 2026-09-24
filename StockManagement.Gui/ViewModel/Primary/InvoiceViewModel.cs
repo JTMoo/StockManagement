@@ -19,6 +19,7 @@ public class InvoiceViewModel : ViewModelBase
 	private string _searchCustomers;
 	private string _searchInvoiceNumber;
 	private readonly List<Func<Invoice, bool>> _filterFunctions = [];
+	private List<Invoice> _invoices = [];
 	private ObservableCollection<Invoice> _filteredInvoices;
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
 
@@ -68,7 +69,8 @@ public class InvoiceViewModel : ViewModelBase
 	/// </summary>
 	public async Task<InvoiceViewModel> InitializeAsync()
 	{
-		this.FilteredInvoices = new(await _invoiceServiceProvider.GetInvoicesAsync());
+		_invoices = [.. await _invoiceServiceProvider.GetInvoicesAsync()];
+		this.OnRefreshSearch();
 		return this;
 	}
 
@@ -86,7 +88,7 @@ public class InvoiceViewModel : ViewModelBase
 
 	private void OnRefreshSearch()
 	{
-		this.FilteredInvoices = new(this.FilteredInvoices.Where(_filterFunctions));
+		this.FilteredInvoices = new(_invoices.Where(_filterFunctions));
 	}
 	private async void OnMoreInfoCommand(Invoice invoice)
 	{
@@ -99,8 +101,9 @@ public class InvoiceViewModel : ViewModelBase
 	{
 		_filterFunctions.Add(invoice =>
 		{
-			var fullNameMatch = string.Join(" ", invoice.Customer.Name, invoice.Customer.Lastname).StartsWith(this.SearchCustomers);
-			return string.IsNullOrEmpty(this.SearchCustomers) || invoice.Customer.Name.StartsWith(this.SearchCustomers, StringComparison.CurrentCultureIgnoreCase) || invoice.Customer.Lastname.StartsWith(this.SearchCustomers, StringComparison.CurrentCultureIgnoreCase) || fullNameMatch;
+			if (string.IsNullOrEmpty(this.SearchCustomers)) return true;
+			var fullName = string.Join(" ", invoice.Customer.Name, invoice.Customer.Lastname);
+			return fullName.StartsWith(this.SearchCustomers, StringComparison.CurrentCultureIgnoreCase) || (invoice.Customer.Lastname?.StartsWith(this.SearchCustomers, StringComparison.CurrentCultureIgnoreCase) ?? false);
 		});
 		_filterFunctions.Add(invoice =>
 		{

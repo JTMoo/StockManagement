@@ -17,9 +17,9 @@
 	<converter:IsEqualConverter x:Key="IsEqual" />
 	<converter:IsNotEqualConverter x:Key="IsNotEqual" />
 	<converter:InverseBooleanConverter x:Key="InverseBoolean" />
-	<converter:BoolToVisibilityCollabsedConverter x:Key="Bool2Collabsed" />
-	<converter:MultiBoolToVisibilityCollabsedConverter x:Key="MultiBool2Collabsed" />
-	<converter:NullToVisibilityCollabsedConverter x:Key="Null2Collabsed" />
+	<converter:BoolToVisibilityCollapsedConverter x:Key="Bool2Collapsed" />
+	<converter:MultiBoolToVisibilityCollapsedConverter x:Key="MultiBool2Collapsed" />
+	<converter:NullToVisibilityCollapsedConverter x:Key="Null2Collapsed" />
 	<selectors:DialogTemplateSelector x:Key="DialogTemplateSelector" />
 	<selectors:ViewTemplateSelector x:Key="ViewTemplateSelector" />
 

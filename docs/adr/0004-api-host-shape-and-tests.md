@@ -30,5 +30,5 @@
 
 - React maps error codes to its own localized text
 - Updates by `Id` need `BaseDocument.Id` exposed first (internal today)
-- Default database name differs from the desktop's; set `Mongo:DatabaseName` to share data
+- Desktop reads the same keys (`appsettings.json`, override in `appsettings.local.json`), same default database
 - Auth before any non-local deployment

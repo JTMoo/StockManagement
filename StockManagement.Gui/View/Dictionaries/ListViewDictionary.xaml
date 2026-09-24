@@ -71,7 +71,7 @@
 				Height="Auto"
 				FontSize="15"
 				Margin="0"
-				Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collabsed}}"
+				Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, Converter={StaticResource Bool2Collapsed}}"
 				Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.MoreInfoCommand}"
 				CommandParameter="{Binding }"/>
 	</DataTemplate>

@@ -27,12 +27,12 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		return;
 	}
 
-	public Task<DeleteResult> DeleteStockItemAsync(StockItem stockItem)
+	public async Task<DeleteResult> DeleteStockItemAsync(StockItem stockItem)
 	{
 		var deleteTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Deletion, 1);
 		var collection = _database.ConnectToMongo<Transaction>();
-		collection.InsertOneAsync(deleteTransaction);
-		return _database.Delete<StockItem>(stockItem);
+		await collection.InsertOneAsync(deleteTransaction);
+		return await _database.Delete<StockItem>(stockItem);
 	}
 
 	public Task<IEnumerable<StockItem>> GetAllStockItemsAsync()
@@ -47,10 +47,10 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 
 	public async Task<ReplaceOneResult> UpdateStockItemAsync(StockItem stockItem)
 	{
-		var item = await this.GetStockItemAsync(stockItem.Code);
-		if (item.Amount != stockItem.Amount)
+		var item = await _database.GetOneAsync<StockItem>(stored => stored.Id == stockItem.Id);
+		if (item is not null && item.Amount != stockItem.Amount)
 		{
-			SaveTransaction(stockItem, item);
+			await this.SaveTransactionAsync(stockItem, item);
 		}
 
 		var collection = _database.ConnectToMongo<StockItem>();
@@ -65,10 +65,10 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		return collection.InsertManyAsync(stockItems);
 	}
 
-	private void SaveTransaction(StockItem stockItem, StockItem item)
+	private Task SaveTransactionAsync(StockItem stockItem, StockItem item)
 	{
 		var changeAmountTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - item.Amount);
-		var collection2 = _database.ConnectToMongo<Transaction>();
-		collection2.InsertOneAsync(changeAmountTransaction);
+		var collection = _database.ConnectToMongo<Transaction>();
+		return collection.InsertOneAsync(changeAmountTransaction);
 	}
 }

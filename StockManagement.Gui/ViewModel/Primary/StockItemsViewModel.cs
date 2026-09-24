@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System;
 using StockManagement.Kernel.Model.ExtensionMethods;
-using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Windows;
 using System.Diagnostics;
@@ -244,15 +243,15 @@ public class StockItemsViewModel : ViewModelBase
 		});
 		_filterFunctions.Add(item =>
 		{
-			return string.IsNullOrEmpty(this.SearchNames) || Regex.IsMatch(item.Name.ToLower(), this.SearchNames.ToLower());
+			return item.Name.MatchesSearch(this.SearchNames);
 		});
 		_filterFunctions.Add(item =>
 		{
-			return string.IsNullOrEmpty(this.SearchCodes) || Regex.IsMatch(item.Code.ToLower(), this.SearchCodes.ToLower());
+			return item.Code.MatchesSearch(this.SearchCodes);
 		});
 		_filterFunctions.Add(item =>
 		{
-			return string.IsNullOrEmpty(this.SearchLocations) || Regex.IsMatch(item.Location.ToLower(), this.SearchLocations.ToLower());
+			return item.Location.MatchesSearch(this.SearchLocations);
 		});
 		_filterFunctions.Add(item =>
 		{

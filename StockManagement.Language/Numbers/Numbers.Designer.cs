@@ -70,15 +70,6 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MILMILLIONES.
-        /// </summary>
-        public static string billion {
-            get {
-                return ResourceManager.GetString("billion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to OCHO.
         /// </summary>
         public static string eight {
@@ -286,6 +277,15 @@ namespace StockManagement.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UN.
+        /// </summary>
+        public static string oneShort {
+            get {
+                return ResourceManager.GetString("oneShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SIETE.
         /// </summary>
         public static string seven {
@@ -480,6 +480,15 @@ namespace StockManagement.Language {
         public static string twentyone {
             get {
                 return ResourceManager.GetString("twentyone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VEINTIÚN.
+        /// </summary>
+        public static string twentyoneShort {
+            get {
+                return ResourceManager.GetString("twentyoneShort", resourceCulture);
             }
         }
         

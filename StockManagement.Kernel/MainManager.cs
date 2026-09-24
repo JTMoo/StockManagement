@@ -1,4 +1,5 @@
-﻿using StockManagement.Kernel.Commands;
+﻿using MongoDB.Driver;
+using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Database;
 using System.Diagnostics;
 using StockManagement.Kernel.Model;
@@ -34,14 +35,15 @@ public class MainManager : NotificationBase, IDisposable
         this.Dispose();
     }
 
-    public DatabaseManager DatabaseManager { get; } = new();
+    public DatabaseManager DatabaseManager { get; private set; }
 	public Settings Settings { get; internal set; }
 
 
-    public static async Task<IDatabase> Initialize()
+    public static async Task<IDatabase> Initialize(IMongoDatabase database)
     {
         if (_isInitialized) return Instance.DatabaseManager;
 
+        Instance.DatabaseManager = new(database);
         await Instance.Init();
         return Instance.DatabaseManager;
 	}
@@ -100,31 +102,9 @@ public class MainManager : NotificationBase, IDisposable
 	private async Task Init()
 	{
 		this.Settings = await DatabaseManager.GetOneAsync<Settings>(_ => true).ContinueWith(task => task.Result ?? new());
-		this.CreateCollectionIndeces();
+		await this.DatabaseManager.CreateUniqueIndexesAsync();
 
 		this._commandManager.Init();
 		_isInitialized = true;
-	}
-
-	private void CreateCollectionIndeces()
-	{
-		if (!this.Settings.StockItemIndexCreated)
-		{
-			var stockItemCollection = this.DatabaseManager.ConnectToMongo<StockItem>();
-			stockItemCollection.Indexes.CreateMany(UniquePropertyHelper.GetStockItemUniqueProperties());
-            this.Settings.StockItemIndexCreated = true;
-		}
-		if (!this.Settings.CustomerIndexCreated)
-		{
-			var customerCollection = this.DatabaseManager.ConnectToMongo<Customer>();
-			customerCollection.Indexes.CreateMany(UniquePropertyHelper.GetCustomerUniqueProperties());
-            this.Settings.CustomerIndexCreated = true;
-		}
-		if (!this.Settings.InvoiceIndexCreated)
-		{
-			var invoiceCollection = this.DatabaseManager.ConnectToMongo<Invoice>();
-			invoiceCollection.Indexes.CreateMany(UniquePropertyHelper.GetInvoiceUniqueProperties());
-			this.Settings.InvoiceIndexCreated = true;
-		}
 	}
 }
