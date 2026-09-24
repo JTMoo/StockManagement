@@ -107,8 +107,7 @@
 					   Text="{x:Static lang:Resources.selectManufacturer}"
 					   Margin="5"/>
 			<ComboBox Style="{StaticResource CustomComboBoxStyle}"
-					  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
-					  ItemTemplate="{StaticResource DisplayNameDataTemplate}"
+					  ItemsSource="{Binding Manufacturers}"
 					  SelectedItem="{Binding SelectedSearchManufacturer}" />
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.selectType}"

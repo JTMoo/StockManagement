@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System;
 using StockManagement.Kernel.Model.ExtensionMethods;
-using StockManagement.Kernel.Model.Types;
 using System.ComponentModel;
 using System.Windows;
 using System.Diagnostics;
@@ -28,7 +27,7 @@ public class StockItemsViewModel : ViewModelBase
 	private string _searchCodes;
 	private string _searchLocations;
 	private bool _hideUnavailableItems;
-	private ManufacturerType _selectedSearchManufacturer;
+	private string _selectedSearchManufacturer = string.Empty;
 	private Type _selectedSearchStockItemType;
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
@@ -73,6 +72,11 @@ public class StockItemsViewModel : ViewModelBase
 
 	public ObservableCollection<ShoppingCartItem> ShoppingCartItems { get; } = [];
 
+	/// <summary>
+	/// Manufacturers in use; the empty entry means all.
+	/// </summary>
+	public ObservableCollection<string> Manufacturers { get; } = [string.Empty];
+
 	public StockItem SelectedStockItem
 	{
 		get { return _selectedStockItem; }
@@ -103,7 +107,7 @@ public class StockItemsViewModel : ViewModelBase
 		set { this.SetField(ref _hideUnavailableItems, value); }
 	}
 
-	public ManufacturerType SelectedSearchManufacturer
+	public string SelectedSearchManufacturer
 	{
 		get { return _selectedSearchManufacturer; }
 		set { this.SetField(ref _selectedSearchManufacturer, value); }
@@ -142,8 +146,9 @@ public class StockItemsViewModel : ViewModelBase
 
 	private async Task UpdateStockItemsAsync()
 	{
-		var filteredStockItems = await _stockItemServiceProvider.GetAllStockItemsAsync().ContinueWith(task => task.Result.Where(_filterFunctions));
-		this.FilteredStockItems = new(filteredStockItems);
+		var stockItems = (await _stockItemServiceProvider.GetAllStockItemsAsync()).ToList();
+		this.Manufacturers.EqualizeTo([string.Empty, .. stockItems.GetManufacturers()]);
+		this.FilteredStockItems = new(stockItems.Where(_filterFunctions));
 	}
 
 	private async void UpdateStockItemsOnSuccess(bool success)
@@ -157,7 +162,7 @@ public class StockItemsViewModel : ViewModelBase
 		if (GuiManager.Instance.StockItemTypes == null)
 			return;
 
-		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem: new());
+		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem: new(), this.Manufacturers);
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
 
@@ -165,7 +170,7 @@ public class StockItemsViewModel : ViewModelBase
 	{
 		if (stockItem == null) return;
 
-		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem);
+		GuiManager.Instance.MainViewModel.Dialog = new StockItemCreationDialogViewModel(_stockItemServiceProvider, stockItem, this.Manufacturers);
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
 
@@ -230,7 +235,7 @@ public class StockItemsViewModel : ViewModelBase
 	{
 		_filterFunctions.Add(item =>
 		{
-			return this.SelectedSearchManufacturer == ManufacturerType.None || item.Manufacturer == this.SelectedSearchManufacturer;
+			return string.IsNullOrEmpty(this.SelectedSearchManufacturer) || string.Equals(item.Manufacturer, this.SelectedSearchManufacturer, StringComparison.OrdinalIgnoreCase);
 		});
 		_filterFunctions.Add(item =>
 		{

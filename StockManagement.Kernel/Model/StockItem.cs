@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 using StockManagement.Kernel.Database;
-using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
@@ -13,7 +13,7 @@ public class StockItem : BaseDocument
 	private string _location = string.Empty;
 	private string _name = string.Empty;
 	private string _miscellaneous = string.Empty;
-	private ManufacturerType _manufacturer;
+	private string _manufacturer = string.Empty;
 	private double _price;
 	private double _factor;
 	private int _amount;
@@ -22,7 +22,7 @@ public class StockItem : BaseDocument
 	{
 	}
 
-	public StockItem (string name, string code = "", string description = "", int amount=1, int price = 0, ManufacturerType manufacturer = ManufacturerType.None, string misc = "") 
+	public StockItem (string name, string code = "", string description = "", int amount=1, int price = 0, string manufacturer = "", string misc = "") 
 	{
 		this.Name = name;
 		this.Code = code;
@@ -83,10 +83,11 @@ public class StockItem : BaseDocument
 	}
 
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.manufacturer))]
-	public ManufacturerType Manufacturer
+	[BsonSerializer(typeof(ManufacturerSerializer))]
+	public string Manufacturer
 	{
 		get { return _manufacturer; }
-		set { this.SetField(ref _manufacturer, value); }
+		set { this.SetField(ref _manufacturer, value?.Trim() ?? string.Empty); }
 	}
 
 	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.miscellaneous))]
