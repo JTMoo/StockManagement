@@ -38,4 +38,9 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 
 	await page.getByRole("button", { name: "Stock items" }).click();
 	await expect(page.getByRole("row", { name: /Screw A1/ })).toContainText("8");
+
+	await page.getByRole("button", { name: "Settings" }).click();
+	await shot(page, "5-settings");
+	await page.locator("main").getByLabel("Select language:").selectOption("es-PY");
+	await expect(page.getByRole("heading", { name: "Configuracion" })).toBeVisible();
 });

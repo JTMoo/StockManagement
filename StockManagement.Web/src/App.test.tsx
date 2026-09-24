@@ -10,11 +10,16 @@ describe("App", () =>
 	it("SelectLanguage_German_ShowsGermanTexts", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [] } });
+		mockApi({
+			"GET /api/stock-items": { body: [] },
+			"GET /api/settings": { body: { language: "English" } },
+			"PUT /api/settings": { body: { language: "German" } }
+		});
 		render(<I18nProvider culture="en-US"><App /></I18nProvider>);
+		await userEvent.click(screen.getByRole("button", { name: "Settings" }));
 
 		// Act
-		await userEvent.selectOptions(screen.getByRole("combobox"), "de-DE");
+		await userEvent.selectOptions(await screen.findByRole("combobox"), "de-DE");
 
 		// Assert
 		expect(screen.getByRole("button", { name: "Neuer Verkauf" })).toBeInTheDocument();
