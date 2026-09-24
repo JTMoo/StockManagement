@@ -9,5 +9,5 @@ public abstract class BaseDocument : NotificationBase
 
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
-	internal string Id { get; set; }
+	public string Id { get; set; }
 }
