@@ -155,3 +155,4 @@ StockManagement/.vs/ProjectEvaluation/stockmanagement.projects.v8.bin
 /StockManagement/StockManagement.Installer/Installer
 StockManagement/StockManagement.Installer/ComponentsGenerated.wxs
 /.vs
+StockManagement.Api/wwwroot/

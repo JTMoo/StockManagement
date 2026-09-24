@@ -22,6 +22,10 @@ var app = builder.Build();
 
 await database.CreateUniqueIndexesAsync();
 
+// React build (StockManagement.Web) lands in wwwroot
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseFastEndpoints(config =>
 {
 	config.Endpoints.RoutePrefix = "api";
