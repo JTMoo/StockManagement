@@ -18,7 +18,9 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 
 - Build: `dotnet build StockManagement.sln` (Gui needs Windows)
 - Test: `dotnet test StockManagement.Tests`
-- CI: `Integration.yml` (test on PR), `Delivery.yml` (MSI on tag)
+- API tests (Docker): `dotnet test StockManagement.Api.Tests`
+- Run API: `dotnet run --project StockManagement.Api` (MongoDB on `127.0.0.1:27017`)
+- CI: `Integration.yml` (Windows tests + Linux API tests on PR), `Delivery.yml` (MSI on tag)
 
 ## Style (existing)
 

@@ -1,3 +1,5 @@
+using StockManagement.Kernel.Model;
+
 namespace StockManagement.Sales.Core.Contracts;
 
 
@@ -16,4 +18,9 @@ public sealed record SaleResult(IReadOnlyList<string> UnavailableItems)
 	/// True when every article had enough stock and the invoice was stored
 	/// </summary>
 	public bool Succeeded => this.UnavailableItems.Count == 0;
+
+	/// <summary>
+	/// Stored invoice, set by <see cref="ISaleService.SellAsync"/> on success
+	/// </summary>
+	public Invoice? Invoice { get; init; }
 }

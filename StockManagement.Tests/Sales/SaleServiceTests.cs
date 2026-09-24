@@ -2,6 +2,8 @@ using Moq;
 using StockManagement.Sales.Core;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.Types;
+using StockManagement.Sales.Core.Contracts;
 
 namespace StockManagement.Tests.Sales;
 
@@ -156,6 +158,77 @@ public sealed class SaleServiceTests
 		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
 	}
 
+
+	[TestMethod]
+	public async Task SellAsync_EnoughStock_StoresNumberedInvoice()
+	{
+		// Arrange
+		var stored = new StockItem("Screw", code: "A1", amount: 10, price: 5000);
+		this.SetupStock(stored);
+		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice() { Number = 7 }]);
+		var customer = new Customer() { CustomerId = 1001 };
+		var date = new DateTime(2026, 9, 1);
+
+		// Act
+		var result = await this.CreateService().SellAsync(customer, [new SaleItem("A1", 3)], SaleCondition.Cash, date);
+
+		// Assert
+		Assert.IsTrue(result.Succeeded);
+		Assert.AreEqual(8, result.Invoice.Number);
+		Assert.AreEqual(15000, result.Invoice.Total);
+		Assert.AreEqual(SaleCondition.Cash, result.Invoice.SaleCondition);
+		Assert.AreSame(customer, result.Invoice.Customer);
+		Assert.AreEqual(7, stored.Amount);
+		_invoices.Verify(provider => provider.AddInvoiceAsync(result.Invoice), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task SellAsync_MoreThanInStock_ReportsShortageAndWritesNothing()
+	{
+		// Arrange
+		this.SetupStock(new StockItem("Screw", code: "A1", amount: 2));
+
+		// Act
+		var result = await this.CreateService().SellAsync(new Customer(), [new SaleItem("A1", 3)], SaleCondition.Cash, DateTime.Today);
+
+		// Assert
+		Assert.IsFalse(result.Succeeded);
+		Assert.IsNull(result.Invoice);
+		CollectionAssert.AreEqual(new[] { "Screw" }, result.UnavailableItems.ToList());
+		_stockItems.Verify(provider => provider.UpdateStockItemAsync(It.IsAny<StockItem>()), Times.Never);
+		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task SellAsync_SameCodeTwiceAboveStock_ReportsShortage()
+	{
+		// Arrange
+		this.SetupStock(new StockItem("Screw", code: "A1", amount: 4));
+
+		// Act
+		var result = await this.CreateService().SellAsync(new Customer(), [new SaleItem("A1", 2), new SaleItem("A1", 3)], SaleCondition.Cash, DateTime.Today);
+
+		// Assert
+		CollectionAssert.AreEqual(new[] { "Screw" }, result.UnavailableItems.ToList());
+	}
+
+	[TestMethod]
+	public async Task SellAsync_UnknownCode_ReportsCodeUnavailable()
+	{
+		// Act
+		var result = await this.CreateService().SellAsync(new Customer(), [new SaleItem("X9", 1)], SaleCondition.Cash, DateTime.Today);
+
+		// Assert
+		CollectionAssert.AreEqual(new[] { "X9" }, result.UnavailableItems.ToList());
+		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task SellAsync_ZeroAmount_Throws()
+	{
+		// Act + Assert
+		await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => this.CreateService().SellAsync(new Customer(), [new SaleItem("A1", 0)], SaleCondition.Cash, DateTime.Today));
+	}
 
 	private SaleService CreateService()
 	{

@@ -52,6 +52,22 @@ public sealed class CustomerServiceTests
 	}
 
 
+	[TestMethod]
+	public async Task CreateCustomerAsync_ExistingCustomers_StoresWithNextId()
+	{
+		// Arrange
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer() { CustomerId = 1001 }]);
+		var customer = new Customer() { Name = "Ana", CustomerId = 5 };
+
+		// Act
+		var result = await this.CreateService().CreateCustomerAsync(customer);
+
+		// Assert
+		Assert.AreSame(customer, result);
+		Assert.AreEqual(1002, result.CustomerId);
+		_customers.Verify(provider => provider.AddCustomerAsync(customer), Times.Once);
+	}
+
 	private CustomerService CreateService()
 	{
 		return new CustomerService(_customers.Object);
