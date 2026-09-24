@@ -19,7 +19,6 @@ public class ListInvoicesEndpoint(IInvoiceServiceProvider invoiceServiceProvider
 	public override void Configure()
 	{
 		this.Get("/invoices");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<InvoiceListResponse> ExecuteAsync(ListInvoicesRequest request, CancellationToken cancellationToken)

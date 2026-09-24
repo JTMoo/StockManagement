@@ -17,7 +17,6 @@ public class GetStockItemEndpoint(IStockItemServiceProvider stockItemServiceProv
 	public override void Configure()
 	{
 		this.Get("/stock-items/{Code}");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound>> ExecuteAsync(GetStockItemRequest request, CancellationToken cancellationToken)

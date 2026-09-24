@@ -32,7 +32,6 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 	public override void Configure()
 	{
 		this.Put("/stock-items/{Id}");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound, Conflict<DuplicateStockItemCodeResponse>>> ExecuteAsync(UpdateStockItemRequest request, CancellationToken cancellationToken)

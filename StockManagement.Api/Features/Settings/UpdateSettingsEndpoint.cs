@@ -16,7 +16,6 @@ public class UpdateSettingsEndpoint(ISettingsService settingsService) : Endpoint
 	public override void Configure()
 	{
 		this.Put("/settings");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<SettingsResponse> ExecuteAsync(UpdateSettingsRequest request, CancellationToken cancellationToken)

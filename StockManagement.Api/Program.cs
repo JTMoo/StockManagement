@@ -1,8 +1,11 @@
 using System.Linq;
 using System.Text.Json.Serialization;
 using FastEndpoints;
+using FastEndpoints.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using StockManagement.Auth.Core;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Customers.Core;
 using StockManagement.Customers.Core.Contracts;
 using StockManagement.Infrastructure;
@@ -14,20 +17,26 @@ using StockManagement.Settings.Core.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var jwtSigningKey = builder.Configuration["Jwt:SigningKey"] ?? throw new InvalidOperationException("Jwt:SigningKey is missing.");
+
 builder.Services
+	.AddAuthenticationJwtBearer(options => options.SigningKey = jwtSigningKey)
+	.AddAuthorization()
 	.AddFastEndpoints()
 	.AddInfrastructure(builder.Configuration)
 	.AddInfrastructureServiceProviders()
 	.AddSalesCore()
 	.AddCustomersCore()
 	.AddSettingsCore()
+	.AddAuthCore()
 	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-// AddSalesCore/AddCustomersCore/AddSettingsCore register these Singleton for the GUI's Mongo Kernel providers;
+// AddSalesCore/AddCustomersCore/AddSettingsCore/AddAuthCore register these Singleton for the GUI's Mongo Kernel providers;
 // the API's providers above are Scoped (EF's AppDbContext isn't thread-safe), so override to match
 MakeScoped<ISaleService>(builder.Services);
 MakeScoped<ICustomerService>(builder.Services);
 MakeScoped<ISettingsService>(builder.Services);
+MakeScoped<IAuthService>(builder.Services);
 
 var app = builder.Build();
 
@@ -39,6 +48,9 @@ await using (var scope = app.Services.CreateAsyncScope())
 // React build (StockManagement.Web) lands in wwwroot
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseFastEndpoints(config =>
 {
