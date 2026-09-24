@@ -24,24 +24,43 @@ export type Language = "German" | "English" | "Spanish";
 
 export type Settings = { language: Language };
 
+export type LoginResult = { token: string; username: string };
+
 export type ApiFailure =
 	| { kind: "notFound" }
 	| { kind: "invalid"; codes: string[] }
 	| { kind: "conflict"; unavailableItems: string[] }
 	| { kind: "duplicate"; code: string }
+	| { kind: "unauthorized" }
 	| { kind: "unexpected" };
 
 export type Result<T> = { ok: true; value: T } | { ok: false; failure: ApiFailure };
 
 type ProblemDetails = { errors?: { reason: string }[] };
 
+// Set by AuthProvider; kept out of React so api.ts has no framework dependency
+let authToken: string | null = null;
+let onUnauthorized: (() => void) | null = null;
+
+export function setAuthToken(token: string | null)
+{
+	authToken = token;
+}
+
+export function setUnauthorizedHandler(handler: (() => void) | null)
+{
+	onUnauthorized = handler;
+}
+
 async function send<T>(path: string, init?: RequestInit): Promise<Result<T>>
 {
 	let response: Response;
 	try
 	{
+		const headers: Record<string, string> = init?.body ? { "Content-Type": "application/json" } : {};
+		if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
 		// Content-Type only with a body: FastEndpoints otherwise tries to parse the (empty) GET body as JSON and rejects it
-		response = await fetch(`/api${path}`, { ...init, headers: init?.body ? { "Content-Type": "application/json" } : {} });
+		response = await fetch(`/api${path}`, { ...init, headers });
 	}
 	catch
 	{
@@ -50,6 +69,11 @@ async function send<T>(path: string, init?: RequestInit): Promise<Result<T>>
 
 	if (response.ok) return { ok: true, value: (response.status === 204 ? undefined : await response.json()) as T };
 	if (response.status === 404) return { ok: false, failure: { kind: "notFound" } };
+	if (response.status === 401)
+	{
+		onUnauthorized?.();
+		return { ok: false, failure: { kind: "unauthorized" } };
+	}
 	if (response.status === 409)
 	{
 		const body = (await response.json()) as { unavailableItems?: string[]; code?: string };
@@ -72,7 +96,8 @@ export const api = {
 	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
 	listInvoices: (filter: InvoiceFilter, signal?: AbortSignal) => send<InvoiceListResult>(`/invoices?${invoiceFilterQuery(filter)}`, { signal }),
 	getSettings: (signal?: AbortSignal) => send<Settings>("/settings", { signal }),
-	updateSettings: (language: Language) => send<Settings>("/settings", { method: "PUT", body: JSON.stringify({ language }) })
+	updateSettings: (language: Language) => send<Settings>("/settings", { method: "PUT", body: JSON.stringify({ language }) }),
+	login: (username: string, password: string) => send<LoginResult>("/auth/login", { method: "POST", body: JSON.stringify({ username, password }) })
 };
 
 function invoiceFilterQuery(filter: InvoiceFilter): string

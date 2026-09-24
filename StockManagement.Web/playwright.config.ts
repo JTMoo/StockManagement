@@ -10,7 +10,8 @@ export default defineConfig({
 	use: { baseURL: `http://localhost:${port}` },
 	webServer: {
 		command: "dotnet run --project ../StockManagement.Api --no-launch-profile",
-		url: `http://localhost:${port}/api/stock-items`,
+		// Not an API route: every API endpoint now requires auth (ADR-0009), so this would never see a 2xx
+		url: `http://localhost:${port}/`,
 		timeout: 180_000,
 		env: {
 			ASPNETCORE_URLS: `http://localhost:${port}`,
