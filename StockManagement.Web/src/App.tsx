@@ -1,4 +1,4 @@
-import { BookUser, Inbox, Languages, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
+import { BookUser, Inbox, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { CustomerList } from "./features/customers/CustomerList";
@@ -6,7 +6,7 @@ import { InvoiceView } from "./features/invoices/InvoiceView";
 import { SaleForm } from "./features/sales/SaleForm";
 import { SettingsPage } from "./features/settings/SettingsPage";
 import { StockItemList } from "./features/stock-items/StockItemList";
-import { cultures, useI18n, type Culture, type TextKey } from "./i18n";
+import { useI18n } from "./i18n";
 
 type View = "stockItems" | "clients" | "newSale" | "invoices" | "settings";
 
@@ -18,11 +18,10 @@ const views: { name: View; icon: LucideIcon }[] = [
 	{ name: "invoices", icon: Inbox },
 	{ name: "settings", icon: Settings }
 ];
-const cultureNames: Record<Culture, TextKey> = { "de-DE": "german", "en-US": "english", "es-PY": "spanish" };
 
 export function App()
 {
-	const { t, culture, setCulture } = useI18n();
+	const { t } = useI18n();
 	const [view, setView] = useState<View>("stockItems");
 	const [invoice, setInvoice] = useState<Invoice>();
 	const [menuExtended, setMenuExtended] = useState(true);
@@ -52,12 +51,6 @@ export function App()
 							<Icon />{menuExtended && <span>{t(name)}</span>}
 						</button>
 					))}
-					<label className="menu-item">
-						<Languages />
-						<select aria-label={t("selectLanguage")} value={culture} onChange={event => setCulture(event.target.value as Culture)}>
-							{cultures.map(name => <option key={name} value={name}>{t(cultureNames[name])}</option>)}
-						</select>
-					</label>
 				</div>
 			</nav>
 		</div>
