@@ -132,6 +132,21 @@
   <data name="mapProperties" xml:space="preserve">
     <value>Spalten zu Eigenschaften zuordnen</value>
   </data>
+  <data name="chooseFile" xml:space="preserve">
+    <value>Datei auswählen</value>
+  </data>
+  <data name="import" xml:space="preserve">
+    <value>Importieren</value>
+  </data>
+  <data name="imported" xml:space="preserve">
+    <value>Importiert</value>
+  </data>
+  <data name="duplicatesSkipped" xml:space="preserve">
+    <value>Als Duplikat übersprungen</value>
+  </data>
+  <data name="row" xml:space="preserve">
+    <value>Zeile</value>
+  </data>
   <data name="search" xml:space="preserve">
     <value>Suche:</value>
   </data>

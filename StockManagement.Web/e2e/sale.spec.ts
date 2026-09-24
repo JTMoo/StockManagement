@@ -43,4 +43,8 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 	await shot(page, "5-settings");
 	await page.locator("main").getByLabel("Select language:").selectOption("es-PY");
 	await expect(page.getByRole("heading", { name: "Configuracion" })).toBeVisible();
+
+	await page.getByRole("button", { name: "Importación de Excel" }).click();
+	await expect(page.getByRole("button", { name: "Importar" })).toBeDisabled();
+	await shot(page, "6-excel-import");
 });

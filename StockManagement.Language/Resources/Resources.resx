@@ -132,6 +132,21 @@
   <data name="mapProperties" xml:space="preserve">
     <value>Map columns to properties</value>
   </data>
+  <data name="chooseFile" xml:space="preserve">
+    <value>Choose file</value>
+  </data>
+  <data name="import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="imported" xml:space="preserve">
+    <value>Imported</value>
+  </data>
+  <data name="duplicatesSkipped" xml:space="preserve">
+    <value>Skipped as duplicate</value>
+  </data>
+  <data name="row" xml:space="preserve">
+    <value>Row</value>
+  </data>
   <data name="search" xml:space="preserve">
     <value>Search:</value>
   </data>

@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Customers.Core;
 using StockManagement.Customers.Core.Contracts;
+using StockManagement.Import.Core;
+using StockManagement.Import.Core.Contracts;
 using StockManagement.Infrastructure;
 using StockManagement.Infrastructure.Database;
 using StockManagement.Sales.Core;
@@ -21,6 +23,7 @@ builder.Services
 	.AddSalesCore()
 	.AddCustomersCore()
 	.AddSettingsCore()
+	.AddImportCore()
 	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // AddSalesCore/AddCustomersCore/AddSettingsCore register these Singleton for the GUI's Mongo Kernel providers;
@@ -28,6 +31,7 @@ builder.Services
 MakeScoped<ISaleService>(builder.Services);
 MakeScoped<ICustomerService>(builder.Services);
 MakeScoped<ISettingsService>(builder.Services);
+MakeScoped<IStockItemImportService>(builder.Services);
 
 var app = builder.Build();
 

@@ -13,6 +13,7 @@
     <ProjectReference Include="..\StockManagement.Settings.Core\StockManagement.Settings.Core.csproj" />
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
     <ProjectReference Include="..\StockManagement.Infrastructure\StockManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\StockManagement.Import.Core\StockManagement.Import.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

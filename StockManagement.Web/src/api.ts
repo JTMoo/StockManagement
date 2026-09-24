@@ -24,6 +24,10 @@ export type Language = "German" | "English" | "Spanish";
 
 export type Settings = { language: Language };
 
+export type StockItemImportRowError = { row: number; message: string };
+
+export type StockItemImportResult = { sheetName: string; imported: number; duplicates: number; errors: StockItemImportRowError[] };
+
 export type ApiFailure =
 	| { kind: "notFound" }
 	| { kind: "invalid"; codes: string[] }
@@ -37,11 +41,23 @@ type ProblemDetails = { errors?: { reason: string }[] };
 
 async function send<T>(path: string, init?: RequestInit): Promise<Result<T>>
 {
+	// Content-Type only with a body: FastEndpoints otherwise tries to parse the (empty) GET body as JSON and rejects it
+	return handleResponse(() => fetch(`/api${path}`, { ...init, headers: init?.body ? { "Content-Type": "application/json" } : {} }));
+}
+
+async function sendForm<T>(path: string, file: File): Promise<Result<T>>
+{
+	const body = new FormData();
+	body.append("File", file);
+	return handleResponse(() => fetch(`/api${path}`, { method: "POST", body }));
+}
+
+async function handleResponse<T>(fetchCall: () => Promise<Response>): Promise<Result<T>>
+{
 	let response: Response;
 	try
 	{
-		// Content-Type only with a body: FastEndpoints otherwise tries to parse the (empty) GET body as JSON and rejects it
-		response = await fetch(`/api${path}`, { ...init, headers: init?.body ? { "Content-Type": "application/json" } : {} });
+		response = await fetchCall();
 	}
 	catch
 	{
@@ -65,6 +81,7 @@ export const api = {
 	createStockItem: (stockItem: NewStockItem) => send<StockItem>("/stock-items", { method: "POST", body: JSON.stringify(stockItem) }),
 	updateStockItem: (stockItem: StockItem) => send<StockItem>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "PUT", body: JSON.stringify(stockItem) }),
 	deleteStockItem: (stockItem: StockItem) => send<void>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "DELETE" }),
+	importStockItems: (file: File) => sendForm<StockItemImportResult>("/stock-items/import", file),
 	listCustomers: (signal?: AbortSignal) => send<Customer[]>("/customers", { signal }),
 	createCustomer: (customer: NewCustomer) => send<Customer>("/customers", { method: "POST", body: JSON.stringify(customer) }),
 	updateCustomer: (customer: Customer) => send<Customer>(`/customers/${customer.customerId}`, { method: "PUT", body: JSON.stringify(customer) }),
