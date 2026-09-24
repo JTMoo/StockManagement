@@ -7,6 +7,14 @@ public class ShoppingCartItem(StockItem item) : NotificationBase
 	private int discount = 0;
 
 
+	/// <summary>
+	/// For EF Core materialization
+	/// </summary>
+	private ShoppingCartItem() : this(null!)
+	{
+	}
+
+
 	public StockItem StockItem { get; set; } = item;
 
 	public int Discount

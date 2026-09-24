@@ -1,0 +1,33 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using StockManagement.Kernel.Model;
+
+namespace StockManagement.Infrastructure.Database;
+
+
+internal sealed class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
+{
+	public void Configure(EntityTypeBuilder<Invoice> builder)
+	{
+		builder.Property<string>("Id").ValueGeneratedOnAdd();
+		builder.HasKey("Id");
+		builder.HasIndex(invoice => invoice.Number).IsUnique();
+		builder.HasOne(invoice => invoice.Customer).WithMany().IsRequired();
+
+		// DateTime.Now (Kind=Local); Npgsql only accepts UTC for "timestamp with time zone"
+		builder.Property(invoice => invoice.Date).HasColumnType("timestamp without time zone");
+		builder.Property(invoice => invoice.ExpirationDate).HasColumnType("timestamp without time zone");
+
+		builder.OwnsMany(invoice => invoice.Items, item =>
+		{
+			item.WithOwner().HasForeignKey("InvoiceId");
+			item.Property<Guid>("Id").ValueGeneratedOnAdd();
+			item.HasKey("Id");
+			item.HasOne(cartItem => cartItem.StockItem).WithMany().IsRequired();
+			item.Navigation(cartItem => cartItem.StockItem).AutoInclude();
+			item.ToTable("InvoiceItems");
+		});
+		builder.Navigation(invoice => invoice.Items).AutoInclude();
+		builder.Navigation(invoice => invoice.Customer).AutoInclude();
+	}
+}

@@ -35,7 +35,7 @@ public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockIte
 		}
 		else
 		{
-			var result = await _stockItemServiceProvider.UpdateStockItemAsync(this.StockItem).ContinueWith(task => task.Result.ModifiedCount == 1);
+			var result = await _stockItemServiceProvider.UpdateStockItemAsync(this.StockItem).ContinueWith(task => task.Result == 1);
 		}
 	}
 }

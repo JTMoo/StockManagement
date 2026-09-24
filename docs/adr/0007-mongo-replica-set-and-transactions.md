@@ -1,6 +1,6 @@
 # ADR-0007: MongoDB as single-node replica set, multi-step writes in transactions
 
-- Status: Proposed
+- Status: Superseded by [ADR-0008](0008-ef-core-on-postgresql.md)
 - Date: 2026-09-24
 
 ## Context

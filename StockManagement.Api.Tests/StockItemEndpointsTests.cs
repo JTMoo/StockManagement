@@ -20,7 +20,7 @@ public sealed class StockItemEndpointsTests
 		_factory = new();
 		_client = _factory.CreateClient();
 
-		var stockItems = _factory.Services.GetRequiredService<IStockItemServiceProvider>();
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
 		await stockItems.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10, price: 5000));
 		await stockItems.AddStockItemAsync(new StockItem("Nut", code: "B2", amount: 3, price: 1000));
 	}

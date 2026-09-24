@@ -2,7 +2,7 @@
 ## This project is the basis of a Stock Management Tool.
 
 This basis has:
-- Connection to MongoDB
+- API on PostgreSQL (EF Core); GUI still on MongoDB
 - Seperated BusinessLogic from UI
 - Creation of Stock Items
 - Checking Stock Items in and out
@@ -22,16 +22,22 @@ Getting an Installer as follows:
 https://www.mongodb.com/try/download/community
 
 # Database config
-- `appsettings.json` next to the exe: `ConnectionStrings:Mongo`, `Mongo:DatabaseName`
+- GUI `appsettings.json` next to the exe: `ConnectionStrings:Mongo`, `Mongo:DatabaseName`
+- API `appsettings.json`: `ConnectionStrings:Postgres`
 - Per install: `appsettings.local.json` with the keys to override (kept on upgrade)
 
 # PostgreSQL (ADR-0008)
-- Moving the data layer to EF Core on PostgreSQL; not wired into the app yet, Mongo stays live
+- API's data layer is EF Core on PostgreSQL (StockItem, Customer, Invoice, Transaction); Mongo removed from the API
+- Migrations run automatically on API start (`Database.MigrateAsync()`)
 - API integration tests need Docker (Testcontainers `postgres:16`)
-- Once wired in: `ConnectionStrings:Postgres` in `appsettings.json`
+- GUI still reads/writes MongoDB directly, unchanged (not yet cut over)
 
-# MongoDB replica set (ADR-0007)
-- Needed for transactions; standalone `mongod` → sales fail
+# MongoDB (GUI only)
+- Still used by the WPF GUI: `User`/`Settings` and, until the GUI is cut over, its own copy of Stock/Customer/Sale data
+
+# MongoDB replica set (ADR-0007, superseded by ADR-0008 for the API)
+- Was needed for the API's multi-step sale transaction; that's now the Postgres transaction in `EfInvoiceServiceProvider`
+- Still applies to the GUI, which is unchanged and needs it for the same reason
 - `mongod.cfg` (Windows: `C:\Program Files\MongoDB\Server\<version>\bin\mongod.cfg`):
 ```yaml
 replication:

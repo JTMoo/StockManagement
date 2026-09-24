@@ -1,4 +1,3 @@
-﻿using MongoDB.Driver;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Database.Interfaces;
@@ -8,8 +7,14 @@ public interface IInvoiceServiceProvider
 {
 	public Task<Invoice> GetInvoiceAync(int invoiceNumber);
 	public Task<IEnumerable<Invoice>> GetInvoicesAsync();
-	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice invoice);
-	public Task<DeleteResult> DeleteInvoiceAsync(Invoice invoice);
+
+	/// <returns>Rows affected; 1 on success</returns>
+	public Task<int> UpdateInvoiceAsync(Invoice invoice);
+
+	/// <returns>Rows affected; 1 on success</returns>
+	public Task<int> DeleteInvoiceAsync(Invoice invoice);
+
+	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use; nothing written</exception>
 	public Task AddInvoiceAsync(Invoice invoice);
 
 	/// <summary>
@@ -20,6 +25,6 @@ public interface IInvoiceServiceProvider
 	/// Records one <see cref="Transaction"/> per line. Sets each line's <see cref="StockItem.Amount"/> to the stock left.
 	/// </remarks>
 	/// <returns>Names of the short lines; empty when the sale was stored</returns>
-	/// <exception cref="MongoWriteException">Invoice number already exists; nothing written</exception>
+	/// <exception cref="InvoiceNumberAlreadyExistsException">Invoice number already exists; nothing written</exception>
 	public Task<IReadOnlyList<string>> TryAddSaleAsync(Invoice invoice, CancellationToken cancellationToken = default);
 }
