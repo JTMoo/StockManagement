@@ -415,6 +415,24 @@
   <data name="show" xml:space="preserve">
     <value>Mostrar</value>
   </data>
+  <data name="from" xml:space="preserve">
+    <value>Desde</value>
+  </data>
+  <data name="to" xml:space="preserve">
+    <value>Hasta</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>Siguiente</value>
+  </data>
+  <data name="customerName" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Volver</value>
+  </data>
   <data name="save" xml:space="preserve">
     <value>Guardar</value>
   </data>

@@ -2,7 +2,7 @@ import { BookUser, Inbox, Menu, Settings, ShoppingCart, Wrench, type LucideIcon 
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { CustomerList } from "./features/customers/CustomerList";
-import { InvoiceView } from "./features/invoices/InvoiceView";
+import { InvoiceBrowser } from "./features/invoices/InvoiceBrowser";
 import { SaleForm } from "./features/sales/SaleForm";
 import { SettingsPage } from "./features/settings/SettingsPage";
 import { StockItemList } from "./features/stock-items/StockItemList";
@@ -38,7 +38,7 @@ export function App()
 				{view === "stockItems" && <StockItemList />}
 				{view === "clients" && <CustomerList />}
 				{view === "newSale" && <SaleForm onSold={onSold} />}
-				{view === "invoices" && <InvoiceView invoice={invoice} />}
+				{view === "invoices" && <InvoiceBrowser invoice={invoice} />}
 				{view === "settings" && <SettingsPage />}
 			</main>
 			<nav className={menuExtended ? "menu" : "menu collapsed"}>

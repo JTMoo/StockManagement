@@ -34,4 +34,4 @@ export function renderEnglish(ui: ReactElement)
 export const screw = { id: "1", code: "A1", name: "Screw", description: "M6", location: "A-1", amount: 10, price: 5000, manufacturer: "None" };
 export const nut = { id: "2", code: "B2", name: "Nut", description: "M6", location: "B-2", amount: 0, price: 1000, manufacturer: "None" };
 export const ana = { customerId: 1001, name: "Ana", lastname: "Gómez", address: "", phoneNumber: "", identificationNumber: "", postboxNumber: "", email: "", miscellaneous: "" };
-export const invoice = { number: 7, date: "2026-09-24T10:00:00", expirationDate: "2026-10-24T10:00:00", total: 10000, tax: 909, saleCondition: "Cash", customerId: 1001, lines: [{ code: "A1", name: "Screw", amount: 2, unitPrice: 5000 }] };
+export const invoice = { number: 7, date: "2026-09-24T10:00:00", expirationDate: "2026-10-24T10:00:00", total: 10000, tax: 909, saleCondition: "Cash", customerId: 1001, customerName: "Ana Gómez", lines: [{ code: "A1", name: "Screw", amount: 2, unitPrice: 5000 }] };

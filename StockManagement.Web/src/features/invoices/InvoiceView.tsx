@@ -4,7 +4,7 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 
-export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
+export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; onBack?: () => void })
 {
 	const { t, formatNumber, formatDate } = useI18n();
 	const [number, setNumber] = useState(initial ? String(initial.number) : "");
@@ -24,6 +24,7 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 	return (
 		<Page title={t("invoices")} toolbar={
 			<form onSubmit={onSubmit} className="toolbar-form">
+				{onBack && <button type="button" className="quiet" onClick={onBack}>{t("back")}</button>}
 				<input type="number" min={1} required aria-label={t("invoiceId")} placeholder={t("invoiceId")} value={number} onChange={event => setNumber(event.target.value)} />
 				<button type="submit">{t("show")}</button>
 			</form>
@@ -36,7 +37,7 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 						<span>{t(invoice.saleCondition === "Cash" ? "cash" : "credit")}</span>
 					</header>
 					<dl>
-						<dt>{t("customerId")}</dt><dd>{invoice.customerId}</dd>
+						<dt>{t("customerName")}</dt><dd>{invoice.customerName} ({invoice.customerId})</dd>
 						<dt>{t("creationDate")}</dt><dd>{formatDate(invoice.date)}</dd>
 						<dt>{t("expirationDate")}</dt><dd>{formatDate(invoice.expirationDate)}</dd>
 					</dl>

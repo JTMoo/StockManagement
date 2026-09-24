@@ -127,6 +127,76 @@ public sealed class EfInvoiceServiceProviderTests
 	}
 
 	[TestMethod]
+	public async Task GetInvoicesAsync_FilteredByCustomerId_ReturnsOnlyThatCustomersInvoices()
+	{
+		// Arrange
+		await using var scope = _services.CreateAsyncScope();
+		var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+		var stockItem = new StockItem("Screw", code: "A1", amount: 10);
+		var ann = new Customer { CustomerId = 1001, Name = "Ann" };
+		var bob = new Customer { CustomerId = 1002, Name = "Bob" };
+		db.StockItems.Add(stockItem);
+		db.Customers.AddRange(ann, bob);
+		db.Invoices.AddRange(
+			new Invoice { Number = 1, Customer = ann, Date = new DateTime(2026, 1, 1), Items = [] },
+			new Invoice { Number = 2, Customer = bob, Date = new DateTime(2026, 1, 2), Items = [] });
+		await db.SaveChangesAsync();
+		var provider = new EfInvoiceServiceProvider(db);
+
+		// Act
+		var result = await provider.GetInvoicesAsync(customerId: 1001, from: null, to: null, page: 1, pageSize: 20);
+
+		// Assert
+		Assert.AreEqual(1, result.TotalCount);
+		Assert.AreEqual(1, result.Items.Single().Number);
+	}
+
+	[TestMethod]
+	public async Task GetInvoicesAsync_FilteredByDateRange_ExcludesInvoicesOutsideRange()
+	{
+		// Arrange
+		await using var scope = _services.CreateAsyncScope();
+		var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+		var customer = new Customer { CustomerId = 1001, Name = "Ann" };
+		db.Customers.Add(customer);
+		db.Invoices.AddRange(
+			new Invoice { Number = 1, Customer = customer, Date = new DateTime(2026, 1, 1), Items = [] },
+			new Invoice { Number = 2, Customer = customer, Date = new DateTime(2026, 6, 1), Items = [] },
+			new Invoice { Number = 3, Customer = customer, Date = new DateTime(2026, 12, 1), Items = [] });
+		await db.SaveChangesAsync();
+		var provider = new EfInvoiceServiceProvider(db);
+
+		// Act
+		var result = await provider.GetInvoicesAsync(customerId: null, from: new DateTime(2026, 3, 1), to: new DateTime(2026, 9, 1), page: 1, pageSize: 20);
+
+		// Assert
+		Assert.AreEqual(2, result.Items.Single().Number);
+	}
+
+	[TestMethod]
+	public async Task GetInvoicesAsync_SecondPage_ReturnsRemainingInvoicesNewestFirst()
+	{
+		// Arrange
+		await using var scope = _services.CreateAsyncScope();
+		var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+		var customer = new Customer { CustomerId = 1001, Name = "Ann" };
+		db.Customers.Add(customer);
+		db.Invoices.AddRange(
+			new Invoice { Number = 1, Customer = customer, Date = new DateTime(2026, 1, 1), Items = [] },
+			new Invoice { Number = 2, Customer = customer, Date = new DateTime(2026, 1, 2), Items = [] },
+			new Invoice { Number = 3, Customer = customer, Date = new DateTime(2026, 1, 3), Items = [] });
+		await db.SaveChangesAsync();
+		var provider = new EfInvoiceServiceProvider(db);
+
+		// Act
+		var result = await provider.GetInvoicesAsync(customerId: null, from: null, to: null, page: 2, pageSize: 2);
+
+		// Assert
+		Assert.AreEqual(3, result.TotalCount);
+		Assert.AreEqual(1, result.Items.Single().Number);
+	}
+
+	[TestMethod]
 	public async Task TryAddSaleAsync_DuplicateNumber_ThrowsInvoiceNumberAlreadyExists()
 	{
 		// Arrange

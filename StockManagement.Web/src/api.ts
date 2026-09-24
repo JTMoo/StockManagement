@@ -12,7 +12,11 @@ export type NewCustomer = Partial<Omit<Customer, "customerId">> & { name: string
 
 export type InvoiceLine = { code: string; name: string; amount: number; unitPrice: number };
 
-export type Invoice = { number: number; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; lines: InvoiceLine[] };
+export type Invoice = { number: number; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; customerName: string; lines: InvoiceLine[] };
+
+export type InvoiceListResult = { items: Invoice[]; totalCount: number };
+
+export type InvoiceFilter = { customerId?: number; from?: string; to?: string; page: number; pageSize: number };
 
 export type NewSale = { customerId: number; saleCondition: SaleCondition; items: { code: string; amount: number }[] };
 
@@ -36,7 +40,8 @@ async function send<T>(path: string, init?: RequestInit): Promise<Result<T>>
 	let response: Response;
 	try
 	{
-		response = await fetch(`/api${path}`, { ...init, headers: { "Content-Type": "application/json" } });
+		// Content-Type only with a body: FastEndpoints otherwise tries to parse the (empty) GET body as JSON and rejects it
+		response = await fetch(`/api${path}`, { ...init, headers: init?.body ? { "Content-Type": "application/json" } : {} });
 	}
 	catch
 	{
@@ -65,6 +70,16 @@ export const api = {
 	updateCustomer: (customer: Customer) => send<Customer>(`/customers/${customer.customerId}`, { method: "PUT", body: JSON.stringify(customer) }),
 	createSale: (sale: NewSale) => send<Invoice>("/sales", { method: "POST", body: JSON.stringify(sale) }),
 	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
+	listInvoices: (filter: InvoiceFilter, signal?: AbortSignal) => send<InvoiceListResult>(`/invoices?${invoiceFilterQuery(filter)}`, { signal }),
 	getSettings: (signal?: AbortSignal) => send<Settings>("/settings", { signal }),
 	updateSettings: (language: Language) => send<Settings>("/settings", { method: "PUT", body: JSON.stringify({ language }) })
 };
+
+function invoiceFilterQuery(filter: InvoiceFilter): string
+{
+	const params = new URLSearchParams({ page: String(filter.page), pageSize: String(filter.pageSize) });
+	if (filter.customerId !== undefined) params.set("customerId", String(filter.customerId));
+	if (filter.from) params.set("from", filter.from);
+	if (filter.to) params.set("to", filter.to);
+	return params.toString();
+}
