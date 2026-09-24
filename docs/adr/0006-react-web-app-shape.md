@@ -26,7 +26,7 @@
 - `src/api.ts`: hand-written types + `fetch`; expected failures as `Result` (`notFound`, `invalid` codes, `conflict`, `unexpected`), no throws
 - Texts: `scripts/resx-to-json.mjs` generates `src/i18n/*.json` from resx before dev/build/test (gitignored); keys = resx names; API error codes = text keys
 - No router, state library or UI kit until a screen needs one
-- Look follows WPF: brandboard colors, Poppins (`@fontsource/poppins`), right-side icon menu (`lucide-react`), plain CSS in `src/index.css`
+- Look follows WPF: brandboard colors, Poppins (`@fontsource/poppins`), right-side icon menu (`lucide-react`), plain CSS tokens in `src/index.css`; printed things (invoice, sale total, Sell) as paper on navy (frontend-design plugin pass)
 - Feature folders like the API: `src/features/<feature>/`
 - Tests: Vitest + React Testing Library with stubbed `fetch`; Playwright smoke test against the real API + MongoDB (seeded, own database); own CI job on `ubuntu-latest`
 

@@ -53,7 +53,7 @@ describe("SaleForm", () =>
 		// Arrange
 		const { fetchMock, onSold } = await renderSaleForm();
 		await userEvent.selectOptions(screen.getByLabelText("Customer"), "1001");
-		await userEvent.selectOptions(screen.getByLabelText("Sale condition"), "Credit");
+		await userEvent.click(screen.getByRole("radio", { name: "Credit" }));
 		await addToCart("A1", 2);
 
 		// Act

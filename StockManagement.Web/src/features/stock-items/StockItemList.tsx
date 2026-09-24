@@ -24,7 +24,7 @@ export function StockItemList()
 					</thead>
 					<tbody>
 						{visible.map(item => (
-							<tr key={item.code}>
+							<tr key={item.code} className={item.amount === 0 ? "sold-out" : undefined}>
 								<td>{item.name}</td><td>{item.code}</td>
 								<td className="number">{formatNumber(item.amount)}</td><td className="number">{formatNumber(item.price)}</td>
 								<td>{item.manufacturer}</td><td>{item.location}</td>

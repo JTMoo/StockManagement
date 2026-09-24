@@ -15,6 +15,7 @@ describe("InvoiceView", () =>
 		// Assert
 		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
 		expect(screen.getByTestId("invoice-total")).toHaveTextContent("10,000");
+		expect(screen.getByRole("heading", { name: "Invoice 7" })).toBeInTheDocument();
 		expect(screen.getByText("Cash")).toBeInTheDocument();
 	});
 

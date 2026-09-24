@@ -32,13 +32,15 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 			</form>
 			<FailureMessage failure={failure} notFound="invoiceNotFound" />
 			{invoice && (
-				<article className="panel" aria-label={`${t("invoice")} ${invoice.number}`}>
+				<article className="paper" aria-label={`${t("invoice")} ${invoice.number}`}>
+					<header>
+						<h3>{t("invoice")} {invoice.number}</h3>
+						<span>{t(invoice.saleCondition === "Cash" ? "cash" : "credit")}</span>
+					</header>
 					<dl>
-						<dt>{t("invoiceId")}</dt><dd>{invoice.number}</dd>
 						<dt>{t("customerId")}</dt><dd>{invoice.customerId}</dd>
 						<dt>{t("creationDate")}</dt><dd>{formatDate(invoice.date)}</dd>
 						<dt>{t("expirationDate")}</dt><dd>{formatDate(invoice.expirationDate)}</dd>
-						<dt>{t("saleCondition")}</dt><dd>{t(invoice.saleCondition === "Cash" ? "cash" : "credit")}</dd>
 					</dl>
 					<table>
 						<thead>
@@ -53,7 +55,7 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 						</tbody>
 						<tfoot>
 							<tr><th colSpan={3}>{t("tax")}</th><td className="number">{formatNumber(invoice.tax)}</td></tr>
-							<tr><th colSpan={3}>{t("total")}</th><td className="number" data-testid="invoice-total">{formatNumber(invoice.total)}</td></tr>
+							<tr className="total"><th colSpan={3}>{t("total")}</th><td className="number" data-testid="invoice-total">{formatNumber(invoice.total)}</td></tr>
 						</tfoot>
 					</table>
 				</article>

@@ -49,8 +49,8 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 		<form onSubmit={onSubmit}>
 			<h2>{t("newSale")}</h2>
 			<FailureMessage failure={customers.failure ?? stockItems.failure} />
-			<div className="panel">
-				<div className="inline-form">
+			<div className="sale">
+				<div className="sale-pick">
 					<label>
 						{t("customer")}
 						<select value={customerId} required onChange={event => setCustomerId(event.target.value)}>
@@ -58,48 +58,52 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 							{customers.data?.map(customer => <option key={customer.customerId} value={customer.customerId}>{`${customer.customerId} ${customer.name} ${customer.lastname}`.trim()}</option>)}
 						</select>
 					</label>
-					<label>
-						{t("saleCondition")}
-						<select value={saleCondition} onChange={event => setSaleCondition(event.target.value as SaleCondition)}>
-							<option value="Cash">{t("cash")}</option>
-							<option value="Credit">{t("credit")}</option>
-						</select>
-					</label>
+					<fieldset className="segmented">
+						<legend>{t("saleCondition")}</legend>
+						{(["Cash", "Credit"] as const).map(condition => (
+							<label key={condition}>
+								<input type="radio" name="saleCondition" value={condition} checked={saleCondition === condition} onChange={() => setSaleCondition(condition)} />
+								{t(condition === "Cash" ? "cash" : "credit")}
+							</label>
+						))}
+					</fieldset>
+					<div className="inline-form">
+						<label className="grow">
+							{t("stockItem")}
+							<select value={code} onChange={event => setCode(event.target.value)}>
+								<option value="" />
+								{available.map(item => <option key={item.code} value={item.code}>{`${item.code} ${item.name} (${item.amount})`}</option>)}
+							</select>
+						</label>
+						<label>
+							{t("quantity")}
+							<input type="number" min={1} value={amount} onChange={event => setAmount(Number(event.target.value))} />
+						</label>
+						<button type="button" onClick={onAdd} disabled={!code}>{t("addToShoppingCart")}</button>
+					</div>
 				</div>
-				<div className="inline-form">
-					<label>
-						{t("stockItem")}
-						<select value={code} onChange={event => setCode(event.target.value)}>
-							<option value="" />
-							{available.map(item => <option key={item.code} value={item.code}>{`${item.code} ${item.name} (${item.amount})`}</option>)}
-						</select>
-					</label>
-					<label>
-						{t("quantity")}
-						<input type="number" min={1} value={amount} onChange={event => setAmount(Number(event.target.value))} />
-					</label>
-					<button type="button" onClick={onAdd} disabled={!code}>{t("addToShoppingCart")}</button>
+				<div className="receipt">
+					<table aria-label={t("shoppingCart")}>
+						<thead>
+							<tr><th>{t("name")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th /></tr>
+						</thead>
+						<tbody>
+							{cart.map(line => (
+								<tr key={line.item.code}>
+									<td>{line.item.name}<small>{line.item.code}</small></td>
+									<td className="number">{formatNumber(line.amount)}</td><td className="number">{formatNumber(line.item.price * line.amount)}</td>
+									<td><button type="button" className="quiet" onClick={() => setCart(cart.filter(other => other !== line))}>{t("remove")}</button></td>
+								</tr>
+							))}
+						</tbody>
+						<tfoot>
+							<tr className="total"><th>{t("total")}</th><td colSpan={2} className="number">{formatNumber(total)}</td><td /></tr>
+						</tfoot>
+					</table>
+					<FailureMessage failure={failure} notFound="customerNotFound" />
+					<button type="submit" className="primary" disabled={busy || cart.length === 0 || !customerId}>{t("sell")}</button>
 				</div>
 			</div>
-			<table aria-label={t("shoppingCart")}>
-				<thead>
-					<tr><th>{t("code")}</th><th>{t("name")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th /></tr>
-				</thead>
-				<tbody>
-					{cart.map(line => (
-						<tr key={line.item.code}>
-							<td>{line.item.code}</td><td>{line.item.name}</td>
-							<td className="number">{formatNumber(line.amount)}</td><td className="number">{formatNumber(line.item.price * line.amount)}</td>
-							<td><button type="button" onClick={() => setCart(cart.filter(other => other !== line))}>{t("remove")}</button></td>
-						</tr>
-					))}
-				</tbody>
-				<tfoot>
-					<tr><th colSpan={3}>{t("total")}</th><td className="number">{formatNumber(total)}</td><td /></tr>
-				</tfoot>
-			</table>
-			<FailureMessage failure={failure} notFound="customerNotFound" />
-			<button type="submit" disabled={busy || cart.length === 0 || !customerId}>{t("sell")}</button>
 		</form>
 	);
 }
