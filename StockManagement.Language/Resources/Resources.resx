@@ -420,4 +420,16 @@
   <data name="show" xml:space="preserve">
     <value>Show</value>
   </data>
+  <data name="save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="itemAlreadyExists" xml:space="preserve">
+    <value>A stock item with this code already exists:</value>
+  </data>
+  <data name="itemDeletionPrompt" xml:space="preserve">
+    <value>Delete {0}?</value>
+  </data>
 </root>

@@ -415,4 +415,16 @@
   <data name="show" xml:space="preserve">
     <value>Mostrar</value>
   </data>
+  <data name="save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="itemAlreadyExists" xml:space="preserve">
+    <value>Ya existe un artículo con este código:</value>
+  </data>
+  <data name="itemDeletionPrompt" xml:space="preserve">
+    <value>¿Eliminar {0}?</value>
+  </data>
 </root>

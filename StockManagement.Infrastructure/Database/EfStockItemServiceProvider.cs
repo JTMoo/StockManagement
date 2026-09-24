@@ -20,6 +20,11 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 		return _db.StockItems.SingleOrDefaultAsync(item => item.Code == code)!;
 	}
 
+	public Task<StockItem> GetStockItemByIdAsync(string id)
+	{
+		return _db.StockItems.SingleOrDefaultAsync(item => item.Id == id)!;
+	}
+
 	public async Task<IEnumerable<StockItem>> GetAllStockItemsAsync()
 	{
 		return await _db.StockItems.ToListAsync();
