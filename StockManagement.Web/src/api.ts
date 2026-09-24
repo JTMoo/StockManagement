@@ -33,7 +33,8 @@ async function send<T>(path: string, init?: RequestInit): Promise<Result<T>>
 	let response: Response;
 	try
 	{
-		response = await fetch(`/api${path}`, { ...init, headers: { "Content-Type": "application/json" } });
+		// Content-Type only with a body: FastEndpoints otherwise tries to parse the (empty) GET body as JSON and rejects it
+		response = await fetch(`/api${path}`, { ...init, headers: init?.body ? { "Content-Type": "application/json" } : {} });
 	}
 	catch
 	{
