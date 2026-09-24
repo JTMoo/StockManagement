@@ -1,5 +1,4 @@
 using StockManagement.Kernel.Model;
-using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Api.Features.StockItems;
 
@@ -7,7 +6,7 @@ namespace StockManagement.Api.Features.StockItems;
 /// <summary>
 /// Article with its units in stock
 /// </summary>
-public sealed record StockItemResponse(string Code, string Name, string Description, string Location, int Amount, decimal Price, ManufacturerType Manufacturer)
+public sealed record StockItemResponse(string Code, string Name, string Description, string Location, int Amount, decimal Price, string Manufacturer)
 {
 	public static StockItemResponse From(StockItem stockItem)
 	{

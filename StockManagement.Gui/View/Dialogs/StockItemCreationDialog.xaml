@@ -89,14 +89,15 @@
 													Margin="3"
 													ActualText="{Binding StockItem.Miscellaneous, Mode=TwoWay}" />
 
-				<!-- Manufacturer Type -->
+				<!-- Manufacturer -->
 				<TextBlock Grid.Row="7"
 						   Style="{StaticResource IndentedDialogTextBlockStyle}"
 						   Text="{x:Static lang:Resources.manufacturer}" />
 				<ComboBox Grid.Row="7" Grid.Column="1"
 						  Style="{StaticResource CustomComboBoxStyle}"
-						  ItemsSource="{Binding Source={StaticResource typesFromManufacturers}}"
-						  SelectedItem="{Binding StockItem.Manufacturer}"/>
+						  IsEditable="True"
+						  ItemsSource="{Binding Manufacturers}"
+						  Text="{Binding StockItem.Manufacturer, UpdateSourceTrigger=PropertyChanged}"/>
 
 				<!-- Description -->
 				<TextBlock Grid.Row="8"
