@@ -13,11 +13,16 @@ builder.Services
 	.AddFastEndpoints()
 	.AddKernel(database)
 	.AddSalesCore()
-	.AddCustomersCore();
+	.AddCustomersCore()
+	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 var app = builder.Build();
 
 await database.CreateUniqueIndexesAsync();
+
+// React build (StockManagement.Web) lands in wwwroot
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseFastEndpoints(config =>
 {

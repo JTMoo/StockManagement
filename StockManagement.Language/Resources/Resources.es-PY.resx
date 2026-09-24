@@ -385,4 +385,28 @@
   <data name="password" xml:space="preserve">
     <value>Contraseña</value>
   </data>
+  <data name="newSale" xml:space="preserve">
+    <value>Nueva venta</value>
+  </data>
+  <data name="sell" xml:space="preserve">
+    <value>Vender</value>
+  </data>
+  <data name="customerNotFound" xml:space="preserve">
+    <value>Cliente no encontrado.</value>
+  </data>
+  <data name="invoiceNotFound" xml:space="preserve">
+    <value>Factura no encontrada.</value>
+  </data>
+  <data name="itemsUnavailable" xml:space="preserve">
+    <value>Stock insuficiente:</value>
+  </data>
+  <data name="invalidInput" xml:space="preserve">
+    <value>Revise los datos ingresados.</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>Quitar</value>
+  </data>
+  <data name="show" xml:space="preserve">
+    <value>Mostrar</value>
+  </data>
 </root>
