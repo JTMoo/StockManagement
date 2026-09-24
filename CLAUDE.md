@@ -47,18 +47,6 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Money: never `double`
 - No binaries (`.msi`) in git; no customer names or connection strings in code
 
-## Known bugs (fix when touched)
-
-| Where | Bug |
-|---|---|
-| `ConversionHelper.Ones[9]` | `ten` instead of `nine` |
-| `SaleService.CompleteSaleAsync` | Stock updated before invoice insert, not atomic |
-| `StockItemServiceProvider` delete/amount change | Transaction insert not awaited |
-| `DatabaseManager` | `new MongoClient` per call; hard-coded connection + `LaCosecha_` DB name |
-| `MainManager.CreateCollectionIndeces` | `*IndexCreated` flags never saved |
-| `CustomerViewModel`, `InvoiceViewModel` search | Filters the filtered list; cleared search shows nothing new |
-| Search filters | Raw user text into `Regex.IsMatch`; invalid pattern throws |
-| Identifiers | `Collabsed`, `Indeces`, `Nineth`, `Twelveth`, `Eight` |
 
 ## Tests
 
@@ -76,3 +64,4 @@ Owner comments on code → add one line. Newest last. Conflicts with a rule abov
 - 2026-09-24: XML `<summary>` one line, rest in `<remarks>` ([#34](https://github.com/JTMoo/StockManagement/pull/34))
 - 2026-09-24: Public contract members need XML docs ([#34](https://github.com/JTMoo/StockManagement/pull/34))
 - 2026-09-24: Rules 1-3 above ([#35](https://github.com/JTMoo/StockManagement/pull/35#issuecomment-5813587865))
+- 2026-09-24: Bugs → GitHub issues (match existing first), not docs ([#40](https://github.com/JTMoo/StockManagement/pull/40#discussion_r4093518187))
