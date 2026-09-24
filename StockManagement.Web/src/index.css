@@ -1,0 +1,13 @@
+:root { font-family: system-ui, sans-serif; color-scheme: light dark; }
+body { margin: 0; }
+header { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 1rem; border-bottom: 1px solid #8884; }
+nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+nav button[aria-pressed="true"] { font-weight: bold; }
+main { padding: 1rem; }
+table { border-collapse: collapse; width: 100%; margin-block: 1rem; }
+th, td { border-bottom: 1px solid #8884; padding: 0.25rem 0.5rem; text-align: left; }
+.number { text-align: right; font-variant-numeric: tabular-nums; }
+.inline-form { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: end; margin-block: 0.5rem; }
+label { display: flex; flex-direction: column; gap: 0.25rem; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
+.failure { color: #c0392b; }
