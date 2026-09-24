@@ -33,7 +33,7 @@ public class LoginViewModel : ViewModelBase
 		get { return _password; }
 		set { this.SetField(ref _password, value); }
 	}
-	#region Properties
+	#endregion Properties
 
 
 	public static Task<LoginViewModel> CreateAsync(IUserServiceProvider userServiceProvider)
