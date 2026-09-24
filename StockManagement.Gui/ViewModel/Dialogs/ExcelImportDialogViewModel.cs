@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
-using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Import.Core.Contracts;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
@@ -10,12 +10,12 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 {
 	private string selectedWorksheetName = string.Empty;
 	private XLWorkbook workbook;
-	private readonly IStockItemServiceProvider _stockItemServiceProvider;
+	private readonly IStockItemImportService _stockItemImportService;
 
 
-	private ExcelImportDialogViewModel(IStockItemServiceProvider stockItemServiceProvider)
+	private ExcelImportDialogViewModel(IStockItemImportService stockItemImportService)
 	{
-		_stockItemServiceProvider = stockItemServiceProvider;
+		_stockItemImportService = stockItemImportService;
 	}
 
 	#region Properties
@@ -30,12 +30,12 @@ public sealed class ExcelImportDialogViewModel : DialogViewModelBase
 
 	public override void Confirm()
 	{
-		GuiManager.Instance.MainViewModel.Dialog = new TableMappingViewModel(this.workbook.Worksheet(this.SelectedWorksheetName), _stockItemServiceProvider);
+		GuiManager.Instance.MainViewModel.Dialog = new TableMappingViewModel(this.workbook.Worksheet(this.SelectedWorksheetName), _stockItemImportService);
 	}
 
-	public static Task<ExcelImportDialogViewModel> CreateAsync(string filePath, IStockItemServiceProvider stockItemServiceProvider)
+	public static Task<ExcelImportDialogViewModel> CreateAsync(string filePath, IStockItemImportService stockItemImportService)
 	{
-		var ret = new ExcelImportDialogViewModel(stockItemServiceProvider);
+		var ret = new ExcelImportDialogViewModel(stockItemImportService);
 		return ret.InitializeAsync(filePath);
 	}
 

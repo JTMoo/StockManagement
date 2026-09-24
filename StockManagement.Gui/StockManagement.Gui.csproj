@@ -19,11 +19,18 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.104.2" />
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StockManagement.Customers.Core\StockManagement.Customers.Core.csproj" />
+    <ProjectReference Include="..\StockManagement.Customers.Core.Contracts\StockManagement.Customers.Core.Contracts.csproj" />
+    <ProjectReference Include="..\StockManagement.Import.Core\StockManagement.Import.Core.csproj" />
+    <ProjectReference Include="..\StockManagement.Import.Core.Contracts\StockManagement.Import.Core.Contracts.csproj" />
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
+    <ProjectReference Include="..\StockManagement.Sales.Core\StockManagement.Sales.Core.csproj" />
+    <ProjectReference Include="..\StockManagement.Sales.Core.Contracts\StockManagement.Sales.Core.Contracts.csproj" />
     <ProjectReference Include="..\StockManagement.Language\StockManagement.Language.csproj" />
   </ItemGroup>
 

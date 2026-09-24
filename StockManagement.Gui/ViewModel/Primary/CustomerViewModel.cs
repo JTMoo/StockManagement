@@ -12,6 +12,7 @@ using StockManagement.Gui.ViewModel.Dialogs;
 using System.Windows;
 using System.Diagnostics;
 using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Customers.Core.Contracts;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -24,14 +25,16 @@ public class CustomerViewModel : ViewModelBase
 	private string _searchLastnames;
 	private ObservableCollection<Customer> _filteredCustomers;
 	private readonly ICustomerServiceProvider _customerServiceProvider;
+	private readonly ICustomerService _customerService;
 
 
-	private CustomerViewModel(ICustomerServiceProvider customerServiceProvider)
+	public CustomerViewModel(ICustomerServiceProvider customerServiceProvider, ICustomerService customerService)
 	{
 		this.CreateCustomerCommand = new RelayCommand<string>(this.OnCreateCustomerCommand);
 		this.MoreInfoCommand = new RelayCommand<Customer>(this.OpenCustomerCreationDialogWithCustomer);
 
 		_customerServiceProvider = customerServiceProvider;
+		_customerService = customerService;
 
 		this.PropertyChanged += this.OnPropertyChangedEvent;
 		this.SetupFilterConditions();
@@ -68,13 +71,10 @@ public class CustomerViewModel : ViewModelBase
 	#endregion Properties
 
 
-	public static Task<CustomerViewModel> CreateAsync(ICustomerServiceProvider customerServiceProvider)
-	{
-		var ret = new CustomerViewModel(customerServiceProvider);
-		return ret.InitializeAsync();
-	}
-
-	private async Task<CustomerViewModel> InitializeAsync()
+	/// <summary>
+	/// Loads the data the view shows. Call once after the container created the view model.
+	/// </summary>
+	public async Task<CustomerViewModel> InitializeAsync()
 	{
 		await this.UpdateCustomersAsync();
 		return this;
@@ -96,7 +96,7 @@ public class CustomerViewModel : ViewModelBase
 	{
 		try
 		{
-			var newId = await GetNewCustomerId();
+			var newId = await _customerService.GetNextCustomerIdAsync();
 			this.OpenCustomerCreationDialogWithId(newId);
 		}
 		catch (Exception ex)
@@ -124,23 +124,6 @@ public class CustomerViewModel : ViewModelBase
 	{
 		var filteredCustomers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result.Where(_filterFunctions));
 		this.FilteredCustomers = new(filteredCustomers);
-	}
-
-	private async Task<int> GetNewCustomerId()
-	{
-		try
-		{
-			var customers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result);
-			return customers.Max(customer => customer.CustomerId) + 1;
-		}
-		catch (ArgumentNullException)
-		{
-			return 1001;
-		}
-		catch (InvalidOperationException)
-		{
-			return 1001;
-		}
 	}
 
 	private void OnRefreshSearch()

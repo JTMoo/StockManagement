@@ -2,9 +2,8 @@
 using StockManagement.Gui.ViewModel.Dialogs;
 using StockManagement.Gui.ViewModel.Primary;
 using StockManagement.Kernel;
-using StockManagement.Kernel.Database;
-using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,27 +18,21 @@ internal class MainViewModel : NotificationBase
 	private bool isWaitDialogVisible = false;
 	private bool _isMenuExtended = false;
 	private int responsiveDialogBorderThickness;
-	private readonly IStockItemServiceProvider _stockItemServiceProvider;
-	private readonly ICustomerServiceProvider _customerServiceProvider;
-	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
-	private readonly IUserServiceProvider _userServiceProvider;
+	private readonly Func<StockItemsViewModel> _createStockItemsViewModel;
 
 
-	private MainViewModel(IDatabase database)
+	public MainViewModel(Func<StockItemsViewModel> createStockItemsViewModel, Func<CustomerViewModel> createCustomerViewModel, Func<InvoiceViewModel> createInvoiceViewModel, Func<LoginViewModel> createLoginViewModel)
 	{
-		_stockItemServiceProvider = new StockItemServiceProvider(database);
-		_customerServiceProvider = new CustomerServiceProvider(database);
-		_invoiceServiceProvider = new InvoiceServiceProvider(database);
-		_userServiceProvider = new UserServiceProvider(database);
+		_createStockItemsViewModel = createStockItemsViewModel;
 
 		ToggleMenuCommand = new RelayCommand<string>(_ => this.IsMenuExtended = !this.IsMenuExtended);
 		QuitCommand = new RelayCommand<string>(_ => Application.Current.Shutdown());
 		OpenSettingsCommand = new RelayCommand<string>(_ => this.Dialog = new SettingsDialogViewModel());
 
-		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await StockItemsViewModel.CreateAsync(_stockItemServiceProvider, _customerServiceProvider, _invoiceServiceProvider));
-		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await CustomerViewModel.CreateAsync(_customerServiceProvider));
-		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await InvoiceViewModel.CreateAsync(_invoiceServiceProvider));
-		OpenLoginCommand = new RelayCommand<string>(async _ => this.CurrentView = await LoginViewModel.CreateAsync(_userServiceProvider));
+		OpenStockItemsViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await createStockItemsViewModel().InitializeAsync());
+		OpenCustomerViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await createCustomerViewModel().InitializeAsync());
+		OpenInvoiceViewCommand = new RelayCommand<string>(async _ => this.CurrentView = await createInvoiceViewModel().InitializeAsync());
+		OpenLoginCommand = new RelayCommand<string>(async _ => this.CurrentView = await createLoginViewModel().InitializeAsync());
 
 		this.ResponsiveDialogBorderThickness = MainManagerFacade.Settings.DialogBorderThickness;
 		MainManagerFacade.Settings.PropertyChanged += this.OnSettingsChanged;
@@ -91,15 +84,12 @@ internal class MainViewModel : NotificationBase
 	}
 	#endregion Properties
 
-	public static Task<MainViewModel> CreateAsync(IDatabase database)
+	/// <summary>
+	/// Opens the stock view. Call once after the container created the view model.
+	/// </summary>
+	public async Task<MainViewModel> InitializeAsync()
 	{
-		var ret = new MainViewModel(database);
-		return ret.InitializeAsync();
-	}
-
-	private async Task<MainViewModel> InitializeAsync()
-	{
-		this.CurrentView = await StockItemsViewModel.CreateAsync(_stockItemServiceProvider, _customerServiceProvider, _invoiceServiceProvider);
+		this.CurrentView = await _createStockItemsViewModel().InitializeAsync();
 		return this;
 	}
 

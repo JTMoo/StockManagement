@@ -13,7 +13,7 @@ public class LoginViewModel : ViewModelBase
 	private string _password = string.Empty;
 
 
-	private LoginViewModel(IUserServiceProvider userServiceProvider)
+	public LoginViewModel(IUserServiceProvider userServiceProvider)
 	{
 		_userServiceProvider = userServiceProvider;
 	}
@@ -36,13 +36,10 @@ public class LoginViewModel : ViewModelBase
 	#endregion Properties
 
 
-	public static Task<LoginViewModel> CreateAsync(IUserServiceProvider userServiceProvider)
-	{
-		var ret = new LoginViewModel(userServiceProvider);
-		return ret.InitializeAsync();
-	}
-
-	private async Task<LoginViewModel> InitializeAsync()
+	/// <summary>
+	/// Loads the data the view shows. Call once after the container created the view model.
+	/// </summary>
+	public async Task<LoginViewModel> InitializeAsync()
 	{
 		this.AllUsers = new(await _userServiceProvider.GetAllUsersAsync());
 		return this;

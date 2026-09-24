@@ -9,11 +9,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MSTest" Version="3.6.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StockManagement.Sales.Core\StockManagement.Sales.Core.csproj" />
+    <ProjectReference Include="..\StockManagement.Customers.Core\StockManagement.Customers.Core.csproj" />
+    <ProjectReference Include="..\StockManagement.Import.Core\StockManagement.Import.Core.csproj" />
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
   </ItemGroup>
 
