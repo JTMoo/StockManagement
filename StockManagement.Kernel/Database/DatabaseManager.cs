@@ -8,18 +8,7 @@ namespace StockManagement.Kernel.Database;
 
 public class DatabaseManager(IMongoDatabase database) : IDatabase
 {
-	private const string DefaultConnectionString = "mongodb://127.0.0.1:27017";
-	private const string DefaultDatabaseName = "LaCosecha_StockManagement";
-
 	private readonly IMongoDatabase _database = database;
-
-
-	/// <summary>
-	/// Local database of the desktop app
-	/// </summary>
-	public DatabaseManager() : this(new MongoClient(DefaultConnectionString).GetDatabase(DefaultDatabaseName))
-	{
-	}
 
 
 	/// <summary>

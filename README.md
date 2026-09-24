@@ -20,3 +20,7 @@ Getting an Installer as follows:
 
 # Mongo-DB Installer Download
 https://www.mongodb.com/try/download/community
+
+# Database config
+- `appsettings.json` next to the exe: `ConnectionStrings:Mongo`, `Mongo:DatabaseName`
+- Per install: `appsettings.local.json` with the keys to override (kept on upgrade)

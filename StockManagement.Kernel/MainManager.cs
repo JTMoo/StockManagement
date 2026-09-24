@@ -1,4 +1,5 @@
-﻿using StockManagement.Kernel.Commands;
+﻿using MongoDB.Driver;
+using StockManagement.Kernel.Commands;
 using StockManagement.Kernel.Database;
 using System.Diagnostics;
 using StockManagement.Kernel.Model;
@@ -34,14 +35,15 @@ public class MainManager : NotificationBase, IDisposable
         this.Dispose();
     }
 
-    public DatabaseManager DatabaseManager { get; } = new();
+    public DatabaseManager DatabaseManager { get; private set; }
 	public Settings Settings { get; internal set; }
 
 
-    public static async Task<IDatabase> Initialize()
+    public static async Task<IDatabase> Initialize(IMongoDatabase database)
     {
         if (_isInitialized) return Instance.DatabaseManager;
 
+        Instance.DatabaseManager = new(database);
         await Instance.Init();
         return Instance.DatabaseManager;
 	}

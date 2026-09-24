@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using FastEndpoints;
-using MongoDB.Driver;
 using StockManagement.Customers.Core;
 using StockManagement.Kernel;
 using StockManagement.Kernel.Database;
@@ -8,9 +7,7 @@ using StockManagement.Sales.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Mongo") ?? throw new InvalidOperationException("ConnectionStrings:Mongo is missing.");
-var databaseName = builder.Configuration["Mongo:DatabaseName"] ?? throw new InvalidOperationException("Mongo:DatabaseName is missing.");
-var database = new DatabaseManager(new MongoClient(connectionString).GetDatabase(databaseName));
+var database = new DatabaseManager(builder.Configuration.GetMongoDatabase());
 
 builder.Services
 	.AddFastEndpoints()
