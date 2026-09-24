@@ -100,31 +100,9 @@ public class MainManager : NotificationBase, IDisposable
 	private async Task Init()
 	{
 		this.Settings = await DatabaseManager.GetOneAsync<Settings>(_ => true).ContinueWith(task => task.Result ?? new());
-		this.CreateCollectionIndeces();
+		await this.DatabaseManager.CreateUniqueIndexesAsync();
 
 		this._commandManager.Init();
 		_isInitialized = true;
-	}
-
-	private void CreateCollectionIndeces()
-	{
-		if (!this.Settings.StockItemIndexCreated)
-		{
-			var stockItemCollection = this.DatabaseManager.ConnectToMongo<StockItem>();
-			stockItemCollection.Indexes.CreateMany(UniquePropertyHelper.GetStockItemUniqueProperties());
-            this.Settings.StockItemIndexCreated = true;
-		}
-		if (!this.Settings.CustomerIndexCreated)
-		{
-			var customerCollection = this.DatabaseManager.ConnectToMongo<Customer>();
-			customerCollection.Indexes.CreateMany(UniquePropertyHelper.GetCustomerUniqueProperties());
-            this.Settings.CustomerIndexCreated = true;
-		}
-		if (!this.Settings.InvoiceIndexCreated)
-		{
-			var invoiceCollection = this.DatabaseManager.ConnectToMongo<Invoice>();
-			invoiceCollection.Indexes.CreateMany(UniquePropertyHelper.GetInvoiceUniqueProperties());
-			this.Settings.InvoiceIndexCreated = true;
-		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model.Types;
@@ -11,6 +12,7 @@ namespace StockManagement.Kernel.Model;
 /// Model-class containing all information regarding Settings
 /// </summary>
 /// ********************************************************************************************************************************
+[BsonIgnoreExtraElements]
 public class Settings : BaseDocument
 {
 	private AvailableLanguages _selectedLanguage;
@@ -26,10 +28,6 @@ public class Settings : BaseDocument
 		this.SelectedLanguage = selectedLanguage;
 		this.DialogBorderThickness = dialogBorderThickness;
 	}
-
-	public bool StockItemIndexCreated { get; set; } = false;
-	public bool CustomerIndexCreated { get; set; } = false;
-	public bool InvoiceIndexCreated { get; set; } = false;
 
 	public AvailableLanguages SelectedLanguage
 	{
