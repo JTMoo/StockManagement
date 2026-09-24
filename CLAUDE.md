@@ -29,6 +29,8 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Role suffixes: `*Service` (logic), `*Repository` (data), `*Helper`, `*Extensions`, `*ViewModel`, `*Type` (enums)
 - XML docs: public contract members; `<summary>` one line, details in `<remarks>`
 - User-facing text only via `StockManagement.Language`
+- Expected failures: `Try*` + `out` or result, not exceptions
+- Commands: `XxxCommand` → private `OnXxxCommand`; handlers `OnXxx`
 
 ## Target (new code)
 
@@ -40,7 +42,23 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Atomic multi-step writes; counters via `$inc`
 - `CancellationToken` on async; no `async void`, no fire-and-forget, no empty `catch`
 - `ILogger<T>`, log the exception
-- Import errors: per-row report
+- Import errors: per-row report; keep source (file, sheet, row)
+- Mongo duplicate key → domain error in Infrastructure
+- Money: never `double`
+- No binaries (`.msi`) in git; no customer names or connection strings in code
+
+## Known bugs (fix when touched)
+
+| Where | Bug |
+|---|---|
+| `ConversionHelper.Ones[9]` | `ten` instead of `nine` |
+| `SaleService.CompleteSaleAsync` | Stock updated before invoice insert, not atomic |
+| `StockItemServiceProvider` delete/amount change | Transaction insert not awaited |
+| `DatabaseManager` | `new MongoClient` per call; hard-coded connection + `LaCosecha_` DB name |
+| `MainManager.CreateCollectionIndeces` | `*IndexCreated` flags never saved |
+| `CustomerViewModel`, `InvoiceViewModel` search | Filters the filtered list; cleared search shows nothing new |
+| Search filters | Raw user text into `Regex.IsMatch`; invalid pattern throws |
+| Identifiers | `Collabsed`, `Indeces`, `Nineth`, `Twelveth`, `Eight` |
 
 ## Tests
 
