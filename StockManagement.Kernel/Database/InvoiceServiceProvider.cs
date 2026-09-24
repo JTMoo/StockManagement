@@ -40,7 +40,7 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice invoice)
 	{
 		var collection = _database.ConnectToMongo<Invoice>();
-		var filter = Builders<Invoice>.Filter.Eq("Id", invoice.Number);
+		var filter = Builders<Invoice>.Filter.Eq("Id", invoice.Id);
 		// Upsert means: replace if existent - insert if not existent
 		return collection.ReplaceOneAsync(filter, invoice, new ReplaceOptions { IsUpsert = true });
 	}
