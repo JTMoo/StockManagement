@@ -49,39 +49,41 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 		<form onSubmit={onSubmit}>
 			<h2>{t("newSale")}</h2>
 			<FailureMessage failure={customers.failure ?? stockItems.failure} />
-			<div className="inline-form">
-				<label>
-					{t("customer")}
-					<select value={customerId} required onChange={event => setCustomerId(event.target.value)}>
-						<option value="">{t("selectCustomer")}</option>
-						{customers.data?.map(customer => <option key={customer.customerId} value={customer.customerId}>{`${customer.customerId} ${customer.name} ${customer.lastname}`.trim()}</option>)}
-					</select>
-				</label>
-				<label>
-					{t("saleCondition")}
-					<select value={saleCondition} onChange={event => setSaleCondition(event.target.value as SaleCondition)}>
-						<option value="Cash">{t("cash")}</option>
-						<option value="Credit">{t("credit")}</option>
-					</select>
-				</label>
-			</div>
-			<div className="inline-form">
-				<label>
-					{t("stockItem")}
-					<select value={code} onChange={event => setCode(event.target.value)}>
-						<option value="" />
-						{available.map(item => <option key={item.code} value={item.code}>{`${item.code} ${item.name} (${item.amount})`}</option>)}
-					</select>
-				</label>
-				<label>
-					{t("quantity")}
-					<input type="number" min={1} value={amount} onChange={event => setAmount(Number(event.target.value))} />
-				</label>
-				<button type="button" onClick={onAdd} disabled={!code}>{t("addToShoppingCart")}</button>
+			<div className="panel">
+				<div className="inline-form">
+					<label>
+						{t("customer")}
+						<select value={customerId} required onChange={event => setCustomerId(event.target.value)}>
+							<option value="">{t("selectCustomer")}</option>
+							{customers.data?.map(customer => <option key={customer.customerId} value={customer.customerId}>{`${customer.customerId} ${customer.name} ${customer.lastname}`.trim()}</option>)}
+						</select>
+					</label>
+					<label>
+						{t("saleCondition")}
+						<select value={saleCondition} onChange={event => setSaleCondition(event.target.value as SaleCondition)}>
+							<option value="Cash">{t("cash")}</option>
+							<option value="Credit">{t("credit")}</option>
+						</select>
+					</label>
+				</div>
+				<div className="inline-form">
+					<label>
+						{t("stockItem")}
+						<select value={code} onChange={event => setCode(event.target.value)}>
+							<option value="" />
+							{available.map(item => <option key={item.code} value={item.code}>{`${item.code} ${item.name} (${item.amount})`}</option>)}
+						</select>
+					</label>
+					<label>
+						{t("quantity")}
+						<input type="number" min={1} value={amount} onChange={event => setAmount(Number(event.target.value))} />
+					</label>
+					<button type="button" onClick={onAdd} disabled={!code}>{t("addToShoppingCart")}</button>
+				</div>
 			</div>
 			<table aria-label={t("shoppingCart")}>
 				<thead>
-					<tr><th>{t("code")}</th><th>{t("name")}</th><th>{t("quantity")}</th><th>{t("price")}</th><th /></tr>
+					<tr><th>{t("code")}</th><th>{t("name")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th /></tr>
 				</thead>
 				<tbody>
 					{cart.map(line => (

@@ -21,7 +21,7 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 	await page.getByRole("button", { name: "New sale" }).click();
 	const customerId = await page.getByRole("option", { name: "Ana Gómez" }).getAttribute("value");
 	await page.getByLabel("Customer").selectOption(customerId!);
-	await page.getByLabel("Stock item").selectOption("A1");
+	await page.getByRole("combobox", { name: /^Stock item/ }).selectOption("A1");
 	await page.getByLabel("Quantity").fill("2");
 	await page.getByRole("button", { name: "Add to shopping cart" }).click();
 	await shot(page, "3-new-sale");
@@ -33,5 +33,5 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 	await shot(page, "4-invoice");
 
 	await page.getByRole("button", { name: "Stock items" }).click();
-	await expect(page.getByRole("row", { name: /A1 Screw/ })).toContainText("8");
+	await expect(page.getByRole("row", { name: /Screw A1/ })).toContainText("8");
 });

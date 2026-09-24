@@ -23,7 +23,7 @@ export function CustomerList()
 				<tbody>
 					{customers.map(customer => (
 						<tr key={customer.customerId}>
-							<td className="number">{customer.customerId}</td><td>{customer.name}</td><td>{customer.lastname}</td>
+							<td>{customer.customerId}</td><td>{customer.name}</td><td>{customer.lastname}</td>
 							<td>{customer.phoneNumber}</td><td>{customer.email}</td><td>{customer.address}</td>
 						</tr>
 					))}

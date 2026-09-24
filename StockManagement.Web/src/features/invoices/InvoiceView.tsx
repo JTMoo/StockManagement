@@ -32,7 +32,7 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 			</form>
 			<FailureMessage failure={failure} notFound="invoiceNotFound" />
 			{invoice && (
-				<article aria-label={`${t("invoice")} ${invoice.number}`}>
+				<article className="panel" aria-label={`${t("invoice")} ${invoice.number}`}>
 					<dl>
 						<dt>{t("invoiceId")}</dt><dd>{invoice.number}</dd>
 						<dt>{t("customerId")}</dt><dd>{invoice.customerId}</dd>
@@ -42,7 +42,7 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 					</dl>
 					<table>
 						<thead>
-							<tr><th>{t("code")}</th><th>{t("name")}</th><th>{t("quantity")}</th><th>{t("price")}</th></tr>
+							<tr><th>{t("code")}</th><th>{t("name")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th></tr>
 						</thead>
 						<tbody>
 							{invoice.lines.map(line => (

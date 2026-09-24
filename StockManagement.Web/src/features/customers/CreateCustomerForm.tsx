@@ -27,7 +27,7 @@ export function CreateCustomerForm({ onCreated }: { onCreated: (customer: Custom
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="inline-form">
+		<form onSubmit={onSubmit} className="panel inline-form">
 			{fields.map(field => (
 				<label key={field}>
 					{t(field)}
