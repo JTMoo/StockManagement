@@ -24,3 +24,14 @@ https://www.mongodb.com/try/download/community
 # Database config
 - `appsettings.json` next to the exe: `ConnectionStrings:Mongo`, `Mongo:DatabaseName`
 - Per install: `appsettings.local.json` with the keys to override (kept on upgrade)
+
+# MongoDB replica set (ADR-0006)
+- Needed for transactions; standalone `mongod` → sales fail
+- `mongod.cfg` (Windows: `C:\Program Files\MongoDB\Server\<version>\bin\mongod.cfg`):
+```yaml
+replication:
+  replSetName: rs0
+```
+- Restart the `MongoDB` service
+- Once: `mongosh --eval "rs.initiate()"`
+- Docker: `docker run -d -p 27017:27017 mongo:7 --replSet rs0` + `docker exec <id> mongosh --eval "rs.initiate()"`

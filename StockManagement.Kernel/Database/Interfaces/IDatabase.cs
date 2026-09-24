@@ -11,4 +11,10 @@ public interface IDatabase
 	public Task<DeleteResult> Delete<T>(BaseDocument item);
 	public IMongoCollection<T> ConnectToMongo<T>(in string collectionName);
 	public IMongoCollection<T> ConnectToMongo<T>();
+
+	/// <summary>
+	/// Starts a session for a multi-document transaction
+	/// </summary>
+	/// <remarks>Needs a replica set (ADR-0006).</remarks>
+	public Task<IClientSessionHandle> StartSessionAsync(CancellationToken cancellationToken = default);
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using StockManagement.Api.Features.Invoices;
 using StockManagement.Api.Features.Sales;
 using StockManagement.Api.Features.StockItems;
@@ -86,32 +87,32 @@ public sealed class SaleEndpointsTests
 	}
 
 	[TestMethod]
-	public async Task TryTakeStockAsync_TooLittleLeft_ReturnsNullAndKeepsStock()
+	public async Task TryAddSaleAsync_SecondLineShort_WritesNothing()
 	{
 		// Arrange
-		var stockItems = _factory.Services.GetRequiredService<IStockItemServiceProvider>();
-		await stockItems.TryTakeStockAsync("A1", 6);
+		await _factory.Services.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Nut", code: "B2", amount: 1, price: 100));
+		var invoice = CreateInvoice(1, ("A1", 3), ("B2", 2));
 
 		// Act
-		var result = await stockItems.TryTakeStockAsync("A1", 6);
+		var result = await _factory.Services.GetRequiredService<IInvoiceServiceProvider>().TryAddSaleAsync(invoice);
 
 		// Assert
-		Assert.IsNull(result);
-		Assert.AreEqual(4, (await stockItems.GetStockItemAsync("A1")).Amount);
+		CollectionAssert.AreEqual(new[] { "B2" }, result.ToList());
+		await this.AssertNothingSoldAsync();
 	}
 
 	[TestMethod]
-	public async Task ReturnStockAsync_AfterTake_RestoresStock()
+	public async Task TryAddSaleAsync_InvoiceNumberTaken_ThrowsAndWritesNothing()
 	{
 		// Arrange
-		var stockItems = _factory.Services.GetRequiredService<IStockItemServiceProvider>();
-		await stockItems.TryTakeStockAsync("A1", 6);
+		var invoices = _factory.Services.GetRequiredService<IInvoiceServiceProvider>();
+		await invoices.AddInvoiceAsync(new Invoice() { Number = 1, Items = [] });
 
 		// Act
-		await stockItems.ReturnStockAsync("A1", 6);
+		await Assert.ThrowsExceptionAsync<MongoWriteException>(() => invoices.TryAddSaleAsync(CreateInvoice(1, ("A1", 3))));
 
 		// Assert
-		Assert.AreEqual(10, (await stockItems.GetStockItemAsync("A1")).Amount);
+		Assert.AreEqual(10, (await _factory.Services.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
 	}
 
 	[TestMethod]
@@ -153,5 +154,16 @@ public sealed class SaleEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+	}
+
+	private async Task AssertNothingSoldAsync()
+	{
+		Assert.AreEqual(10, (await _factory.Services.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
+		Assert.IsNull(await _factory.Services.GetRequiredService<IInvoiceServiceProvider>().GetInvoiceAync(1));
+	}
+
+	private static Invoice CreateInvoice(int number, params (string Code, int Amount)[] lines)
+	{
+		return new Invoice() { Number = number, Items = [.. lines.Select(line => new ShoppingCartItem(new StockItem(line.Code, code: line.Code, amount: 100)) { Amount = line.Amount })] };
 	}
 }

@@ -100,8 +100,7 @@ public sealed class SaleServiceTests
 		Assert.IsTrue(result.Succeeded);
 		Assert.AreEqual(7, stored.Amount);
 		Assert.AreEqual(7, invoice.Items[0].StockItem.Amount);
-		_stockItems.Verify(provider => provider.TryTakeStockAsync("A1", 3, It.IsAny<CancellationToken>()), Times.Once);
-		_invoices.Verify(provider => provider.AddInvoiceAsync(invoice), Times.Once);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(invoice, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -120,54 +119,23 @@ public sealed class SaleServiceTests
 		// Assert
 		Assert.IsFalse(result.Succeeded);
 		CollectionAssert.AreEqual(new[] { "Screw" }, result.UnavailableItems.ToList());
-		_stockItems.Verify(provider => provider.TryTakeStockAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
-		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
-	public async Task CompleteSaleAsync_StockTakenByParallelSale_ReturnsTakenLinesAndStoresNoInvoice()
+	public async Task CompleteSaleAsync_StockTakenBetweenCheckAndWrite_ReportsWriteShortage()
 	{
 		// Arrange
-		var nut = new StockItem("Nut", code: "B2", amount: 10);
-		var screw = new StockItem("Screw", code: "A1", amount: 5);
-		this.SetupStock(nut, screw);
-		var invoice = CreateInvoice(
-			CreateCartItem("B2", "Nut", inStock: 10, price: 100, quantity: 4),
-			CreateCartItem("A1", "Screw", inStock: 5, price: 100, quantity: 3));
-		_stockItems
-			.Setup(provider => provider.TryTakeStockAsync("B2", 4, It.IsAny<CancellationToken>()))
-			.ReturnsAsync(() =>
-			{
-				screw.Amount = 1;
-				nut.Amount -= 4;
-				return nut;
-			});
+		this.SetupStock(new StockItem("Screw", code: "A1", amount: 10));
+		var invoice = CreateInvoice(CreateCartItem("A1", "Screw", inStock: 10, price: 100, quantity: 3));
+		_invoices.Setup(provider => provider.TryAddSaleAsync(invoice, It.IsAny<CancellationToken>())).ReturnsAsync(["Screw"]);
 
 		// Act
 		var result = await this.CreateService().CompleteSaleAsync(invoice);
 
 		// Assert
+		Assert.IsFalse(result.Succeeded);
 		CollectionAssert.AreEqual(new[] { "Screw" }, result.UnavailableItems.ToList());
-		Assert.AreEqual(10, nut.Amount);
-		Assert.AreEqual(1, screw.Amount);
-		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
-	}
-
-	[TestMethod]
-	public async Task CompleteSaleAsync_InvoiceWriteFails_ReturnsStockAndThrows()
-	{
-		// Arrange
-		var stored = new StockItem("Screw", code: "A1", amount: 10);
-		this.SetupStock(stored);
-		var invoice = CreateInvoice(CreateCartItem("A1", "Screw", inStock: 10, price: 100, quantity: 3));
-		_invoices.Setup(provider => provider.AddInvoiceAsync(invoice)).ThrowsAsync(new TimeoutException());
-
-		// Act
-		await Assert.ThrowsExceptionAsync<TimeoutException>(() => this.CreateService().CompleteSaleAsync(invoice));
-
-		// Assert
-		Assert.AreEqual(10, stored.Amount);
-		_stockItems.Verify(provider => provider.ReturnStockAsync("A1", 3, CancellationToken.None), Times.Once);
 	}
 
 	[TestMethod]
@@ -183,7 +151,7 @@ public sealed class SaleServiceTests
 		// Assert
 		Assert.IsFalse(result.Succeeded);
 		CollectionAssert.AreEqual(new[] { "Screw" }, result.UnavailableItems.ToList());
-		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -200,8 +168,7 @@ public sealed class SaleServiceTests
 		await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => service.CompleteSaleAsync(invoice, cancellation.Token));
 
 		// Assert
-		_stockItems.Verify(provider => provider.TryTakeStockAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
-		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 
@@ -225,7 +192,7 @@ public sealed class SaleServiceTests
 		Assert.AreEqual(SaleCondition.Cash, result.Invoice.SaleCondition);
 		Assert.AreSame(customer, result.Invoice.Customer);
 		Assert.AreEqual(7, stored.Amount);
-		_invoices.Verify(provider => provider.AddInvoiceAsync(result.Invoice), Times.Once);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(result.Invoice, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -241,8 +208,7 @@ public sealed class SaleServiceTests
 		Assert.IsFalse(result.Succeeded);
 		Assert.IsNull(result.Invoice);
 		CollectionAssert.AreEqual(new[] { "Screw" }, result.UnavailableItems.ToList());
-		_stockItems.Verify(provider => provider.TryTakeStockAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
-		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -266,7 +232,7 @@ public sealed class SaleServiceTests
 
 		// Assert
 		CollectionAssert.AreEqual(new[] { "X9" }, result.UnavailableItems.ToList());
-		_invoices.Verify(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.TryAddSaleAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -281,24 +247,27 @@ public sealed class SaleServiceTests
 		return new SaleService(_stockItems.Object, _invoices.Object);
 	}
 
+	/// <remarks>The sale write takes the lines out of <paramref name="stockItems"/>, like the transaction in the database.</remarks>
 	private void SetupStock(params StockItem[] stockItems)
 	{
 		foreach (var stockItem in stockItems)
 		{
 			_stockItems.Setup(provider => provider.GetStockItemAsync(stockItem.Code)).ReturnsAsync(stockItem);
-			_stockItems
-				.Setup(provider => provider.TryTakeStockAsync(stockItem.Code, It.IsAny<int>(), It.IsAny<CancellationToken>()))
-				.ReturnsAsync((string _, int amount, CancellationToken _) =>
-				{
-					if (stockItem.Amount < amount) return null;
-					stockItem.Amount -= amount;
-					return stockItem;
-				});
-			_stockItems
-				.Setup(provider => provider.ReturnStockAsync(stockItem.Code, It.IsAny<int>(), It.IsAny<CancellationToken>()))
-				.Callback((string _, int amount, CancellationToken _) => stockItem.Amount += amount)
-				.Returns(Task.CompletedTask);
 		}
+
+		_invoices
+			.Setup(provider => provider.TryAddSaleAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync((Invoice invoice, CancellationToken _) =>
+			{
+				foreach (var item in invoice.Items)
+				{
+					var stored = stockItems.Single(stockItem => stockItem.Code == item.StockItem.Code);
+					stored.Amount -= item.Amount;
+					item.StockItem.Amount = stored.Amount;
+				}
+
+				return [];
+			});
 	}
 
 	private static ShoppingCartItem CreateCartItem(string code, string name, int inStock, int price, int quantity)

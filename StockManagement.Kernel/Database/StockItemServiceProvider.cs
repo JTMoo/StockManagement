@@ -65,46 +65,6 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		return collection.InsertManyAsync(stockItems);
 	}
 
-	public async Task<StockItem?> TryTakeStockAsync(string code, int amount, CancellationToken cancellationToken = default)
-	{
-		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
-
-		var filter = Builders<StockItem>.Filter.Where(item => item.Code == code && item.Amount >= amount);
-		if (await this.IncrementAmountAsync(filter, -amount, cancellationToken) is not StockItem stockItem) return null;
-
-		try
-		{
-			await this.InsertAmountTransactionAsync(stockItem, -amount, cancellationToken);
-		}
-		catch
-		{
-			await this.IncrementAmountAsync(Builders<StockItem>.Filter.Where(item => item.Code == code), amount, CancellationToken.None);
-			throw;
-		}
-
-		return stockItem;
-	}
-
-	public async Task ReturnStockAsync(string code, int amount, CancellationToken cancellationToken = default)
-	{
-		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
-
-		if (await this.IncrementAmountAsync(Builders<StockItem>.Filter.Where(item => item.Code == code), amount, cancellationToken) is not StockItem stockItem) return;
-		await this.InsertAmountTransactionAsync(stockItem, amount, cancellationToken);
-	}
-
-	private Task<StockItem> IncrementAmountAsync(FilterDefinition<StockItem> filter, int amount, CancellationToken cancellationToken)
-	{
-		var options = new FindOneAndUpdateOptions<StockItem> { ReturnDocument = ReturnDocument.After };
-		return _database.ConnectToMongo<StockItem>().FindOneAndUpdateAsync(filter, Builders<StockItem>.Update.Inc(item => item.Amount, amount), options, cancellationToken);
-	}
-
-	private Task InsertAmountTransactionAsync(StockItem stockItem, int amount, CancellationToken cancellationToken)
-	{
-		var transaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount);
-		return _database.ConnectToMongo<Transaction>().InsertOneAsync(transaction, cancellationToken: cancellationToken);
-	}
-
 	private Task SaveTransactionAsync(StockItem stockItem, StockItem item)
 	{
 		var changeAmountTransaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - item.Amount);
