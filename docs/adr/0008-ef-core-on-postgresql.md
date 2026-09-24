@@ -39,3 +39,13 @@
 - API tests: Testcontainers PostgreSQL
 - Installer ships or requires PostgreSQL
 - Sync `SaveChanges` throws: handlers are async
+
+## Slice 2 (StockItem)
+
+- `EfStockItemServiceProvider` (Infrastructure) implements Kernel's `IStockItemServiceProvider`; `BaseDocument.Id` made `public` (was `internal`, per ADR-0004's own follow-up) so Infrastructure can update by Id
+- `IStockItemServiceProvider` no longer returns Mongo's `ReplaceOneResult`/`DeleteResult`; both writes now return `int` (1 on success, throws otherwise)
+- Migrations: `dotnet ef migrations add`, `StockManagement.Infrastructure/Database/Migrations`, design-time factory since `AppDbContext` takes `IServiceProvider`
+- `Transaction.Time` mapped `timestamp without time zone`: `DateTime.Now` is local, Npgsql only accepts UTC for `timestamptz`
+- `Transaction.Invoice` not mapped yet (Invoice isn't in Postgres); ignored in `TransactionConfiguration`
+- Gotcha: adding a dependent entity before updating/removing its principal marks the principal `Added` via graph fixup; `EfStockItemServiceProvider` updates/removes the `StockItem` first, then adds the `Transaction`
+- **Not done**: `EfStockItemServiceProvider` isn't wired into the API or GUI. `InvoiceServiceProvider.TryAddSaleAsync` decrements stock and writes the invoice in one Mongo session transaction (ADR-0007); moving `StockItem` alone would split that atomic write across two databases. Wiring StockItem into the running app needs that crossing solved first — customers/invoices next, or an outbox/saga for the sale — asked the owner rather than picking silently
