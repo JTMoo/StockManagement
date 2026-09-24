@@ -1,4 +1,5 @@
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Sales.Core.Contracts;
 
@@ -28,4 +29,10 @@ public interface ISaleService
 	/// </summary>
 	/// <remarks>Nothing is written when any article has too little stock.</remarks>
 	public Task<SaleResult> CompleteSaleAsync(Invoice invoice, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Sells <paramref name="items"/> from current stock and stores the numbered invoice
+	/// </summary>
+	/// <remarks>Unknown codes and too little stock end up in <see cref="SaleResult.UnavailableItems"/>; nothing is written then.</remarks>
+	public Task<SaleResult> SellAsync(Customer customer, IReadOnlyList<SaleItem> items, SaleCondition saleCondition, DateTime date, CancellationToken cancellationToken = default);
 }
