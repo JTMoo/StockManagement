@@ -273,10 +273,13 @@
   <data name="multipleTrillions" xml:space="preserve">
     <value>BILLONES</value>
   </data>
-  <data name="billion" xml:space="preserve">
-    <value>MILMILLIONES</value>
-  </data>
   <data name="and" xml:space="preserve">
     <value>Y</value>
+  </data>
+  <data name="oneShort" xml:space="preserve">
+    <value>UN</value>
+  </data>
+  <data name="twentyoneShort" xml:space="preserve">
+    <value>VEINTIÚN</value>
   </data>
 </root>
