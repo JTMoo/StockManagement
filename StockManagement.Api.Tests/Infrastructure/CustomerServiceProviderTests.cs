@@ -12,7 +12,7 @@ namespace StockManagement.Api.Tests.Infrastructure;
 
 
 [TestClass]
-public sealed class EfCustomerServiceProviderTests
+public sealed class CustomerServiceProviderTests
 {
 	private ServiceProvider _services;
 

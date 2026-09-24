@@ -1,22 +1,9 @@
 using FastEndpoints;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Api.Features.Customers;
-
-
-public sealed record UpdateCustomerRequest(int CustomerId, string Name, string Lastname = "", string Address = "", string PhoneNumber = "", string IdentificationNumber = "", string PostboxNumber = "", string Email = "", string Miscellaneous = "");
-
-
-public class UpdateCustomerValidator : Validator<UpdateCustomerRequest>
-{
-	public UpdateCustomerValidator()
-	{
-		this.RuleFor(request => request.Name).NotEmpty();
-	}
-}
 
 
 public class UpdateCustomerEndpoint(ICustomerServiceProvider customerServiceProvider) : Endpoint<UpdateCustomerRequest, Results<Ok<CustomerResponse>, NotFound>>
