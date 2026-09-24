@@ -25,6 +25,9 @@ public sealed class StockItemServiceProviderTests
 		_transactions
 			.Setup(c => c.InsertOneAsync(It.IsAny<Transaction>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
 			.ThrowsAsync(new TimeoutException());
+		_stockItems
+			.Setup(c => c.ReplaceOneAsync(It.IsAny<FilterDefinition<StockItem>>(), It.IsAny<StockItem>(), It.IsAny<ReplaceOptions>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new ReplaceOneResult.Acknowledged(1, 1, null));
 	}
 
 	[TestMethod]
