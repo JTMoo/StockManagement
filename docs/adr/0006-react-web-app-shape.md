@@ -1,4 +1,4 @@
-# ADR-0005: React web app shape
+# ADR-0006: React web app shape
 
 - Status: Proposed
 - Date: 2026-09-24

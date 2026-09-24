@@ -5,11 +5,6 @@
 					xmlns:types="clr-namespace:StockManagement.Kernel.Model.Types;assembly=StockManagement.Kernel"
 					xmlns:em="clr-namespace:StockManagement.Kernel.Model.ExtensionMethods;assembly=StockManagement.Kernel"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<ObjectDataProvider x:Key="typesFromManufacturers" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
-		<ObjectDataProvider.MethodParameters>
-			<x:Type TypeName="types:ManufacturerType"/>
-		</ObjectDataProvider.MethodParameters>
-	</ObjectDataProvider>
 	<ObjectDataProvider x:Key="ItemsFromLanguages" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
 		<ObjectDataProvider.MethodParameters>
 			<x:Type TypeName="types:AvailableLanguages"/>
