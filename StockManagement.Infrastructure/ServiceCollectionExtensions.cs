@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IStockItemServiceProvider, EfStockItemServiceProvider>();
 		services.AddScoped<ICustomerServiceProvider, EfCustomerServiceProvider>();
 		services.AddScoped<IInvoiceServiceProvider, EfInvoiceServiceProvider>();
+		services.AddScoped<ISettingsServiceProvider, EfSettingsServiceProvider>();
 		return services;
 	}
 }

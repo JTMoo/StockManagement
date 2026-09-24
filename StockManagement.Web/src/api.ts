@@ -16,6 +16,10 @@ export type Invoice = { number: number; date: string; expirationDate: string; to
 
 export type NewSale = { customerId: number; saleCondition: SaleCondition; items: { code: string; amount: number }[] };
 
+export type Language = "German" | "English" | "Spanish";
+
+export type Settings = { language: Language };
+
 export type ApiFailure =
 	| { kind: "notFound" }
 	| { kind: "invalid"; codes: string[] }
@@ -60,5 +64,7 @@ export const api = {
 	createCustomer: (customer: NewCustomer) => send<Customer>("/customers", { method: "POST", body: JSON.stringify(customer) }),
 	updateCustomer: (customer: Customer) => send<Customer>(`/customers/${customer.customerId}`, { method: "PUT", body: JSON.stringify(customer) }),
 	createSale: (sale: NewSale) => send<Invoice>("/sales", { method: "POST", body: JSON.stringify(sale) }),
-	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal })
+	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
+	getSettings: (signal?: AbortSignal) => send<Settings>("/settings", { signal }),
+	updateSettings: (language: Language) => send<Settings>("/settings", { method: "PUT", body: JSON.stringify({ language }) })
 };
