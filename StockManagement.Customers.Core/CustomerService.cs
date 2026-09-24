@@ -1,5 +1,6 @@
 using StockManagement.Customers.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Util;
 
 namespace StockManagement.Customers.Core;
@@ -19,5 +20,14 @@ internal class CustomerService(ICustomerServiceProvider customerServiceProvider)
 
 		var customers = await _customerServiceProvider.GetCustomersAsync() ?? [];
 		return SequenceNumber.Next(customers.Select(customer => customer.CustomerId), FirstCustomerId);
+	}
+
+	public async Task<Customer> CreateCustomerAsync(Customer customer, CancellationToken cancellationToken = default)
+	{
+		ArgumentNullException.ThrowIfNull(customer);
+
+		customer.CustomerId = await this.GetNextCustomerIdAsync(cancellationToken);
+		await _customerServiceProvider.AddCustomerAsync(customer);
+		return customer;
 	}
 }
