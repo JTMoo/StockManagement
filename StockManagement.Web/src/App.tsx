@@ -1,20 +1,22 @@
-import { BookUser, Inbox, Languages, Menu, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
+import { BookUser, Inbox, Languages, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { CustomerList } from "./features/customers/CustomerList";
 import { InvoiceView } from "./features/invoices/InvoiceView";
 import { SaleForm } from "./features/sales/SaleForm";
+import { SettingsPage } from "./features/settings/SettingsPage";
 import { StockItemList } from "./features/stock-items/StockItemList";
 import { cultures, useI18n, type Culture, type TextKey } from "./i18n";
 
-type View = "stockItems" | "clients" | "newSale" | "invoices";
+type View = "stockItems" | "clients" | "newSale" | "invoices" | "settings";
 
 // Same order and icons as the WPF menu (FontAwesome Wrench, AddressBook, Inbox)
 const views: { name: View; icon: LucideIcon }[] = [
 	{ name: "stockItems", icon: Wrench },
 	{ name: "clients", icon: BookUser },
 	{ name: "newSale", icon: ShoppingCart },
-	{ name: "invoices", icon: Inbox }
+	{ name: "invoices", icon: Inbox },
+	{ name: "settings", icon: Settings }
 ];
 const cultureNames: Record<Culture, TextKey> = { "de-DE": "german", "en-US": "english", "es-PY": "spanish" };
 
@@ -38,6 +40,7 @@ export function App()
 				{view === "clients" && <CustomerList />}
 				{view === "newSale" && <SaleForm onSold={onSold} />}
 				{view === "invoices" && <InvoiceView invoice={invoice} />}
+				{view === "settings" && <SettingsPage />}
 			</main>
 			<nav className={menuExtended ? "menu" : "menu collapsed"}>
 				<button className="menu-item" aria-label="Menu" aria-expanded={menuExtended} onClick={() => setMenuExtended(!menuExtended)}>

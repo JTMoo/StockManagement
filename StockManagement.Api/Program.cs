@@ -9,6 +9,8 @@ using StockManagement.Infrastructure;
 using StockManagement.Infrastructure.Database;
 using StockManagement.Sales.Core;
 using StockManagement.Sales.Core.Contracts;
+using StockManagement.Settings.Core;
+using StockManagement.Settings.Core.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +20,14 @@ builder.Services
 	.AddInfrastructureServiceProviders()
 	.AddSalesCore()
 	.AddCustomersCore()
+	.AddSettingsCore()
 	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-// AddSalesCore/AddCustomersCore register these Singleton for the GUI's Mongo Kernel providers;
+// AddSalesCore/AddCustomersCore/AddSettingsCore register these Singleton for the GUI's Mongo Kernel providers;
 // the API's providers above are Scoped (EF's AppDbContext isn't thread-safe), so override to match
 MakeScoped<ISaleService>(builder.Services);
 MakeScoped<ICustomerService>(builder.Services);
+MakeScoped<ISettingsService>(builder.Services);
 
 var app = builder.Build();
 
