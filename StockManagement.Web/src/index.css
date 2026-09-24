@@ -82,6 +82,7 @@ td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--slate); vertical-al
 tbody tr:hover { background: var(--slate); }
 tr.sold-out td { color: var(--mist); }
 .number { text-align: right; font-variant-numeric: tabular-nums; }
+.row-actions { display: flex; gap: 0.4rem; justify-content: flex-end; }
 tfoot th, tfoot td { border-bottom: 0; }
 .failure { color: var(--error); margin: 0; }
 

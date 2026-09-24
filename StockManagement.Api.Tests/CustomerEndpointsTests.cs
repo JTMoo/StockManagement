@@ -88,4 +88,42 @@ public sealed class CustomerEndpointsTests
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 	}
+
+	[TestMethod]
+	public async Task UpdateCustomer_Existing_ReturnsUpdatedAndPersists()
+	{
+		// Arrange
+		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana"));
+
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/customers/1001", new UpdateCustomerRequest(1001, "Ana", Lastname: "Silva"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		Assert.AreEqual("Silva", (await response.Content.ReadAsAsync<CustomerResponse>()).Lastname);
+		Assert.AreEqual("Silva", (await (await _client.GetAsync("/api/customers/1001")).Content.ReadAsAsync<CustomerResponse>()).Lastname);
+	}
+
+	[TestMethod]
+	public async Task UpdateCustomer_UnknownId_Returns404()
+	{
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/customers/4711", new UpdateCustomerRequest(4711, "Ana"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task UpdateCustomer_EmptyName_Returns400()
+	{
+		// Arrange
+		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana"));
+
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/customers/1001", new UpdateCustomerRequest(1001, ""));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+	}
 }

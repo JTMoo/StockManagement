@@ -14,6 +14,7 @@ export function FailureMessage({ failure, notFound = "unexpectedError" }: { fail
 		{
 			case "notFound": return t(notFound);
 			case "conflict": return `${t("itemsUnavailable")} ${failure!.unavailableItems.join(", ")}`;
+			case "duplicate": return `${t("itemAlreadyExists")} ${failure!.code}`;
 			case "invalid": return [...new Set(failure!.codes.map(code => t(isTextKey(code) ? code : "invalidInput")))].join(" ") || t("invalidInput");
 			default: return t("unexpectedError");
 		}

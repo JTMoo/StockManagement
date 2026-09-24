@@ -186,6 +186,9 @@
   <data name="description" xml:space="preserve">
     <value>Beschreibung</value>
   </data>
+  <data name="edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
   <data name="location" xml:space="preserve">
     <value>Lagerort</value>
   </data>
@@ -357,6 +360,9 @@
   <data name="saleCondition" xml:space="preserve">
     <value>Verkaufsbedingung</value>
   </data>
+  <data name="saveCustomer" xml:space="preserve">
+    <value>Kunde speichern</value>
+  </data>
   <data name="cash" xml:space="preserve">
     <value>Bar</value>
   </data>
@@ -422,5 +428,17 @@
   </data>
   <data name="back" xml:space="preserve">
     <value>Zurück zur Liste</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="itemAlreadyExists" xml:space="preserve">
+    <value>Ein Lagerartikel mit diesem Code existiert bereits:</value>
+  </data>
+  <data name="itemDeletionPrompt" xml:space="preserve">
+    <value>{0} löschen?</value>
   </data>
 </root>

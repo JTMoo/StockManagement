@@ -186,6 +186,9 @@
   <data name="description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="location" xml:space="preserve">
     <value>Location</value>
   </data>
@@ -357,6 +360,9 @@
   <data name="saleCondition" xml:space="preserve">
     <value>Sale condition</value>
   </data>
+  <data name="saveCustomer" xml:space="preserve">
+    <value>Save Customer</value>
+  </data>
   <data name="cash" xml:space="preserve">
     <value>Cash</value>
   </data>
@@ -422,5 +428,17 @@
   </data>
   <data name="back" xml:space="preserve">
     <value>Back</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="itemAlreadyExists" xml:space="preserve">
+    <value>A stock item with this code already exists:</value>
+  </data>
+  <data name="itemDeletionPrompt" xml:space="preserve">
+    <value>Delete {0}?</value>
   </data>
 </root>
