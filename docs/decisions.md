@@ -14,6 +14,7 @@ Read before an important decision. Update in the same PR.
 | [0006](adr/0006-react-web-app-shape.md) | Vite + React web app served by the API, resx texts, Vitest + Playwright | Proposed |
 | [0007](adr/0007-mongo-replica-set-and-transactions.md) | MongoDB single-node replica set, multi-step writes in transactions | Superseded by 0008 |
 | [0008](adr/0008-ef-core-on-postgresql.md) | EF Core on PostgreSQL, one `AppDbContext`, change handlers | Proposed |
+| [0009](adr/0009-jwt-authentication.md) | JWT bearer authentication | Proposed |
 
 ## Standing decisions
 
