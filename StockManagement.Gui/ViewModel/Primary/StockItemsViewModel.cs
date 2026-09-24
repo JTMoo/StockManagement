@@ -35,7 +35,7 @@ public class StockItemsViewModel : ViewModelBase
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
 
 
-	private StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider)
+	public StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider)
 	{
 		_stockItemServiceProvider = stockItemServiceProvider;
 		_customerServiceProvider = customerServiceProvider;
@@ -113,13 +113,10 @@ public class StockItemsViewModel : ViewModelBase
 	}
 	#endregion Properties
 
-	public static Task<StockItemsViewModel> CreateAsync(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider)
-	{
-		var ret = new StockItemsViewModel(stockItemServiceProvider, customerServiceProvider, invoiceServiceProvider);
-		return ret.InitializeAsync();
-	}
-
-	private async Task<StockItemsViewModel> InitializeAsync()
+	/// <summary>
+	/// Loads the data the view shows. Call once after the container created the view model.
+	/// </summary>
+	public async Task<StockItemsViewModel> InitializeAsync()
 	{
 		await this.UpdateStockItemsAsync();
 		return this;

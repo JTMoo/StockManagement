@@ -26,7 +26,7 @@ public class CustomerViewModel : ViewModelBase
 	private readonly ICustomerServiceProvider _customerServiceProvider;
 
 
-	private CustomerViewModel(ICustomerServiceProvider customerServiceProvider)
+	public CustomerViewModel(ICustomerServiceProvider customerServiceProvider)
 	{
 		this.CreateCustomerCommand = new RelayCommand<string>(this.OnCreateCustomerCommand);
 		this.MoreInfoCommand = new RelayCommand<Customer>(this.OpenCustomerCreationDialogWithCustomer);
@@ -68,13 +68,10 @@ public class CustomerViewModel : ViewModelBase
 	#endregion Properties
 
 
-	public static Task<CustomerViewModel> CreateAsync(ICustomerServiceProvider customerServiceProvider)
-	{
-		var ret = new CustomerViewModel(customerServiceProvider);
-		return ret.InitializeAsync();
-	}
-
-	private async Task<CustomerViewModel> InitializeAsync()
+	/// <summary>
+	/// Loads the data the view shows. Call once after the container created the view model.
+	/// </summary>
+	public async Task<CustomerViewModel> InitializeAsync()
 	{
 		await this.UpdateCustomersAsync();
 		return this;

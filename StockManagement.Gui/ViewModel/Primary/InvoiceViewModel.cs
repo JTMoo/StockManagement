@@ -23,7 +23,7 @@ public class InvoiceViewModel : ViewModelBase
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
 
 
-	private InvoiceViewModel(IInvoiceServiceProvider invoiceServiceProvider)
+	public InvoiceViewModel(IInvoiceServiceProvider invoiceServiceProvider)
 	{
 		_invoiceServiceProvider = invoiceServiceProvider;
 
@@ -63,13 +63,10 @@ public class InvoiceViewModel : ViewModelBase
 	#endregion Properties
 
 
-	public static Task<InvoiceViewModel> CreateAsync(IInvoiceServiceProvider invoiceServiceProvider)
-	{
-		var ret = new InvoiceViewModel(invoiceServiceProvider);
-		return ret.InitializeAsync();
-	}
-
-	private async Task<InvoiceViewModel> InitializeAsync()
+	/// <summary>
+	/// Loads the data the view shows. Call once after the container created the view model.
+	/// </summary>
+	public async Task<InvoiceViewModel> InitializeAsync()
 	{
 		this.FilteredInvoices = new(await _invoiceServiceProvider.GetInvoicesAsync());
 		return this;

@@ -1,34 +1,41 @@
-﻿using StockManagement.Gui.View;
+﻿using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using StockManagement.Gui.View;
 using StockManagement.Gui.ViewModel;
 using StockManagement.Kernel;
-using System.Windows;
 
 namespace StockManagement.Gui;
 
 
 public partial class App
 {
-    private MainViewModel _mainViewModel;
+	private ServiceProvider _services;
 
 
 	protected override async void OnStartup(StartupEventArgs e)
-    {
-        var databaseAccess = await MainManager.Initialize();
+	{
+		var databaseAccess = await MainManager.Initialize();
 
-        _mainViewModel = await MainViewModel.CreateAsync(databaseAccess);
-        GuiManager.Instance.Init(_mainViewModel);
+		_services = new ServiceCollection()
+			.AddKernel(databaseAccess)
+			.AddGui()
+			.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
 
-        new MainWindow()
-        {
-	        DataContext = _mainViewModel
-        }.Show();
+		var mainViewModel = await _services.GetRequiredService<MainViewModel>().InitializeAsync();
+		GuiManager.Instance.Init(mainViewModel);
+
+		new MainWindow()
+		{
+			DataContext = mainViewModel
+		}.Show();
 
 		base.OnStartup(e);
-    }
+	}
 
-    protected override void OnExit(ExitEventArgs e)
-    {
-        MainManager.Dispose(true);
-        base.OnExit(e);
-    }
+	protected override void OnExit(ExitEventArgs e)
+	{
+		_services?.Dispose();
+		MainManager.Dispose(true);
+		base.OnExit(e);
+	}
 }
