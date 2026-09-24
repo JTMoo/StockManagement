@@ -1,4 +1,4 @@
-# ADR-0009: JWT bearer authentication
+# ADR-0010: JWT bearer authentication
 
 - Status: Proposed
 - Date: 2026-09-24

@@ -22,7 +22,7 @@ public class LoginValidator : Validator<LoginRequest>
 }
 
 
-/// <remarks>Stateless JWT: no server-side session, "logout" just discards the token client-side. See ADR-0009.</remarks>
+/// <remarks>Stateless JWT: no server-side session, "logout" just discards the token client-side. See ADR-0010.</remarks>
 public class LoginEndpoint(IAuthService authService, IConfiguration configuration) : Endpoint<LoginRequest, Results<Ok<LoginResponse>, UnauthorizedHttpResult>>
 {
 	private readonly IAuthService _authService = authService;

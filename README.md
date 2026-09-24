@@ -32,7 +32,7 @@ https://www.mongodb.com/try/download/community
 - API integration tests need Docker (Testcontainers `postgres:16`)
 - GUI still reads/writes MongoDB directly, unchanged (not yet cut over)
 
-# Authentication (ADR-0009)
+# Authentication (ADR-0010)
 - Every API endpoint needs a JWT bearer token except `POST /api/auth/login`
 - Fresh database: the `AddUsers` migration seeds one admin user (`admin` / `ChangeMe123!`) - no self-service change yet, change it directly in the database if that matters to you
 - Config: `Jwt:SigningKey` (override per install in `appsettings.local.json`, see above), `Jwt:ExpiryHours`

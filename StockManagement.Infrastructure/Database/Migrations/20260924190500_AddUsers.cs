@@ -29,7 +29,7 @@ namespace StockManagement.Infrastructure.Database.Migrations
                 column: "Username",
                 unique: true);
 
-            // Default admin account for a fresh install; password "ChangeMe123!" - change it after first login (no self-service change yet, see ADR-0009)
+            // Default admin account for a fresh install; password "ChangeMe123!" - change it after first login (no self-service change yet, see ADR-0010)
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Username", "PasswordHash" },
