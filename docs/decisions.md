@@ -1,0 +1,28 @@
+# Decisions
+
+Read before an important decision. Update in the same PR.
+
+## ADRs
+
+| ADR | Decision | Status |
+|---|---|---|
+| [0001](adr/0001-record-architecture-decisions.md) | Decisions live in the repo as ADRs | Accepted |
+| [0002](adr/0002-business-logic-in-domain-and-application.md) | Business logic in Domain and Application | Accepted |
+| [0003](adr/0003-fastendpoints-api-and-react-frontend.md) | FastEndpoints API + React, desktop-first | Accepted (shell open) |
+
+## Standing decisions
+
+- Update by `Id`, never by business key ([#32](https://github.com/JTMoo/StockManagement/pull/32))
+- Cultures: de-DE, en-US, es-PY; all UI text via resources
+
+## Open
+
+| Question | Options |
+|---|---|
+| Desktop shell | Tauri / Electron / WebView2 |
+| Money type | `decimal` + currency / integer minor units |
+| Sequential numbers | `$inc` counter / `Max + 1` |
+| Duplicate codes in one import file | drop all (current) / keep first ([#34](https://github.com/JTMoo/StockManagement/pull/34)) |
+| Import pipeline | read → map → clean → validate → preview → commit |
+| `#region` + banners in new code | keep / drop |
+| Nullable warnings as errors | yes / no |
