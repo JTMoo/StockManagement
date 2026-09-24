@@ -23,6 +23,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<StockItem> StockItems => this.Set<StockItem>();
 
+	public DbSet<Transaction> Transactions => this.Set<Transaction>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{
