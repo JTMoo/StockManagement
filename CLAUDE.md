@@ -47,7 +47,6 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Money: never `double`
 - No binaries (`.msi`) in git; no customer names or connection strings in code
 
-
 ## Tests
 
 - MSTest + Moq, `Method_Scenario_ExpectedResult`, `// Arrange` `// Act` `// Assert`
