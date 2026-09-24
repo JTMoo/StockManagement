@@ -27,15 +27,19 @@ export function CreateCustomerForm({ onCreated }: { onCreated: (customer: Custom
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="panel inline-form">
-			{fields.map(field => (
-				<label key={field}>
-					{t(field)}
-					<input value={customer[field] ?? ""} required={field === "name"} onChange={event => setCustomer({ ...customer, [field]: event.target.value })} />
-				</label>
-			))}
-			<button type="submit" disabled={busy}>{t("createCustomer")}</button>
+		<form onSubmit={onSubmit} className="panel">
+			<div className="form-grid">
+				{fields.map(field => (
+					<label key={field}>
+						{t(field)}
+						<input value={customer[field] ?? ""} required={field === "name"} onChange={event => setCustomer({ ...customer, [field]: event.target.value })} />
+					</label>
+				))}
+			</div>
 			<FailureMessage failure={failure} />
+			<div className="form-actions">
+				<button type="submit" disabled={busy}>{t("createCustomer")}</button>
+			</div>
 		</form>
 	);
 }

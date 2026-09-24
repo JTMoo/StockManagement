@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { api, type ApiFailure, type Invoice } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
+import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 
 export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
@@ -21,15 +22,12 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 	}
 
 	return (
-		<section>
-			<h2>{t("invoices")}</h2>
-			<form onSubmit={onSubmit} className="inline-form">
-				<label>
-					{t("invoiceId")}
-					<input type="number" min={1} required value={number} onChange={event => setNumber(event.target.value)} />
-				</label>
+		<Page title={t("invoices")} toolbar={
+			<form onSubmit={onSubmit} className="toolbar-form">
+				<input type="number" min={1} required aria-label={t("invoiceId")} placeholder={t("invoiceId")} value={number} onChange={event => setNumber(event.target.value)} />
 				<button type="submit">{t("show")}</button>
 			</form>
+		}>
 			<FailureMessage failure={failure} notFound="invoiceNotFound" />
 			{invoice && (
 				<article className="paper" aria-label={`${t("invoice")} ${invoice.number}`}>
@@ -60,6 +58,6 @@ export function InvoiceView({ invoice: initial }: { invoice?: Invoice })
 					</table>
 				</article>
 			)}
-		</section>
+		</Page>
 	);
 }

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { api, type ApiFailure, type Invoice, type SaleCondition, type StockItem } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
+import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
 
@@ -46,29 +47,30 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 	}
 
 	return (
-		<form onSubmit={onSubmit}>
-			<h2>{t("newSale")}</h2>
+		<Page title={t("newSale")}>
 			<FailureMessage failure={customers.failure ?? stockItems.failure} />
-			<div className="sale">
-				<div className="sale-pick">
-					<label>
-						{t("customer")}
-						<select value={customerId} required onChange={event => setCustomerId(event.target.value)}>
-							<option value="">{t("selectCustomer")}</option>
-							{customers.data?.map(customer => <option key={customer.customerId} value={customer.customerId}>{`${customer.customerId} ${customer.name} ${customer.lastname}`.trim()}</option>)}
-						</select>
-					</label>
-					<fieldset className="segmented">
-						<legend>{t("saleCondition")}</legend>
-						{(["Cash", "Credit"] as const).map(condition => (
-							<label key={condition}>
-								<input type="radio" name="saleCondition" value={condition} checked={saleCondition === condition} onChange={() => setSaleCondition(condition)} />
-								{t(condition === "Cash" ? "cash" : "credit")}
-							</label>
-						))}
-					</fieldset>
-					<div className="inline-form">
-						<label className="grow">
+			<form onSubmit={onSubmit} className="sale">
+				<div className="panel">
+					<div className="form-grid">
+						<label>
+							{t("customer")}
+							<select value={customerId} required onChange={event => setCustomerId(event.target.value)}>
+								<option value="">{t("selectCustomer")}</option>
+								{customers.data?.map(customer => <option key={customer.customerId} value={customer.customerId}>{`${customer.customerId} ${customer.name} ${customer.lastname}`.trim()}</option>)}
+							</select>
+						</label>
+						<fieldset className="segmented">
+							<legend>{t("saleCondition")}</legend>
+							<div>
+								{(["Cash", "Credit"] as const).map(condition => (
+									<label key={condition}>
+										<input type="radio" name="saleCondition" value={condition} checked={saleCondition === condition} onChange={() => setSaleCondition(condition)} />
+										{t(condition === "Cash" ? "cash" : "credit")}
+									</label>
+								))}
+							</div>
+						</fieldset>
+						<label>
 							{t("stockItem")}
 							<select value={code} onChange={event => setCode(event.target.value)}>
 								<option value="" />
@@ -79,10 +81,12 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 							{t("quantity")}
 							<input type="number" min={1} value={amount} onChange={event => setAmount(Number(event.target.value))} />
 						</label>
+					</div>
+					<div className="form-actions">
 						<button type="button" onClick={onAdd} disabled={!code}>{t("addToShoppingCart")}</button>
 					</div>
 				</div>
-				<div className="receipt">
+				<div className="panel receipt">
 					<table aria-label={t("shoppingCart")}>
 						<thead>
 							<tr><th>{t("name")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th /></tr>
@@ -92,7 +96,7 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 								<tr key={line.item.code}>
 									<td>{line.item.name}<small>{line.item.code}</small></td>
 									<td className="number">{formatNumber(line.amount)}</td><td className="number">{formatNumber(line.item.price * line.amount)}</td>
-									<td><button type="button" className="quiet" onClick={() => setCart(cart.filter(other => other !== line))}>{t("remove")}</button></td>
+									<td className="number"><button type="button" className="quiet" onClick={() => setCart(cart.filter(other => other !== line))}>{t("remove")}</button></td>
 								</tr>
 							))}
 						</tbody>
@@ -103,7 +107,7 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 					<FailureMessage failure={failure} notFound="customerNotFound" />
 					<button type="submit" className="primary" disabled={busy || cart.length === 0 || !customerId}>{t("sell")}</button>
 				</div>
-			</div>
-		</form>
+			</form>
+		</Page>
 	);
 }

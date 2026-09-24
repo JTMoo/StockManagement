@@ -1,5 +1,6 @@
 import { api, type Customer } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
+import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
 import { CreateCustomerForm } from "./CreateCustomerForm";
@@ -12,8 +13,7 @@ export function CustomerList()
 	const onCreated = (customer: Customer) => setData([...customers, customer]);
 
 	return (
-		<section>
-			<h2>{t("clients")}</h2>
+		<Page title={t("clients")}>
 			<CreateCustomerForm onCreated={onCreated} />
 			<FailureMessage failure={failure} />
 			<table>
@@ -29,6 +29,6 @@ export function CustomerList()
 					))}
 				</tbody>
 			</table>
-		</section>
+		</Page>
 	);
 }
