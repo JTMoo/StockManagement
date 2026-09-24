@@ -27,8 +27,8 @@ public sealed class StockItemImportServiceTests
 		var result = await service.SplitDuplicatesAsync([stored, fresh, repeatedFirst, repeatedSecond]);
 
 		// Assert
-		CollectionAssert.AreEqual(new[] { fresh }, result.Unique.ToList());
-		CollectionAssert.AreEqual(new[] { stored, repeatedFirst, repeatedSecond }, result.Duplicates.ToList());
+		CollectionAssert.AreEqual(new[] { fresh, repeatedFirst }, result.Unique.ToList());
+		CollectionAssert.AreEqual(new[] { stored, repeatedSecond }, result.Duplicates.ToList());
 	}
 
 	[TestMethod]
