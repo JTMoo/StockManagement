@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockManagement.Api\StockManagement.Api.csproj" />
+    <ProjectReference Include="..\StockManagement.Infrastructure\StockManagement.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="MSTest" Version="3.6.3" />
     <PackageReference Include="Testcontainers.MongoDb" Version="4.15.0" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.15.0" />
   </ItemGroup>
 
 </Project>
