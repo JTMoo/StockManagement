@@ -19,8 +19,8 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Build: `dotnet build StockManagement.sln` (Gui needs Windows)
 - Test: `dotnet test StockManagement.Tests`
 - API tests (Docker): `dotnet test StockManagement.Api.Tests`
-- Run API: `dotnet run --project StockManagement.Api` (MongoDB replica set on `127.0.0.1:27017`, see README)
-- Web (`StockManagement.Web`): `npm ci`, `npm run dev` (API running), `npm test`, `npm run e2e` (MongoDB replica set), `npm run build` (→ API `wwwroot`)
+- Run API: `dotnet run --project StockManagement.Api` (PostgreSQL on `127.0.0.1:5432`, see README)
+- Web (`StockManagement.Web`): `npm ci`, `npm run dev` (API running), `npm test`, `npm run e2e` (PostgreSQL), `npm run build` (→ API `wwwroot`)
 - CI: `Integration.yml` (Windows tests + Linux API and web tests on PR), `Delivery.yml` (MSI on tag)
 
 ## Style (existing)
@@ -54,7 +54,7 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 
 - MSTest + Moq, `Method_Scenario_ExpectedResult`, `// Arrange` `// Act` `// Assert`
 - Unit test every rule moved out of the UI
-- API integration: `WebApplicationFactory` + Testcontainers MongoDB
+- API integration: `WebApplicationFactory` + Testcontainers PostgreSQL
 - Public behavior only, no reflection
 
 ## Conventions learned from review comments

@@ -36,6 +36,21 @@ jobs:
       run:
         working-directory: StockManagement.Web
 
+    # The API (ADR-0008) needs Postgres on 127.0.0.1:5432
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -51,14 +66,6 @@ jobs:
         node-version: '22'
         cache: npm
         cache-dependency-path: StockManagement.Web/package-lock.json
-
-    # Transactions need a replica set (ADR-0007); service containers can't pass --replSet
-    - name: Start MongoDB replica set
-      run: |
-        docker run -d --name mongo -p 27017:27017 mongo:7 --replSet rs0
-        until docker exec mongo mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"; do sleep 1; done
-        docker exec mongo mongosh --quiet --eval "rs.initiate()"
-        until docker exec mongo mongosh --quiet --eval "db.hello().isWritablePrimary" | grep -q true; do sleep 1; done
 
     - name: Install packages
       run: npm ci

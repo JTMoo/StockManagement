@@ -1,8 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
-// Runs the built app through the real API on its own database. Needs a MongoDB replica set on 127.0.0.1:27017 (ADR-0007).
-export const mongoUrl = "mongodb://127.0.0.1:27017/?directConnection=true";
-export const databaseName = "StockManagementE2E";
+// Runs the built app through the real API on its own database. Needs PostgreSQL on 127.0.0.1:5432 (ADR-0008).
+export const postgres = { host: "127.0.0.1", port: 5432, database: "StockManagementE2E", user: "postgres", password: "postgres" };
 const port = 5090;
 
 export default defineConfig({
@@ -13,6 +12,9 @@ export default defineConfig({
 		command: "dotnet run --project ../StockManagement.Api --no-launch-profile",
 		url: `http://localhost:${port}/api/stock-items`,
 		timeout: 180_000,
-		env: { ASPNETCORE_URLS: `http://localhost:${port}`, ConnectionStrings__Mongo: mongoUrl, Mongo__DatabaseName: databaseName }
+		env: {
+			ASPNETCORE_URLS: `http://localhost:${port}`,
+			ConnectionStrings__Postgres: `Host=${postgres.host};Port=${postgres.port};Database=${postgres.database};Username=${postgres.user};Password=${postgres.password}`
+		}
 	}
 });
