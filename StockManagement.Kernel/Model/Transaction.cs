@@ -5,6 +5,13 @@ namespace StockManagement.Kernel.Model;
 
 public class Transaction(StockItem stockItem, DateTime time, Transaction.Kind kind, int amount) : BaseDocument
 {
+	/// <summary>
+	/// For EF Core materialization
+	/// </summary>
+	private Transaction() : this(null!, default, default, default)
+	{
+	}
+
 	public StockItem StockItem { get; private set; } = stockItem;
 
 	public Invoice Invoice { get; internal set; }
