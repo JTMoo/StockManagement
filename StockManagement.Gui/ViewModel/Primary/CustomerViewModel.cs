@@ -1,7 +1,6 @@
 ﻿using StockManagement.Kernel.Model;
 using System.Collections.Generic;
 using System;
-using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -20,6 +19,7 @@ namespace StockManagement.Gui.ViewModel.Primary;
 public class CustomerViewModel : ViewModelBase
 {
 	private readonly List<Func<Customer, bool>> _filterFunctions = [];
+	private List<Customer> _customers = [];
 	private string _searchNames;
 	private string _searchCustomerIds;
 	private string _searchLastnames;
@@ -122,24 +122,24 @@ public class CustomerViewModel : ViewModelBase
 
 	private async Task UpdateCustomersAsync()
 	{
-		var filteredCustomers = await _customerServiceProvider.GetCustomersAsync().ContinueWith(task => task.Result.Where(_filterFunctions));
-		this.FilteredCustomers = new(filteredCustomers);
+		_customers = [.. await _customerServiceProvider.GetCustomersAsync()];
+		this.OnRefreshSearch();
 	}
 
 	private void OnRefreshSearch()
 	{
-		this.FilteredCustomers = new(this.FilteredCustomers.Where(_filterFunctions));
+		this.FilteredCustomers = new(_customers.Where(_filterFunctions));
 	}
 
 	private void SetupFilterConditions()
 	{
 		_filterFunctions.Add(customer =>
 		{
-			return string.IsNullOrEmpty(this.SearchNames) || Regex.IsMatch(customer.Name.ToLower(), this.SearchNames.ToLower());
+			return customer.Name.MatchesSearch(this.SearchNames);
 		});
 		_filterFunctions.Add(customer =>
 		{
-			return string.IsNullOrEmpty(this.SearchLastnames) || Regex.IsMatch(customer.Lastname.ToLower(), this.SearchLastnames.ToLower());
+			return customer.Lastname.MatchesSearch(this.SearchLastnames);
 		});
 		_filterFunctions.Add(customer =>
 		{
