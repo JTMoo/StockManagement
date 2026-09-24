@@ -1,15 +1,15 @@
-using Testcontainers.MongoDb;
+using Testcontainers.PostgreSql;
 
 namespace StockManagement.Api.Tests;
 
 
 /// <summary>
-/// One MongoDB replica set for the test run; transactions need it (ADR-0007)
+/// One PostgreSQL server for the test run; each test gets its own database on it
 /// </summary>
 [TestClass]
-public static class MongoContainer
+public static class PostgresContainer
 {
-	private static readonly MongoDbContainer _container = new MongoDbBuilder("mongo:7").WithReplicaSet("rs0").Build();
+	private static readonly PostgreSqlContainer _container = new PostgreSqlBuilder("postgres:16").Build();
 
 
 	public static string ConnectionString => _container.GetConnectionString();

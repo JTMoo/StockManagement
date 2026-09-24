@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 using StockManagement.Api.Features.Invoices;
 using StockManagement.Api.Features.Sales;
 using StockManagement.Api.Features.StockItems;
 using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 
@@ -25,8 +25,8 @@ public sealed class SaleEndpointsTests
 		_factory = new();
 		_client = _factory.CreateClient();
 
-		await _factory.Services.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10, price: 5000));
-		await _factory.Services.GetRequiredService<ICustomerServiceProvider>().AddCustomerAsync(new Customer() { CustomerId = 1001, Name = "Ana" });
+		await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10, price: 5000));
+		await _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>().AddCustomerAsync(new Customer() { CustomerId = 1001, Name = "Ana" });
 	}
 
 	[TestCleanup]
@@ -103,11 +103,12 @@ public sealed class SaleEndpointsTests
 	public async Task TryAddSaleAsync_SecondLineShort_WritesNothing()
 	{
 		// Arrange
-		await _factory.Services.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Nut", code: "B2", amount: 1, price: 100));
-		var invoice = CreateInvoice(1, ("A1", 3), ("B2", 2));
+		await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Nut", code: "B2", amount: 1, price: 100));
+		var customer = await _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>().GetCustomerAsync(1001);
+		var invoice = CreateInvoice(customer, 1, ("A1", 3), ("B2", 2));
 
 		// Act
-		var result = await _factory.Services.GetRequiredService<IInvoiceServiceProvider>().TryAddSaleAsync(invoice);
+		var result = await _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>().TryAddSaleAsync(invoice);
 
 		// Assert
 		CollectionAssert.AreEqual(new[] { "B2" }, result.ToList());
@@ -118,14 +119,15 @@ public sealed class SaleEndpointsTests
 	public async Task TryAddSaleAsync_InvoiceNumberTaken_ThrowsAndWritesNothing()
 	{
 		// Arrange
-		var invoices = _factory.Services.GetRequiredService<IInvoiceServiceProvider>();
-		await invoices.AddInvoiceAsync(new Invoice() { Number = 1, Items = [] });
+		var invoices = _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>();
+		var customer = await _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>().GetCustomerAsync(1001);
+		await invoices.AddInvoiceAsync(new Invoice() { Number = 1, Customer = customer, Items = [] });
 
 		// Act
-		await Assert.ThrowsExceptionAsync<MongoWriteException>(() => invoices.TryAddSaleAsync(CreateInvoice(1, ("A1", 3))));
+		await Assert.ThrowsExceptionAsync<InvoiceNumberAlreadyExistsException>(() => invoices.TryAddSaleAsync(CreateInvoice(customer, 1, ("A1", 3))));
 
 		// Assert
-		Assert.AreEqual(10, (await _factory.Services.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
+		Assert.AreEqual(10, (await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
 	}
 
 	[TestMethod]
@@ -171,12 +173,12 @@ public sealed class SaleEndpointsTests
 
 	private async Task AssertNothingSoldAsync()
 	{
-		Assert.AreEqual(10, (await _factory.Services.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
-		Assert.IsNull(await _factory.Services.GetRequiredService<IInvoiceServiceProvider>().GetInvoiceAync(1));
+		Assert.AreEqual(10, (await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
+		Assert.IsNull(await _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>().GetInvoiceAync(1));
 	}
 
-	private static Invoice CreateInvoice(int number, params (string Code, int Amount)[] lines)
+	private static Invoice CreateInvoice(Customer customer, int number, params (string Code, int Amount)[] lines)
 	{
-		return new Invoice() { Number = number, Items = [.. lines.Select(line => new ShoppingCartItem(new StockItem(line.Code, code: line.Code, amount: 100)) { Amount = line.Amount })] };
+		return new Invoice() { Number = number, Customer = customer, Items = [.. lines.Select(line => new ShoppingCartItem(new StockItem(line.Code, code: line.Code, amount: 100)) { Amount = line.Amount })] };
 	}
 }

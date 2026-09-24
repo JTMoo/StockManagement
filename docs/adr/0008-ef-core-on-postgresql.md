@@ -49,3 +49,15 @@
 - `Transaction.Invoice` not mapped yet (Invoice isn't in Postgres); ignored in `TransactionConfiguration`
 - Gotcha: adding a dependent entity before updating/removing its principal marks the principal `Added` via graph fixup; `EfStockItemServiceProvider` updates/removes the `StockItem` first, then adds the `Transaction`
 - **Not done**: `EfStockItemServiceProvider` isn't wired into the API or GUI. `InvoiceServiceProvider.TryAddSaleAsync` decrements stock and writes the invoice in one Mongo session transaction (ADR-0007); moving `StockItem` alone would split that atomic write across two databases. Wiring StockItem into the running app needs that crossing solved first — customers/invoices next, or an outbox/saga for the sale — asked the owner rather than picking silently
+
+## Slice 3 (full API cutover: Customer, Invoice, atomic sale)
+
+- Owner decision: move all of it to Postgres, no production data to migrate ("not in production yet") — supersedes ADR-0007's Mongo session transaction
+- `EfCustomerServiceProvider`, `EfInvoiceServiceProvider` added alongside `EfStockItemServiceProvider`; API host (`Program.cs`) wired fully onto `AppDbContext`, Mongo removed from the API and its tests
+- `Invoice.Items` (`List<ShoppingCartItem>`, not a `BaseDocument`) mapped `OwnsMany`, own `InvoiceItems` table, shadow `Guid Id`, required FK to `StockItem` (a non-owned entity — an owned type can still reference a regular one); `AutoInclude()` on `Invoice.Items`, `Invoice.Customer`, and the owned item's `StockItem` navigation, so a read returns the full graph
+- Sale atomicity (replaces ADR-0007's Mongo session transaction): explicit `Database.BeginTransactionAsync`, one conditional `ExecuteUpdateAsync` per line (`WHERE Code == code AND Amount >= amount`, oversell-safe under concurrency — verified with a real concurrent `Task.WhenAll` test), then `SaveChangesAsync` for the `Transaction`/`Invoice` inserts, then `CommitAsync`; any line short → `RollbackAsync`, nothing written
+- Duplicate invoice number → `DbUpdateException` (Postgres `23505`) → `InvoiceNumberAlreadyExistsException`, same pattern as `StockItemCodeAlreadyExistsException`/`CustomerIdAlreadyExistsException`
+- `ISaleService`/`ICustomerService` stay `AddSingleton` in the shared `Sales.Core`/`Customers.Core` extensions (used by the WPF GUI too, which validates DI scopes at build); the API overrides them to `Scoped` in `Program.cs` only, via a reflection-based `ServiceDescriptor` swap (`MakeScoped<T>`) — needed because the EF providers they now depend on are Scoped (`AppDbContext` isn't thread-safe) and a Singleton can't consume a Scoped service
+- **Not done**: the WPF GUI (still Mongo-backed for everything, including `User`/`Settings`) — this session can't build or verify WPF in a Linux container; flagged to the owner rather than rewired blind
+- Migrations regenerated (`InitialCreate`) to include `Customers`, `Invoices`, `InvoiceItems` alongside `StockItems`, `Transactions`
+- `PostgresContainer.cs` (Api.Tests): one shared assembly-level Testcontainers Postgres, mirroring the old `MongoContainer.cs`; `MongoContainer.cs` and the `Testcontainers.MongoDb` package reference deleted

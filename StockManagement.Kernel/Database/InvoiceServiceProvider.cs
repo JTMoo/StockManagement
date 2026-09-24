@@ -56,9 +56,10 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 		return [];
 	}
 
-	public Task<DeleteResult> DeleteInvoiceAsync(Invoice invoice)
+	public async Task<int> DeleteInvoiceAsync(Invoice invoice)
 	{
-		return _database.Delete<Invoice>(invoice);
+		var result = await _database.Delete<Invoice>(invoice);
+		return (int)result.DeletedCount;
 	}
 
 	public Task<Invoice> GetInvoiceAync(int invoiceNumber)
@@ -71,11 +72,12 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 		return _database.GetAll<Invoice>();
 	}
 
-	public Task<ReplaceOneResult> UpdateInvoiceAsync(Invoice invoice)
+	public async Task<int> UpdateInvoiceAsync(Invoice invoice)
 	{
 		var collection = _database.ConnectToMongo<Invoice>();
 		var filter = Builders<Invoice>.Filter.Eq("Id", invoice.Id);
 		// Upsert means: replace if existent - insert if not existent
-		return collection.ReplaceOneAsync(filter, invoice, new ReplaceOptions { IsUpsert = true });
+		var result = await collection.ReplaceOneAsync(filter, invoice, new ReplaceOptions { IsUpsert = true });
+		return (int)result.ModifiedCount;
 	}
 }

@@ -6,7 +6,6 @@ using StockManagement.Infrastructure;
 using StockManagement.Infrastructure.Database;
 using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
-using Testcontainers.PostgreSql;
 
 namespace StockManagement.Api.Tests.Infrastructure;
 
@@ -14,28 +13,14 @@ namespace StockManagement.Api.Tests.Infrastructure;
 [TestClass]
 public sealed class AppDbContextTests
 {
-	private static readonly PostgreSqlContainer _container = new PostgreSqlBuilder("postgres:16").Build();
-
 	private ServiceProvider _services;
 	private List<string> _log;
 
 
-	[ClassInitialize]
-	public static Task StartAsync(TestContext _)
-	{
-		return _container.StartAsync();
-	}
-
-	[ClassCleanup]
-	public static ValueTask StopAsync()
-	{
-		return _container.DisposeAsync();
-	}
-
 	[TestInitialize]
 	public async Task InitializeAsync()
 	{
-		var connectionString = new NpgsqlConnectionStringBuilder(_container.GetConnectionString()) { Database = $"test_{Guid.NewGuid():N}" }.ConnectionString;
+		var connectionString = new NpgsqlConnectionStringBuilder(PostgresContainer.ConnectionString) { Database = $"test_{Guid.NewGuid():N}" }.ConnectionString;
 		var configuration = new ConfigurationBuilder()
 			.AddInMemoryCollection([new("ConnectionStrings:Postgres", connectionString)])
 			.Build();

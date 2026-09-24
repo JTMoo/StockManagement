@@ -25,6 +25,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<Transaction> Transactions => this.Set<Transaction>();
 
+	public DbSet<Customer> Customers => this.Set<Customer>();
+
+	public DbSet<Invoice> Invoices => this.Set<Invoice>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{

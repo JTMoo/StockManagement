@@ -22,9 +22,10 @@ public class CustomerServiceProvider(IDatabase database) : ICustomerServiceProvi
 		return collection.InsertOneAsync(customer);
 	}
 
-	public Task<DeleteResult> DeleteCustomerAsync(Customer customer)
+	public async Task<int> DeleteCustomerAsync(Customer customer)
 	{
-		return _database.Delete<Customer>(customer);
+		var result = await _database.Delete<Customer>(customer);
+		return (int)result.DeletedCount;
 	}
 
 	public Task<Customer> GetCustomerAsync(int customerId)
@@ -37,11 +38,12 @@ public class CustomerServiceProvider(IDatabase database) : ICustomerServiceProvi
 		return _database.GetAll<Customer>();
 	}
 
-	public Task<ReplaceOneResult> UpdateCustomerAsync(Customer customer)
+	public async Task<int> UpdateCustomerAsync(Customer customer)
 	{
 		var collection = _database.ConnectToMongo<Customer>();
 		var filter = Builders<Customer>.Filter.Eq("Id", customer.Id);
 		// Upsert means: replace if existent - insert if not existent
-		return collection.ReplaceOneAsync(filter, customer, new ReplaceOptions { IsUpsert = true });
+		var result = await collection.ReplaceOneAsync(filter, customer, new ReplaceOptions { IsUpsert = true });
+		return (int)result.ModifiedCount;
 	}
 }

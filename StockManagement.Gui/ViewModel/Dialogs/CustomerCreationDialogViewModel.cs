@@ -49,7 +49,7 @@ public class CustomerCreationDialogViewModel : DialogViewModelBase
 		}
 		else
 		{
-			var result = await _customerServiceProvider.UpdateCustomerAsync(this.Customer).ContinueWith(task => task.Result.ModifiedCount == 1);
+			var result = await _customerServiceProvider.UpdateCustomerAsync(this.Customer).ContinueWith(task => task.Result == 1);
 		}
 	}
 }

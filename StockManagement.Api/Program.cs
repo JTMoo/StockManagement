@@ -1,24 +1,36 @@
+using System.Linq;
 using System.Text.Json.Serialization;
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Customers.Core;
-using StockManagement.Kernel;
-using StockManagement.Kernel.Database;
+using StockManagement.Customers.Core.Contracts;
+using StockManagement.Infrastructure;
+using StockManagement.Infrastructure.Database;
 using StockManagement.Sales.Core;
+using StockManagement.Sales.Core.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var database = new DatabaseManager(builder.Configuration.GetMongoDatabase());
-
 builder.Services
 	.AddFastEndpoints()
-	.AddKernel(database)
+	.AddInfrastructure(builder.Configuration)
+	.AddInfrastructureServiceProviders()
 	.AddSalesCore()
 	.AddCustomersCore()
 	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+// AddSalesCore/AddCustomersCore register these Singleton for the GUI's Mongo Kernel providers;
+// the API's providers above are Scoped (EF's AppDbContext isn't thread-safe), so override to match
+MakeScoped<ISaleService>(builder.Services);
+MakeScoped<ICustomerService>(builder.Services);
+
 var app = builder.Build();
 
-await database.CreateUniqueIndexesAsync();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+	await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
+}
 
 // React build (StockManagement.Web) lands in wwwroot
 app.UseDefaultFiles();
@@ -37,4 +49,15 @@ await app.RunAsync();
 /// <summary>
 /// Entry point, public for <c>WebApplicationFactory</c>
 /// </summary>
-public partial class Program;
+public partial class Program
+{
+	/// <summary>
+	/// Swaps an already-registered service's lifetime to Scoped, by reflection so the (internal) implementation type doesn't need to be named
+	/// </summary>
+	private static void MakeScoped<TService>(IServiceCollection services)
+	{
+		var descriptor = services.Single(d => d.ServiceType == typeof(TService));
+		services.Remove(descriptor);
+		services.Add(new ServiceDescriptor(typeof(TService), descriptor.ImplementationType!, ServiceLifetime.Scoped));
+	}
+}
