@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using StockManagement.Gui.Commands;
-using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
-using StockManagement.Kernel.Model.ExtensionMethods;
 using StockManagement.Kernel.Model.Types;
+using StockManagement.Sales.Core.Contracts;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
@@ -15,20 +13,17 @@ namespace StockManagement.Gui.ViewModel.Dialogs;
 internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 {
 	private Invoice _invoice;
-	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
-	private readonly IStockItemServiceProvider _stockItemServiceProvider;
+	private readonly ISaleService? _saleService;
 
 
-	private InvoiceCreationDialogViewModel(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider)
+	private InvoiceCreationDialogViewModel(Invoice invoice)
 	{
 		this.Invoice = invoice;
-		_invoiceServiceProvider = invoiceServiceProvider;
 	}
 
-	private InvoiceCreationDialogViewModel(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
+	private InvoiceCreationDialogViewModel(Invoice invoice, ISaleService saleService)
 	{
-		_invoiceServiceProvider = invoiceServiceProvider;
-		_stockItemServiceProvider = stockItemServiceProvider;
+		_saleService = saleService;
 
 		this.ChangeSaleConditionCommand = new RelayCommand<SaleCondition>(condition => this.Invoice.SaleCondition = condition);
 		this.Invoice = invoice;
@@ -44,43 +39,61 @@ internal class InvoiceCreationDialogViewModel : DialogViewModelBase
 	public bool Exists { get; set; }
 
 
-	public static Task<InvoiceCreationDialogViewModel> CreateAsync(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider)
+	/// <summary>
+	/// Shows an invoice that is already stored
+	/// </summary>
+	public static Task<InvoiceCreationDialogViewModel> CreateAsync(Invoice invoice)
 	{
-		var ret = new InvoiceCreationDialogViewModel(invoice, invoiceServiceProvider);
+		var ret = new InvoiceCreationDialogViewModel(invoice);
 		return ret.InitializeAsync();
 	}
 
-	public static Task<InvoiceCreationDialogViewModel> CreateAsync(Invoice invoice, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
+	/// <summary>
+	/// Shows a new invoice that completes the sale on confirm
+	/// </summary>
+	public static Task<InvoiceCreationDialogViewModel> CreateAsync(Invoice invoice, ISaleService saleService)
 	{
-		var ret = new InvoiceCreationDialogViewModel(invoice, invoiceServiceProvider, stockItemServiceProvider);
+		var ret = new InvoiceCreationDialogViewModel(invoice, saleService);
 		return ret.InitializeAsync();
 	}
 
 	private async Task<InvoiceCreationDialogViewModel> InitializeAsync()
 	{
-		if (this.Invoice.Number != 0)
+		if (this.Invoice.Number != 0 || _saleService == null)
 		{
 			this.Exists = true;
 			return this;
 		}
 
-		List<Invoice> invoices = new(await _invoiceServiceProvider.GetInvoicesAsync());
-		this.Invoice.Number = invoices.Count == 0 ? 1 : invoices.Max(invoice => invoice.Number) + 1;
+		this.Invoice.Number = await _saleService.GetNextInvoiceNumberAsync();
 		return this;
 	}
 
 	public override async void Confirm()
 	{
+		if (this.Exists || _saleService == null)
+		{
+			base.Confirm();
+			return;
+		}
+
 		try
 		{
-			await this.Invoice.Items.UpdateStockItems(_stockItemServiceProvider);
-			await _invoiceServiceProvider.AddInvoiceAsync(this.Invoice);
+			var result = await _saleService.CompleteSaleAsync(this.Invoice);
+			if (!result.Succeeded)
+			{
+				var message = string.Join(" ", Language.Resources.exceptionShoppingCartItemOutOfRange, $"({string.Join(", ", result.UnavailableItems)})");
+				MessageBox.Show(message, Language.Resources.invoices, MessageBoxButton.OK, MessageBoxImage.Error);
+				this.Cancel();
+				return;
+			}
 		}
-		catch (ArgumentOutOfRangeException ex)
+		catch (Exception ex)
 		{
-			var message = string.Join(" ", ex.Message, $"({ex.ParamName})");
-			MessageBox.Show(message, Language.Resources.invoices, MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show(Language.Resources.unexpectedError, Language.Resources.invoices, MessageBoxButton.OK, MessageBoxImage.Error);
+			Trace.WriteLine(ex);
 			this.Cancel();
+			return;
 		}
 
 		base.Confirm();

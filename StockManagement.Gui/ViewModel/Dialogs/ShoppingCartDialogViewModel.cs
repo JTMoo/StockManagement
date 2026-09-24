@@ -10,6 +10,7 @@ using StockManagement.Gui.Commands;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Util;
+using StockManagement.Sales.Core.Contracts;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
@@ -20,15 +21,13 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	private string totalInWords;
 	private Customer _selectedCustomer;
 	private readonly ICustomerServiceProvider _customerServiceProvider;
-	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
-	private readonly IStockItemServiceProvider _stockItemServiceProvider;
+	private readonly ISaleService _saleService;
 
 
-	public ShoppingCartDialogViewModel(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
+	public ShoppingCartDialogViewModel(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, ISaleService saleService)
 	{
 		_customerServiceProvider = customerServiceProvider;
-		_invoiceServiceProvider = invoiceServiceProvider;
-		_stockItemServiceProvider = stockItemServiceProvider;
+		_saleService = saleService;
 
 		this.Items = new(shoppingCartItems);
 		foreach (var item in this.Items)
@@ -72,17 +71,9 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 
 	public override async void Confirm()
 	{
-		var invoice = new Invoice()
-		{
-			Customer = this.SelectedCustomer,
-			Date = DateTime.Now,
-			ExpirationDate = DateTime.Now.AddDays(30),
-			Items = new(this.Items),
-			Total = this.Total,
-			Tax = (long)Math.Round((double)this.Total / 11)
-		};
+		var invoice = _saleService.CreateInvoice(this.SelectedCustomer, this.Items, DateTime.Now);
 		this.DeregisterFromEvents();
-		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _invoiceServiceProvider, _stockItemServiceProvider);
+		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _saleService);
 	}
 
 	public override void Cancel()
@@ -90,9 +81,9 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 		this.DeregisterFromEvents();
 		base.Cancel();
 	}
-	public static Task<ShoppingCartDialogViewModel> CreateAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, IStockItemServiceProvider stockItemServiceProvider)
+	public static Task<ShoppingCartDialogViewModel> CreateAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, ICustomerServiceProvider customerServiceProvider, ISaleService saleService)
 	{
-		var ret = new ShoppingCartDialogViewModel(shoppingCartItems, customerServiceProvider, invoiceServiceProvider, stockItemServiceProvider);
+		var ret = new ShoppingCartDialogViewModel(shoppingCartItems, customerServiceProvider, saleService);
 		return ret.InitializeAsync();
 	}
 
@@ -139,7 +130,7 @@ public class ShoppingCartDialogViewModel : DialogViewModelBase
 	{
 		try
 		{
-			this.Total = this.Items.Sum(item => item.Amount * Convert.ToInt64(Math.Round(item.StockItem.Price, 0)));
+			this.Total = _saleService.CalculateTotal(this.Items);
 		}
 		catch (Exception e)
 		{

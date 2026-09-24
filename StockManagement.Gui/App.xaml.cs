@@ -1,8 +1,11 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using StockManagement.Customers.Core;
 using StockManagement.Gui.View;
 using StockManagement.Gui.ViewModel;
+using StockManagement.Import.Core;
 using StockManagement.Kernel;
+using StockManagement.Sales.Core;
 
 namespace StockManagement.Gui;
 
@@ -18,6 +21,9 @@ public partial class App
 
 		_services = new ServiceCollection()
 			.AddKernel(databaseAccess)
+			.AddSalesCore()
+			.AddCustomersCore()
+			.AddImportCore()
 			.AddGui()
 			.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClosedXML.Excel;
 using StockManagement.Gui.Commands;
-using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.ExtensionMethods;
@@ -20,12 +20,12 @@ public partial class TableMappingViewModel : DialogViewModelBase
 {
 	private readonly Dictionary<PropertyInfo, string> _tableHeaderPropertyPairs = [];
 	private readonly IXLWorksheet _worksheet;
-	private readonly IStockItemServiceProvider _stockItemServiceProvider;
+	private readonly IStockItemImportService _stockItemImportService;
 
 
-	public TableMappingViewModel(IXLWorksheet worksheet, IStockItemServiceProvider stockItemServiceProvider)
+	public TableMappingViewModel(IXLWorksheet worksheet, IStockItemImportService stockItemImportService)
 	{
-		_stockItemServiceProvider = stockItemServiceProvider;
+		_stockItemImportService = stockItemImportService;
 		_worksheet = worksheet;
 
 		this.GetTableDataFromWorksheet();
@@ -46,11 +46,11 @@ public partial class TableMappingViewModel : DialogViewModelBase
 	{
 		GuiManager.Instance.ShowWaitDialog();
 
-		var items = await Task.Run(this.ExtractStockItemsFromExcelSheet).ContinueWith(task => task.Result.ToList());
-		var existingItems = await _stockItemServiceProvider.GetAllStockItemsAsync().ContinueWith(task => task.Result.ToList());
-		var dupCount = items.RemoveAndCountDuplicates(existingItems);
+		var items = await Task.Run(this.ExtractStockItemsFromExcelSheet);
+		var split = await _stockItemImportService.SplitDuplicatesAsync(items);
+		var dupCount = split.Duplicates.Count;
 
-		var result = MessageBox.Show($"Extracted {items.Count + dupCount} elements. {dupCount} are duplicates. Do you want to complete the import with the remaining {items.Count} elements?", Language.Resources.excelImport, MessageBoxButton.YesNo);
+		var result = MessageBox.Show($"Extracted {split.Unique.Count + dupCount} elements. {dupCount} are duplicates. Do you want to complete the import with the remaining {split.Unique.Count} elements?", Language.Resources.excelImport, MessageBoxButton.YesNo);
 		if (result != MessageBoxResult.Yes)
 		{
 			GuiManager.Instance.HideWaitDialog();
@@ -58,7 +58,7 @@ public partial class TableMappingViewModel : DialogViewModelBase
 			return;
 		}
 
-		await _stockItemServiceProvider.AddManyStockItemsAsync(items);
+		await _stockItemImportService.ImportAsync(split.Unique);
 
 		GuiManager.Instance.HideWaitDialog();
 		base.Confirm();

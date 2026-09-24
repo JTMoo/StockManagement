@@ -15,6 +15,8 @@ using System.Windows;
 using System.Diagnostics;
 using StockManagement.Kernel.Database.Interfaces;
 using System.Threading.Tasks;
+using StockManagement.Import.Core.Contracts;
+using StockManagement.Sales.Core.Contracts;
 
 namespace StockManagement.Gui.ViewModel.Primary;
 
@@ -32,14 +34,16 @@ public class StockItemsViewModel : ViewModelBase
 	private readonly List<Func<StockItem, bool>> _filterFunctions = [];
 	private readonly IStockItemServiceProvider _stockItemServiceProvider;
 	private readonly ICustomerServiceProvider _customerServiceProvider;
-	private readonly IInvoiceServiceProvider _invoiceServiceProvider;
+	private readonly ISaleService _saleService;
+	private readonly IStockItemImportService _stockItemImportService;
 
 
-	public StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, IInvoiceServiceProvider invoiceServiceProvider)
+	public StockItemsViewModel(IStockItemServiceProvider stockItemServiceProvider, ICustomerServiceProvider customerServiceProvider, ISaleService saleService, IStockItemImportService stockItemImportService)
 	{
 		_stockItemServiceProvider = stockItemServiceProvider;
 		_customerServiceProvider = customerServiceProvider;
-		_invoiceServiceProvider = invoiceServiceProvider;
+		_saleService = saleService;
+		_stockItemImportService = stockItemImportService;
 
 		this.MoreInfoCommand = new RelayCommand<StockItem>(this.OnMoreInfoCommand);
 		this.CreateStockItemCommand = new RelayCommand<string>(this.OnCreateStockItemCommand);
@@ -195,7 +199,7 @@ public class StockItemsViewModel : ViewModelBase
 
 	private async void OnShoppingCartCommand(string obj)
 	{
-		var cartDialog = await ShoppingCartDialogViewModel.CreateAsync(this.ShoppingCartItems, _customerServiceProvider, _invoiceServiceProvider, _stockItemServiceProvider);
+		var cartDialog = await ShoppingCartDialogViewModel.CreateAsync(this.ShoppingCartItems, _customerServiceProvider, _saleService);
 		GuiManager.Instance.MainViewModel.Dialog = cartDialog;
 		GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 	}
@@ -211,7 +215,7 @@ public class StockItemsViewModel : ViewModelBase
 			GuiManager.Instance.ShowWaitDialog();
 			try
 			{
-				GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName, _stockItemServiceProvider);
+				GuiManager.Instance.MainViewModel.Dialog = await ExcelImportDialogViewModel.CreateAsync(dialog.FileName, _stockItemImportService);
 				GuiManager.Instance.MainViewModel.Dialog.DialogClosing += this.UpdateStockItemsOnSuccess;
 			}
 			catch(Exception ex)

@@ -92,7 +92,7 @@ public class InvoiceViewModel : ViewModelBase
 	{
 		if (invoice == null) return;
 
-		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice, _invoiceServiceProvider);
+		GuiManager.Instance.MainViewModel.Dialog = await InvoiceCreationDialogViewModel.CreateAsync(invoice);
 	}
 
 	private void SetupFilterConditions()
