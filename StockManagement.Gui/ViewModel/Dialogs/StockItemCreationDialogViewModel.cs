@@ -1,17 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Gui.ViewModel.Dialogs;
 
 
-public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockItemServiceProvider, StockItem stockItem) : DialogViewModelBase()
+public class StockItemCreationDialogViewModel(IStockItemServiceProvider stockItemServiceProvider, StockItem stockItem, IEnumerable<string> manufacturers) : DialogViewModelBase()
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
 
 
 	#region Properties
 	public StockItem StockItem { get; set; } = stockItem;
+
+	/// <summary>
+	/// Manufacturers to pick from; a new name can be typed too.
+	/// </summary>
+	public IEnumerable<string> Manufacturers { get; } = manufacturers;
 	#endregion
 
 	public override async void Confirm()
