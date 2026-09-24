@@ -29,6 +29,8 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Role suffixes: `*Service` (logic), `*Repository` (data), `*Helper`, `*Extensions`, `*ViewModel`, `*Type` (enums)
 - XML docs: public contract members; `<summary>` one line, details in `<remarks>`
 - User-facing text only via `StockManagement.Language`
+- Expected failures: `Try*` + `out` or result, not exceptions
+- Commands: `XxxCommand` → private `OnXxxCommand`; handlers `OnXxx`
 
 ## Target (new code)
 
@@ -40,7 +42,10 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Atomic multi-step writes; counters via `$inc`
 - `CancellationToken` on async; no `async void`, no fire-and-forget, no empty `catch`
 - `ILogger<T>`, log the exception
-- Import errors: per-row report
+- Import errors: per-row report; keep source (file, sheet, row)
+- Mongo duplicate key → domain error in Infrastructure
+- Money: never `double`
+- No binaries (`.msi`) in git; no customer names or connection strings in code
 
 ## Tests
 
@@ -58,3 +63,4 @@ Owner comments on code → add one line. Newest last. Conflicts with a rule abov
 - 2026-09-24: XML `<summary>` one line, rest in `<remarks>` ([#34](https://github.com/JTMoo/StockManagement/pull/34))
 - 2026-09-24: Public contract members need XML docs ([#34](https://github.com/JTMoo/StockManagement/pull/34))
 - 2026-09-24: Rules 1-3 above ([#35](https://github.com/JTMoo/StockManagement/pull/35#issuecomment-5813587865))
+- 2026-09-24: Bugs → GitHub issues (match existing first), not docs ([#40](https://github.com/JTMoo/StockManagement/pull/40#discussion_r4093518187))

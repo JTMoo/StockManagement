@@ -26,3 +26,5 @@ Read before an important decision. Update in the same PR.
 | Import pipeline | read → map → clean → validate → preview → commit |
 | `#region` + banners in new code | keep / drop |
 | Nullable warnings as errors | yes / no |
+| Format check in CI | `dotnet format --verify-no-changes` + `.editorconfig` naming rules / none |
+| Frontend tests | Vitest + RTL + Playwright / other |
