@@ -186,6 +186,9 @@
   <data name="description" xml:space="preserve">
     <value>Descripción</value>
   </data>
+  <data name="edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
   <data name="location" xml:space="preserve">
     <value>Ubicación</value>
   </data>
@@ -360,6 +363,9 @@
   </data>
   <data name="saleCondition" xml:space="preserve">
     <value>Condición de Venta</value>
+  </data>
+  <data name="saveCustomer" xml:space="preserve">
+    <value>Guardar cliente</value>
   </data>
   <data name="cash" xml:space="preserve">
     <value>Contado</value>

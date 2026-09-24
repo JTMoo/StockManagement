@@ -65,6 +65,22 @@ public sealed class EfCustomerServiceProviderTests
 	}
 
 	[TestMethod]
+	public async Task UpdateCustomerAsync_Existing_PersistsChanges()
+	{
+		// Arrange
+		await this.UseAsync(provider => provider.AddCustomerAsync(new Customer { CustomerId = 1001, Name = "Ann" }));
+		var stored = await this.UseAsync(provider => provider.GetCustomerAsync(1001));
+		stored.Name = "Bea";
+
+		// Act
+		var result = await this.UseAsync(provider => provider.UpdateCustomerAsync(stored));
+
+		// Assert
+		Assert.AreEqual(1, result);
+		Assert.AreEqual("Bea", (await this.UseAsync(provider => provider.GetCustomerAsync(1001))).Name);
+	}
+
+	[TestMethod]
 	public async Task DeleteCustomerAsync_Existing_Removed()
 	{
 		// Arrange

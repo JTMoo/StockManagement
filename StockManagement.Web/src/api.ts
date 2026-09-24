@@ -47,6 +47,7 @@ export const api = {
 	listStockItems: (signal?: AbortSignal) => send<StockItem[]>("/stock-items", { signal }),
 	listCustomers: (signal?: AbortSignal) => send<Customer[]>("/customers", { signal }),
 	createCustomer: (customer: NewCustomer) => send<Customer>("/customers", { method: "POST", body: JSON.stringify(customer) }),
+	updateCustomer: (customer: Customer) => send<Customer>(`/customers/${customer.customerId}`, { method: "PUT", body: JSON.stringify(customer) }),
 	createSale: (sale: NewSale) => send<Invoice>("/sales", { method: "POST", body: JSON.stringify(sale) }),
 	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal })
 };
