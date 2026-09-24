@@ -1,4 +1,4 @@
-# ADR-0007: EF Core on PostgreSQL, one context, change handlers
+# ADR-0008: EF Core on PostgreSQL, one context, change handlers
 
 - Status: Proposed
 - Date: 2026-09-24
