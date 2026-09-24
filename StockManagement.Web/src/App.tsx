@@ -2,7 +2,7 @@ import { BookUser, Inbox, Languages, Menu, ShoppingCart, Wrench, type LucideIcon
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { CustomerList } from "./features/customers/CustomerList";
-import { InvoiceView } from "./features/invoices/InvoiceView";
+import { InvoiceBrowser } from "./features/invoices/InvoiceBrowser";
 import { SaleForm } from "./features/sales/SaleForm";
 import { StockItemList } from "./features/stock-items/StockItemList";
 import { cultures, useI18n, type Culture, type TextKey } from "./i18n";
@@ -37,7 +37,7 @@ export function App()
 				{view === "stockItems" && <StockItemList />}
 				{view === "clients" && <CustomerList />}
 				{view === "newSale" && <SaleForm onSold={onSold} />}
-				{view === "invoices" && <InvoiceView invoice={invoice} />}
+				{view === "invoices" && <InvoiceBrowser invoice={invoice} />}
 			</main>
 			<nav className={menuExtended ? "menu" : "menu collapsed"}>
 				<button className="menu-item" aria-label="Menu" aria-expanded={menuExtended} onClick={() => setMenuExtended(!menuExtended)}>

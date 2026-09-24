@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
@@ -22,6 +23,22 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 	public async Task<IEnumerable<Invoice>> GetInvoicesAsync()
 	{
 		return await _db.Invoices.ToListAsync();
+	}
+
+	public async Task<PagedResult<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, int page, int pageSize)
+	{
+		var query = _db.Invoices.AsQueryable();
+		if (customerId is int id) query = query.Where(invoice => invoice.Customer.CustomerId == id);
+		if (from is DateTime start) query = query.Where(invoice => invoice.Date >= start);
+		if (to is DateTime end) query = query.Where(invoice => invoice.Date <= end);
+
+		var totalCount = await query.CountAsync();
+		var items = await query.OrderByDescending(invoice => invoice.Date)
+			.Skip((page - 1) * pageSize)
+			.Take(pageSize)
+			.ToListAsync();
+
+		return new(items, totalCount);
 	}
 
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use</exception>

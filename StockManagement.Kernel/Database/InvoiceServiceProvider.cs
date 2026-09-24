@@ -72,6 +72,25 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 		return _database.GetAll<Invoice>();
 	}
 
+	public async Task<PagedResult<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, int page, int pageSize)
+	{
+		var filterBuilder = Builders<Invoice>.Filter;
+		var filter = filterBuilder.Empty;
+		if (customerId is int id) filter &= filterBuilder.Eq(invoice => invoice.Customer.CustomerId, id);
+		if (from is DateTime start) filter &= filterBuilder.Gte(invoice => invoice.Date, start);
+		if (to is DateTime end) filter &= filterBuilder.Lte(invoice => invoice.Date, end);
+
+		var collection = _database.ConnectToMongo<Invoice>();
+		var totalCount = (int)await collection.CountDocumentsAsync(filter);
+		var items = await collection.Find(filter)
+			.SortByDescending(invoice => invoice.Date)
+			.Skip((page - 1) * pageSize)
+			.Limit(pageSize)
+			.ToListAsync();
+
+		return new(items, totalCount);
+	}
+
 	public async Task<int> UpdateInvoiceAsync(Invoice invoice)
 	{
 		var collection = _database.ConnectToMongo<Invoice>();

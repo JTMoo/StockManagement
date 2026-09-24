@@ -405,4 +405,22 @@
   <data name="show" xml:space="preserve">
     <value>Anzeigen</value>
   </data>
+  <data name="from" xml:space="preserve">
+    <value>Von</value>
+  </data>
+  <data name="to" xml:space="preserve">
+    <value>Bis</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="customerName" xml:space="preserve">
+    <value>Kunde</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Zurück zur Liste</value>
+  </data>
 </root>

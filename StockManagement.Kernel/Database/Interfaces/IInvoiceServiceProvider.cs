@@ -1,3 +1,4 @@
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Database.Interfaces;
@@ -7,6 +8,12 @@ public interface IInvoiceServiceProvider
 {
 	public Task<Invoice> GetInvoiceAync(int invoiceNumber);
 	public Task<IEnumerable<Invoice>> GetInvoicesAsync();
+
+	/// <summary>
+	/// Invoices matching every given filter, newest first, one page at a time
+	/// </summary>
+	/// <param name="page">1-based</param>
+	public Task<PagedResult<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, int page, int pageSize);
 
 	/// <returns>Rows affected; 1 on success</returns>
 	public Task<int> UpdateInvoiceAsync(Invoice invoice);
