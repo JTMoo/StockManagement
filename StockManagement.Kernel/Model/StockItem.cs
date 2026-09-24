@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MongoDB.Driver;
 using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model.Types;
 
@@ -95,26 +94,5 @@ public class StockItem : BaseDocument
 	{
 		get { return _miscellaneous; }
 		set { this.SetField(ref _miscellaneous, value); }
-	}
-
-
-	public override List<CreateIndexModel<StockItem>> GetIndexCreationModels<StockItem>()
-	{
-		var creationModels = new List<CreateIndexModel<StockItem>>();
-
-		var options = new CreateIndexOptions() { Unique = true };
-		List<StringFieldDefinition<StockItem>> uniqueProperties =
-		[
-			new StringFieldDefinition<StockItem>(nameof(this.Code))
-		];
-
-		uniqueProperties.ForEach(property =>
-		{
-			var indexDefinition = new IndexKeysDefinitionBuilder<StockItem>().Ascending(property);
-			var creationModel = new CreateIndexModel<StockItem>(indexDefinition, options);
-			creationModels.Add(creationModel);
-		});
-
-		return creationModels;
 	}
 }
