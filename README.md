@@ -25,6 +25,11 @@ https://www.mongodb.com/try/download/community
 - `appsettings.json` next to the exe: `ConnectionStrings:Mongo`, `Mongo:DatabaseName`
 - Per install: `appsettings.local.json` with the keys to override (kept on upgrade)
 
+# PostgreSQL (ADR-0008)
+- Moving the data layer to EF Core on PostgreSQL; not wired into the app yet, Mongo stays live
+- API integration tests need Docker (Testcontainers `postgres:16`)
+- Once wired in: `ConnectionStrings:Postgres` in `appsettings.json`
+
 # MongoDB replica set (ADR-0007)
 - Needed for transactions; standalone `mongod` → sales fail
 - `mongod.cfg` (Windows: `C:\Program Files\MongoDB\Server\<version>\bin\mongod.cfg`):
