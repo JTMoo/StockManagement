@@ -6,12 +6,13 @@ namespace StockManagement.Import.Core;
 internal static class DuplicateFilter
 {
 	/// <summary>
-	/// Splits import <paramref name="candidates"/> into records that can be inserted and records that would clash.
-	/// A candidate is a duplicate when its key already exists in <paramref name="existing"/>,
-	/// or when the key appears more than once among the candidates (then every copy is a duplicate,
-	/// because there is no rule yet for which copy wins).
+	/// Splits import <paramref name="candidates"/> into records that can be inserted and records that would clash
 	/// </summary>
-	/// <remarks>The order of <paramref name="candidates"/> is kept in both lists.</remarks>
+	/// <remarks>
+	/// A candidate is a duplicate when its key already exists in <paramref name="existing"/>, or when the key appears
+	/// more than once among the candidates; then every copy is a duplicate, because there is no rule yet for which copy wins.
+	/// The order of <paramref name="candidates"/> is kept in both lists.
+	/// </remarks>
 	public static DuplicateFilterResult<T> Split<T, TKey>(IEnumerable<T> candidates, IEnumerable<T> existing, Func<T, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
 		where TKey : notnull
 	{

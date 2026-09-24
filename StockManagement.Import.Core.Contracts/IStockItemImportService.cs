@@ -10,5 +10,8 @@ public interface IStockItemImportService
 	/// </summary>
 	public Task<DuplicateFilterResult<StockItem>> SplitDuplicatesAsync(IEnumerable<StockItem> candidates, CancellationToken cancellationToken = default);
 
+	/// <summary>
+	/// Stores the given articles in one call; an empty list writes nothing
+	/// </summary>
 	public Task ImportAsync(IEnumerable<StockItem> stockItems, CancellationToken cancellationToken = default);
 }
