@@ -25,11 +25,11 @@
 								<fa:ImageAwesome Grid.Column="0"
 												 Height="30" Width="30" Margin="15"
 												 Foreground="{TemplateBinding Button.Foreground}"
-												 Visibility="{Binding IconVisibility, ElementName=IconButtonControl, Converter={StaticResource Bool2Collabsed}, UpdateSourceTrigger=PropertyChanged}"
+												 Visibility="{Binding IconVisibility, ElementName=IconButtonControl, Converter={StaticResource Bool2Collapsed}, UpdateSourceTrigger=PropertyChanged}"
 												 Icon="{Binding Icon, ElementName=IconButtonControl, UpdateSourceTrigger=PropertyChanged}" />
 								<TextBlock Grid.Column="1"
 										   Style="{StaticResource MenuTextBlockStyle}"
-										   Visibility="{Binding TextVisibility, ElementName=IconButtonControl, Converter={StaticResource Bool2Collabsed}, UpdateSourceTrigger=PropertyChanged}"
+										   Visibility="{Binding TextVisibility, ElementName=IconButtonControl, Converter={StaticResource Bool2Collapsed}, UpdateSourceTrigger=PropertyChanged}"
 										   Text="{Binding Text, ElementName=IconButtonControl, UpdateSourceTrigger=PropertyChanged}" />
 							</Grid>
 						</ControlTemplate>

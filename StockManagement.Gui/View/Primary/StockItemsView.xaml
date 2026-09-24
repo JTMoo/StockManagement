@@ -87,7 +87,7 @@
 		<!-- Search Bar -->
 		<StackPanel Grid.Column="2" Grid.RowSpan="99"
 					Width="200"
-					Visibility="{Binding IsSearchBarVisible, Converter={StaticResource Bool2Collabsed}}">
+					Visibility="{Binding IsSearchBarVisible, Converter={StaticResource Bool2Collapsed}}">
 			<TextBlock Style="{StaticResource BaseTextBlockStyle}" 
 					   Text="{x:Static lang:Resources.search}"
 					   FontSize="30"

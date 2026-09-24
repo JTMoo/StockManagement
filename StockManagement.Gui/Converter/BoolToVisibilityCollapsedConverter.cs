@@ -6,11 +6,13 @@ using System.Windows.Data;
 namespace StockManagement.Gui.Converter;
 
 
-internal class NullToVisibilityCollabsedConverter : IValueConverter
+internal class BoolToVisibilityCollapsedConverter : IValueConverter
 {
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
-		var visibility = value != null;
+		ArgumentNullException.ThrowIfNull(value);
+		if (value is not bool visibility) throw new InvalidCastException(nameof(value));
+
 		if (parameter != null && parameter is string invert && invert.Equals("invert", StringComparison.InvariantCultureIgnoreCase))
 			return visibility ? Visibility.Collapsed : Visibility.Visible;
 

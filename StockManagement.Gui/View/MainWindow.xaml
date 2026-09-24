@@ -78,7 +78,7 @@
 			<dialogControls:WaitDialog Grid.ColumnSpan="99"
 									   Grid.RowSpan="99"
 									   Style="{StaticResource BaseDialogStyle}"
-									   Visibility="{Binding IsWaitDialogVisible, Converter={StaticResource Bool2Collabsed}}"
+									   Visibility="{Binding IsWaitDialogVisible, Converter={StaticResource Bool2Collapsed}}"
 									   Panel.ZIndex="9999"/>
 		</Grid>
 	</Border>

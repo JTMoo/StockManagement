@@ -145,7 +145,7 @@
 		<controls:DialogActionBarControl Grid.Row="99"
 										 Grid.ColumnSpan="99"
 										 ConfirmCommand="{Binding ConfirmDialogCommand}"
-										 ConfirmVisibility="{Binding SelectedCustomer, Converter={StaticResource Null2Collabsed}}"
+										 ConfirmVisibility="{Binding SelectedCustomer, Converter={StaticResource Null2Collapsed}}"
 										 CancelCommand="{Binding CancelDialogCommand}"/>
 	</Grid>
 </UserControl>

@@ -184,7 +184,7 @@
 										 ConfirmCommand="{Binding ConfirmDialogCommand}"
 										 CancelCommand="{Binding CancelDialogCommand}">
 			<controls:DialogActionBarControl.ConfirmVisibility>
-				<MultiBinding Converter="{StaticResource MultiBool2Collabsed}">
+				<MultiBinding Converter="{StaticResource MultiBool2Collapsed}">
 					<MultiBinding.Bindings>
 						<Binding Path="Exists" Converter="{StaticResource InverseBoolean}" />
 						<Binding Path="Invoice.SaleCondition" Converter="{StaticResource IsNotEqual}" ConverterParameter="{x:Static types:SaleCondition.None}" />
