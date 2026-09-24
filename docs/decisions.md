@@ -11,7 +11,8 @@ Read before an important decision. Update in the same PR.
 | [0003](adr/0003-fastendpoints-api-and-react-frontend.md) | FastEndpoints API + React, desktop-first | Accepted (shell open) |
 | [0004](adr/0004-api-host-shape-and-tests.md) | API routes, errors, config, integration tests | Proposed |
 | [0005](adr/0005-manufacturer-as-free-text.md) | Manufacturer as free text, old enum numbers read as names | Proposed |
-| [0006](adr/0006-mongo-replica-set-and-transactions.md) | MongoDB single-node replica set, multi-step writes in transactions | Proposed |
+| [0006](adr/0006-react-web-app-shape.md) | Vite + React web app served by the API, resx texts, Vitest + Playwright | Proposed |
+| [0007](adr/0007-mongo-replica-set-and-transactions.md) | MongoDB single-node replica set, multi-step writes in transactions | Proposed |
 
 ## Standing decisions
 
@@ -30,4 +31,3 @@ Read before an important decision. Update in the same PR.
 | `#region` + banners in new code | keep / drop |
 | Nullable warnings as errors | yes / no |
 | Format check in CI | `dotnet format --verify-no-changes` + `.editorconfig` naming rules / none |
-| Frontend tests | Vitest + RTL + Playwright / other |

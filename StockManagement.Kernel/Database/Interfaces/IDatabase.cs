@@ -15,6 +15,6 @@ public interface IDatabase
 	/// <summary>
 	/// Starts a session for a multi-document transaction
 	/// </summary>
-	/// <remarks>Needs a replica set (ADR-0006).</remarks>
+	/// <remarks>Needs a replica set (ADR-0007).</remarks>
 	public Task<IClientSessionHandle> StartSessionAsync(CancellationToken cancellationToken = default);
 }

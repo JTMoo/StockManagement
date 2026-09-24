@@ -25,7 +25,7 @@ https://www.mongodb.com/try/download/community
 - `appsettings.json` next to the exe: `ConnectionStrings:Mongo`, `Mongo:DatabaseName`
 - Per install: `appsettings.local.json` with the keys to override (kept on upgrade)
 
-# MongoDB replica set (ADR-0006)
+# MongoDB replica set (ADR-0007)
 - Needed for transactions; standalone `mongod` → sales fail
 - `mongod.cfg` (Windows: `C:\Program Files\MongoDB\Server\<version>\bin\mongod.cfg`):
 ```yaml

@@ -1,0 +1,113 @@
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/600.css";
+
+/*
+ * La Cosecha brandboard (StockManagement.Gui BaseDictionary.xaml).
+ * One loud thing: printed things (invoice, receipt total, Sell) are paper on navy.
+ */
+:root {
+	--navy: #071c31;
+	--slate: #253745;
+	--steel: #4a5c6a;
+	--border: #405668;
+	--mist: #9ba7aa;
+	--paper: #e0e0e0;
+	--error: orangered;
+	--radius: 6px;
+	color-scheme: dark;
+	font: 400 1rem/1.5 Poppins, system-ui, sans-serif;
+	font-size: 17px;
+	color: var(--paper);
+	background: var(--navy);
+}
+body { margin: 0; }
+h2 { font-size: 1.75rem; line-height: 1.2; font-weight: 600; margin: 0 0 1.25rem; color: #fff; }
+h3 { font-size: 1.25rem; font-weight: 600; margin: 0; }
+small { display: block; font-size: 0.8rem; color: var(--mist); }
+:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+/* Shell: content left, WPF menu right; everything left-aligned */
+.shell { display: grid; grid-template-columns: 1fr auto; min-height: 100vh; }
+main { padding: 2rem 2.5rem; min-width: 0; }
+.menu { display: flex; flex-direction: column; justify-content: space-between; width: 13rem; padding: 0.75rem; box-sizing: border-box; border-left: 1px solid var(--border); }
+.menu.collapsed { width: auto; }
+.menu-bottom { display: flex; flex-direction: column; gap: 0.25rem; }
+.menu-item { display: flex; align-items: center; gap: 0.75rem; min-height: 52px; padding: 0 0.9rem; box-sizing: border-box; font: inherit; text-align: left; color: var(--mist); background: none; border: 0; border-radius: var(--radius); cursor: pointer; }
+.menu-item svg { flex: none; }
+.menu-item:hover { color: #fff; background: var(--slate); }
+.menu-item[aria-pressed="true"] { color: #fff; background: var(--slate); font-weight: 600; box-shadow: inset 3px 0 var(--paper); }
+label.menu-item { flex-direction: row; cursor: default; }
+label.menu-item select { flex: 1; min-width: 0; }
+.menu.collapsed .menu-item select { display: none; }
+
+/* Page: title left, toolbar right, content below */
+.page { display: flex; flex-direction: column; gap: 1.5rem; max-width: 72rem; }
+.page-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; min-height: 2.75rem; }
+.page-header h2 { margin: 0; }
+.toolbar, .toolbar-form { display: flex; gap: 0.5rem; }
+.toolbar input { width: 14rem; }
+
+/* Controls */
+button { font: inherit; color: #fff; background: var(--steel); border: 0; border-radius: var(--radius); padding: 0.45rem 1rem; cursor: pointer; }
+button:hover:not(:disabled) { background: var(--border); }
+button:disabled { opacity: 0.45; cursor: default; }
+button.quiet { color: var(--mist); background: none; padding: 0.2rem 0.5rem; }
+button.quiet:hover:not(:disabled) { color: #fff; background: var(--slate); }
+button.primary { width: 100%; padding: 0.75rem; font-size: 1.15rem; font-weight: 600; color: var(--navy); background: var(--paper); }
+button.primary:hover:not(:disabled) { background: #fff; }
+input, select { font: inherit; color: #fff; background: var(--slate); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.4rem 0.65rem; box-sizing: border-box; height: 2.5rem; }
+label, legend { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem; color: var(--mist); }
+
+/* Forms: same grid everywhere, labels above fields, actions bottom-left */
+.panel { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius); background: color-mix(in srgb, var(--slate) 35%, transparent); }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem 1.25rem; align-items: end; }
+.form-grid input, .form-grid select { width: 100%; }
+.form-actions { display: flex; gap: 0.75rem; }
+
+/* Cash / Credit like the WPF radio buttons */
+.segmented { border: 0; padding: 0; margin: 0; min-width: 0; }
+.segmented legend { padding: 0; margin-bottom: 0.3rem; }
+.segmented > div { display: flex; }
+.segmented label { flex: 1; flex-direction: row; justify-content: center; align-items: center; height: 2.5rem; box-sizing: border-box; font-size: 1rem; color: var(--mist); border: 1px solid var(--border); cursor: pointer; }
+.segmented label:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.segmented label:last-child { border-radius: 0 var(--radius) var(--radius) 0; border-left: 0; }
+.segmented label:has(:checked) { color: var(--navy); background: var(--paper); font-weight: 600; }
+.segmented label:has(:focus-visible) { outline: 2px solid var(--paper); outline-offset: 2px; }
+.segmented input { position: absolute; opacity: 0; }
+
+/* Lists */
+table { border-collapse: collapse; width: 100%; }
+th { text-align: left; font-size: 0.85rem; font-weight: 600; color: var(--mist); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--slate); vertical-align: top; }
+tbody tr:hover { background: var(--slate); }
+tr.sold-out td { color: var(--mist); }
+.number { text-align: right; font-variant-numeric: tabular-nums; }
+tfoot th, tfoot td { border-bottom: 0; }
+.failure { color: var(--error); margin: 0; }
+
+/* New sale: input panel left, receipt right */
+.sale { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); gap: 1.5rem; align-items: start; }
+.receipt tbody:empty::after { content: "—"; display: block; padding: 1rem 0.75rem; color: var(--mist); }
+.receipt td:first-child, .receipt th:first-child { padding-left: 0; }
+.receipt td:last-child, .receipt th:last-child { padding-right: 0; }
+tr.total th, tr.total td { padding-top: 1rem; font-size: 1.6rem; font-weight: 600; color: #fff; border-top: 2px solid var(--paper); }
+
+/* Printed things: invoice as paper */
+.paper { padding: 2rem 2.25rem; color: var(--navy); background: var(--paper); border-radius: 2px; }
+.paper header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 2px solid var(--navy); }
+.paper header span { font-weight: 600; }
+.paper dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1.5rem; margin: 0 0 1.5rem; }
+.paper dt { color: var(--steel); }
+.paper dd { margin: 0; }
+.paper th { color: var(--steel); border-color: var(--mist); }
+.paper td { border-color: #c8cdcf; }
+.paper tbody tr:hover { background: none; }
+.paper tr.total th, .paper tr.total td { color: var(--navy); border-top-color: var(--navy); }
+
+@media (max-width: 800px) {
+	main { padding: 1rem; }
+	.sale { grid-template-columns: 1fr; }
+	.menu { width: auto; }
+	.menu-item span, .menu-item select { display: none; }
+	.paper { padding: 1.25rem; }
+}

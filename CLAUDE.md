@@ -20,7 +20,8 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - Test: `dotnet test StockManagement.Tests`
 - API tests (Docker): `dotnet test StockManagement.Api.Tests`
 - Run API: `dotnet run --project StockManagement.Api` (MongoDB replica set on `127.0.0.1:27017`, see README)
-- CI: `Integration.yml` (Windows tests + Linux API tests on PR), `Delivery.yml` (MSI on tag)
+- Web (`StockManagement.Web`): `npm ci`, `npm run dev` (API running), `npm test`, `npm run e2e` (MongoDB replica set), `npm run build` (→ API `wwwroot`)
+- CI: `Integration.yml` (Windows tests + Linux API and web tests on PR), `Delivery.yml` (MSI on tag)
 
 ## Style (existing)
 
@@ -66,3 +67,4 @@ Owner comments on code → add one line. Newest last. Conflicts with a rule abov
 - 2026-09-24: Public contract members need XML docs ([#34](https://github.com/JTMoo/StockManagement/pull/34))
 - 2026-09-24: Rules 1-3 above ([#35](https://github.com/JTMoo/StockManagement/pull/35#issuecomment-5813587865))
 - 2026-09-24: Bugs → GitHub issues (match existing first), not docs ([#40](https://github.com/JTMoo/StockManagement/pull/40#discussion_r4093518187))
+- 2026-09-24: Frontend PRs show screenshots (Playwright, CI artifact `web-screenshots`) ([#50](https://github.com/JTMoo/StockManagement/pull/50#issuecomment-5814690250))

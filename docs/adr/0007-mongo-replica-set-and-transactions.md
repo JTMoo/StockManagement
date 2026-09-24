@@ -1,4 +1,4 @@
-# ADR-0006: MongoDB as single-node replica set, multi-step writes in transactions
+# ADR-0007: MongoDB as single-node replica set, multi-step writes in transactions
 
 - Status: Proposed
 - Date: 2026-09-24

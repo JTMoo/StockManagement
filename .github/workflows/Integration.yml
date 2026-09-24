@@ -28,6 +28,57 @@ jobs:
     - name: Execute API Integration Tests
       run: dotnet test StockManagement.Api.Tests
 
+  web-tests:
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: StockManagement.Web
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: npm
+        cache-dependency-path: StockManagement.Web/package-lock.json
+
+    # Transactions need a replica set (ADR-0007); service containers can't pass --replSet
+    - name: Start MongoDB replica set
+      run: |
+        docker run -d --name mongo -p 27017:27017 mongo:7 --replSet rs0
+        until docker exec mongo mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"; do sleep 1; done
+        docker exec mongo mongosh --quiet --eval "rs.initiate()"
+        until docker exec mongo mongosh --quiet --eval "db.hello().isWritablePrimary" | grep -q true; do sleep 1; done
+
+    - name: Install packages
+      run: npm ci
+
+    - name: Execute Web Unit Tests
+      run: npm test
+
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+
+    - name: Execute Web E2E Tests
+      run: npm run e2e
+
+    - name: Upload screenshots
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-screenshots
+        path: StockManagement.Web/screenshots
+
   build:
 
     strategy:

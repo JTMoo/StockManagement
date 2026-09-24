@@ -4,7 +4,7 @@ namespace StockManagement.Api.Tests;
 
 
 /// <summary>
-/// One MongoDB replica set for the test run; transactions need it (ADR-0006)
+/// One MongoDB replica set for the test run; transactions need it (ADR-0007)
 /// </summary>
 [TestClass]
 public static class MongoContainer
