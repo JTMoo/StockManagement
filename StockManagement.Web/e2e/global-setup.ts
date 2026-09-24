@@ -8,8 +8,8 @@ export default async function globalSetup()
 	const database = client.db(databaseName);
 	await database.dropDatabase();
 	await database.collection("StockManagement.Kernel.Model.StockItem").insertMany([
-		{ Name: "Screw", Code: "A1", Amount: 10, Description: "M6", Location: "A-1", Price: 5000.0, Factor: 0.0, Manufacturer: 0, Miscellaneous: "" },
-		{ Name: "Nut", Code: "B2", Amount: 1, Description: "M6", Location: "B-2", Price: 1000.0, Factor: 0.0, Manufacturer: 0, Miscellaneous: "" }
+		{ Name: "Screw", Code: "A1", Amount: 10, Description: "M6", Location: "A-1", Price: 5000.0, Factor: 0.0, Manufacturer: "", Miscellaneous: "" },
+		{ Name: "Nut", Code: "B2", Amount: 1, Description: "M6", Location: "B-2", Price: 1000.0, Factor: 0.0, Manufacturer: "", Miscellaneous: "" }
 	]);
 	await client.close();
 }
