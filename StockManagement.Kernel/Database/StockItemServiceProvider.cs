@@ -47,8 +47,8 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 
 	public async Task<ReplaceOneResult> UpdateStockItemAsync(StockItem stockItem)
 	{
-		var item = await this.GetStockItemAsync(stockItem.Code);
-		if (item.Amount != stockItem.Amount)
+		var item = await _database.GetOneAsync<StockItem>(stored => stored.Id == stockItem.Id);
+		if (item is not null && item.Amount != stockItem.Amount)
 		{
 			await this.SaveTransactionAsync(stockItem, item);
 		}

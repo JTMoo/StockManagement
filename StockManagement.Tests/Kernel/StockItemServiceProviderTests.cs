@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
 using StockManagement.Kernel.Database;
@@ -47,5 +48,26 @@ public sealed class StockItemServiceProviderTests
 		// Act + Assert
 		await Assert.ThrowsExceptionAsync<TimeoutException>(() => provider.UpdateStockItemAsync(new StockItem { Code = "A1", Amount = 3 }));
 		_stockItems.Verify(c => c.ReplaceOneAsync(It.IsAny<FilterDefinition<StockItem>>(), It.IsAny<StockItem>(), It.IsAny<ReplaceOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+	}
+
+	[TestMethod]
+	public async Task UpdateStockItemAsync_CodeChanged_FindsStoredItemById()
+	{
+		// Arrange
+		var id = ObjectId.GenerateNewId().ToString();
+		var stored = new StockItem { Id = id, Code = "OLD", Amount = 5 };
+		_database
+			.Setup(d => d.GetOneAsync(It.IsAny<Expression<Func<StockItem, bool>>>()))
+			.ReturnsAsync((Expression<Func<StockItem, bool>> filter) => filter.Compile()(stored) ? stored : null);
+		_transactions
+			.Setup(c => c.InsertOneAsync(It.IsAny<Transaction>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
+			.Returns(Task.CompletedTask);
+		var provider = new StockItemServiceProvider(_database.Object);
+
+		// Act
+		await provider.UpdateStockItemAsync(new StockItem { Id = id, Code = "NEW", Amount = 3 });
+
+		// Assert
+		_transactions.Verify(c => c.InsertOneAsync(It.Is<Transaction>(t => t.Amount == -2), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
 	}
 }
