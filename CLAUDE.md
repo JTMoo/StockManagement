@@ -11,7 +11,7 @@
 Important = hard to undo or spans features (layers, frameworks, persistence, API contracts, auth, money, import, tests, packaging).
 
 1. Read [docs/decisions.md](docs/decisions.md). No silent contradiction of an accepted ADR.
-2. Grill it: owner's *grill me* skill (local). Not available: ask the owner directly.
+2. Grill it: `/grill-with-docs` (`~/.claude/skills/grill-with-docs`, owner's machine). Not available: ask the owner directly.
 3. Record it: ADR in [docs/adr/](docs/adr/README.md) + row in `docs/decisions.md`. Small rules: *Standing decisions*.
 
 ## Commands
