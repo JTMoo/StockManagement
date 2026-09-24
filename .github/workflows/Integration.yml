@@ -28,6 +28,48 @@ jobs:
     - name: Execute API Integration Tests
       run: dotnet test StockManagement.Api.Tests
 
+  web-tests:
+
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+
+    defaults:
+      run:
+        working-directory: StockManagement.Web
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: npm
+        cache-dependency-path: StockManagement.Web/package-lock.json
+
+    - name: Install packages
+      run: npm ci
+
+    - name: Execute Web Unit Tests
+      run: npm test
+
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+
+    - name: Execute Web E2E Tests
+      run: npm run e2e
+
   build:
 
     strategy:
