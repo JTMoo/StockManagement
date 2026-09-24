@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
-// Runs the built app through the real API on its own database. Needs MongoDB on 127.0.0.1:27017.
-export const mongoUrl = "mongodb://127.0.0.1:27017";
+// Runs the built app through the real API on its own database. Needs a MongoDB replica set on 127.0.0.1:27017 (ADR-0007).
+export const mongoUrl = "mongodb://127.0.0.1:27017/?directConnection=true";
 export const databaseName = "StockManagementE2E";
 const port = 5090;
 

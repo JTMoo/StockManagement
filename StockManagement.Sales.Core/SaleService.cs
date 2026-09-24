@@ -45,8 +45,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 
 	/// <remarks>
 	/// Stock is checked against the database, not against the possibly stale articles held by the cart.
-	/// Each line is taken out of stock atomically and only if enough is left, so parallel sales cannot oversell.
-	/// A failed line or invoice write returns the lines already taken. Not one Mongo transaction yet (#41).
+	/// Stock and invoice are then written in one Mongo transaction: all or nothing, no oversell by parallel sales.
 	/// </remarks>
 	public async Task<SaleResult> CompleteSaleAsync(Invoice invoice, CancellationToken cancellationToken = default)
 	{
@@ -59,32 +58,8 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		var shortages = StockAvailability.FindShortages(requests);
 		if (shortages.Count > 0) return new SaleResult(shortages.Select(shortage => shortage.Name).ToList());
 
-		List<ShoppingCartItem> taken = [];
-		try
-		{
-			foreach (var item in items)
-			{
-				cancellationToken.ThrowIfCancellationRequested();
-
-				if (await _stockItemServiceProvider.TryTakeStockAsync(item.StockItem.Code, item.Amount, cancellationToken) is not StockItem stockItem)
-				{
-					await this.ReturnStockAsync(taken);
-					return new SaleResult([item.StockItem.Name]);
-				}
-
-				item.StockItem.Amount = stockItem.Amount;
-				taken.Add(item);
-			}
-
-			await _invoiceServiceProvider.AddInvoiceAsync(invoice);
-		}
-		catch
-		{
-			await this.ReturnStockAsync(taken);
-			throw;
-		}
-
-		return SaleResult.Success;
+		var shortItems = await _invoiceServiceProvider.TryAddSaleAsync(invoice, cancellationToken);
+		return shortItems.Count == 0 ? SaleResult.Success : new SaleResult(shortItems);
 	}
 
 	/// <remarks>Stock is checked before the cart is built, because <see cref="ShoppingCartItem.Amount"/> silently caps at the units in stock.</remarks>
@@ -107,17 +82,6 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 
 		var result = await this.CompleteSaleAsync(invoice, cancellationToken);
 		return result.Succeeded ? result with { Invoice = invoice } : result;
-	}
-
-	/// <remarks>Empties <paramref name="taken"/> one by one, so a second call never returns a line twice.</remarks>
-	private async Task ReturnStockAsync(List<ShoppingCartItem> taken)
-	{
-		while (taken.Count > 0)
-		{
-			var item = taken[^1];
-			await _stockItemServiceProvider.ReturnStockAsync(item.StockItem.Code, item.Amount, CancellationToken.None);
-			taken.RemoveAt(taken.Count - 1);
-		}
 	}
 
 	private async Task<Dictionary<string, StockItem>> LoadCurrentStockAsync(IEnumerable<string> codes, CancellationToken cancellationToken)

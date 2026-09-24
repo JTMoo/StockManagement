@@ -22,6 +22,40 @@ public class InvoiceServiceProvider(IDatabase database) : IInvoiceServiceProvide
 		return collection.InsertOneAsync(invoice);
 	}
 
+	public async Task<IReadOnlyList<string>> TryAddSaleAsync(Invoice invoice, CancellationToken cancellationToken = default)
+	{
+		ArgumentNullException.ThrowIfNull(invoice);
+
+		var items = invoice.Items ?? [];
+		var stockItems = _database.ConnectToMongo<StockItem>();
+		var transactions = _database.ConnectToMongo<Transaction>();
+		var options = new FindOneAndUpdateOptions<StockItem> { ReturnDocument = ReturnDocument.After };
+		List<(ShoppingCartItem Item, int AmountLeft)> taken = [];
+
+		using var session = await _database.StartSessionAsync(cancellationToken);
+		session.StartTransaction();
+
+		foreach (var item in items)
+		{
+			var filter = Builders<StockItem>.Filter.Where(stockItem => stockItem.Code == item.StockItem.Code && stockItem.Amount >= item.Amount);
+			var update = Builders<StockItem>.Update.Inc(stockItem => stockItem.Amount, -item.Amount);
+			if (await stockItems.FindOneAndUpdateAsync(session, filter, update, options, cancellationToken) is not StockItem stored)
+			{
+				await session.AbortTransactionAsync(cancellationToken);
+				return [item.StockItem.Name];
+			}
+
+			await transactions.InsertOneAsync(session, new Transaction(stored, DateTime.Now, Transaction.Kind.Amount, -item.Amount), cancellationToken: cancellationToken);
+			taken.Add((item, stored.Amount));
+		}
+
+		await _database.ConnectToMongo<Invoice>().InsertOneAsync(session, invoice, cancellationToken: cancellationToken);
+		await session.CommitTransactionAsync(cancellationToken);
+
+		taken.ForEach(line => line.Item.StockItem.Amount = line.AmountLeft);
+		return [];
+	}
+
 	public Task<DeleteResult> DeleteInvoiceAsync(Invoice invoice)
 	{
 		return _database.Delete<Invoice>(invoice);

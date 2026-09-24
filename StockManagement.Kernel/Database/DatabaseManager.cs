@@ -44,6 +44,11 @@ public class DatabaseManager(IMongoDatabase database) : IDatabase
 		return col.DeleteOneAsync(filter);
 	}
 
+	public Task<IClientSessionHandle> StartSessionAsync(CancellationToken cancellationToken = default)
+	{
+		return _database.Client.StartSessionAsync(cancellationToken: cancellationToken);
+	}
+
 	public IMongoCollection<T> ConnectToMongo<T>(in string collectionName)
 	{
 		return _database.GetCollection<T>(collectionName);

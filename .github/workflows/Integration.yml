@@ -32,12 +32,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mongo:
-        image: mongo:7
-        ports:
-          - 27017:27017
-
     defaults:
       run:
         working-directory: StockManagement.Web
@@ -57,6 +51,14 @@ jobs:
         node-version: '22'
         cache: npm
         cache-dependency-path: StockManagement.Web/package-lock.json
+
+    # Transactions need a replica set (ADR-0007); service containers can't pass --replSet
+    - name: Start MongoDB replica set
+      run: |
+        docker run -d --name mongo -p 27017:27017 mongo:7 --replSet rs0
+        until docker exec mongo mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"; do sleep 1; done
+        docker exec mongo mongosh --quiet --eval "rs.initiate()"
+        until docker exec mongo mongosh --quiet --eval "db.hello().isWritablePrimary" | grep -q true; do sleep 1; done
 
     - name: Install packages
       run: npm ci
