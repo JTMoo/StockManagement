@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Api.Features.Invoices;
@@ -83,6 +83,35 @@ public sealed class SaleEndpointsTests
 		CollectionAssert.AreEqual(new[] { "Screw" }, conflict.UnavailableItems.ToList());
 		var stockItem = await _client.GetFromJsonAsync<StockItemResponse>("/api/stock-items/A1", ApiFactory.JsonOptions);
 		Assert.AreEqual(10, stockItem.Amount);
+	}
+
+	[TestMethod]
+	public async Task TryTakeStockAsync_TooLittleLeft_ReturnsNullAndKeepsStock()
+	{
+		// Arrange
+		var stockItems = _factory.Services.GetRequiredService<IStockItemServiceProvider>();
+		await stockItems.TryTakeStockAsync("A1", 6);
+
+		// Act
+		var result = await stockItems.TryTakeStockAsync("A1", 6);
+
+		// Assert
+		Assert.IsNull(result);
+		Assert.AreEqual(4, (await stockItems.GetStockItemAsync("A1")).Amount);
+	}
+
+	[TestMethod]
+	public async Task ReturnStockAsync_AfterTake_RestoresStock()
+	{
+		// Arrange
+		var stockItems = _factory.Services.GetRequiredService<IStockItemServiceProvider>();
+		await stockItems.TryTakeStockAsync("A1", 6);
+
+		// Act
+		await stockItems.ReturnStockAsync("A1", 6);
+
+		// Assert
+		Assert.AreEqual(10, (await stockItems.GetStockItemAsync("A1")).Amount);
 	}
 
 	[TestMethod]
