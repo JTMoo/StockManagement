@@ -14,7 +14,6 @@ public class UpdateCustomerEndpoint(ICustomerServiceProvider customerServiceProv
 	public override void Configure()
 	{
 		this.Put("/customers/{CustomerId}");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Ok<CustomerResponse>, NotFound>> ExecuteAsync(UpdateCustomerRequest request, CancellationToken cancellationToken)

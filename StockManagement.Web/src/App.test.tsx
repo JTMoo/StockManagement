@@ -1,9 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { App } from "./App";
-import { I18nProvider } from "./i18n";
-import { mockApi } from "./test-utils";
+import { mockApi, renderEnglish } from "./test-utils";
 
 describe("App", () =>
 {
@@ -15,7 +14,7 @@ describe("App", () =>
 			"GET /api/settings": { body: { language: "English" } },
 			"PUT /api/settings": { body: { language: "German" } }
 		});
-		render(<I18nProvider culture="en-US"><App /></I18nProvider>);
+		renderEnglish(<App />);
 		await userEvent.click(screen.getByRole("button", { name: "Settings" }));
 
 		// Act
@@ -29,7 +28,7 @@ describe("App", () =>
 	{
 		// Arrange
 		mockApi({ "GET /api/stock-items": { body: [] }, "GET /api/customers": { body: [] } });
-		render(<I18nProvider culture="en-US"><App /></I18nProvider>);
+		renderEnglish(<App />);
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Menu" }));
@@ -38,5 +37,15 @@ describe("App", () =>
 		// Assert
 		expect(screen.queryByText("Clients", { selector: "span" })).not.toBeInTheDocument();
 		expect(screen.getByRole("heading", { name: "Clients" })).toBeInTheDocument();
+	});
+
+	it("NotLoggedIn_ShowsLoginScreenInsteadOfShell", () =>
+	{
+		// Arrange + Act
+		renderEnglish(<App />, { authenticated: false });
+
+		// Assert
+		expect(screen.getByRole("heading", { name: "User login" })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
 	});
 });

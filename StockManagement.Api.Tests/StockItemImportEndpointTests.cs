@@ -17,10 +17,10 @@ public sealed class StockItemImportEndpointTests
 
 
 	[TestInitialize]
-	public void Initialize()
+	public async Task InitializeAsync()
 	{
 		_factory = new();
-		_client = _factory.CreateClient();
+		_client = await _factory.CreateAuthenticatedClientAsync();
 	}
 
 	[TestCleanup]
@@ -117,6 +117,20 @@ public sealed class StockItemImportEndpointTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task Import_NoToken_ReturnsUnauthorized()
+	{
+		// Arrange
+		using var anonymousClient = _factory.CreateClient();
+		var content = ExcelFileContent(CreateWorkbook("Stock", ["Code", "Name"], ["A1", "Screw"]));
+
+		// Act
+		var response = await anonymousClient.PostAsync("/api/stock-items/import", content);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
 	}
 
 

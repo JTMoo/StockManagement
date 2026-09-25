@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using StockManagement.Auth.Core;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Customers.Core;
 using StockManagement.Customers.Core.Contracts;
 using StockManagement.Import.Core;
@@ -23,7 +25,8 @@ public sealed class ServiceRegistrationTests
 			.AddKernel(new Mock<IDatabase>().Object)
 			.AddSalesCore()
 			.AddCustomersCore()
-			.AddImportCore();
+			.AddImportCore()
+			.AddAuthCore();
 
 		// Act
 		using var provider = services.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
@@ -36,6 +39,7 @@ public sealed class ServiceRegistrationTests
 		Assert.IsNotNull(provider.GetRequiredService<ISaleService>());
 		Assert.IsNotNull(provider.GetRequiredService<ICustomerService>());
 		Assert.IsNotNull(provider.GetRequiredService<IStockItemImportService>());
+		Assert.IsNotNull(provider.GetRequiredService<IAuthService>());
 	}
 
 	[TestMethod]

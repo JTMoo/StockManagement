@@ -34,7 +34,6 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 	public override void Configure()
 	{
 		this.Post("/stock-items");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Created<StockItemResponse>, Conflict<DuplicateStockItemCodeResponse>>> ExecuteAsync(CreateStockItemRequest request, CancellationToken cancellationToken)

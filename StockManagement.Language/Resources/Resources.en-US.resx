@@ -402,6 +402,15 @@
   <data name="password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="invalidCredentials" xml:space="preserve">
+    <value>Incorrect username or password.</value>
+  </data>
+  <data name="sessionExpired" xml:space="preserve">
+    <value>Your session has expired. Please log in again.</value>
+  </data>
   <data name="newSale" xml:space="preserve">
     <value>New sale</value>
   </data>

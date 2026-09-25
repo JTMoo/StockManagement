@@ -8,6 +8,13 @@ const shot = (page: Page, name: string) => page.screenshot({ path: `screenshots/
 test("full sale: create customer, sell, view invoice, stock goes down", async ({ page }) =>
 {
 	await page.goto("/");
+	await expect(page.getByRole("button", { name: "User login" })).toBeVisible();
+	await shot(page, "0-login");
+
+	await page.getByLabel("Username").fill("admin");
+	await page.getByLabel("Password").fill("ChangeMe123!");
+	await page.getByRole("button", { name: "User login" }).click();
+
 	await expect(page.getByRole("cell", { name: "Screw" })).toBeVisible();
 	await shot(page, "1-stock-items");
 

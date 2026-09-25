@@ -17,7 +17,6 @@ public class GetCustomerEndpoint(ICustomerServiceProvider customerServiceProvide
 	public override void Configure()
 	{
 		this.Get("/customers/{CustomerId}");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Ok<CustomerResponse>, NotFound>> ExecuteAsync(GetCustomerRequest request, CancellationToken cancellationToken)

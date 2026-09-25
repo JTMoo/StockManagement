@@ -19,7 +19,7 @@ public sealed class StockItemEndpointsTests
 	public async Task InitializeAsync()
 	{
 		_factory = new();
-		_client = _factory.CreateClient();
+		_client = await _factory.CreateAuthenticatedClientAsync();
 
 		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
 		await stockItems.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10, price: 5000));

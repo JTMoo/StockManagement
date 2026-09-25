@@ -28,7 +28,6 @@ public class CreateCustomerEndpoint(ICustomerService customerService) : Endpoint
 	public override void Configure()
 	{
 		this.Post("/customers");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Created<CustomerResponse>> ExecuteAsync(CreateCustomerRequest request, CancellationToken cancellationToken)

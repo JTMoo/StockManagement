@@ -42,7 +42,6 @@ public class ImportStockItemsEndpoint(IExcelStockItemParser excelStockItemParser
 	{
 		this.Post("/stock-items/import");
 		this.AllowFileUploads();
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Ok<StockItemImportResponse>, BadRequest<InvalidExcelFileResponse>>> ExecuteAsync(ImportStockItemsRequest request, CancellationToken cancellationToken)

@@ -50,7 +50,6 @@ public class CreateSaleEndpoint(ISaleService saleService, ICustomerServiceProvid
 	public override void Configure()
 	{
 		this.Post("/sales");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<Created<InvoiceResponse>, Conflict<SaleConflictResponse>>> ExecuteAsync(CreateSaleRequest request, CancellationToken cancellationToken)

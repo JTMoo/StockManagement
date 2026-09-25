@@ -406,6 +406,15 @@
   <data name="password" xml:space="preserve">
     <value>Contraseña</value>
   </data>
+  <data name="logout" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="invalidCredentials" xml:space="preserve">
+    <value>Usuario o contraseña incorrectos.</value>
+  </data>
+  <data name="sessionExpired" xml:space="preserve">
+    <value>Su sesión ha expirado. Por favor, inicie sesión de nuevo.</value>
+  </data>
   <data name="newSale" xml:space="preserve">
     <value>Nueva venta</value>
   </data>

@@ -32,6 +32,12 @@ https://www.mongodb.com/try/download/community
 - API integration tests need Docker (Testcontainers `postgres:16`)
 - GUI still reads/writes MongoDB directly, unchanged (not yet cut over)
 
+# Authentication (ADR-0010)
+- Every API endpoint needs a JWT bearer token except `POST /api/auth/login`
+- Fresh database: the `AddUsers` migration seeds one admin user (`admin` / `ChangeMe123!`) - no self-service change yet, change it directly in the database if that matters to you
+- Config: `Jwt:SigningKey` (override per install in `appsettings.local.json`, see above), `Jwt:ExpiryHours`
+- Local dev / CI: `StockManagement.Api.Tests` logs in via `ApiFactory.CreateAuthenticatedClientAsync()`; `npm run e2e` logs in as the seeded admin at the start of the spec; the React app shows a login screen until you log in
+
 # MongoDB (GUI only)
 - Still used by the WPF GUI: `User`/`Settings` and, until the GUI is cut over, its own copy of Stock/Customer/Sale data
 
