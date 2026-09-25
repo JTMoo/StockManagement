@@ -6,10 +6,11 @@ using StockManagement.Customers.Core;
 using StockManagement.Customers.Core.Contracts;
 using StockManagement.Import.Core;
 using StockManagement.Import.Core.Contracts;
-using StockManagement.Kernel;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Sales.Core;
 using StockManagement.Sales.Core.Contracts;
+using StockManagement.Settings.Core;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Tests;
 
@@ -18,34 +19,29 @@ namespace StockManagement.Tests;
 public sealed class ServiceRegistrationTests
 {
 	[TestMethod]
-	public void AddKernelAndCores_BuildWithValidation_ResolvesEveryContract()
+	public void AddCores_ResolveAgainstProviderInterfaces_ResolvesEveryContract()
 	{
 		// Arrange
 		var services = new ServiceCollection()
-			.AddKernel(new Mock<IDatabase>().Object)
+			.AddSingleton(new Mock<IStockItemServiceProvider>().Object)
+			.AddSingleton(new Mock<ICustomerServiceProvider>().Object)
+			.AddSingleton(new Mock<IInvoiceServiceProvider>().Object)
+			.AddSingleton(new Mock<IUserServiceProvider>().Object)
+			.AddSingleton(new Mock<ISettingsServiceProvider>().Object)
 			.AddSalesCore()
 			.AddCustomersCore()
 			.AddImportCore()
-			.AddAuthCore();
+			.AddAuthCore()
+			.AddSettingsCore();
 
 		// Act
 		using var provider = services.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
 
 		// Assert
-		Assert.IsNotNull(provider.GetRequiredService<IStockItemServiceProvider>());
-		Assert.IsNotNull(provider.GetRequiredService<ICustomerServiceProvider>());
-		Assert.IsNotNull(provider.GetRequiredService<IInvoiceServiceProvider>());
-		Assert.IsNotNull(provider.GetRequiredService<IUserServiceProvider>());
 		Assert.IsNotNull(provider.GetRequiredService<ISaleService>());
 		Assert.IsNotNull(provider.GetRequiredService<ICustomerService>());
 		Assert.IsNotNull(provider.GetRequiredService<IStockItemImportService>());
 		Assert.IsNotNull(provider.GetRequiredService<IAuthService>());
-	}
-
-	[TestMethod]
-	public void AddKernel_NullDatabase_Throws()
-	{
-		// Act + Assert
-		Assert.ThrowsException<ArgumentNullException>(() => new ServiceCollection().AddKernel(null));
+		Assert.IsNotNull(provider.GetRequiredService<ISettingsService>());
 	}
 }
