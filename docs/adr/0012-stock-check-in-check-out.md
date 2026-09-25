@@ -1,4 +1,4 @@
-# ADR-0011: Stock check-in / check-out with a reason
+# ADR-0012: Stock check-in / check-out with a reason
 
 - Status: Proposed
 - Date: 2026-09-25
