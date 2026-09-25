@@ -12,7 +12,6 @@ public class ListCustomersEndpoint(ICustomerServiceProvider customerServiceProvi
 	public override void Configure()
 	{
 		this.Get("/customers");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<IReadOnlyList<CustomerResponse>> ExecuteAsync(CancellationToken cancellationToken)

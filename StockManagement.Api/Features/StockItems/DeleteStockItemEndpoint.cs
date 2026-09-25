@@ -18,7 +18,6 @@ public class DeleteStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 	public override void Configure()
 	{
 		this.Delete("/stock-items/{Id}");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<Results<NoContent, NotFound>> ExecuteAsync(DeleteStockItemRequest request, CancellationToken cancellationToken)

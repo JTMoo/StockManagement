@@ -12,7 +12,6 @@ public class ListStockItemsEndpoint(IStockItemServiceProvider stockItemServicePr
 	public override void Configure()
 	{
 		this.Get("/stock-items");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<IReadOnlyList<StockItemResponse>> ExecuteAsync(CancellationToken cancellationToken)

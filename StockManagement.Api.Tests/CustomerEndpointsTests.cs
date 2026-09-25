@@ -13,10 +13,10 @@ public sealed class CustomerEndpointsTests
 
 
 	[TestInitialize]
-	public void Initialize()
+	public async Task InitializeAsync()
 	{
 		_factory = new();
-		_client = _factory.CreateClient();
+		_client = await _factory.CreateAuthenticatedClientAsync();
 	}
 
 	[TestCleanup]

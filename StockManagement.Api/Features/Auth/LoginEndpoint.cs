@@ -1,0 +1,56 @@
+using FastEndpoints;
+using FastEndpoints.Security;
+using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
+
+namespace StockManagement.Api.Features.Auth;
+
+
+public sealed record LoginRequest(string Username, string Password);
+
+public sealed record LoginResponse(string Token, string Username);
+
+
+public class LoginValidator : Validator<LoginRequest>
+{
+	public LoginValidator()
+	{
+		this.RuleFor(request => request.Username).NotEmpty();
+		this.RuleFor(request => request.Password).NotEmpty();
+	}
+}
+
+
+/// <remarks>Stateless JWT: no server-side session, "logout" just discards the token client-side. See ADR-0010.</remarks>
+public class LoginEndpoint(IAuthService authService, IConfiguration configuration) : Endpoint<LoginRequest, Results<Ok<LoginResponse>, UnauthorizedHttpResult>>
+{
+	private readonly IAuthService _authService = authService;
+	private readonly IConfiguration _configuration = configuration;
+
+
+	public override void Configure()
+	{
+		this.Post("/auth/login");
+		this.AllowAnonymous();
+	}
+
+	public override async Task<Results<Ok<LoginResponse>, UnauthorizedHttpResult>> ExecuteAsync(LoginRequest request, CancellationToken cancellationToken)
+	{
+		var user = await _authService.ValidateCredentialsAsync(request.Username, request.Password, cancellationToken);
+		if (user is null) return TypedResults.Unauthorized();
+
+		var signingKey = _configuration["Jwt:SigningKey"]!;
+		var expiryHours = _configuration.GetValue("Jwt:ExpiryHours", 12);
+
+		var token = JwtBearer.CreateToken(options =>
+		{
+			options.SigningKey = signingKey;
+			options.ExpireAt = DateTime.UtcNow.AddHours(expiryHours);
+			options.User["sub"] = user.Id;
+			options.User["username"] = user.Username;
+		});
+
+		return TypedResults.Ok(new LoginResponse(token, user.Username));
+	}
+}

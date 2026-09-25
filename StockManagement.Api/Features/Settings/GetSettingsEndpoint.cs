@@ -12,7 +12,6 @@ public class GetSettingsEndpoint(ISettingsService settingsService) : EndpointWit
 	public override void Configure()
 	{
 		this.Get("/settings");
-		this.AllowAnonymous();
 	}
 
 	public override async Task<SettingsResponse> ExecuteAsync(CancellationToken cancellationToken)

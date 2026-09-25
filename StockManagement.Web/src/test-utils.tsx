@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { vi } from "vitest";
+import { AuthProvider } from "./auth";
 import { I18nProvider } from "./i18n";
 
 export type Route = { status?: number; body?: unknown };
@@ -26,9 +27,12 @@ export function sentBody(fetchMock: ReturnType<typeof mockApi>, key: string): un
 	return call ? JSON.parse(call[1]!.body as string) : undefined;
 }
 
-export function renderEnglish(ui: ReactElement)
+/** Renders as a logged-in user (seeds `localStorage` before mount); pass `authenticated: false` for the login screen. */
+export function renderEnglish(ui: ReactElement, { authenticated = true }: { authenticated?: boolean } = {})
 {
-	return render(<I18nProvider culture="en-US">{ui}</I18nProvider>);
+	if (authenticated) localStorage.setItem("auth.username", "admin");
+
+	return render(<I18nProvider culture="en-US"><AuthProvider>{ui}</AuthProvider></I18nProvider>);
 }
 
 export const screw = { id: "1", code: "A1", name: "Screw", description: "M6", location: "A-1", amount: 10, price: 5000, manufacturer: "None" };

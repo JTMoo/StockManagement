@@ -19,7 +19,7 @@ public sealed class ListInvoicesEndpointTests
 	public async Task InitializeAsync()
 	{
 		_factory = new();
-		_client = _factory.CreateClient();
+		_client = await _factory.CreateAuthenticatedClientAsync();
 
 		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
 		var customers = _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>();

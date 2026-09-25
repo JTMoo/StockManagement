@@ -1,7 +1,7 @@
 import type { ApiFailure } from "./api";
 import { isTextKey, useI18n, type TextKey } from "./i18n";
 
-export function FailureMessage({ failure, notFound = "unexpectedError" }: { failure?: ApiFailure; notFound?: TextKey })
+export function FailureMessage({ failure, notFound = "unexpectedError", unauthorized = "sessionExpired" }: { failure?: ApiFailure; notFound?: TextKey; unauthorized?: TextKey })
 {
 	const { t } = useI18n();
 	if (!failure) return null;
@@ -16,6 +16,7 @@ export function FailureMessage({ failure, notFound = "unexpectedError" }: { fail
 			case "conflict": return `${t("itemsUnavailable")} ${failure!.unavailableItems.join(", ")}`;
 			case "duplicate": return `${t("itemAlreadyExists")} ${failure!.code}`;
 			case "invalid": return [...new Set(failure!.codes.map(code => t(isTextKey(code) ? code : "invalidInput")))].join(" ") || t("invalidInput");
+			case "unauthorized": return t(unauthorized);
 			default: return t("unexpectedError");
 		}
 	}

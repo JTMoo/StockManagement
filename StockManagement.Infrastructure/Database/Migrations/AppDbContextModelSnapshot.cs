@@ -196,6 +196,28 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("StockManagement.Kernel.Model.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("StockManagement.Kernel.Model.Invoice", b =>
                 {
                     b.HasOne("StockManagement.Kernel.Model.Customer", "Customer")

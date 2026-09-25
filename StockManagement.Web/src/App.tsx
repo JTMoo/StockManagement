@@ -1,6 +1,8 @@
-import { BookUser, Inbox, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
+import { BookUser, Inbox, LogOut, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
+import { useAuth } from "./auth";
+import { LoginPage } from "./features/auth/LoginPage";
 import { CustomerList } from "./features/customers/CustomerList";
 import { InvoiceBrowser } from "./features/invoices/InvoiceBrowser";
 import { SaleForm } from "./features/sales/SaleForm";
@@ -22,6 +24,7 @@ const views: { name: View; icon: LucideIcon }[] = [
 export function App()
 {
 	const { t } = useI18n();
+	const { username, logout } = useAuth();
 	const [view, setView] = useState<View>("stockItems");
 	const [invoice, setInvoice] = useState<Invoice>();
 	const [menuExtended, setMenuExtended] = useState(true);
@@ -31,6 +34,8 @@ export function App()
 		setInvoice(sold);
 		setView("invoices");
 	}
+
+	if (!username) return <LoginPage />;
 
 	return (
 		<div className="shell">
@@ -51,6 +56,9 @@ export function App()
 							<Icon />{menuExtended && <span>{t(name)}</span>}
 						</button>
 					))}
+					<button className="menu-item" aria-label={t("logout")} onClick={logout}>
+						<LogOut />{menuExtended && <span>{t("logout")}</span>}
+					</button>
 				</div>
 			</nav>
 		</div>
