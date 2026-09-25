@@ -35,6 +35,7 @@ export type ApiFailure =
 	| { kind: "invalid"; codes: string[] }
 	| { kind: "conflict"; unavailableItems: string[] }
 	| { kind: "duplicate"; code: string }
+	| { kind: "insufficientStock"; inStock: number }
 	| { kind: "unauthorized" }
 	| { kind: "unexpected" };
 
@@ -96,8 +97,9 @@ async function handleResponse<T>(fetchCall: () => Promise<Response>): Promise<Re
 	}
 	if (response.status === 409)
 	{
-		const body = (await response.json()) as { unavailableItems?: string[]; code?: string };
+		const body = (await response.json()) as { unavailableItems?: string[]; code?: string; inStock?: number };
 		if (body.unavailableItems) return { ok: false, failure: { kind: "conflict", unavailableItems: body.unavailableItems } };
+		if (body.inStock !== undefined) return { ok: false, failure: { kind: "insufficientStock", inStock: body.inStock } };
 		return { ok: false, failure: { kind: "duplicate", code: body.code ?? "" } };
 	}
 	if (response.status === 400) return { ok: false, failure: { kind: "invalid", codes: ((await response.json()) as ProblemDetails).errors?.map(error => error.reason) ?? [] } };
@@ -109,6 +111,8 @@ export const api = {
 	createStockItem: (stockItem: NewStockItem) => send<StockItem>("/stock-items", { method: "POST", body: JSON.stringify(stockItem) }),
 	updateStockItem: (stockItem: StockItem) => send<StockItem>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "PUT", body: JSON.stringify(stockItem) }),
 	deleteStockItem: (stockItem: StockItem) => send<void>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "DELETE" }),
+	checkInStockItem: (id: string, amount: number, reason: string) => send<StockItem>(`/stock-items/${encodeURIComponent(id)}/check-in`, { method: "POST", body: JSON.stringify({ amount, reason }) }),
+	checkOutStockItem: (id: string, amount: number, reason: string) => send<StockItem>(`/stock-items/${encodeURIComponent(id)}/check-out`, { method: "POST", body: JSON.stringify({ amount, reason }) }),
 	importStockItems: (file: File) => sendForm<StockItemImportResult>("/stock-items/import", file),
 	listCustomers: (signal?: AbortSignal) => send<Customer[]>("/customers", { signal }),
 	createCustomer: (customer: NewCustomer) => send<Customer>("/customers", { method: "POST", body: JSON.stringify(customer) }),

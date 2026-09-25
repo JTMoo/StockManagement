@@ -176,4 +176,40 @@ describe("StockItemList", () =>
 		expect(await screen.findByText("1")).toBeInTheDocument();
 		expect(fetchMock.mock.calls.filter(([url, init]) => `${init?.method ?? "GET"} ${url}` === "GET /api/stock-items")).toHaveLength(2);
 	});
+
+	it("CheckIn_Valid_PostsAndUpdatesAmount", async () =>
+	{
+		// Arrange
+		const fetchMock = mockApi({ "GET /api/stock-items": { body: [screw] }, "POST /api/stock-items/1/check-in": { body: { ...screw, amount: 15 } } });
+		renderEnglish(<StockItemList />);
+		await screen.findByRole("cell", { name: "Screw" });
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Check In/Out" }));
+		const amountField = screen.getAllByLabelText("Amount")[1];
+		await userEvent.clear(amountField);
+		await userEvent.type(amountField, "5");
+		await userEvent.type(screen.getByLabelText("Reason"), "Delivery");
+		await userEvent.click(screen.getByRole("button", { name: "Check In" }));
+
+		// Assert
+		expect(await screen.findByRole("cell", { name: "15" })).toBeInTheDocument();
+		expect(sentBody(fetchMock, "POST /api/stock-items/1/check-in")).toEqual({ amount: 5, reason: "Delivery" });
+	});
+
+	it("CheckOut_InsufficientStock_ShowsError", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items": { body: [screw] }, "POST /api/stock-items/1/check-out": { status: 409, body: { inStock: 2 } } });
+		renderEnglish(<StockItemList />);
+		await screen.findByRole("cell", { name: "Screw" });
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Check In/Out" }));
+		await userEvent.type(screen.getByLabelText("Reason"), "Damaged");
+		await userEvent.click(screen.getByRole("button", { name: "Check Out" }));
+
+		// Assert
+		expect(await screen.findByRole("alert")).toHaveTextContent("Not enough in stock, only available: 2");
+	});
 });

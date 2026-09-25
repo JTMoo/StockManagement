@@ -4,6 +4,7 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { StockCheckForm } from "./StockCheckForm";
 import { StockItemForm } from "./StockItemForm";
 import { StockItemImport } from "./StockItemImport";
 
@@ -13,6 +14,7 @@ export function StockItemList()
 	const { data: stockItems = [], setData, failure } = useLoad(api.listStockItems);
 	const [search, setSearch] = useState("");
 	const [editing, setEditing] = useState<StockItem>();
+	const [checking, setChecking] = useState<StockItem>();
 	const [showImport, setShowImport] = useState(false);
 
 	async function onImported()
@@ -30,6 +32,12 @@ export function StockItemList()
 		setEditing(undefined);
 	}
 
+	function onChecked(stockItem: StockItem)
+	{
+		setData(stockItems.map(item => item.id === stockItem.id ? stockItem : item));
+		setChecking(undefined);
+	}
+
 	async function onDelete(stockItem: StockItem)
 	{
 		if (!window.confirm(t("itemDeletionPrompt").replace("{0}", stockItem.name))) return;
@@ -38,6 +46,7 @@ export function StockItemList()
 
 		setData(stockItems.filter(item => item.id !== stockItem.id));
 		if (editing?.id === stockItem.id) setEditing(undefined);
+		if (checking?.id === stockItem.id) setChecking(undefined);
 	}
 
 	return (
@@ -46,6 +55,7 @@ export function StockItemList()
 			<button type="button" className="quiet" aria-pressed={showImport} onClick={() => setShowImport(!showImport)}>{t("excelImport")}</button>
 		</>}>
 			<StockItemForm editing={editing} onSaved={onSaved} onCancel={() => setEditing(undefined)} />
+			{checking && <StockCheckForm stockItem={checking} onChecked={onChecked} onCancel={() => setChecking(undefined)} />}
 			{showImport && <StockItemImport onImported={onImported} />}
 			<FailureMessage failure={failure} />
 			<table>
@@ -60,6 +70,7 @@ export function StockItemList()
 							<td>{item.manufacturer}</td><td>{item.location}</td>
 							<td className="row-actions">
 								<button type="button" className="quiet" onClick={() => setEditing(item)}>{t("edit")}</button>
+								<button type="button" className="quiet" onClick={() => setChecking(item)}>{t("checkStock")}</button>
 								<button type="button" className="quiet" onClick={() => onDelete(item)}>{t("deleteItem")}</button>
 							</td>
 						</tr>
