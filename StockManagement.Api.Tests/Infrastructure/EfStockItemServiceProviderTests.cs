@@ -125,6 +125,61 @@ public sealed class EfStockItemServiceProviderTests
 		Assert.IsNull(await this.UseAsync(provider => provider.GetStockItemAsync("A1")));
 	}
 
+	[TestMethod]
+	public async Task CheckInStockItemAsync_Valid_IncreasesAmountAndRecordsReasonedTransaction()
+	{
+		// Arrange
+		await this.UseAsync(provider => provider.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10)));
+		var stored = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+
+		// Act
+		await this.UseAsync(provider => provider.CheckInStockItemAsync(stored, 5, "Delivery"));
+
+		// Assert
+		var updated = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+		Assert.AreEqual(15, updated.Amount);
+		var last = await this.UseDbAsync(db => db.Transactions.OrderBy(t => t.Time).LastAsync());
+		Assert.AreEqual(5, last.Amount);
+		Assert.AreEqual("Delivery", last.Reason);
+	}
+
+	[TestMethod]
+	public async Task TryCheckOutStockItemAsync_EnoughStock_DecreasesAmountRecordsTransactionAndReturnsTrue()
+	{
+		// Arrange
+		await this.UseAsync(provider => provider.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10)));
+		var stored = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+
+		// Act
+		var result = await this.UseAsync(provider => provider.TryCheckOutStockItemAsync(stored, 4, "Damaged"));
+
+		// Assert
+		Assert.IsTrue(result);
+		var updated = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+		Assert.AreEqual(6, updated.Amount);
+		var last = await this.UseDbAsync(db => db.Transactions.OrderBy(t => t.Time).LastAsync());
+		Assert.AreEqual(-4, last.Amount);
+		Assert.AreEqual("Damaged", last.Reason);
+	}
+
+	[TestMethod]
+	public async Task TryCheckOutStockItemAsync_InsufficientStock_ReturnsFalseAndWritesNothing()
+	{
+		// Arrange
+		await this.UseAsync(provider => provider.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 3)));
+		var stored = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+
+		// Act
+		var result = await this.UseAsync(provider => provider.TryCheckOutStockItemAsync(stored, 4, "Damaged"));
+
+		// Assert
+		Assert.IsFalse(result);
+		var updated = await this.UseAsync(provider => provider.GetStockItemAsync("A1"));
+		Assert.AreEqual(3, updated.Amount);
+		var transactionCount = await this.UseDbAsync(db => db.Transactions.CountAsync());
+		Assert.AreEqual(1, transactionCount); // only the AddStockItemAsync transaction
+	}
+
 
 	private async Task<T> UseAsync<T>(Func<IStockItemServiceProvider, Task<T>> action)
 	{

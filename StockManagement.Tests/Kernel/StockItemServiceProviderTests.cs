@@ -73,4 +73,63 @@ public sealed class StockItemServiceProviderTests
 		// Assert
 		_transactions.Verify(c => c.InsertOneAsync(It.Is<Transaction>(t => t.Amount == -2), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
 	}
+
+	[TestMethod]
+	public async Task CheckInStockItemAsync_Valid_ReplacesItemAndRecordsReasonedTransaction()
+	{
+		// Arrange
+		_transactions
+			.Setup(c => c.InsertOneAsync(It.IsAny<Transaction>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
+			.Returns(Task.CompletedTask);
+		var provider = new StockItemServiceProvider(_database.Object);
+		var stockItem = new StockItem { Code = "A1", Amount = 5 };
+
+		// Act
+		await provider.CheckInStockItemAsync(stockItem, 3, "Delivery");
+
+		// Assert
+		Assert.AreEqual(8, stockItem.Amount);
+		_stockItems.Verify(c => c.ReplaceOneAsync(It.IsAny<FilterDefinition<StockItem>>(), It.Is<StockItem>(item => item.Amount == 8), It.IsAny<ReplaceOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+		_transactions.Verify(c => c.InsertOneAsync(It.Is<Transaction>(t => t.Amount == 3 && t.Reason == "Delivery"), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task TryCheckOutStockItemAsync_EnoughStock_ReplacesItemRecordsTransactionAndReturnsTrue()
+	{
+		// Arrange
+		var stored = new StockItem { Code = "A1", Amount = 5 };
+		_database.Setup(d => d.GetOneAsync(It.IsAny<Expression<Func<StockItem, bool>>>())).ReturnsAsync(stored);
+		_transactions
+			.Setup(c => c.InsertOneAsync(It.IsAny<Transaction>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()))
+			.Returns(Task.CompletedTask);
+		var provider = new StockItemServiceProvider(_database.Object);
+		var stockItem = new StockItem { Code = "A1", Amount = 5 };
+
+		// Act
+		var result = await provider.TryCheckOutStockItemAsync(stockItem, 2, "Damaged");
+
+		// Assert
+		Assert.IsTrue(result);
+		Assert.AreEqual(3, stockItem.Amount);
+		_transactions.Verify(c => c.InsertOneAsync(It.Is<Transaction>(t => t.Amount == -2 && t.Reason == "Damaged"), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task TryCheckOutStockItemAsync_InsufficientStock_ReturnsFalseAndWritesNothing()
+	{
+		// Arrange
+		var stored = new StockItem { Code = "A1", Amount = 1 };
+		_database.Setup(d => d.GetOneAsync(It.IsAny<Expression<Func<StockItem, bool>>>())).ReturnsAsync(stored);
+		var provider = new StockItemServiceProvider(_database.Object);
+		var stockItem = new StockItem { Code = "A1", Amount = 1 };
+
+		// Act
+		var result = await provider.TryCheckOutStockItemAsync(stockItem, 2, "Damaged");
+
+		// Assert
+		Assert.IsFalse(result);
+		Assert.AreEqual(1, stockItem.Amount);
+		_stockItems.Verify(c => c.ReplaceOneAsync(It.IsAny<FilterDefinition<StockItem>>(), It.IsAny<StockItem>(), It.IsAny<ReplaceOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+		_transactions.Verify(c => c.InsertOneAsync(It.IsAny<Transaction>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+	}
 }

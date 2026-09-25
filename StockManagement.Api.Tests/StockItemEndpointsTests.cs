@@ -166,4 +166,82 @@ public sealed class StockItemEndpointsTests
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
 	}
+
+	[TestMethod]
+	public async Task CheckInStockItem_Valid_Returns200AndIncreasesAmount()
+	{
+		// Arrange
+		var id = (await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>()).Id;
+
+		// Act
+		var response = await _client.PostAsJsonAsync($"/api/stock-items/{id}/check-in", new { Id = id, Amount = 5, Reason = "Delivery" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var stockItem = await response.Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(15, stockItem.Amount);
+	}
+
+	[TestMethod]
+	public async Task CheckInStockItem_EmptyReason_Returns400()
+	{
+		// Arrange
+		var id = (await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>()).Id;
+
+		// Act
+		var response = await _client.PostAsJsonAsync($"/api/stock-items/{id}/check-in", new { Id = id, Amount = 5, Reason = "" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task CheckInStockItem_UnknownId_Returns404()
+	{
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/stock-items/unknown/check-in", new { Id = "unknown", Amount = 5, Reason = "Delivery" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task CheckOutStockItem_EnoughStock_Returns200AndDecreasesAmount()
+	{
+		// Arrange
+		var id = (await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>()).Id;
+
+		// Act
+		var response = await _client.PostAsJsonAsync($"/api/stock-items/{id}/check-out", new { Id = id, Amount = 4, Reason = "Damaged" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var stockItem = await response.Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(6, stockItem.Amount);
+	}
+
+	[TestMethod]
+	public async Task CheckOutStockItem_InsufficientStock_Returns409()
+	{
+		// Arrange
+		var id = (await (await _client.GetAsync("/api/stock-items/B2")).Content.ReadAsAsync<StockItemResponse>()).Id;
+
+		// Act
+		var response = await _client.PostAsJsonAsync($"/api/stock-items/{id}/check-out", new { Id = id, Amount = 4, Reason = "Damaged" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Conflict, response.StatusCode);
+		var body = await response.Content.ReadAsAsync<InsufficientStockResponse>();
+		Assert.AreEqual(3, body.InStock);
+	}
+
+	[TestMethod]
+	public async Task CheckOutStockItem_UnknownId_Returns404()
+	{
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/stock-items/unknown/check-out", new { Id = "unknown", Amount = 1, Reason = "Damaged" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+	}
 }

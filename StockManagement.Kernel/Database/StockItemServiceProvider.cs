@@ -78,4 +78,38 @@ public class StockItemServiceProvider(IDatabase database) : IStockItemServicePro
 		var collection = _database.ConnectToMongo<Transaction>();
 		return collection.InsertOneAsync(changeAmountTransaction);
 	}
+
+	/// <remarks>Writes the item and the reasoned <see cref="Transaction"/> directly, bypassing <see cref="UpdateStockItemAsync"/>'s own (unreasoned) auto-transaction.</remarks>
+	public async Task CheckInStockItemAsync(StockItem stockItem, int amount, string reason)
+	{
+		stockItem.Amount += amount;
+		await this.ReplaceStockItemAsync(stockItem);
+		await this.SaveTransactionAsync(stockItem, amount, reason);
+	}
+
+	/// <remarks>No conditional update available on this (WPF-only) Mongo path; re-reads the stored amount right before writing instead.</remarks>
+	public async Task<bool> TryCheckOutStockItemAsync(StockItem stockItem, int amount, string reason)
+	{
+		var stored = await _database.GetOneAsync<StockItem>(item => item.Id == stockItem.Id);
+		if (stored is null || stored.Amount < amount) return false;
+
+		stockItem.Amount = stored.Amount - amount;
+		await this.ReplaceStockItemAsync(stockItem);
+		await this.SaveTransactionAsync(stockItem, -amount, reason);
+		return true;
+	}
+
+	private Task ReplaceStockItemAsync(StockItem stockItem)
+	{
+		var collection = _database.ConnectToMongo<StockItem>();
+		var filter = Builders<StockItem>.Filter.Eq("Id", stockItem.Id);
+		return collection.ReplaceOneAsync(filter, stockItem, new ReplaceOptions { IsUpsert = true });
+	}
+
+	private Task SaveTransactionAsync(StockItem stockItem, int amount, string reason)
+	{
+		var transaction = new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount, reason);
+		var collection = _database.ConnectToMongo<Transaction>();
+		return collection.InsertOneAsync(transaction);
+	}
 }
