@@ -8,6 +8,8 @@ using StockManagement.Auth.Core;
 using StockManagement.Auth.Core.Contracts;
 using StockManagement.Customers.Core;
 using StockManagement.Customers.Core.Contracts;
+using StockManagement.Import.Core;
+using StockManagement.Import.Core.Contracts;
 using StockManagement.Infrastructure;
 using StockManagement.Infrastructure.Database;
 using StockManagement.Sales.Core;
@@ -28,6 +30,7 @@ builder.Services
 	.AddSalesCore()
 	.AddCustomersCore()
 	.AddSettingsCore()
+	.AddImportCore()
 	.AddAuthCore()
 	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
@@ -36,6 +39,7 @@ builder.Services
 MakeScoped<ISaleService>(builder.Services);
 MakeScoped<ICustomerService>(builder.Services);
 MakeScoped<ISettingsService>(builder.Services);
+MakeScoped<IStockItemImportService>(builder.Services);
 MakeScoped<IAuthService>(builder.Services);
 
 var app = builder.Build();

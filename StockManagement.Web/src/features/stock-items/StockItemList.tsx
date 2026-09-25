@@ -5,6 +5,7 @@ import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
 import { StockItemForm } from "./StockItemForm";
+import { StockItemImport } from "./StockItemImport";
 
 export function StockItemList()
 {
@@ -12,6 +13,13 @@ export function StockItemList()
 	const { data: stockItems = [], setData, failure } = useLoad(api.listStockItems);
 	const [search, setSearch] = useState("");
 	const [editing, setEditing] = useState<StockItem>();
+	const [showImport, setShowImport] = useState(false);
+
+	async function onImported()
+	{
+		const result = await api.listStockItems();
+		if (result.ok) setData(result.value);
+	}
 
 	const term = search.trim().toLowerCase();
 	const visible = stockItems.filter(item => [item.code, item.name, item.description, item.location].some(value => value.toLowerCase().includes(term)));
@@ -33,8 +41,12 @@ export function StockItemList()
 	}
 
 	return (
-		<Page title={t("stockItems")} toolbar={<input type="search" aria-label={t("search")} placeholder={t("searchBoxDefault")} value={search} onChange={event => setSearch(event.target.value)} />}>
+		<Page title={t("stockItems")} toolbar={<>
+			<input type="search" aria-label={t("search")} placeholder={t("searchBoxDefault")} value={search} onChange={event => setSearch(event.target.value)} />
+			<button type="button" className="quiet" aria-pressed={showImport} onClick={() => setShowImport(!showImport)}>{t("excelImport")}</button>
+		</>}>
 			<StockItemForm editing={editing} onSaved={onSaved} onCancel={() => setEditing(undefined)} />
+			{showImport && <StockItemImport onImported={onImported} />}
 			<FailureMessage failure={failure} />
 			<table>
 				<thead>
