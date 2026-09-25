@@ -141,4 +141,39 @@ describe("StockItemList", () =>
 		// Assert
 		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
 	});
+
+	it("ToggleExcelImport_Click_ShowsAndHidesImportPanel", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items": { body: [] } });
+		renderEnglish(<StockItemList />);
+
+		// Act + Assert
+		await userEvent.click(screen.getByRole("button", { name: "Excel Import" }));
+		expect(screen.getByLabelText("Choose file")).toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("button", { name: "Excel Import" }));
+		expect(screen.queryByLabelText("Choose file")).not.toBeInTheDocument();
+	});
+
+	it("Import_Successful_RefreshesList", async () =>
+	{
+		// Arrange
+		const fetchMock = mockApi({
+			"GET /api/stock-items": { body: [] },
+			"POST /api/stock-items/import": { body: { sheetName: "Stock", imported: 1, duplicates: 0, errors: [] } }
+		});
+		renderEnglish(<StockItemList />);
+		await userEvent.click(screen.getByRole("button", { name: "Excel Import" }));
+
+		const file = new File(["dummy"], "stock.xlsx");
+		await userEvent.upload(screen.getByLabelText("Choose file"), file);
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Import" }));
+
+		// Assert
+		expect(await screen.findByText("1")).toBeInTheDocument();
+		expect(fetchMock.mock.calls.filter(([url, init]) => `${init?.method ?? "GET"} ${url}` === "GET /api/stock-items")).toHaveLength(2);
+	});
 });

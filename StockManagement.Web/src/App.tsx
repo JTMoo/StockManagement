@@ -1,20 +1,18 @@
-import { BookUser, FileSpreadsheet, Inbox, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
+import { BookUser, Inbox, Menu, Settings, ShoppingCart, Wrench, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { CustomerList } from "./features/customers/CustomerList";
 import { InvoiceBrowser } from "./features/invoices/InvoiceBrowser";
 import { SaleForm } from "./features/sales/SaleForm";
 import { SettingsPage } from "./features/settings/SettingsPage";
-import { StockItemImport } from "./features/stock-items/StockItemImport";
 import { StockItemList } from "./features/stock-items/StockItemList";
 import { useI18n } from "./i18n";
 
-type View = "stockItems" | "excelImport" | "clients" | "newSale" | "invoices" | "settings";
+type View = "stockItems" | "clients" | "newSale" | "invoices" | "settings";
 
 // Same order and icons as the WPF menu (FontAwesome Wrench, AddressBook, Inbox)
 const views: { name: View; icon: LucideIcon }[] = [
 	{ name: "stockItems", icon: Wrench },
-	{ name: "excelImport", icon: FileSpreadsheet },
 	{ name: "clients", icon: BookUser },
 	{ name: "newSale", icon: ShoppingCart },
 	{ name: "invoices", icon: Inbox },
@@ -38,7 +36,6 @@ export function App()
 		<div className="shell">
 			<main>
 				{view === "stockItems" && <StockItemList />}
-				{view === "excelImport" && <StockItemImport />}
 				{view === "clients" && <CustomerList />}
 				{view === "newSale" && <SaleForm onSold={onSold} />}
 				{view === "invoices" && <InvoiceBrowser invoice={invoice} />}

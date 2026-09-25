@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { api, type ApiFailure, type StockItemImportResult } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
-import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 
-export function StockItemImport()
+/** Embedded in StockItemList (toggled by its "Excel Import" toolbar button), not its own nav entry. */
+export function StockItemImport({ onImported }: { onImported?: () => void })
 {
 	const { t } = useI18n();
 	const fileInput = useRef<HTMLInputElement>(null);
@@ -26,17 +26,18 @@ export function StockItemImport()
 		setResult(response.value);
 		setFile(undefined);
 		if (fileInput.current) fileInput.current.value = "";
+		onImported?.();
 	}
 
 	return (
-		<Page title={t("excelImport")}>
-			<div className="panel form-actions">
+		<div className="panel">
+			<div className="form-actions">
 				<input ref={fileInput} type="file" accept=".xlsx" aria-label={t("chooseFile")} onChange={event => setFile(event.target.files?.[0])} />
 				<button type="button" disabled={!file || busy} onClick={onImport}>{t("import")}</button>
 			</div>
 			<FailureMessage failure={failure} />
 			{result && (
-				<div className="panel">
+				<>
 					<div className="form-grid">
 						<label>{t("imported")}<output>{result.imported}</output></label>
 						<label>{t("duplicatesSkipped")}<output>{result.duplicates}</output></label>
@@ -49,8 +50,8 @@ export function StockItemImport()
 							</tbody>
 						</table>
 					)}
-				</div>
+				</>
 			)}
-		</Page>
+		</div>
 	);
 }
