@@ -6,6 +6,11 @@ namespace StockManagement.Kernel.Model;
 
 public class Customer : BaseDocument
 {
+	/// <summary>
+	/// First id assigned when none are stored yet
+	/// </summary>
+	public const int FirstCustomerId = 1001;
+
 	private int customerId = -1;
 	private string name = string.Empty;
 	private string lastname = string.Empty;

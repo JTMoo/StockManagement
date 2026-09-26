@@ -19,6 +19,11 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 		return _db.Customers.SingleOrDefaultAsync(customer => customer.CustomerId == customerId)!;
 	}
 
+	public Task<Customer> GetCustomerByIdAsync(string id)
+	{
+		return _db.Customers.SingleOrDefaultAsync(customer => customer.Id == id)!;
+	}
+
 	public async Task<IEnumerable<Customer>> GetCustomersAsync()
 	{
 		return await _db.Customers.ToListAsync();
@@ -28,6 +33,15 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 	public async Task AddCustomerAsync(Customer customer)
 	{
 		_db.Customers.Add(customer);
+		await this.SaveChangesAsync();
+	}
+
+	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
+	public async Task AddManyCustomersAsync(IList<Customer> customers)
+	{
+		if (customers is not { Count: > 0 }) return;
+
+		_db.Customers.AddRange(customers);
 		await this.SaveChangesAsync();
 	}
 

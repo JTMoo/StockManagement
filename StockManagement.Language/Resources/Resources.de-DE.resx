@@ -147,6 +147,15 @@
   <data name="row" xml:space="preserve">
     <value>Zeile</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="commit" xml:space="preserve">
+    <value>Übernehmen</value>
+  </data>
+  <data name="undo" xml:space="preserve">
+    <value>Rückgängig</value>
+  </data>
   <data name="search" xml:space="preserve">
     <value>Suche:</value>
   </data>
@@ -533,5 +542,20 @@
   </data>
   <data name="permUsersManage" xml:space="preserve">
     <value>Benutzer verwalten</value>
+  </data>
+  <data name="checkStock" xml:space="preserve">
+    <value>Ein-/Ausbuchen</value>
+  </data>
+  <data name="checkIn" xml:space="preserve">
+    <value>Einbuchen</value>
+  </data>
+  <data name="checkOut" xml:space="preserve">
+    <value>Ausbuchen</value>
+  </data>
+  <data name="reason" xml:space="preserve">
+    <value>Grund</value>
+  </data>
+  <data name="insufficientStock" xml:space="preserve">
+    <value>Nicht genug auf Lager, verfügbar:</value>
   </data>
 </root>

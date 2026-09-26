@@ -17,6 +17,9 @@ public static class ServiceCollectionExtensions
 	{
 		services.AddSingleton<IStockItemImportService, StockItemImportService>();
 		services.AddSingleton<IExcelStockItemParser, ExcelStockItemParser>();
+		services.AddSingleton<IImportTargetHandler, StockItemImportTargetHandler>();
+		services.AddSingleton<IImportTargetHandler, CustomerImportTargetHandler>();
+		services.AddSingleton<IImportBatchService, ImportBatchService>();
 		return services;
 	}
 }

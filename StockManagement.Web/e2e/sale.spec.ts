@@ -46,6 +46,21 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 	await page.getByRole("button", { name: "Stock items" }).click();
 	await expect(page.getByRole("row", { name: /Screw A1/ })).toContainText("8");
 
+	const screwRow = page.getByRole("row", { name: /Screw A1/ });
+	await screwRow.getByRole("button", { name: "Check In/Out" }).click();
+	const checkAmount = page.getByLabel("Amount").last();
+	await checkAmount.fill("5");
+	await page.getByLabel("Reason").fill("Restock");
+	await shot(page, "5-check-in");
+	await page.getByRole("button", { name: "Check In", exact: true }).click();
+	await expect(screwRow).toContainText("13");
+
+	await screwRow.getByRole("button", { name: "Check In/Out" }).click();
+	await checkAmount.fill("2");
+	await page.getByLabel("Reason").fill("Damaged");
+	await page.getByRole("button", { name: "Check Out", exact: true }).click();
+	await expect(screwRow).toContainText("11");
+
 	await page.getByRole("button", { name: "Settings" }).click();
 	await shot(page, "5-settings");
 	await page.locator("main").getByLabel("Select language:").selectOption("es-PY");

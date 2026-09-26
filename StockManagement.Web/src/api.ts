@@ -26,6 +26,26 @@ export type Settings = { language: Language };
 
 export type StockItemImportRowError = { row: number; message: string };
 
+export type ImportTarget = "StockItems" | "Customers";
+
+export type ImportRowStatus = "Ready" | "Duplicate" | "Error";
+
+export type ImportBatchStatus = "Previewed" | "Committed" | "Undone";
+
+export type ImportBatchRow = { row: number; status: ImportRowStatus; message?: string; fields?: Record<string, unknown> };
+
+export type ImportBatch = {
+	id: string;
+	target: ImportTarget;
+	fileName: string;
+	sheetName: string;
+	status: ImportBatchStatus;
+	readyCount: number;
+	duplicateCount: number;
+	errorCount: number;
+	rows: ImportBatchRow[];
+};
+
 export type StockItemImportResult = { sheetName: string; imported: number; duplicates: number; errors: StockItemImportRowError[] };
 
 export type UserRole = "Standard" | "Admin";
@@ -50,6 +70,8 @@ export type ApiFailure =
 	| { kind: "invalid"; codes: string[] }
 	| { kind: "conflict"; unavailableItems: string[] }
 	| { kind: "duplicate"; code: string }
+	| { kind: "insufficientStock"; inStock: number }
+	| { kind: "invalidState"; reason: string }
 	| { kind: "cannotDeleteSelf" }
 	| { kind: "unauthorized" }
 	| { kind: "unexpected" };
@@ -84,9 +106,10 @@ async function send<T>(path: string, init?: RequestInit): Promise<Result<T>>
 	return handleResponse(() => fetch(`/api${path}`, { ...init, headers }));
 }
 
-async function sendForm<T>(path: string, file: File): Promise<Result<T>>
+async function sendForm<T>(path: string, file: File, fields?: Record<string, string>): Promise<Result<T>>
 {
 	const body = new FormData();
+	for (const [key, value] of Object.entries(fields ?? {})) body.append(key, value);
 	body.append("File", file);
 	return handleResponse(() => fetch(`/api${path}`, { method: "POST", body, headers: authHeaders() }));
 }
@@ -112,9 +135,11 @@ async function handleResponse<T>(fetchCall: () => Promise<Response>): Promise<Re
 	}
 	if (response.status === 409)
 	{
-		const body = (await response.json()) as { unavailableItems?: string[]; code?: string };
+		const body = (await response.json()) as { unavailableItems?: string[]; code?: string; inStock?: number; reason?: string };
 		if (body.unavailableItems) return { ok: false, failure: { kind: "conflict", unavailableItems: body.unavailableItems } };
 		if (body.code) return { ok: false, failure: { kind: "duplicate", code: body.code } };
+		if (body.inStock !== undefined) return { ok: false, failure: { kind: "insufficientStock", inStock: body.inStock } };
+		if (body.reason !== undefined) return { ok: false, failure: { kind: "invalidState", reason: body.reason } };
 		return { ok: false, failure: { kind: "cannotDeleteSelf" } };
 	}
 	if (response.status === 400) return { ok: false, failure: { kind: "invalid", codes: ((await response.json()) as ProblemDetails).errors?.map(error => error.reason) ?? [] } };
@@ -126,7 +151,12 @@ export const api = {
 	createStockItem: (stockItem: NewStockItem) => send<StockItem>("/stock-items", { method: "POST", body: JSON.stringify(stockItem) }),
 	updateStockItem: (stockItem: StockItem) => send<StockItem>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "PUT", body: JSON.stringify(stockItem) }),
 	deleteStockItem: (stockItem: StockItem) => send<void>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "DELETE" }),
+	checkInStockItem: (id: string, amount: number, reason: string) => send<StockItem>(`/stock-items/${encodeURIComponent(id)}/check-in`, { method: "POST", body: JSON.stringify({ amount, reason }) }),
+	checkOutStockItem: (id: string, amount: number, reason: string) => send<StockItem>(`/stock-items/${encodeURIComponent(id)}/check-out`, { method: "POST", body: JSON.stringify({ amount, reason }) }),
 	importStockItems: (file: File) => sendForm<StockItemImportResult>("/stock-items/import", file),
+	previewImport: (target: ImportTarget, file: File) => sendForm<ImportBatch>("/import/batches", file, { Target: target }),
+	commitImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/commit`, { method: "POST" }),
+	undoImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/undo`, { method: "POST" }),
 	listCustomers: (signal?: AbortSignal) => send<Customer[]>("/customers", { signal }),
 	createCustomer: (customer: NewCustomer) => send<Customer>("/customers", { method: "POST", body: JSON.stringify(customer) }),
 	updateCustomer: (customer: Customer) => send<Customer>(`/customers/${customer.customerId}`, { method: "PUT", body: JSON.stringify(customer) }),
