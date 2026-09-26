@@ -1,4 +1,4 @@
-import { BookUser, Inbox, LogOut, Menu, Settings, ShoppingCart, Users, Wrench, type LucideIcon } from "lucide-react";
+import { Banknote, BookUser, Inbox, LogOut, Menu, Settings, ShoppingCart, Users, Wrench, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { useAuth } from "./auth";
@@ -6,12 +6,13 @@ import { LoginPage } from "./features/auth/LoginPage";
 import { CustomerList } from "./features/customers/CustomerList";
 import { InvoiceBrowser } from "./features/invoices/InvoiceBrowser";
 import { SaleForm } from "./features/sales/SaleForm";
+import { CompanySettingsPage } from "./features/settings/CompanySettingsPage";
 import { SettingsPage } from "./features/settings/SettingsPage";
 import { StockItemList } from "./features/stock-items/StockItemList";
 import { UserList } from "./features/users/UserList";
 import { useI18n } from "./i18n";
 
-type View = "stockItems" | "clients" | "newSale" | "invoices" | "settings" | "users";
+type View = "stockItems" | "clients" | "newSale" | "invoices" | "companySettings" | "settings" | "users";
 
 // Same order and icons as the WPF menu (FontAwesome Wrench, AddressBook, Inbox)
 const views: { name: View; icon: LucideIcon }[] = [
@@ -19,6 +20,7 @@ const views: { name: View; icon: LucideIcon }[] = [
 	{ name: "clients", icon: BookUser },
 	{ name: "newSale", icon: ShoppingCart },
 	{ name: "invoices", icon: Inbox },
+	{ name: "companySettings", icon: Banknote },
 	{ name: "settings", icon: Settings }
 ];
 
@@ -48,6 +50,7 @@ export function App()
 				{view === "clients" && <CustomerList />}
 				{view === "newSale" && <SaleForm onSold={onSold} />}
 				{view === "invoices" && <InvoiceBrowser invoice={invoice} />}
+				{view === "companySettings" && <CompanySettingsPage />}
 				{view === "settings" && <SettingsPage />}
 				{view === "users" && <UserList />}
 			</main>

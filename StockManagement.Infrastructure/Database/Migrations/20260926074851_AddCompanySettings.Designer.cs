@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockManagement.Infrastructure.Database;
@@ -11,9 +12,11 @@ using StockManagement.Infrastructure.Database;
 namespace StockManagement.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260926074851_AddCompanySettings")]
+    partial class AddCompanySettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,40 +110,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.ImportBatch", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("CommittedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SheetName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Target")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UndoneAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ImportBatches");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.Invoice", b =>
@@ -264,32 +233,9 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string[]>("Permissions")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -301,46 +247,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.ImportBatch", b =>
-                {
-                    b.OwnsMany("StockManagement.Kernel.Model.ImportBatchRow", "Rows", b1 =>
-                        {
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("ErrorMessage")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("ImportBatchId")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("ImportedEntityId")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("PayloadJson")
-                                .HasColumnType("text");
-
-                            b1.Property<int>("RowNumber")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("Status")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("ImportBatchId");
-
-                            b1.ToTable("ImportBatchRows", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ImportBatchId");
-                        });
-
-                    b.Navigation("Rows");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.Invoice", b =>

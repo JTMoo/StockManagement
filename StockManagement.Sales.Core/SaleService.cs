@@ -3,14 +3,16 @@ using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 using StockManagement.Kernel.Util;
 using StockManagement.Sales.Core.Contracts;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Sales.Core;
 
 
-internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, IInvoiceServiceProvider invoiceServiceProvider) : ISaleService
+internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, ISettingsService settingsService) : ISaleService
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider = invoiceServiceProvider;
+	private readonly ISettingsService _settingsService = settingsService;
 
 
 	public long CalculateTotal(IEnumerable<ShoppingCartItem> items)
@@ -18,19 +20,22 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		return InvoiceCalculator.CalculateTotal((items ?? []).Select(ToSaleLine));
 	}
 
-	public Invoice CreateInvoice(Customer customer, IEnumerable<ShoppingCartItem> items, DateTime date)
+	public async Task<Invoice> CreateInvoiceAsync(Customer customer, IEnumerable<ShoppingCartItem> items, DateTime date, CancellationToken cancellationToken = default)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
 		List<ShoppingCartItem> cartItems = [.. items ?? []];
 		var total = this.CalculateTotal(cartItems);
+		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
 
 		return new Invoice()
 		{
 			Customer = customer,
 			Date = date,
-			ExpirationDate = InvoiceCalculator.CalculateExpirationDate(date),
+			ExpirationDate = InvoiceCalculator.CalculateExpirationDate(date, companySettings.PaymentTermInDays),
 			Items = cartItems,
 			Total = total,
-			Tax = InvoiceCalculator.CalculateTax(total)
+			Tax = InvoiceCalculator.CalculateTax(total, companySettings.VatRatePercent)
 		};
 	}
 
@@ -40,7 +45,8 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var invoices = await _invoiceServiceProvider.GetInvoicesAsync() ?? [];
-		return SequenceNumber.Next(invoices.Select(invoice => invoice.Number), InvoiceCalculator.FirstInvoiceNumber);
+		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+		return SequenceNumber.Next(invoices.Select(invoice => invoice.Number), companySettings.FirstInvoiceNumber);
 	}
 
 	/// <remarks>
@@ -76,7 +82,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		if (shortages.Count > 0) return new SaleResult(shortages.Select(shortage => shortage.Name).ToList());
 
 		var cartItems = items.Select(item => new ShoppingCartItem(currentStock[item.Code]) { Amount = item.Amount });
-		var invoice = this.CreateInvoice(customer, cartItems, date);
+		var invoice = await this.CreateInvoiceAsync(customer, cartItems, date, cancellationToken);
 		invoice.SaleCondition = saleCondition;
 		invoice.Number = await this.GetNextInvoiceNumberAsync(cancellationToken);
 

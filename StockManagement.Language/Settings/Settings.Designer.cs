@@ -122,5 +122,77 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("spanish", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Company settings.
+        /// </summary>
+        public static string companySettings {
+            get {
+                return ResourceManager.GetString("companySettings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Company name.
+        /// </summary>
+        public static string companyName {
+            get {
+                return ResourceManager.GetString("companyName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Tax ID.
+        /// </summary>
+        public static string taxId {
+            get {
+                return ResourceManager.GetString("taxId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        public static string currency {
+            get {
+                return ResourceManager.GetString("currency", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to VAT rate (%).
+        /// </summary>
+        public static string vatRate {
+            get {
+                return ResourceManager.GetString("vatRate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Payment term (days).
+        /// </summary>
+        public static string paymentTermInDays {
+            get {
+                return ResourceManager.GetString("paymentTermInDays", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to First invoice number.
+        /// </summary>
+        public static string firstInvoiceNumber {
+            get {
+                return ResourceManager.GetString("firstInvoiceNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to First customer id.
+        /// </summary>
+        public static string firstCustomerId {
+            get {
+                return ResourceManager.GetString("firstCustomerId", resourceCulture);
+            }
+        }
     }
 }

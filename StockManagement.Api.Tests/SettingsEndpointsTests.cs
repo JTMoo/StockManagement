@@ -63,4 +63,53 @@ public sealed class SettingsEndpointsTests
 		// Assert
 		Assert.AreEqual(AvailableLanguages.English, (await response.Content.ReadAsAsync<SettingsResponse>()).Language);
 	}
+
+	[TestMethod]
+	public async Task GetCompanySettings_NothingStored_ReturnsDefaults()
+	{
+		// Act
+		var response = await _client.GetAsync("/api/company-settings");
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var settings = await response.Content.ReadAsAsync<CompanySettingsResponse>();
+		Assert.AreEqual(10m, settings.VatRatePercent);
+		Assert.AreEqual(30, settings.PaymentTermInDays);
+		Assert.AreEqual(1, settings.FirstInvoiceNumber);
+		Assert.AreEqual(1001, settings.FirstCustomerId);
+	}
+
+	[TestMethod]
+	public async Task UpdateCompanySettings_ValidRequest_PersistsAndReturnsIt()
+	{
+		// Arrange
+		var request = new UpdateCompanySettingsRequest("Acme", "123456", "PYG", 5m, 14, 100, 2000);
+
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/company-settings", request);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var settings = await response.Content.ReadAsAsync<CompanySettingsResponse>();
+		Assert.AreEqual("Acme", settings.CompanyName);
+		Assert.AreEqual("123456", settings.TaxId);
+		Assert.AreEqual("PYG", settings.Currency);
+		Assert.AreEqual(5m, settings.VatRatePercent);
+		Assert.AreEqual(14, settings.PaymentTermInDays);
+		Assert.AreEqual(100, settings.FirstInvoiceNumber);
+		Assert.AreEqual(2000, settings.FirstCustomerId);
+
+		var stored = await (await _client.GetAsync("/api/company-settings")).Content.ReadAsAsync<CompanySettingsResponse>();
+		Assert.AreEqual("Acme", stored.CompanyName);
+	}
+
+	[TestMethod]
+	public async Task UpdateCompanySettings_VatRateOutOfRange_ReturnsBadRequest()
+	{
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/company-settings", new UpdateCompanySettingsRequest("Acme", "123456", "PYG", 150m, 14, 100, 2000));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+	}
 }
