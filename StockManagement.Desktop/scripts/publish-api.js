@@ -1,5 +1,5 @@
 // Self-contained publish of StockManagement.Api for the host OS/arch, into
-// StockManagement.Desktop/resources/api. Run before electron-builder (ADR-0014).
+// StockManagement.Desktop/resources/api. Run before electron-builder (ADR-0015).
 const { spawnSync } = require("node:child_process");
 const path = require("node:path");
 

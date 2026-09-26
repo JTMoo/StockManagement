@@ -129,7 +129,7 @@ jobs:
     - name: Install packages
       run: npm ci
 
-    - name: Publish bundled API (linux-x64, ADR-0014)
+    - name: Publish bundled API (linux-x64, ADR-0015)
       run: npm run publish-api
 
     - name: Build (unpacked, no installer)

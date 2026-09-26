@@ -51,7 +51,7 @@ await using (var scope = app.Services.CreateAsyncScope())
 	await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
 }
 
-// Polled by StockManagement.Desktop to know when the bundled API is ready (ADR-0014)
+// Polled by StockManagement.Desktop to know when the bundled API is ready (ADR-0015)
 app.MapHealthChecks("/health");
 
 // React build (StockManagement.Web) lands in wwwroot
