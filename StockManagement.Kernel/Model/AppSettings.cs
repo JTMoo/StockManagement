@@ -10,11 +10,73 @@ namespace StockManagement.Kernel.Model;
 public class AppSettings : BaseDocument
 {
 	private AvailableLanguages _language = AvailableLanguages.German;
+	private string _companyName = "";
+	private string _taxId = "";
+	private string _currency = "";
+	private decimal _vatRatePercent = 10m;
+	private int _paymentTermInDays = 30;
+	private int _firstInvoiceNumber = 1;
+	private int _firstCustomerId = 1001;
 
 
 	public AvailableLanguages Language
 	{
 		get => this._language;
 		set => this.SetField(ref this._language, value);
+	}
+
+	public string CompanyName
+	{
+		get => this._companyName;
+		set => this.SetField(ref this._companyName, value);
+	}
+
+	public string TaxId
+	{
+		get => this._taxId;
+		set => this.SetField(ref this._taxId, value);
+	}
+
+	/// <summary>
+	/// ISO 4217 currency code (e.g. "PYG"); empty until set
+	/// </summary>
+	/// <remarks>Display only for now; not yet tied to any formatting or rounding behavior.</remarks>
+	public string Currency
+	{
+		get => this._currency;
+		set => this.SetField(ref this._currency, value);
+	}
+
+	/// <summary>
+	/// VAT rate as a percentage (e.g. 10 for 10 %), included in stock item prices
+	/// </summary>
+	public decimal VatRatePercent
+	{
+		get => this._vatRatePercent;
+		set => this.SetField(ref this._vatRatePercent, value);
+	}
+
+	public int PaymentTermInDays
+	{
+		get => this._paymentTermInDays;
+		set => this.SetField(ref this._paymentTermInDays, value);
+	}
+
+	/// <summary>
+	/// Seed for the next invoice number when no invoice exists yet
+	/// </summary>
+	public int FirstInvoiceNumber
+	{
+		get => this._firstInvoiceNumber;
+		set => this.SetField(ref this._firstInvoiceNumber, value);
+	}
+
+	/// <summary>
+	/// Seed for the next customer id when no customer exists yet
+	/// </summary>
+	public int FirstCustomerId
+	{
+		get => this._firstCustomerId;
+		set => this.SetField(ref this._firstCustomerId, value);
 	}
 }

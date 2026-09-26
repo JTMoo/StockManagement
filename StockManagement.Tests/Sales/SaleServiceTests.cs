@@ -4,6 +4,7 @@ using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 using StockManagement.Sales.Core.Contracts;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Tests.Sales;
 
@@ -13,10 +14,18 @@ public sealed class SaleServiceTests
 {
 	private readonly Mock<IStockItemServiceProvider> _stockItems = new();
 	private readonly Mock<IInvoiceServiceProvider> _invoices = new();
+	private readonly Mock<ISettingsService> _settings = new();
 
+
+	[TestInitialize]
+	public void Initialize()
+	{
+		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001));
+	}
 
 	[TestMethod]
-	public void CreateInvoice_CartWithItems_FillsTotalTaxAndDates()
+	public async Task CreateInvoiceAsync_CartWithItems_FillsTotalTaxAndDates()
 	{
 		// Arrange
 		var service = this.CreateService();
@@ -29,7 +38,7 @@ public sealed class SaleServiceTests
 		];
 
 		// Act
-		var invoice = service.CreateInvoice(customer, items, date);
+		var invoice = await service.CreateInvoiceAsync(customer, items, date);
 
 		// Assert
 		Assert.AreSame(customer, invoice.Customer);
@@ -39,6 +48,24 @@ public sealed class SaleServiceTests
 		Assert.AreEqual(date.AddDays(30), invoice.ExpirationDate);
 		Assert.AreEqual(0, invoice.Number);
 		CollectionAssert.AreEqual(items, invoice.Items);
+	}
+
+	[TestMethod]
+	public async Task CreateInvoiceAsync_ConfiguredVatRateAndTerm_UsesThem()
+	{
+		// Arrange
+		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CompanySettings("", "", "", 5m, 14, 1, 1001));
+		var service = this.CreateService();
+		var date = new DateTime(2026, 9, 1);
+		List<ShoppingCartItem> items = [CreateCartItem("A1", "Screw", inStock: 10, price: 2100, quantity: 1)];
+
+		// Act
+		var invoice = await service.CreateInvoiceAsync(new Customer(), items, date);
+
+		// Assert
+		Assert.AreEqual(100, invoice.Tax);
+		Assert.AreEqual(date.AddDays(14), invoice.ExpirationDate);
 	}
 
 	[TestMethod]
@@ -244,7 +271,7 @@ public sealed class SaleServiceTests
 
 	private SaleService CreateService()
 	{
-		return new SaleService(_stockItems.Object, _invoices.Object);
+		return new SaleService(_stockItems.Object, _invoices.Object, _settings.Object);
 	}
 
 	/// <remarks>The sale write takes the lines out of <paramref name="stockItems"/>, like the transaction in the database.</remarks>

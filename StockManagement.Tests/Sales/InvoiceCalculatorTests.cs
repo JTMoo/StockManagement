@@ -79,23 +79,36 @@ public sealed class InvoiceCalculatorTests
 	[DataRow(11000L, 1000L)]
 	[DataRow(100L, 9L)]
 	[DataRow(105L, 10L)]
-	public void CalculateTax_GrossTotal_ReturnsTenPercentVatShare(long total, long expected)
+	public void CalculateTax_TenPercentRate_ReturnsVatShare(long total, long expected)
 	{
 		// Act
-		var result = InvoiceCalculator.CalculateTax(total);
+		var result = InvoiceCalculator.CalculateTax(total, 10m);
+
+		// Assert
+		Assert.AreEqual(expected, result);
+	}
+
+	[DataTestMethod]
+	[DataRow(0L, 0L)]
+	[DataRow(105L, 5L)]
+	[DataRow(2100L, 100L)]
+	public void CalculateTax_FivePercentRate_ReturnsVatShare(long total, long expected)
+	{
+		// Act
+		var result = InvoiceCalculator.CalculateTax(total, 5m);
 
 		// Assert
 		Assert.AreEqual(expected, result);
 	}
 
 	[TestMethod]
-	public void CalculateExpirationDate_AnyDate_AddsThirtyDays()
+	public void CalculateExpirationDate_AnyDate_AddsPaymentTerm()
 	{
 		// Arrange
 		var date = new DateTime(2026, 2, 10, 14, 30, 0);
 
 		// Act
-		var result = InvoiceCalculator.CalculateExpirationDate(date);
+		var result = InvoiceCalculator.CalculateExpirationDate(date, 30);
 
 		// Assert
 		Assert.AreEqual(new DateTime(2026, 3, 12, 14, 30, 0), result);

@@ -2,6 +2,7 @@ using Moq;
 using StockManagement.Customers.Core;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Tests.Customers;
 
@@ -10,7 +11,15 @@ namespace StockManagement.Tests.Customers;
 public sealed class CustomerServiceTests
 {
 	private readonly Mock<ICustomerServiceProvider> _customers = new();
+	private readonly Mock<ISettingsService> _settings = new();
 
+
+	[TestInitialize]
+	public void Initialize()
+	{
+		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001));
+	}
 
 	[TestMethod]
 	public async Task GetNextCustomerIdAsync_NoCustomers_Returns1001()
@@ -51,6 +60,21 @@ public sealed class CustomerServiceTests
 		Assert.AreEqual(1018, result);
 	}
 
+	[TestMethod]
+	public async Task GetNextCustomerIdAsync_NoCustomers_UsesConfiguredFirstCustomerId()
+	{
+		// Arrange
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 2000));
+
+		// Act
+		var result = await this.CreateService().GetNextCustomerIdAsync();
+
+		// Assert
+		Assert.AreEqual(2000, result);
+	}
+
 
 	[TestMethod]
 	public async Task CreateCustomerAsync_ExistingCustomers_StoresWithNextId()
@@ -70,6 +94,6 @@ public sealed class CustomerServiceTests
 
 	private CustomerService CreateService()
 	{
-		return new CustomerService(_customers.Object);
+		return new CustomerService(_customers.Object, _settings.Object);
 	}
 }

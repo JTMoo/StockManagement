@@ -33,4 +33,43 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 			await _settingsServiceProvider.AddSettingsAsync(new AppSettings { Language = language });
 		}
 	}
+
+	public async Task<CompanySettings> GetCompanySettingsAsync(CancellationToken cancellationToken = default)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		var settings = await _settingsServiceProvider.GetSettingsAsync() ?? new AppSettings();
+		return new CompanySettings(settings.CompanyName, settings.TaxId, settings.Currency, settings.VatRatePercent, settings.PaymentTermInDays, settings.FirstInvoiceNumber, settings.FirstCustomerId);
+	}
+
+	public async Task SetCompanySettingsAsync(CompanySettings companySettings, CancellationToken cancellationToken = default)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+		ArgumentNullException.ThrowIfNull(companySettings);
+
+		if (await _settingsServiceProvider.GetSettingsAsync() is AppSettings settings)
+		{
+			settings.CompanyName = companySettings.CompanyName;
+			settings.TaxId = companySettings.TaxId;
+			settings.Currency = companySettings.Currency;
+			settings.VatRatePercent = companySettings.VatRatePercent;
+			settings.PaymentTermInDays = companySettings.PaymentTermInDays;
+			settings.FirstInvoiceNumber = companySettings.FirstInvoiceNumber;
+			settings.FirstCustomerId = companySettings.FirstCustomerId;
+			await _settingsServiceProvider.UpdateSettingsAsync(settings);
+		}
+		else
+		{
+			await _settingsServiceProvider.AddSettingsAsync(new AppSettings
+			{
+				CompanyName = companySettings.CompanyName,
+				TaxId = companySettings.TaxId,
+				Currency = companySettings.Currency,
+				VatRatePercent = companySettings.VatRatePercent,
+				PaymentTermInDays = companySettings.PaymentTermInDays,
+				FirstInvoiceNumber = companySettings.FirstInvoiceNumber,
+				FirstCustomerId = companySettings.FirstCustomerId
+			});
+		}
+	}
 }
