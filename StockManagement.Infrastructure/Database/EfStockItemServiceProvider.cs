@@ -70,6 +70,56 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 		return 1;
 	}
 
+	public async Task CheckInStockItemAsync(StockItem stockItem, int amount, string reason)
+	{
+		await using var transaction = await _db.Database.BeginTransactionAsync();
+
+		// Track StockItem's own state first: Add() on the Transaction below would otherwise graph-fixup StockItem as Added too
+		this.AttachUnchanged(stockItem);
+		await _db.StockItems
+			.Where(item => item.Id == stockItem.Id)
+			.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Amount, item => item.Amount + amount));
+
+		_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount, reason));
+		await this.SaveChangesAsync();
+
+		await transaction.CommitAsync();
+		stockItem.Amount += amount;
+	}
+
+	/// <remarks>Conditional <c>UPDATE ... WHERE Amount &gt;= @amount</c>, same oversell guard as <see cref="EfInvoiceServiceProvider.TryAddSaleAsync"/></remarks>
+	public async Task<bool> TryCheckOutStockItemAsync(StockItem stockItem, int amount, string reason)
+	{
+		await using var transaction = await _db.Database.BeginTransactionAsync();
+
+		// Same ordering reason as CheckInStockItemAsync
+		this.AttachUnchanged(stockItem);
+		var affected = await _db.StockItems
+			.Where(item => item.Id == stockItem.Id && item.Amount >= amount)
+			.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Amount, item => item.Amount - amount));
+
+		if (affected == 0)
+		{
+			await transaction.RollbackAsync();
+			return false;
+		}
+
+		_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, -amount, reason));
+		await this.SaveChangesAsync();
+
+		await transaction.CommitAsync();
+		stockItem.Amount -= amount;
+		return true;
+	}
+
+	/// <summary>
+	/// Registers an already-stored, unmodified <see cref="StockItem"/> with the change tracker; a no-op if this exact instance is tracked already
+	/// </summary>
+	private void AttachUnchanged(StockItem stockItem)
+	{
+		_db.StockItems.Attach(stockItem);
+	}
+
 	/// <summary>
 	/// Every write succeeds fully or throws: EF has no partial-row upsert like the old Mongo layer
 	/// </summary>

@@ -469,4 +469,19 @@
   <data name="itemDeletionPrompt" xml:space="preserve">
     <value>¿Eliminar {0}?</value>
   </data>
+  <data name="checkStock" xml:space="preserve">
+    <value>Ingresar/Retirar</value>
+  </data>
+  <data name="checkIn" xml:space="preserve">
+    <value>Ingresar</value>
+  </data>
+  <data name="checkOut" xml:space="preserve">
+    <value>Retirar</value>
+  </data>
+  <data name="reason" xml:space="preserve">
+    <value>Motivo</value>
+  </data>
+  <data name="insufficientStock" xml:space="preserve">
+    <value>No hay suficiente stock, disponible:</value>
+  </data>
 </root>

@@ -17,6 +17,7 @@ Read before an important decision. Update in the same PR.
 | [0009](adr/0009-web-stock-item-excel-import.md) | Web Excel import: auto-matched headers, one upload-and-import call | Proposed |
 | [0010](adr/0010-jwt-authentication.md) | JWT bearer authentication | Proposed |
 | [0011](adr/0011-retire-wpf-gui.md) | Retire the WPF GUI, browser-only for now | Proposed |
+| [0012](adr/0012-stock-check-in-check-out.md) | Stock check-in/check-out: `Transaction.Reason`, conditional-update check-out | Proposed |
 
 ## Standing decisions
 

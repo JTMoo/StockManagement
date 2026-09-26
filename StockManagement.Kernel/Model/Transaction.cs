@@ -3,7 +3,7 @@
 namespace StockManagement.Kernel.Model;
 
 
-public class Transaction(StockItem stockItem, DateTime time, Transaction.Kind kind, int amount) : BaseDocument
+public class Transaction(StockItem stockItem, DateTime time, Transaction.Kind kind, int amount, string reason = "") : BaseDocument
 {
 	/// <summary>
 	/// For EF Core materialization
@@ -21,6 +21,11 @@ public class Transaction(StockItem stockItem, DateTime time, Transaction.Kind ki
 	public Kind SelectedKind { get; private set; } = kind;
 
 	public int Amount { get; private set; } = amount;
+
+	/// <summary>
+	/// Why the amount changed; only set by explicit check-in/check-out, empty otherwise
+	/// </summary>
+	public string Reason { get; private set; } = reason;
 
 	public enum Kind
 	{
