@@ -10,7 +10,7 @@ namespace StockManagement.Import.Core;
 /// <summary>
 /// Reads <typeparamref name="T"/> instances from the first worksheet of an Excel file, matching columns to its writable properties by name
 /// </summary>
-/// <remarks>Shared by every <see cref="IImportTargetHandler"/>; <see cref="ExcelStockItemParser"/> is a thin, pre-ADR-0009 wrapper around this for stock items.</remarks>
+/// <remarks>Shared by every <see cref="IImportTargetHandler"/>.</remarks>
 internal static class ExcelEntityParser<T> where T : new()
 {
 	private static readonly IReadOnlyList<PropertyInfo> ImportableProperties =

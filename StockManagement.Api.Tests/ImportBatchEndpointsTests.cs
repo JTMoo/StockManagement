@@ -184,6 +184,43 @@ public sealed class ImportBatchEndpointsTests
 	}
 
 	[TestMethod]
+	public async Task Preview_StockItemCodeAlreadyStored_ReportsAsDuplicate()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		await stockItems.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10));
+
+		var content = ExcelFileContent(ImportTarget.StockItems, CreateWorkbook("Stock", ["Code", "Name"], ["A1", "Screw again"], ["B2", "Nut"]));
+
+		// Act
+		var response = await _client.PostAsync("/api/import/batches", content);
+
+		// Assert
+		var batch = await response.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(1, batch.ReadyCount);
+		Assert.AreEqual(1, batch.DuplicateCount);
+	}
+
+	[TestMethod]
+	public async Task Preview_StockItemRowWithBadNumber_ReportsRowErrorAndSkipsRow()
+	{
+		// Arrange
+		var content = ExcelFileContent(ImportTarget.StockItems, CreateWorkbook("Stock",
+			["Code", "Name", "Amount"],
+			["A1", "Screw", "10"],
+			["B2", "Nut", "not-a-number"]));
+
+		// Act
+		var response = await _client.PostAsync("/api/import/batches", content);
+
+		// Assert
+		var batch = await response.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(1, batch.ReadyCount);
+		Assert.AreEqual(1, batch.ErrorCount);
+		Assert.AreEqual(3, batch.Rows.Single(row => row.Status == ImportRowStatus.Error).Row);
+	}
+
+	[TestMethod]
 	public async Task Preview_NoFile_Returns400()
 	{
 		// Arrange

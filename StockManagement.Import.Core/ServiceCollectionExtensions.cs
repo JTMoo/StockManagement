@@ -16,7 +16,6 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddImportCore(this IServiceCollection services)
 	{
 		services.AddSingleton<IStockItemImportService, StockItemImportService>();
-		services.AddSingleton<IExcelStockItemParser, ExcelStockItemParser>();
 		services.AddSingleton<IImportTargetHandler, StockItemImportTargetHandler>();
 		services.AddSingleton<IImportTargetHandler, CustomerImportTargetHandler>();
 		services.AddSingleton<IImportBatchService, ImportBatchService>();

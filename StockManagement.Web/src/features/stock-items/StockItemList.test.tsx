@@ -159,21 +159,34 @@ describe("StockItemList", () =>
 	it("Import_Successful_RefreshesList", async () =>
 	{
 		// Arrange
+		const batch = {
+			id: "batch-1",
+			target: "StockItems",
+			fileName: "stock.xlsx",
+			sheetName: "Sheet1",
+			status: "Previewed",
+			readyCount: 1,
+			duplicateCount: 0,
+			errorCount: 0,
+			rows: [{ row: 2, status: "Ready", fields: { Code: "A1" } }]
+		};
 		const fetchMock = mockApi({
 			"GET /api/stock-items": { body: [] },
-			"POST /api/stock-items/import": { body: { sheetName: "Stock", imported: 1, duplicates: 0, errors: [] } }
+			"POST /api/import/batches": { body: batch },
+			"POST /api/import/batches/batch-1/commit": { body: { ...batch, status: "Committed" } }
 		});
 		renderEnglish(<StockItemList />);
 		await userEvent.click(screen.getByRole("button", { name: "Excel Import" }));
 
 		const file = new File(["dummy"], "stock.xlsx");
 		await userEvent.upload(screen.getByLabelText("Choose file"), file);
+		await userEvent.click(screen.getByRole("button", { name: "Preview" }));
 
 		// Act
-		await userEvent.click(screen.getByRole("button", { name: "Import" }));
+		await userEvent.click(await screen.findByRole("button", { name: "Commit" }));
 
 		// Assert
-		expect(await screen.findByText("1")).toBeInTheDocument();
+		expect(await screen.findByRole("button", { name: "Undo" })).toBeInTheDocument();
 		expect(fetchMock.mock.calls.filter(([url, init]) => `${init?.method ?? "GET"} ${url}` === "GET /api/stock-items")).toHaveLength(2);
 	});
 
