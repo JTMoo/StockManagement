@@ -28,6 +28,7 @@ Read before an important decision. Update in the same PR.
 - Update by `Id`, never by business key ([#32](https://github.com/JTMoo/StockManagement/pull/32))
 - Cultures: de-DE, en-US, es-PY; all UI text via resources
 - Import: code repeated in one file → keep first, rest reported as duplicates (owner, 2026-09-24)
+- Resources split per domain (`StockManagement.Language/{Common,Auth,Settings,Customers,StockItems,Invoices,Import}`) to cut merge conflicts; each domain is its own resx set + hand-written Designer.cs class, same as `Numbers` (owner, 2026-09-26)
 
 ## Open
 
