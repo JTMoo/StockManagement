@@ -1,0 +1,33 @@
+{
+	"name": "stockmanagement-desktop",
+	"version": "1.0.0",
+	"description": "Desktop shell for StockManagement: opens the API's web app in a native window",
+	"private": true,
+	"author": "Jonathan Trefz",
+	"repository": "https://github.com/JTMoo/StockManagement",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"build": "electron-builder"
+	},
+	"devDependencies": {
+		"electron": "^33.0.0",
+		"electron-builder": "^25.1.8"
+	},
+	"build": {
+		"appId": "com.stockmanagement.desktop",
+		"productName": "StockManagement",
+		"files": [
+			"main.js"
+		],
+		"directories": {
+			"output": "dist"
+		},
+		"win": {
+			"target": "nsis"
+		},
+		"mac": {
+			"target": "dmg"
+		}
+	}
+}

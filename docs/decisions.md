@@ -8,7 +8,7 @@ Read before an important decision. Update in the same PR.
 |---|---|---|
 | [0001](adr/0001-record-architecture-decisions.md) | Decisions live in the repo as ADRs | Accepted |
 | [0002](adr/0002-business-logic-in-domain-and-application.md) | Business logic in Domain and Application | Accepted |
-| [0003](adr/0003-fastendpoints-api-and-react-frontend.md) | FastEndpoints API + React, desktop-first | Accepted (shell open) |
+| [0003](adr/0003-fastendpoints-api-and-react-frontend.md) | FastEndpoints API + React, desktop-first | Accepted |
 | [0004](adr/0004-api-host-shape-and-tests.md) | API routes, errors, config, integration tests | Proposed |
 | [0005](adr/0005-manufacturer-as-free-text.md) | Manufacturer as free text, old enum numbers read as names | Proposed |
 | [0006](adr/0006-react-web-app-shape.md) | Vite + React web app served by the API, resx texts, Vitest + Playwright | Proposed |
@@ -18,6 +18,7 @@ Read before an important decision. Update in the same PR.
 | [0010](adr/0010-jwt-authentication.md) | JWT bearer authentication | Proposed |
 | [0011](adr/0011-retire-wpf-gui.md) | Retire the WPF GUI, browser-only for now | Proposed |
 | [0012](adr/0012-stock-check-in-check-out.md) | Stock check-in/check-out: `Transaction.Reason`, conditional-update check-out | Proposed |
+| [0013](adr/0013-electron-desktop-shell.md) | Electron desktop shell, opens the API's URL | Proposed |
 
 ## Standing decisions
 
@@ -29,7 +30,6 @@ Read before an important decision. Update in the same PR.
 
 | Question | Options |
 |---|---|
-| Desktop shell | Tauri / Electron / WebView2 |
 | Money type | `decimal` + currency / integer minor units |
 | Sequential numbers | `$inc` counter / `Max + 1` |
 | Import pipeline | read → map → clean → validate → preview → commit |
