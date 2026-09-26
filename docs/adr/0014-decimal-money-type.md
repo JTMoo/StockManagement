@@ -23,12 +23,13 @@
 
 - Replace `double`/`long` money fields with `decimal`: `StockItem.Price`, `StockItem.Factor`, `SaleLine.UnitPrice`, `Invoice.Total`, `Invoice.Tax`
 - EF: `HasPrecision(18, 2)` on each money property (2 decimal digits fixed for now; revisit if a zero-decimal currency like PYG is configured in #31)
-- Keep existing rounding behavior: `Math.Round(value, 2, MidpointRounding.ToEven)` in `InvoiceCalculator`, same policy, just at 2 decimal places instead of 0
+- Switch rounding to commercial convention: `Math.Round(value, 2, MidpointRounding.AwayFromZero)` in `InvoiceCalculator` (changes current ToEven/banker's behavior)
 - No `Money` value object, no `Currency` type yet — single currency stays implicit until #31 introduces company settings; revisit then if multi-currency is actually needed
 
 ## Consequences
 
 - Unblocks price import (erp-gaps.md #4)
 - A migration is needed for existing `double`/`long` columns → `numeric(18,2)`
+- Rounding behavior changes from ToEven to AwayFromZero: totals/tax on existing invoices may recompute slightly differently if ever re-run
 - Cross-currency mistakes stay uncaught by the compiler until a `Money`/`Currency` type is introduced later, if ever needed
 - `TaxDivisor`-style flat-VAT math still lives in `InvoiceCalculator`; #31/#12 (VAT rates in settings) is a separate change
