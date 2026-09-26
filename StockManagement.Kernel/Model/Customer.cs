@@ -28,55 +28,55 @@ public class Customer : BaseDocument
 
 
 	#region Properties
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.customerId))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.customerId))]
 	public int CustomerId
 	{
 		get { return this.customerId; }
 		set { this.SetField(ref this.customerId, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.name))]
+	[Display(ResourceType = typeof(Language.Common), Name = nameof(Language.Common.name))]
 	public string Name
 	{
 		get { return this.name; }
 		set { this.SetField(ref this.name, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.lastname))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.lastname))]
 	public string Lastname
 	{
 		get { return this.lastname; }
 		set { this.SetField(ref this.lastname, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.address))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.address))]
 	public string Address
 	{
 		get { return this.address; }
 		set { this.SetField(ref this.address, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.phoneNumber))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.phoneNumber))]
 	public string PhoneNumber
 	{
 		get { return this.phoneNumber; }
 		set { this.SetField(ref this.phoneNumber, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.identificationNumber))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.identificationNumber))]
 	public string IdentificationNumber
 	{
 		get { return this.identificationNumber; }
 		set { this.SetField(ref this.identificationNumber, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.postboxNumber))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.postboxNumber))]
 	public string PostboxNumber
 	{
 		get { return this.postboxNumber; }
 		set { this.SetField(ref this.postboxNumber, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.email))]
+	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.email))]
 	public string Email
 	{
 		get { return this.email; }
 		set { this.SetField(ref this.email, value); }
 	}
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.miscellaneous))]
+	[Display(ResourceType = typeof(Language.Common), Name = nameof(Language.Common.miscellaneous))]
 	public string Miscellaneous
 	{
 		get { return this.miscellaneous; }

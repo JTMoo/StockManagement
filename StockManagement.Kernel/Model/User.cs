@@ -32,35 +32,35 @@ public class User : BaseDocument
 		set { this.SetField(ref this.passwordHash, value); }
 	}
 
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.fullName))]
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.fullName))]
 	public string FullName
 	{
 		get { return this.fullName; }
 		set { this.SetField(ref this.fullName, value); }
 	}
 
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.email))]
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.email))]
 	public string Email
 	{
 		get { return this.email; }
 		set { this.SetField(ref this.email, value); }
 	}
 
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.phone))]
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.phone))]
 	public string Phone
 	{
 		get { return this.phone; }
 		set { this.SetField(ref this.phone, value); }
 	}
 
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.position))]
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.position))]
 	public string Position
 	{
 		get { return this.position; }
 		set { this.SetField(ref this.position, value); }
 	}
 
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.role))]
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.role))]
 	public UserRole Role
 	{
 		get { return this.role; }
@@ -70,7 +70,7 @@ public class User : BaseDocument
 	/// <summary>
 	/// Permission strings (see <c>StockManagement.Auth.Core.Contracts.Permission</c>) granted to a <see cref="UserRole.Standard"/> user; ignored for <see cref="UserRole.Admin"/>, who has every permission
 	/// </summary>
-	[Display(ResourceType = typeof(Language.Resources), Name = nameof(Language.Resources.rights))]
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.rights))]
 	public string[] Permissions
 	{
 		get { return this.permissions; }
