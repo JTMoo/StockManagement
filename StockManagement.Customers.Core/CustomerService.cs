@@ -8,8 +8,6 @@ namespace StockManagement.Customers.Core;
 
 internal class CustomerService(ICustomerServiceProvider customerServiceProvider) : ICustomerService
 {
-	public const int FirstCustomerId = 1001;
-
 	private readonly ICustomerServiceProvider _customerServiceProvider = customerServiceProvider;
 
 
@@ -19,7 +17,7 @@ internal class CustomerService(ICustomerServiceProvider customerServiceProvider)
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var customers = await _customerServiceProvider.GetCustomersAsync() ?? [];
-		return SequenceNumber.Next(customers.Select(customer => customer.CustomerId), FirstCustomerId);
+		return SequenceNumber.Next(customers.Select(customer => customer.CustomerId), Customer.FirstCustomerId);
 	}
 
 	public async Task<Customer> CreateCustomerAsync(Customer customer, CancellationToken cancellationToken = default)
