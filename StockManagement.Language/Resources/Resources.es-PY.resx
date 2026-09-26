@@ -484,4 +484,28 @@
   <data name="insufficientStock" xml:space="preserve">
     <value>No hay suficiente stock, disponible:</value>
   </data>
+  <data name="companySettings" xml:space="preserve">
+    <value>Configuración de la empresa</value>
+  </data>
+  <data name="companyName" xml:space="preserve">
+    <value>Nombre de la empresa</value>
+  </data>
+  <data name="taxId" xml:space="preserve">
+    <value>Número de identificación fiscal</value>
+  </data>
+  <data name="currency" xml:space="preserve">
+    <value>Moneda</value>
+  </data>
+  <data name="vatRate" xml:space="preserve">
+    <value>Tasa de IVA (%)</value>
+  </data>
+  <data name="paymentTermInDays" xml:space="preserve">
+    <value>Plazo de pago (días)</value>
+  </data>
+  <data name="firstInvoiceNumber" xml:space="preserve">
+    <value>Primer número de factura</value>
+  </data>
+  <data name="firstCustomerId" xml:space="preserve">
+    <value>Primer número de cliente</value>
+  </data>
 </root>

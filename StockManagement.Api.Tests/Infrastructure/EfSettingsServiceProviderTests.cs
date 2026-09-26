@@ -80,6 +80,34 @@ public sealed class EfSettingsServiceProviderTests
 		Assert.AreEqual(AvailableLanguages.English, (await this.UseAsync(provider => provider.GetSettingsAsync()))!.Language);
 	}
 
+	[TestMethod]
+	public async Task AddSettingsAsync_CompanyFieldsStored_GetSettingsAsyncReturnsThem()
+	{
+		// Arrange
+		await this.UseAsync(provider => provider.AddSettingsAsync(new AppSettings
+		{
+			CompanyName = "Acme",
+			TaxId = "123456",
+			Currency = "PYG",
+			VatRatePercent = 5.5m,
+			PaymentTermInDays = 14,
+			FirstInvoiceNumber = 100,
+			FirstCustomerId = 2000
+		}));
+
+		// Act
+		var result = await this.UseAsync(provider => provider.GetSettingsAsync());
+
+		// Assert
+		Assert.AreEqual("Acme", result!.CompanyName);
+		Assert.AreEqual("123456", result.TaxId);
+		Assert.AreEqual("PYG", result.Currency);
+		Assert.AreEqual(5.5m, result.VatRatePercent);
+		Assert.AreEqual(14, result.PaymentTermInDays);
+		Assert.AreEqual(100, result.FirstInvoiceNumber);
+		Assert.AreEqual(2000, result.FirstCustomerId);
+	}
+
 
 	private async Task<T> UseAsync<T>(Func<ISettingsServiceProvider, Task<T>> action)
 	{

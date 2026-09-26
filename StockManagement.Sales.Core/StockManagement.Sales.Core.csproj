@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\StockManagement.Sales.Core.Contracts\StockManagement.Sales.Core.Contracts.csproj" />
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
+    <ProjectReference Include="..\StockManagement.Settings.Core.Contracts\StockManagement.Settings.Core.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

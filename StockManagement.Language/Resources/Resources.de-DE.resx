@@ -480,4 +480,28 @@
   <data name="insufficientStock" xml:space="preserve">
     <value>Nicht genug auf Lager, verfügbar:</value>
   </data>
+  <data name="companySettings" xml:space="preserve">
+    <value>Firmeneinstellungen</value>
+  </data>
+  <data name="companyName" xml:space="preserve">
+    <value>Firmenname</value>
+  </data>
+  <data name="taxId" xml:space="preserve">
+    <value>Steuernummer</value>
+  </data>
+  <data name="currency" xml:space="preserve">
+    <value>Währung</value>
+  </data>
+  <data name="vatRate" xml:space="preserve">
+    <value>MwSt.-Satz (%)</value>
+  </data>
+  <data name="paymentTermInDays" xml:space="preserve">
+    <value>Zahlungsziel (Tage)</value>
+  </data>
+  <data name="firstInvoiceNumber" xml:space="preserve">
+    <value>Erste Rechnungsnummer</value>
+  </data>
+  <data name="firstCustomerId" xml:space="preserve">
+    <value>Erste Kundennummer</value>
+  </data>
 </root>

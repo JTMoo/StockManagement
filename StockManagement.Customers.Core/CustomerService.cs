@@ -2,15 +2,15 @@ using StockManagement.Customers.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Util;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Customers.Core;
 
 
-internal class CustomerService(ICustomerServiceProvider customerServiceProvider) : ICustomerService
+internal class CustomerService(ICustomerServiceProvider customerServiceProvider, ISettingsService settingsService) : ICustomerService
 {
-	public const int FirstCustomerId = 1001;
-
 	private readonly ICustomerServiceProvider _customerServiceProvider = customerServiceProvider;
+	private readonly ISettingsService _settingsService = settingsService;
 
 
 	/// <remarks>Still "highest + 1" over all stored customers; a counter document with $inc is the planned replacement.</remarks>
@@ -19,7 +19,8 @@ internal class CustomerService(ICustomerServiceProvider customerServiceProvider)
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var customers = await _customerServiceProvider.GetCustomersAsync() ?? [];
-		return SequenceNumber.Next(customers.Select(customer => customer.CustomerId), FirstCustomerId);
+		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+		return SequenceNumber.Next(customers.Select(customer => customer.CustomerId), companySettings.FirstCustomerId);
 	}
 
 	public async Task<Customer> CreateCustomerAsync(Customer customer, CancellationToken cancellationToken = default)

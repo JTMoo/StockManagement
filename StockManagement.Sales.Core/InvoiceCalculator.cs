@@ -6,15 +6,6 @@ namespace StockManagement.Sales.Core;
 /// </summary>
 internal static class InvoiceCalculator
 {
-	public const int FirstInvoiceNumber = 1;
-
-	/// <summary>
-	/// Prices include VAT at 10 %, so the VAT share of a gross amount is 10/110 = 1/11.
-	/// </summary>
-	public const int TaxDivisor = 11;
-	public const int PaymentTermInDays = 30;
-
-
 	/// <summary>
 	/// Sums quantity times unit price, with each unit price rounded to a whole unit first.
 	/// </summary>
@@ -29,13 +20,14 @@ internal static class InvoiceCalculator
 	/// <summary>
 	/// VAT contained in a gross <paramref name="total"/>, rounded to a whole unit.
 	/// </summary>
-	public static long CalculateTax(long total)
+	/// <remarks>Prices include VAT: for a <paramref name="vatRatePercent"/> of 10, the VAT share of the gross total is 10/110.</remarks>
+	public static long CalculateTax(long total, decimal vatRatePercent)
 	{
-		return (long)Math.Round((double)total / TaxDivisor);
+		return (long)Math.Round((double)total * (double)vatRatePercent / (100 + (double)vatRatePercent));
 	}
 
-	public static DateTime CalculateExpirationDate(DateTime invoiceDate)
+	public static DateTime CalculateExpirationDate(DateTime invoiceDate, int paymentTermInDays)
 	{
-		return invoiceDate.AddDays(PaymentTermInDays);
+		return invoiceDate.AddDays(paymentTermInDays);
 	}
 }

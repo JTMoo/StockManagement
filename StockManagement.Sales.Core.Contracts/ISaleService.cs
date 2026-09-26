@@ -15,8 +15,8 @@ public interface ISaleService
 	/// <summary>
 	/// Builds an unsaved invoice for the cart with total, tax and due date filled in
 	/// </summary>
-	/// <remarks>The number is left at 0; see <see cref="GetNextInvoiceNumberAsync"/>.</remarks>
-	public Invoice CreateInvoice(Customer customer, IEnumerable<ShoppingCartItem> items, DateTime date);
+	/// <remarks>The number is left at 0; see <see cref="GetNextInvoiceNumberAsync"/>. Tax and due date use the configured company settings.</remarks>
+	public Task<Invoice> CreateInvoiceAsync(Customer customer, IEnumerable<ShoppingCartItem> items, DateTime date, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Number for the next new invoice

@@ -489,4 +489,28 @@
   <data name="insufficientStock" xml:space="preserve">
     <value>Not enough in stock, only available:</value>
   </data>
+  <data name="companySettings" xml:space="preserve">
+    <value>Company settings</value>
+  </data>
+  <data name="companyName" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="taxId" xml:space="preserve">
+    <value>Tax ID</value>
+  </data>
+  <data name="currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="vatRate" xml:space="preserve">
+    <value>VAT rate (%)</value>
+  </data>
+  <data name="paymentTermInDays" xml:space="preserve">
+    <value>Payment term (days)</value>
+  </data>
+  <data name="firstInvoiceNumber" xml:space="preserve">
+    <value>First invoice number</value>
+  </data>
+  <data name="firstCustomerId" xml:space="preserve">
+    <value>First customer id</value>
+  </data>
 </root>
