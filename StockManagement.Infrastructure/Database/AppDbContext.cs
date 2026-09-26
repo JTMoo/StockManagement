@@ -33,6 +33,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<User> Users => this.Set<User>();
 
+	public DbSet<ImportBatch> ImportBatches => this.Set<ImportBatch>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{

@@ -41,6 +41,8 @@ MakeScoped<ICustomerService>(builder.Services);
 MakeScoped<ISettingsService>(builder.Services);
 MakeScoped<IStockItemImportService>(builder.Services);
 MakeScoped<IAuthService>(builder.Services);
+MakeScoped<IImportTargetHandler>(builder.Services);
+MakeScoped<IImportBatchService>(builder.Services);
 
 var app = builder.Build();
 
@@ -72,12 +74,14 @@ await app.RunAsync();
 public partial class Program
 {
 	/// <summary>
-	/// Swaps an already-registered service's lifetime to Scoped, by reflection so the (internal) implementation type doesn't need to be named
+	/// Swaps every already-registered implementation of <typeparamref name="TService"/> to Scoped, by reflection so the (internal) implementation types don't need to be named
 	/// </summary>
 	private static void MakeScoped<TService>(IServiceCollection services)
 	{
-		var descriptor = services.Single(d => d.ServiceType == typeof(TService));
-		services.Remove(descriptor);
-		services.Add(new ServiceDescriptor(typeof(TService), descriptor.ImplementationType!, ServiceLifetime.Scoped));
+		foreach (var descriptor in services.Where(d => d.ServiceType == typeof(TService)).ToList())
+		{
+			services.Remove(descriptor);
+			services.Add(new ServiceDescriptor(typeof(TService), descriptor.ImplementationType!, ServiceLifetime.Scoped));
+		}
 	}
 }
