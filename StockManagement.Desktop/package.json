@@ -8,7 +8,8 @@
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
-		"build": "electron-builder"
+		"publish-api": "node scripts/publish-api.js",
+		"build": "npm run publish-api && electron-builder"
 	},
 	"devDependencies": {
 		"electron": "^33.0.0",
@@ -20,6 +21,12 @@
 		"files": [
 			"main.js"
 		],
+		"extraResources": [
+			{
+				"from": "resources/api",
+				"to": "api"
+			}
+		],
 		"directories": {
 			"output": "dist"
 		},
@@ -28,6 +35,9 @@
 		},
 		"mac": {
 			"target": "dmg"
+		},
+		"linux": {
+			"target": "AppImage"
 		}
 	}
 }
