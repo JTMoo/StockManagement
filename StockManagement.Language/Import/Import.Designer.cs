@@ -124,6 +124,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Opening Stock.
+        /// </summary>
+        public static string openingStock {
+            get {
+                return ResourceManager.GetString("openingStock", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string preview {

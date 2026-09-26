@@ -67,7 +67,7 @@ public sealed class StockItemImportTargetHandlerTests
 		_stockItems.Setup(provider => provider.GetStockItemByIdAsync("id-1")).ReturnsAsync(stockItem);
 
 		// Act
-		await _handler.UndoAsync(["id-1"]);
+		await _handler.UndoAsync([("id-1", stockItem)]);
 
 		// Assert
 		_stockItems.Verify(provider => provider.DeleteStockItemAsync(stockItem), Times.Once);

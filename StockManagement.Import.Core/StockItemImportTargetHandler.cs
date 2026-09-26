@@ -38,9 +38,9 @@ internal sealed class StockItemImportTargetHandler(IStockItemImportService impor
 		return [.. items.Select(item => item.Id)];
 	}
 
-	public async Task UndoAsync(IReadOnlyList<string> entityIds, CancellationToken cancellationToken = default)
+	public async Task UndoAsync(IReadOnlyList<(string EntityId, object Candidate)> entities, CancellationToken cancellationToken = default)
 	{
-		foreach (var id in entityIds)
+		foreach (var (id, _) in entities)
 		{
 			if (await _stockItemServiceProvider.GetStockItemByIdAsync(id) is StockItem item)
 			{

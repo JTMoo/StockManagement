@@ -68,8 +68,11 @@ internal sealed class ImportBatchService : IImportBatchService
 		var batch = await this.GetExistingBatchAsync(batchId);
 		var handler = this.GetHandler(batch.Target);
 
-		var importedIds = batch.ReadyRows.Where(row => row.ImportedEntityId is not null).Select(row => row.ImportedEntityId!).ToList();
-		await handler.UndoAsync(importedIds, cancellationToken);
+		var committed = batch.ReadyRows
+			.Where(row => row.ImportedEntityId is not null)
+			.Select(row => (row.ImportedEntityId!, handler.DeserializeCandidate(row.PayloadJson!)))
+			.ToList();
+		await handler.UndoAsync(committed, cancellationToken);
 
 		batch.MarkUndone();
 		await _importBatchServiceProvider.UpdateImportBatchAsync(batch);
