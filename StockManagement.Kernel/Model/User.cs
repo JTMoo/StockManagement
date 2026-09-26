@@ -1,4 +1,6 @@
-﻿using StockManagement.Kernel.Database;
+using System.ComponentModel.DataAnnotations;
+using StockManagement.Kernel.Database;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Kernel.Model;
 
@@ -7,6 +9,12 @@ public class User : BaseDocument
 {
 	private string username = string.Empty;
 	private string passwordHash = string.Empty;
+	private string fullName = string.Empty;
+	private string email = string.Empty;
+	private string phone = string.Empty;
+	private string position = string.Empty;
+	private UserRole role = UserRole.Standard;
+	private string[] permissions = [];
 
 
 	public string Username
@@ -22,5 +30,50 @@ public class User : BaseDocument
 	{
 		get { return this.passwordHash; }
 		set { this.SetField(ref this.passwordHash, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.fullName))]
+	public string FullName
+	{
+		get { return this.fullName; }
+		set { this.SetField(ref this.fullName, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.email))]
+	public string Email
+	{
+		get { return this.email; }
+		set { this.SetField(ref this.email, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.phone))]
+	public string Phone
+	{
+		get { return this.phone; }
+		set { this.SetField(ref this.phone, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.position))]
+	public string Position
+	{
+		get { return this.position; }
+		set { this.SetField(ref this.position, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.role))]
+	public UserRole Role
+	{
+		get { return this.role; }
+		set { this.SetField(ref this.role, value); }
+	}
+
+	/// <summary>
+	/// Permission strings (see <c>StockManagement.Auth.Core.Contracts.Permission</c>) granted to a <see cref="UserRole.Standard"/> user; ignored for <see cref="UserRole.Admin"/>, who has every permission
+	/// </summary>
+	[Display(ResourceType = typeof(Language.Users), Name = nameof(Language.Users.rights))]
+	public string[] Permissions
+	{
+		get { return this.permissions; }
+		set { this.SetField(ref this.permissions, value); }
 	}
 }

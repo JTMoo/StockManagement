@@ -1,4 +1,5 @@
 using FastEndpoints;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Api.Features.Settings;
@@ -12,6 +13,7 @@ public class GetCompanySettingsEndpoint(ISettingsService settingsService) : Endp
 	public override void Configure()
 	{
 		this.Get("/company-settings");
+		this.Permissions(Permission.SettingsRead);
 	}
 
 	public override async Task<CompanySettingsResponse> ExecuteAsync(CancellationToken cancellationToken)

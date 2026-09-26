@@ -2,6 +2,7 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using StockManagement.Api.Features.Invoices;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
@@ -50,6 +51,7 @@ public class CreateSaleEndpoint(ISaleService saleService, ICustomerServiceProvid
 	public override void Configure()
 	{
 		this.Post("/sales");
+		this.Permissions(Permission.SalesWrite);
 	}
 
 	public override async Task<Results<Created<InvoiceResponse>, Conflict<SaleConflictResponse>>> ExecuteAsync(CreateSaleRequest request, CancellationToken cancellationToken)

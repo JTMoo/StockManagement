@@ -1,4 +1,5 @@
 using FastEndpoints;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Api.Features.Customers;
@@ -12,6 +13,7 @@ public class ListCustomersEndpoint(ICustomerServiceProvider customerServiceProvi
 	public override void Configure()
 	{
 		this.Get("/customers");
+		this.Permissions(Permission.CustomersRead);
 	}
 
 	public override async Task<IReadOnlyList<CustomerResponse>> ExecuteAsync(CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 using FastEndpoints;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Api.Features.StockItems;
@@ -12,6 +13,7 @@ public class ListStockItemsEndpoint(IStockItemServiceProvider stockItemServicePr
 	public override void Configure()
 	{
 		this.Get("/stock-items");
+		this.Permissions(Permission.StockItemsRead);
 	}
 
 	public override async Task<IReadOnlyList<StockItemResponse>> ExecuteAsync(CancellationToken cancellationToken)

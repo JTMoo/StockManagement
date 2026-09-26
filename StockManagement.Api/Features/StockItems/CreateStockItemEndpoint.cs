@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
@@ -34,6 +35,7 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 	public override void Configure()
 	{
 		this.Post("/stock-items");
+		this.Permissions(Permission.StockItemsWrite);
 	}
 
 	public override async Task<Results<Created<StockItemResponse>, Conflict<DuplicateStockItemCodeResponse>>> ExecuteAsync(CreateStockItemRequest request, CancellationToken cancellationToken)

@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Model;
 
@@ -17,6 +18,7 @@ public class GetImportBatchEndpoint(IImportBatchService importBatchService) : En
 	public override void Configure()
 	{
 		this.Get("/import/batches/{Id}");
+		this.Permissions(Permission.StockItemsRead, Permission.CustomersRead);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, NotFound>> ExecuteAsync(GetImportBatchRequest request, CancellationToken cancellationToken)

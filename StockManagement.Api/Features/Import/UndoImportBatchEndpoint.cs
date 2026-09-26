@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Exceptions;
 
@@ -18,6 +19,7 @@ public class UndoImportBatchEndpoint(IImportBatchService importBatchService) : E
 	public override void Configure()
 	{
 		this.Post("/import/batches/{Id}/undo");
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, NotFound, Conflict<ImportBatchStatusConflictResponse>>> ExecuteAsync(UndoImportBatchRequest request, CancellationToken cancellationToken)

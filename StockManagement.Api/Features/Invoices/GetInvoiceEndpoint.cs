@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
@@ -17,6 +18,7 @@ public class GetInvoiceEndpoint(IInvoiceServiceProvider invoiceServiceProvider) 
 	public override void Configure()
 	{
 		this.Get("/invoices/{Number}");
+		this.Permissions(Permission.SalesRead);
 	}
 
 	public override async Task<Results<Ok<InvoiceResponse>, NotFound>> ExecuteAsync(GetInvoiceRequest request, CancellationToken cancellationToken)

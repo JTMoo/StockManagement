@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Exceptions;
 
@@ -21,6 +22,7 @@ public class CommitImportBatchEndpoint(IImportBatchService importBatchService) :
 	public override void Configure()
 	{
 		this.Post("/import/batches/{Id}/commit");
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, NotFound, Conflict<ImportBatchStatusConflictResponse>>> ExecuteAsync(CommitImportBatchRequest request, CancellationToken cancellationToken)

@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Import.Core.Contracts;
 
 namespace StockManagement.Api.Features.StockItems;
@@ -42,6 +43,7 @@ public class ImportStockItemsEndpoint(IExcelStockItemParser excelStockItemParser
 	{
 		this.Post("/stock-items/import");
 		this.AllowFileUploads();
+		this.Permissions(Permission.StockItemsWrite);
 	}
 
 	public override async Task<Results<Ok<StockItemImportResponse>, BadRequest<InvalidExcelFileResponse>>> ExecuteAsync(ImportStockItemsRequest request, CancellationToken cancellationToken)
