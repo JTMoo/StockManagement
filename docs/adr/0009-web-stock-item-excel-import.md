@@ -1,6 +1,6 @@
 # ADR-0009: Web stock item Excel import
 
-- Status: Proposed
+- Status: Superseded by [0018](0018-generic-import-pipeline.md)
 - Date: 2026-09-24
 
 ## Context

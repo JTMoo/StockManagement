@@ -14,7 +14,7 @@ Read before an important decision. Update in the same PR.
 | [0006](adr/0006-react-web-app-shape.md) | Vite + React web app served by the API, resx texts, Vitest + Playwright | Proposed |
 | [0007](adr/0007-mongo-replica-set-and-transactions.md) | MongoDB single-node replica set, multi-step writes in transactions | Superseded by 0008 |
 | [0008](adr/0008-ef-core-on-postgresql.md) | EF Core on PostgreSQL, one `AppDbContext`, change handlers | Proposed |
-| [0009](adr/0009-web-stock-item-excel-import.md) | Web Excel import: auto-matched headers, one upload-and-import call | Proposed |
+| [0009](adr/0009-web-stock-item-excel-import.md) | Web Excel import: auto-matched headers, one upload-and-import call | Superseded by 0018 |
 | [0010](adr/0010-jwt-authentication.md) | JWT bearer authentication | Proposed |
 | [0011](adr/0011-retire-wpf-gui.md) | Retire the WPF GUI, browser-only for now | Proposed |
 | [0012](adr/0012-stock-check-in-check-out.md) | Stock check-in/check-out: `Transaction.Reason`, conditional-update check-out | Proposed |
@@ -23,7 +23,7 @@ Read before an important decision. Update in the same PR.
 | [0015](adr/0015-company-settings-and-vat-rate.md) | Extend `AppSettings`/`ISettingsService` with company settings; one configurable VAT rate | Proposed |
 | [0016](adr/0016-electron-bundles-and-launches-api.md) | Electron bundles a self-contained API publish and launches it | Proposed |
 | [0017](adr/0017-roles-and-permissions.md) | Roles (Admin/Standard) + per-module Read/Write permission strings | Proposed |
-| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
+| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Accepted |
 
 ## Standing decisions
 

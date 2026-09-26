@@ -26,8 +26,6 @@ export type Settings = { language: Language };
 
 export type CompanySettings = { companyName: string; taxId: string; currency: string; vatRatePercent: number; paymentTermInDays: number; firstInvoiceNumber: number; firstCustomerId: number; currencyDecimalDigits: number };
 
-export type StockItemImportRowError = { row: number; message: string };
-
 export type ImportTarget = "StockItems" | "Customers";
 
 export type ImportRowStatus = "Ready" | "Duplicate" | "Error";
@@ -47,8 +45,6 @@ export type ImportBatch = {
 	errorCount: number;
 	rows: ImportBatchRow[];
 };
-
-export type StockItemImportResult = { sheetName: string; imported: number; duplicates: number; errors: StockItemImportRowError[] };
 
 export type UserRole = "Standard" | "Admin";
 
@@ -155,7 +151,6 @@ export const api = {
 	deleteStockItem: (stockItem: StockItem) => send<void>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "DELETE" }),
 	checkInStockItem: (id: string, amount: number, reason: string) => send<StockItem>(`/stock-items/${encodeURIComponent(id)}/check-in`, { method: "POST", body: JSON.stringify({ amount, reason }) }),
 	checkOutStockItem: (id: string, amount: number, reason: string) => send<StockItem>(`/stock-items/${encodeURIComponent(id)}/check-out`, { method: "POST", body: JSON.stringify({ amount, reason }) }),
-	importStockItems: (file: File) => sendForm<StockItemImportResult>("/stock-items/import", file),
 	previewImport: (target: ImportTarget, file: File) => sendForm<ImportBatch>("/import/batches", file, { Target: target }),
 	commitImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/commit`, { method: "POST" }),
 	undoImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/undo`, { method: "POST" }),

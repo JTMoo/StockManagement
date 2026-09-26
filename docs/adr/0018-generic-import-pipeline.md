@@ -1,6 +1,6 @@
 # ADR-0018: Generic import pipeline (batches, preview → commit, undo)
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-26
 
 ## Context
@@ -27,8 +27,8 @@
 - Customer de-duplication is exact match on `IdentificationNumber` only; a blank number never matches another (most legacy rows have none), so it always imports as new until #5's fuzzy check lands
 - `POST /import/batches` (multipart: `Target` + `File`) previews and stores the batch; `POST /import/batches/{id}/commit` writes its `Ready` rows and records each one's new entity id; `POST /import/batches/{id}/undo` deletes them again; `GET /import/batches/{id}` re-reads a batch. A batch in the wrong state (double commit, undo before commit) is a 409 with a reason, not a 500
 - The generic Excel column-matching (header → property by name or localized `Display` name) moved into `ExcelEntityParser<T>`, shared by both handlers; `ExcelStockItemParser` (ADR-0009) now delegates to it instead of duplicating the reflection code
-- Web: only a customer import screen for now (file → preview → counts + non-ready rows → commit/undo), reusing the `StockItemImport` panel pattern; stock items keep ADR-0009's one-shot `/stock-items/import` UI as is
-- Left for follow-up work (commented on #58 rather than closing it): column-mapping UI, an error-report download, and wiring the stock-item import screen onto the generic pipeline
+- Web: both stock item and customer import screens use the same preview/commit/undo panel (`StockItemImport`, `CustomerImport`); ADR-0009's one-shot `/stock-items/import` endpoint is removed, along with `IExcelStockItemParser` (superseded by `ExcelEntityParser<T>`, already shared)
+- Left for follow-up work (commented on #58 rather than closing it): column-mapping UI and an error-report download
 
 ## Consequences
 
