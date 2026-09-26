@@ -39,7 +39,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var settings = await _settingsServiceProvider.GetSettingsAsync() ?? new AppSettings();
-		return new CompanySettings(settings.CompanyName, settings.TaxId, settings.Currency, settings.VatRatePercent, settings.PaymentTermInDays, settings.FirstInvoiceNumber, settings.FirstCustomerId);
+		return new CompanySettings(settings.CompanyName, settings.TaxId, settings.Currency, settings.VatRatePercent, settings.PaymentTermInDays, settings.FirstInvoiceNumber, settings.FirstCustomerId, settings.CurrencyDecimalDigits);
 	}
 
 	public async Task SetCompanySettingsAsync(CompanySettings companySettings, CancellationToken cancellationToken = default)
@@ -56,6 +56,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 			settings.PaymentTermInDays = companySettings.PaymentTermInDays;
 			settings.FirstInvoiceNumber = companySettings.FirstInvoiceNumber;
 			settings.FirstCustomerId = companySettings.FirstCustomerId;
+			settings.CurrencyDecimalDigits = companySettings.CurrencyDecimalDigits;
 			await _settingsServiceProvider.UpdateSettingsAsync(settings);
 		}
 		else
@@ -68,7 +69,8 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 				VatRatePercent = companySettings.VatRatePercent,
 				PaymentTermInDays = companySettings.PaymentTermInDays,
 				FirstInvoiceNumber = companySettings.FirstInvoiceNumber,
-				FirstCustomerId = companySettings.FirstCustomerId
+				FirstCustomerId = companySettings.FirstCustomerId,
+				CurrencyDecimalDigits = companySettings.CurrencyDecimalDigits
 			});
 		}
 	}

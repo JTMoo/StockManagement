@@ -10,6 +10,6 @@ public sealed record StockItemResponse(string Id, string Code, string Name, stri
 {
 	public static StockItemResponse From(StockItem stockItem)
 	{
-		return new(stockItem.Id, stockItem.Code, stockItem.Name, stockItem.Description, stockItem.Location, stockItem.Amount, (decimal)stockItem.Price, stockItem.Manufacturer);
+		return new(stockItem.Id, stockItem.Code, stockItem.Name, stockItem.Description, stockItem.Location, stockItem.Amount, stockItem.Price, stockItem.Manufacturer);
 	}
 }

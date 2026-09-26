@@ -13,6 +13,8 @@ internal sealed class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 		builder.HasKey("Id");
 		builder.HasIndex(invoice => invoice.Number).IsUnique();
 		builder.HasOne(invoice => invoice.Customer).WithMany().IsRequired();
+		builder.Property(invoice => invoice.Total).HasPrecision(18, 2);
+		builder.Property(invoice => invoice.Tax).HasPrecision(18, 2);
 
 		// DateTime.Now (Kind=Local); Npgsql only accepts UTC for "timestamp with time zone"
 		builder.Property(invoice => invoice.Date).HasColumnType("timestamp without time zone");

@@ -9,8 +9,8 @@ public interface ISaleService
 	/// <summary>
 	/// Gross total of the cart
 	/// </summary>
-	/// <remarks>Each unit price is rounded to a whole unit, then multiplied by the quantity.</remarks>
-	public long CalculateTotal(IEnumerable<ShoppingCartItem> items);
+	/// <remarks>Each unit price is rounded to <paramref name="currencyDecimalDigits"/>, then multiplied by the quantity.</remarks>
+	public decimal CalculateTotal(IEnumerable<ShoppingCartItem> items, int currencyDecimalDigits);
 
 	/// <summary>
 	/// Builds an unsaved invoice for the cart with total, tax and due date filled in

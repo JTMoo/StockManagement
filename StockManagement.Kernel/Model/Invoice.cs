@@ -11,8 +11,8 @@ public class Invoice : BaseDocument
 	private SaleCondition saleCondition;
 	private DateTime date;
 	private DateTime expirationDate;
-	private long total;
-	private long tax;
+	private decimal total;
+	private decimal tax;
 	private int number;
 
 
@@ -29,7 +29,7 @@ public class Invoice : BaseDocument
 		set { this.SetField(ref this.number, value); }
 	}
 	[Display(ResourceType = typeof(Language.Invoices), Name = nameof(Language.Invoices.tax))]
-	public long Tax
+	public decimal Tax
 	{
 		get { return this.tax; }
 		set { this.SetField(ref this.tax, value); }
@@ -47,7 +47,7 @@ public class Invoice : BaseDocument
 		set { this.SetField(ref this.expirationDate, value); }
 	}
 	[Display(ResourceType = typeof(Language.Invoices), Name = nameof(Language.Invoices.total))]
-	public long Total
+	public decimal Total
 	{
 		get { return this.total; }
 		set { this.SetField(ref this.total, value); }

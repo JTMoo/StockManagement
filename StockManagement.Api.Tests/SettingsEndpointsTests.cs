@@ -83,7 +83,7 @@ public sealed class SettingsEndpointsTests
 	public async Task UpdateCompanySettings_ValidRequest_PersistsAndReturnsIt()
 	{
 		// Arrange
-		var request = new UpdateCompanySettingsRequest("Acme", "123456", "PYG", 5m, 14, 100, 2000);
+		var request = new UpdateCompanySettingsRequest("Acme", "123456", "PYG", 5m, 14, 100, 2000, 0);
 
 		// Act
 		var response = await _client.PutAsJsonAsync("/api/company-settings", request);
@@ -107,7 +107,7 @@ public sealed class SettingsEndpointsTests
 	public async Task UpdateCompanySettings_VatRateOutOfRange_ReturnsBadRequest()
 	{
 		// Act
-		var response = await _client.PutAsJsonAsync("/api/company-settings", new UpdateCompanySettingsRequest("Acme", "123456", "PYG", 150m, 14, 100, 2000));
+		var response = await _client.PutAsJsonAsync("/api/company-settings", new UpdateCompanySettingsRequest("Acme", "123456", "PYG", 150m, 14, 100, 2000, 0));
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
