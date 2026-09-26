@@ -24,7 +24,7 @@ export type Language = "German" | "English" | "Spanish";
 
 export type Settings = { language: Language };
 
-export type CompanySettings = { companyName: string; taxId: string; currency: string; vatRatePercent: number; paymentTermInDays: number; firstInvoiceNumber: number; firstCustomerId: number };
+export type CompanySettings = { companyName: string; taxId: string; currency: string; vatRatePercent: number; paymentTermInDays: number; firstInvoiceNumber: number; firstCustomerId: number; currencyDecimalDigits: number };
 
 export type StockItemImportRowError = { row: number; message: string };
 

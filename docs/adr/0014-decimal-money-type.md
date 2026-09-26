@@ -1,6 +1,6 @@
 # ADR-0014: `decimal` for money, no separate Money type
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-26
 
 ## Context

@@ -64,6 +64,10 @@ export function CompanySettingsPage()
 						{t("firstCustomerId")}
 						<input type="number" min={1} step="1" value={current.firstCustomerId} onChange={event => setDraft({ ...current, firstCustomerId: Number(event.target.value) })} />
 					</label>
+					<label>
+						{t("currencyDecimalDigits")}
+						<input type="number" min={0} max={4} step="1" value={current.currencyDecimalDigits} onChange={event => setDraft({ ...current, currencyDecimalDigits: Number(event.target.value) })} />
+					</label>
 				</div>
 				<FailureMessage failure={failure} />
 				<div className="form-actions">
