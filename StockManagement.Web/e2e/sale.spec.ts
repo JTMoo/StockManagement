@@ -61,7 +61,7 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 	await page.getByRole("button", { name: "Check Out", exact: true }).click();
 	await expect(screwRow).toContainText("11");
 
-	await page.getByRole("button", { name: "Settings" }).click();
+	await page.getByRole("button", { name: "Settings", exact: true }).click();
 	await shot(page, "5-settings");
 	await page.locator("main").getByLabel("Select language:").selectOption("es-PY");
 	await expect(page.getByRole("heading", { name: "Configuracion" })).toBeVisible();
