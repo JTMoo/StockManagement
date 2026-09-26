@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockManagement.Infrastructure.Database;
@@ -11,9 +12,11 @@ using StockManagement.Infrastructure.Database;
 namespace StockManagement.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260926074727_AddImportBatches")]
+    partial class AddImportBatches
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,32 +31,8 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("FirstCustomerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FirstInvoiceNumber")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Language")
                         .HasColumnType("integer");
-
-                    b.Property<int>("PaymentTermInDays")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TaxId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("VatRatePercent")
-                        .HasColumnType("numeric(5,2)");
 
                     b.HasKey("Id");
 

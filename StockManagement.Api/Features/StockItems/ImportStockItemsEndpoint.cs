@@ -18,7 +18,7 @@ public class ImportStockItemsValidator : Validator<ImportStockItemsRequest>
 {
 	public ImportStockItemsValidator()
 	{
-		this.RuleFor(request => request.File).NotNull().Must(file => file.Length > 0);
+		this.RuleFor(request => request.File).Must(file => file is { Length: > 0 });
 	}
 }
 

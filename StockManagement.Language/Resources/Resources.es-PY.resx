@@ -147,6 +147,15 @@
   <data name="row" xml:space="preserve">
     <value>Fila</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>Vista previa</value>
+  </data>
+  <data name="commit" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="undo" xml:space="preserve">
+    <value>Deshacer</value>
+  </data>
   <data name="search" xml:space="preserve">
     <value>Búsqueda</value>
   </data>
