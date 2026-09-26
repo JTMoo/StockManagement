@@ -8,7 +8,7 @@ namespace StockManagement.Api.Tests;
 
 
 /// <summary>
-/// A Standard user only gets the permissions granted on their account (ADR-0015); #14's "simple users can't change client data"
+/// A Standard user only gets the permissions granted on their account (ADR-0017); #14's "simple users can't change client data"
 /// </summary>
 [TestClass]
 public sealed class PermissionEnforcementTests

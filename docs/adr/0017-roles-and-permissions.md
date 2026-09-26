@@ -1,4 +1,4 @@
-# ADR-0015: Roles and permissions
+# ADR-0017: Roles and permissions
 
 - Status: Proposed
 - Date: 2026-09-26

@@ -5,7 +5,7 @@ namespace StockManagement.Auth.Core.Contracts;
 
 
 /// <summary>
-/// Per-module Read/Write permission strings put on the JWT and checked with FastEndpoints' <c>Permissions()</c>. See ADR-0015.
+/// Per-module Read/Write permission strings put on the JWT and checked with FastEndpoints' <c>Permissions()</c>. See ADR-0017.
 /// </summary>
 public static class Permission
 {

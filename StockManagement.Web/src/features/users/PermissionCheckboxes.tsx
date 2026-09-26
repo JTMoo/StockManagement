@@ -2,7 +2,7 @@ import type { Permission, UserRole } from "../../api";
 import { useI18n } from "../../i18n";
 import { permissionOptions } from "./permissionOptions";
 
-/** Role Admin implies every permission (ADR-0015): the checkboxes only matter, and only show, for Standard. */
+/** Role Admin implies every permission (ADR-0017): the checkboxes only matter, and only show, for Standard. */
 export function PermissionCheckboxes({ role, permissions, onChange }: { role: UserRole; permissions: Permission[]; onChange: (permissions: Permission[]) => void })
 {
 	const { t } = useI18n();

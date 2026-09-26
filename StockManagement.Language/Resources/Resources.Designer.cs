@@ -932,5 +932,50 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("back", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Full name.
+        /// </summary>
+        public static string fullName {
+            get {
+                return ResourceManager.GetString("fullName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Phone.
+        /// </summary>
+        public static string phone {
+            get {
+                return ResourceManager.GetString("phone", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        public static string position {
+            get {
+                return ResourceManager.GetString("position", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string role {
+            get {
+                return ResourceManager.GetString("role", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Rights.
+        /// </summary>
+        public static string rights {
+            get {
+                return ResourceManager.GetString("rights", resourceCulture);
+            }
+        }
     }
 }
