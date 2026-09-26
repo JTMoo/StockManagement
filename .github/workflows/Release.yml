@@ -1,0 +1,63 @@
+name: Release StockManagement.Desktop
+
+# Builds and publishes desktop installers on tag push (self-contained API bundled, ADR-0016)
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            electron-builder-flag: --win
+          - os: macos-latest
+            electron-builder-flag: --mac
+          - os: ubuntu-latest
+            electron-builder-flag: --linux
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Build web app into wwwroot
+      working-directory: StockManagement.Web
+      run: |
+        npm ci
+        npm run build
+
+    - name: Install desktop packages
+      working-directory: StockManagement.Desktop
+      run: npm ci
+
+    - name: Publish bundled API
+      working-directory: StockManagement.Desktop
+      run: npm run publish-api
+
+    - name: Build installer
+      working-directory: StockManagement.Desktop
+      run: npx electron-builder ${{ matrix.electron-builder-flag }}
+
+    - name: Upload installer
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          StockManagement.Desktop/dist/*.exe
+          StockManagement.Desktop/dist/*.dmg
+          StockManagement.Desktop/dist/*.AppImage

@@ -30,8 +30,9 @@ This basis has:
 - Config: `Jwt:SigningKey` (override per install in `appsettings.local.json`, see above), `Jwt:ExpiryHours`
 - Local dev / CI: `StockManagement.Api.Tests` logs in via `ApiFactory.CreateAuthenticatedClientAsync()`; `npm run e2e` logs in as the seeded admin at the start of the spec; the React app shows a login screen until you log in
 
-# Desktop app (ADR-0013)
+# Desktop app (ADR-0013, ADR-0016)
 - `StockManagement.Desktop`: Electron shell, opens the API's URL in a native window (Windows/macOS/Linux)
-- Start the API first, then: `cd StockManagement.Desktop && npm ci && npm start`
+- Dev (unpackaged): start the API first, then `cd StockManagement.Desktop && npm ci && npm start`
 - Override the target URL with the `STOCKMANAGEMENT_URL` env var (default `http://localhost:5080`)
-- `npm run build` packages an installer (`electron-builder`); the shell doesn't start the API itself yet
+- Packaged builds bundle a self-contained API publish and launch it on startup; Postgres is still external - see [Quick start](#quick-start) for reaching it at `127.0.0.1:5432`
+- `npm run build` (or a `v*` tag push, see `.github/workflows/Release.yml`) publishes the API and packages an installer per OS
