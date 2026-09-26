@@ -26,7 +26,7 @@ export type Settings = { language: Language };
 
 export type CompanySettings = { companyName: string; taxId: string; currency: string; vatRatePercent: number; paymentTermInDays: number; firstInvoiceNumber: number; firstCustomerId: number; currencyDecimalDigits: number };
 
-export type ImportTarget = "StockItems" | "Customers";
+export type ImportTarget = "StockItems" | "Customers" | "OpeningStock";
 
 export type ImportRowStatus = "Ready" | "Duplicate" | "Error";
 

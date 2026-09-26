@@ -28,9 +28,10 @@ public interface IImportTargetHandler
 	public Task<IReadOnlyList<string>> CommitAsync(IReadOnlyList<object> candidates, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Removes the entities a commit created, by id
+	/// Reverses what a commit did, per committed row
 	/// </summary>
-	public Task UndoAsync(IReadOnlyList<string> entityIds, CancellationToken cancellationToken = default);
+	/// <remarks>Most handlers created an entity per row and just delete it by <c>EntityId</c>; a handler that mutated an existing entity instead (no new id) reads what it needs back off <c>Candidate</c>.</remarks>
+	public Task UndoAsync(IReadOnlyList<(string EntityId, object Candidate)> entities, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Serializes a candidate for storage on its <see cref="Kernel.Model.ImportBatchRow"/>
