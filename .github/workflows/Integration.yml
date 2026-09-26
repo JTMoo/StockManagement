@@ -114,6 +114,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
     - name: Install Node
       uses: actions/setup-node@v4
       with:
@@ -123,6 +128,9 @@ jobs:
 
     - name: Install packages
       run: npm ci
+
+    - name: Publish bundled API (linux-x64, ADR-0014)
+      run: npm run publish-api
 
     - name: Build (unpacked, no installer)
       run: npx electron-builder --dir

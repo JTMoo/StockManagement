@@ -42,12 +42,17 @@ MakeScoped<ISettingsService>(builder.Services);
 MakeScoped<IStockItemImportService>(builder.Services);
 MakeScoped<IAuthService>(builder.Services);
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
 	await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
 }
+
+// Polled by StockManagement.Desktop to know when the bundled API is ready (ADR-0014)
+app.MapHealthChecks("/health");
 
 // React build (StockManagement.Web) lands in wwwroot
 app.UseDefaultFiles();
