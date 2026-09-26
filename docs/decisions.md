@@ -23,7 +23,7 @@ Read before an important decision. Update in the same PR.
 | [0015](adr/0015-company-settings-and-vat-rate.md) | Extend `AppSettings`/`ISettingsService` with company settings; one configurable VAT rate | Proposed |
 | [0016](adr/0016-electron-bundles-and-launches-api.md) | Electron bundles a self-contained API publish and launches it | Proposed |
 | [0017](adr/0017-roles-and-permissions.md) | Roles (Admin/Standard) + per-module Read/Write permission strings | Proposed |
-| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Accepted |
+| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 
 ## Standing decisions
 
