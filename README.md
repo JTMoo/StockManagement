@@ -23,3 +23,9 @@ This basis has:
 - Fresh database: the `AddUsers` migration seeds one admin user (`admin` / `ChangeMe123!`) - no self-service change yet, change it directly in the database if that matters to you
 - Config: `Jwt:SigningKey` (override per install in `appsettings.local.json`, see above), `Jwt:ExpiryHours`
 - Local dev / CI: `StockManagement.Api.Tests` logs in via `ApiFactory.CreateAuthenticatedClientAsync()`; `npm run e2e` logs in as the seeded admin at the start of the spec; the React app shows a login screen until you log in
+
+# Desktop app (ADR-0013)
+- `StockManagement.Desktop`: Electron shell, opens the API's URL in a native window (Windows/macOS/Linux)
+- Start the API first, then: `cd StockManagement.Desktop && npm ci && npm start`
+- Override the target URL with the `STOCKMANAGEMENT_URL` env var (default `http://localhost:5080`)
+- `npm run build` packages an installer (`electron-builder`); the shell doesn't start the API itself yet
