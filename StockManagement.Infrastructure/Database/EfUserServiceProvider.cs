@@ -14,9 +14,9 @@ public class EfUserServiceProvider(AppDbContext db) : IUserServiceProvider
 	private readonly AppDbContext _db = db;
 
 
-	public Task<User> GetUserAsync(string id)
+	public Task<User?> GetUserAsync(string id)
 	{
-		return _db.Users.SingleAsync(user => user.Id == id);
+		return _db.Users.SingleOrDefaultAsync(user => user.Id == id);
 	}
 
 	public Task<User?> GetUserByUsernameAsync(string username)

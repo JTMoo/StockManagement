@@ -48,4 +48,14 @@ describe("App", () =>
 		expect(screen.getByRole("heading", { name: "User login" })).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "Settings" })).not.toBeInTheDocument();
 	});
+
+	it("WithoutUsersManage_HidesUsersNavItem", () =>
+	{
+		// Arrange + Act
+		mockApi({ "GET /api/stock-items": { body: [] } });
+		renderEnglish(<App />, { permissions: ["StockItems.Read"] });
+
+		// Assert
+		expect(screen.queryByRole("button", { name: "Users" })).not.toBeInTheDocument();
+	});
 });

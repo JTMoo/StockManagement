@@ -50,7 +50,22 @@ export type ImportBatch = {
 
 export type StockItemImportResult = { sheetName: string; imported: number; duplicates: number; errors: StockItemImportRowError[] };
 
-export type LoginResult = { token: string; username: string };
+export type UserRole = "Standard" | "Admin";
+
+export type Permission =
+	| "Users.Manage"
+	| "Customers.Read" | "Customers.Write"
+	| "StockItems.Read" | "StockItems.Write"
+	| "Sales.Read" | "Sales.Write"
+	| "Settings.Read" | "Settings.Write";
+
+export type LoginResult = { token: string; username: string; role: UserRole; permissions: Permission[] };
+
+export type User = { id: string; username: string; fullName: string; email: string; phone: string; position: string; role: UserRole; permissions: Permission[] };
+
+export type NewUser = Partial<Omit<User, "id" | "role" | "permissions">> & { username: string; password: string; role?: UserRole; permissions?: Permission[] };
+
+export type EditUser = Omit<User, "permissions"> & { permissions: Permission[]; password?: string };
 
 export type ApiFailure =
 	| { kind: "notFound" }
@@ -59,6 +74,7 @@ export type ApiFailure =
 	| { kind: "duplicate"; code: string }
 	| { kind: "insufficientStock"; inStock: number }
 	| { kind: "invalidState"; reason: string }
+	| { kind: "cannotDeleteSelf" }
 	| { kind: "unauthorized" }
 	| { kind: "unexpected" };
 
@@ -123,9 +139,10 @@ async function handleResponse<T>(fetchCall: () => Promise<Response>): Promise<Re
 	{
 		const body = (await response.json()) as { unavailableItems?: string[]; code?: string; inStock?: number; reason?: string };
 		if (body.unavailableItems) return { ok: false, failure: { kind: "conflict", unavailableItems: body.unavailableItems } };
+		if (body.code) return { ok: false, failure: { kind: "duplicate", code: body.code } };
 		if (body.inStock !== undefined) return { ok: false, failure: { kind: "insufficientStock", inStock: body.inStock } };
 		if (body.reason !== undefined) return { ok: false, failure: { kind: "invalidState", reason: body.reason } };
-		return { ok: false, failure: { kind: "duplicate", code: body.code ?? "" } };
+		return { ok: false, failure: { kind: "cannotDeleteSelf" } };
 	}
 	if (response.status === 400) return { ok: false, failure: { kind: "invalid", codes: ((await response.json()) as ProblemDetails).errors?.map(error => error.reason) ?? [] } };
 	return { ok: false, failure: { kind: "unexpected" } };
@@ -152,7 +169,11 @@ export const api = {
 	updateSettings: (language: Language) => send<Settings>("/settings", { method: "PUT", body: JSON.stringify({ language }) }),
 	getCompanySettings: (signal?: AbortSignal) => send<CompanySettings>("/company-settings", { signal }),
 	updateCompanySettings: (settings: CompanySettings) => send<CompanySettings>("/company-settings", { method: "PUT", body: JSON.stringify(settings) }),
-	login: (username: string, password: string) => send<LoginResult>("/auth/login", { method: "POST", body: JSON.stringify({ username, password }) })
+	login: (username: string, password: string) => send<LoginResult>("/auth/login", { method: "POST", body: JSON.stringify({ username, password }) }),
+	listUsers: (signal?: AbortSignal) => send<User[]>("/users", { signal }),
+	createUser: (user: NewUser) => send<User>("/users", { method: "POST", body: JSON.stringify(user) }),
+	updateUser: (user: EditUser) => send<User>(`/users/${user.id}`, { method: "PUT", body: JSON.stringify(user) }),
+	deleteUser: (user: User) => send<void>(`/users/${user.id}`, { method: "DELETE" })
 };
 
 function invoiceFilterQuery(filter: InvoiceFilter): string

@@ -22,6 +22,7 @@ Read before an important decision. Update in the same PR.
 | [0014](adr/0014-decimal-money-type.md) | `decimal` for money, no separate Money type | Proposed |
 | [0015](adr/0015-company-settings-and-vat-rate.md) | Extend `AppSettings`/`ISettingsService` with company settings; one configurable VAT rate | Proposed |
 | [0016](adr/0016-electron-bundles-and-launches-api.md) | Electron bundles a self-contained API publish and launches it | Proposed |
+| [0017](adr/0017-roles-and-permissions.md) | Roles (Admin/Standard) + per-module Read/Write permission strings | Proposed |
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 
 ## Standing decisions
@@ -29,7 +30,7 @@ Read before an important decision. Update in the same PR.
 - Update by `Id`, never by business key ([#32](https://github.com/JTMoo/StockManagement/pull/32))
 - Cultures: de-DE, en-US, es-PY; all UI text via resources
 - Import: code repeated in one file → keep first, rest reported as duplicates (owner, 2026-09-24)
-- Resources split per domain (`StockManagement.Language/{Common,Auth,Settings,Customers,StockItems,Invoices,Import}`) to cut merge conflicts; each domain is its own resx set + hand-written Designer.cs class, same as `Numbers` (owner, 2026-09-26)
+- Resources split per domain (`StockManagement.Language/{Common,Auth,Settings,Customers,StockItems,Invoices,Import,Users}`) to cut merge conflicts; each domain is its own resx set + hand-written Designer.cs class, same as `Numbers` (owner, 2026-09-26)
 
 ## Open
 

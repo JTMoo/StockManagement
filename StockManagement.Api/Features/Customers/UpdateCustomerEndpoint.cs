@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
@@ -14,6 +15,7 @@ public class UpdateCustomerEndpoint(ICustomerServiceProvider customerServiceProv
 	public override void Configure()
 	{
 		this.Put("/customers/{CustomerId}");
+		this.Permissions(Permission.CustomersWrite);
 	}
 
 	public override async Task<Results<Ok<CustomerResponse>, NotFound>> ExecuteAsync(UpdateCustomerRequest request, CancellationToken cancellationToken)

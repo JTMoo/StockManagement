@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Model.Types;
 
@@ -41,6 +42,7 @@ public class PreviewImportEndpoint(IImportBatchService importBatchService, ILogg
 	{
 		this.Post("/import/batches");
 		this.AllowFileUploads();
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, BadRequest<InvalidExcelFileResponse>>> ExecuteAsync(PreviewImportRequest request, CancellationToken cancellationToken)

@@ -129,12 +129,6 @@
   <data name="checkStock" xml:space="preserve">
     <value>Check In/Out</value>
   </data>
-  <data name="checkin" xml:space="preserve">
-    <value>Checkin</value>
-  </data>
-  <data name="checkout" xml:space="preserve">
-    <value>Checkout</value>
-  </data>
   <data name="code" xml:space="preserve">
     <value>Code</value>
   </data>

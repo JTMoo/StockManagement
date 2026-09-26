@@ -1,11 +1,16 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { api, setAuthToken, setUnauthorizedHandler, type Result, type LoginResult } from "./api";
+import { api, setAuthToken, setUnauthorizedHandler, type Permission, type Result, type LoginResult, type UserRole } from "./api";
 
 const tokenKey = "auth.token";
 const usernameKey = "auth.username";
+const roleKey = "auth.role";
+const permissionsKey = "auth.permissions";
 
 type Auth = {
 	username: string | null;
+	role: UserRole | null;
+	permissions: Permission[];
+	hasPermission: (permission: Permission) => boolean;
 	login: (username: string, password: string) => Promise<Result<LoginResult>>;
 	logout: () => void;
 };
@@ -37,9 +42,23 @@ function writeStorage(key: string, value: string | null)
 	}
 }
 
+function readPermissions(): Permission[]
+{
+	try
+	{
+		return JSON.parse(readStorage(permissionsKey) ?? "[]") as Permission[];
+	}
+	catch
+	{
+		return [];
+	}
+}
+
 export function AuthProvider({ children }: { children: ReactNode })
 {
 	const [username, setUsername] = useState<string | null>(() => readStorage(usernameKey));
+	const [role, setRole] = useState<UserRole | null>(() => readStorage(roleKey) as UserRole | null);
+	const [permissions, setPermissions] = useState<Permission[]>(readPermissions);
 
 	useEffect(() =>
 	{
@@ -56,8 +75,12 @@ export function AuthProvider({ children }: { children: ReactNode })
 		{
 			setAuthToken(result.value.token);
 			setUsername(result.value.username);
+			setRole(result.value.role);
+			setPermissions(result.value.permissions);
 			writeStorage(tokenKey, result.value.token);
 			writeStorage(usernameKey, result.value.username);
+			writeStorage(roleKey, result.value.role);
+			writeStorage(permissionsKey, JSON.stringify(result.value.permissions));
 		}
 		return result;
 	}
@@ -66,11 +89,20 @@ export function AuthProvider({ children }: { children: ReactNode })
 	{
 		setAuthToken(null);
 		setUsername(null);
+		setRole(null);
+		setPermissions([]);
 		writeStorage(tokenKey, null);
 		writeStorage(usernameKey, null);
+		writeStorage(roleKey, null);
+		writeStorage(permissionsKey, null);
 	}
 
-	return <AuthContext.Provider value={{ username, login, logout }}>{children}</AuthContext.Provider>;
+	function hasPermission(permission: Permission)
+	{
+		return permissions.includes(permission);
+	}
+
+	return <AuthContext.Provider value={{ username, role, permissions, hasPermission, login, logout }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): Auth

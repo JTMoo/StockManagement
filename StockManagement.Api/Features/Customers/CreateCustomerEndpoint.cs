@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Customers.Core.Contracts;
 using StockManagement.Kernel.Model;
 
@@ -28,6 +29,7 @@ public class CreateCustomerEndpoint(ICustomerService customerService) : Endpoint
 	public override void Configure()
 	{
 		this.Post("/customers");
+		this.Permissions(Permission.CustomersWrite);
 	}
 
 	public override async Task<Created<CustomerResponse>> ExecuteAsync(CreateCustomerRequest request, CancellationToken cancellationToken)

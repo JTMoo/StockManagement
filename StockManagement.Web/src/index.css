@@ -75,6 +75,12 @@ label, legend { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0
 .segmented label:has(:focus-visible) { outline: 2px solid var(--paper); outline-offset: 2px; }
 .segmented input { position: absolute; opacity: 0; }
 
+/* User rights: one checkbox per line, box + label side by side */
+.checkbox-group { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; grid-column: 1 / -1; }
+.checkbox-group legend { padding: 0; margin-bottom: 0.3rem; }
+.checkbox-group label { flex-direction: row; align-items: center; gap: 0.5rem; }
+.checkbox-group input { width: auto; height: auto; }
+
 /* Lists */
 table { border-collapse: collapse; width: 100%; }
 th { text-align: left; font-size: 0.85rem; font-weight: 600; color: var(--mist); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }

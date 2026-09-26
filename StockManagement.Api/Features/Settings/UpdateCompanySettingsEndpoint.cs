@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Api.Features.Settings;
@@ -28,6 +29,7 @@ public class UpdateCompanySettingsEndpoint(ISettingsService settingsService) : E
 	public override void Configure()
 	{
 		this.Put("/company-settings");
+		this.Permissions(Permission.SettingsWrite);
 	}
 
 	public override async Task<CompanySettingsResponse> ExecuteAsync(UpdateCompanySettingsRequest request, CancellationToken cancellationToken)

@@ -129,12 +129,6 @@
   <data name="checkStock" xml:space="preserve">
     <value>Ein-/Ausbuchen</value>
   </data>
-  <data name="checkin" xml:space="preserve">
-    <value>Einbuchen</value>
-  </data>
-  <data name="checkout" xml:space="preserve">
-    <value>Ausbuchen</value>
-  </data>
   <data name="code" xml:space="preserve">
     <value>Code</value>
   </data>

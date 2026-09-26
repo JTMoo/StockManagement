@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
@@ -18,6 +19,7 @@ public class DeleteStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 	public override void Configure()
 	{
 		this.Delete("/stock-items/{Id}");
+		this.Permissions(Permission.StockItemsWrite);
 	}
 
 	public override async Task<Results<NoContent, NotFound>> ExecuteAsync(DeleteStockItemRequest request, CancellationToken cancellationToken)

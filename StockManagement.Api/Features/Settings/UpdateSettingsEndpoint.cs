@@ -1,4 +1,5 @@
 using FastEndpoints;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Model.Types;
 using StockManagement.Settings.Core.Contracts;
 
@@ -16,6 +17,7 @@ public class UpdateSettingsEndpoint(ISettingsService settingsService) : Endpoint
 	public override void Configure()
 	{
 		this.Put("/settings");
+		this.Permissions(Permission.SettingsWrite);
 	}
 
 	public override async Task<SettingsResponse> ExecuteAsync(UpdateSettingsRequest request, CancellationToken cancellationToken)

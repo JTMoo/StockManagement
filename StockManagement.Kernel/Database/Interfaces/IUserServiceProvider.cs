@@ -5,7 +5,8 @@ namespace StockManagement.Kernel.Database.Interfaces;
 
 public interface IUserServiceProvider
 {
-	public Task<User> GetUserAsync(string id);
+	/// <returns><see langword="null"/> if no user has that id</returns>
+	public Task<User?> GetUserAsync(string id);
 
 	/// <returns><see langword="null"/> if no user has that username</returns>
 	public Task<User?> GetUserByUsernameAsync(string username);
