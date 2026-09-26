@@ -30,7 +30,7 @@ This basis has:
 - Config: `Jwt:SigningKey` (override per install in `appsettings.local.json`, see above), `Jwt:ExpiryHours`
 - Local dev / CI: `StockManagement.Api.Tests` logs in via `ApiFactory.CreateAuthenticatedClientAsync()`; `npm run e2e` logs in as the seeded admin at the start of the spec; the React app shows a login screen until you log in
 
-# Desktop app (ADR-0013, ADR-0015)
+# Desktop app (ADR-0013, ADR-0016)
 - `StockManagement.Desktop`: Electron shell, opens the API's URL in a native window (Windows/macOS/Linux)
 - Dev (unpackaged): start the API first, then `cd StockManagement.Desktop && npm ci && npm start`
 - Override the target URL with the `STOCKMANAGEMENT_URL` env var (default `http://localhost:5080`)

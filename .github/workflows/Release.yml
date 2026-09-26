@@ -1,6 +1,6 @@
 name: Release StockManagement.Desktop
 
-# Builds and publishes desktop installers on tag push (self-contained API bundled, ADR-0015)
+# Builds and publishes desktop installers on tag push (self-contained API bundled, ADR-0016)
 on:
   push:
     tags:

@@ -1,4 +1,4 @@
-# ADR-0015: Electron shell bundles and launches the API
+# ADR-0016: Electron shell bundles and launches the API
 
 - Status: Proposed
 - Date: 2026-09-26
