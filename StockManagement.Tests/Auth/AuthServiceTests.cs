@@ -53,6 +53,19 @@ public sealed class AuthServiceTests
 		Assert.IsNull(result);
 	}
 
+	[TestMethod]
+	public void HashPassword_ThenVerify_MatchesOriginalPassword()
+	{
+		// Arrange
+		var hash = this.CreateService().HashPassword("s3cret!");
+
+		// Act
+		var matches = PasswordHasher.Verify("s3cret!", hash);
+
+		// Assert
+		Assert.IsTrue(matches);
+	}
+
 	private AuthService CreateService()
 	{
 		return new AuthService(_users.Object);

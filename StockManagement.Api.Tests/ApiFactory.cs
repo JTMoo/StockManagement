@@ -35,10 +35,18 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
 	/// <summary>
 	/// A client logged in as the seeded admin user, with the JWT set as a bearer token
 	/// </summary>
-	public async Task<HttpClient> CreateAuthenticatedClientAsync()
+	public Task<HttpClient> CreateAuthenticatedClientAsync()
+	{
+		return this.CreateAuthenticatedClientAsync(SeededAdminUsername, SeededAdminPassword);
+	}
+
+	/// <summary>
+	/// A client logged in as <paramref name="username"/>, with the JWT set as a bearer token
+	/// </summary>
+	public async Task<HttpClient> CreateAuthenticatedClientAsync(string username, string password)
 	{
 		var client = this.CreateClient();
-		var response = await client.PostAsJsonAsync("/api/auth/login", new LoginRequest(SeededAdminUsername, SeededAdminPassword));
+		var response = await client.PostAsJsonAsync("/api/auth/login", new LoginRequest(username, password));
 		var body = await response.Content.ReadAsAsync<LoginResponse>();
 		client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", body.Token);
 		return client;

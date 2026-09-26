@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
@@ -17,6 +18,7 @@ public class GetStockItemEndpoint(IStockItemServiceProvider stockItemServiceProv
 	public override void Configure()
 	{
 		this.Get("/stock-items/{Code}");
+		this.Permissions(Permission.StockItemsRead);
 	}
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound>> ExecuteAsync(GetStockItemRequest request, CancellationToken cancellationToken)

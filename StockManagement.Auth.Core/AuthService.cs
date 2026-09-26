@@ -18,4 +18,9 @@ internal class AuthService(IUserServiceProvider userServiceProvider) : IAuthServ
 		if (user is null || !PasswordHasher.Verify(password, user.PasswordHash)) return null;
 		return user;
 	}
+
+	public string HashPassword(string password)
+	{
+		return PasswordHasher.Hash(password);
+	}
 }

@@ -1,8 +1,11 @@
 import { render } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { vi } from "vitest";
+import type { Permission, UserRole } from "./api";
 import { AuthProvider } from "./auth";
 import { I18nProvider } from "./i18n";
+
+export const allPermissions: Permission[] = ["Users.Manage", "Customers.Read", "Customers.Write", "StockItems.Read", "StockItems.Write", "Sales.Read", "Sales.Write", "Settings.Read", "Settings.Write"];
 
 export type Route = { status?: number; body?: unknown };
 
@@ -28,9 +31,14 @@ export function sentBody(fetchMock: ReturnType<typeof mockApi>, key: string): un
 }
 
 /** Renders as a logged-in user (seeds `localStorage` before mount); pass `authenticated: false` for the login screen. */
-export function renderEnglish(ui: ReactElement, { authenticated = true }: { authenticated?: boolean } = {})
+export function renderEnglish(ui: ReactElement, { authenticated = true, role = "Admin", permissions = allPermissions }: { authenticated?: boolean; role?: UserRole; permissions?: Permission[] } = {})
 {
-	if (authenticated) localStorage.setItem("auth.username", "admin");
+	if (authenticated)
+	{
+		localStorage.setItem("auth.username", "admin");
+		localStorage.setItem("auth.role", role);
+		localStorage.setItem("auth.permissions", JSON.stringify(permissions));
+	}
 
 	return render(<I18nProvider culture="en-US"><AuthProvider>{ui}</AuthProvider></I18nProvider>);
 }

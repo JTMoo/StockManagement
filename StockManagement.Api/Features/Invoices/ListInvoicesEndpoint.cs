@@ -1,4 +1,5 @@
 using FastEndpoints;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 
 namespace StockManagement.Api.Features.Invoices;
@@ -19,6 +20,7 @@ public class ListInvoicesEndpoint(IInvoiceServiceProvider invoiceServiceProvider
 	public override void Configure()
 	{
 		this.Get("/invoices");
+		this.Permissions(Permission.SalesRead);
 	}
 
 	public override async Task<InvoiceListResponse> ExecuteAsync(ListInvoicesRequest request, CancellationToken cancellationToken)

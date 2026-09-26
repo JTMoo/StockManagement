@@ -465,4 +465,73 @@
   <data name="itemDeletionPrompt" xml:space="preserve">
     <value>{0} löschen?</value>
   </data>
+  <data name="fullName" xml:space="preserve">
+    <value>Vollständiger Name</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="role" xml:space="preserve">
+    <value>Rolle</value>
+  </data>
+  <data name="rights" xml:space="preserve">
+    <value>Rechte</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="users" xml:space="preserve">
+    <value>Benutzer</value>
+  </data>
+  <data name="createUser" xml:space="preserve">
+    <value>Benutzer anlegen</value>
+  </data>
+  <data name="saveUser" xml:space="preserve">
+    <value>Benutzer speichern</value>
+  </data>
+  <data name="deleteUser" xml:space="preserve">
+    <value>Benutzer löschen</value>
+  </data>
+  <data name="deleteUserPrompt" xml:space="preserve">
+    <value>Benutzer {0} löschen?</value>
+  </data>
+  <data name="usernameAlreadyExists" xml:space="preserve">
+    <value>Ein Benutzer mit diesem Benutzernamen existiert bereits:</value>
+  </data>
+  <data name="cannotDeleteSelf" xml:space="preserve">
+    <value>Sie können Ihr eigenes Konto nicht löschen.</value>
+  </data>
+  <data name="permCustomersRead" xml:space="preserve">
+    <value>Kunden ansehen</value>
+  </data>
+  <data name="permCustomersWrite" xml:space="preserve">
+    <value>Kunden bearbeiten</value>
+  </data>
+  <data name="permStockItemsRead" xml:space="preserve">
+    <value>Lagerartikel ansehen</value>
+  </data>
+  <data name="permStockItemsWrite" xml:space="preserve">
+    <value>Lagerartikel bearbeiten</value>
+  </data>
+  <data name="permSalesRead" xml:space="preserve">
+    <value>Rechnungen ansehen</value>
+  </data>
+  <data name="permSalesWrite" xml:space="preserve">
+    <value>Verkäufe erfassen</value>
+  </data>
+  <data name="permSettingsRead" xml:space="preserve">
+    <value>Einstellungen ansehen</value>
+  </data>
+  <data name="permSettingsWrite" xml:space="preserve">
+    <value>Einstellungen bearbeiten</value>
+  </data>
+  <data name="permUsersManage" xml:space="preserve">
+    <value>Benutzer verwalten</value>
+  </data>
 </root>

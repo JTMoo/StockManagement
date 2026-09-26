@@ -3,13 +3,14 @@ using FastEndpoints.Security;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using StockManagement.Auth.Core.Contracts;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Api.Features.Auth;
 
 
 public sealed record LoginRequest(string Username, string Password);
 
-public sealed record LoginResponse(string Token, string Username);
+public sealed record LoginResponse(string Token, string Username, UserRole Role, IReadOnlyList<string> Permissions);
 
 
 public class LoginValidator : Validator<LoginRequest>
@@ -22,7 +23,7 @@ public class LoginValidator : Validator<LoginRequest>
 }
 
 
-/// <remarks>Stateless JWT: no server-side session, "logout" just discards the token client-side. See ADR-0010.</remarks>
+/// <remarks>Stateless JWT: no server-side session, "logout" just discards the token client-side. See ADR-0010, ADR-0015.</remarks>
 public class LoginEndpoint(IAuthService authService, IConfiguration configuration) : Endpoint<LoginRequest, Results<Ok<LoginResponse>, UnauthorizedHttpResult>>
 {
 	private readonly IAuthService _authService = authService;
@@ -42,6 +43,7 @@ public class LoginEndpoint(IAuthService authService, IConfiguration configuratio
 
 		var signingKey = _configuration["Jwt:SigningKey"]!;
 		var expiryHours = _configuration.GetValue("Jwt:ExpiryHours", 12);
+		var permissions = Permission.Effective(user);
 
 		var token = JwtBearer.CreateToken(options =>
 		{
@@ -49,8 +51,10 @@ public class LoginEndpoint(IAuthService authService, IConfiguration configuratio
 			options.ExpireAt = DateTime.UtcNow.AddHours(expiryHours);
 			options.User["sub"] = user.Id;
 			options.User["username"] = user.Username;
+			options.User.Roles.Add(user.Role.ToString());
+			options.User.Permissions.AddRange(permissions);
 		});
 
-		return TypedResults.Ok(new LoginResponse(token, user.Username));
+		return TypedResults.Ok(new LoginResponse(token, user.Username, user.Role, permissions));
 	}
 }
