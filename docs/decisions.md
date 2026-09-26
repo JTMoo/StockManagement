@@ -20,6 +20,7 @@ Read before an important decision. Update in the same PR.
 | [0012](adr/0012-stock-check-in-check-out.md) | Stock check-in/check-out: `Transaction.Reason`, conditional-update check-out | Proposed |
 | [0013](adr/0013-electron-desktop-shell.md) | Electron desktop shell, opens the API's URL | Proposed |
 | [0014](adr/0014-decimal-money-type.md) | `decimal` for money, no separate Money type | Proposed |
+| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 
 ## Standing decisions
 
@@ -32,7 +33,6 @@ Read before an important decision. Update in the same PR.
 | Question | Options |
 |---|---|
 | Sequential numbers | `$inc` counter / `Max + 1` |
-| Import pipeline | read → map → clean → validate → preview → commit |
 | `#region` + banners in new code | keep / drop |
 | Nullable warnings as errors | yes / no |
 | Format check in CI | `dotnet format --verify-no-changes` + `.editorconfig` naming rules / none |
