@@ -20,7 +20,7 @@ public sealed class AppDbContextTests
 	[TestInitialize]
 	public async Task InitializeAsync()
 	{
-		var connectionString = new NpgsqlConnectionStringBuilder(PostgresContainer.ConnectionString) { Database = $"test_{Guid.NewGuid():N}" }.ConnectionString;
+		var connectionString = new NpgsqlConnectionStringBuilder(PostgresContainer.ConnectionString) { Database = $"test_{Guid.NewGuid():N}", Pooling = false }.ConnectionString;
 		var configuration = new ConfigurationBuilder()
 			.AddInMemoryCollection([new("ConnectionStrings:Postgres", connectionString)])
 			.Build();

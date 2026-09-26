@@ -131,25 +131,7 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("changeInfo", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Checkin.
-        /// </summary>
-        public static string checkin {
-            get {
-                return ResourceManager.GetString("checkin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Checkout.
-        /// </summary>
-        public static string checkout {
-            get {
-                return ResourceManager.GetString("checkout", resourceCulture);
-            }
-        }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clients.
         /// </summary>

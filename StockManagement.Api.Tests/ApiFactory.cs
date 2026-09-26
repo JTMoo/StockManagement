@@ -54,7 +54,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
 
 	protected override void ConfigureWebHost(IWebHostBuilder builder)
 	{
-		var connectionString = new NpgsqlConnectionStringBuilder(PostgresContainer.ConnectionString) { Database = $"test_{Guid.NewGuid():N}" }.ConnectionString;
+		var connectionString = new NpgsqlConnectionStringBuilder(PostgresContainer.ConnectionString) { Database = $"test_{Guid.NewGuid():N}", Pooling = false }.ConnectionString;
 		builder.UseSetting("ConnectionStrings:Postgres", connectionString);
 	}
 
