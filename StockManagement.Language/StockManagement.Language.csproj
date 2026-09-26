@@ -15,10 +15,40 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Numbers.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Resources.Designer.cs">
+    <Compile Update="Common\Common.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Auth\Auth.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Auth.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Settings\Settings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Customers\Customers.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Customers.resx</DependentUpon>
+    </Compile>
+    <Compile Update="StockItems\StockItems.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StockItems.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Invoices\Invoices.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Invoices.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Import\Import.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Import.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -28,10 +58,40 @@
       <LastGenOutput>Numbers.Designer.cs</LastGenOutput>
       <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Resources.resx">
-      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    <EmbeddedResource Update="Common\Common.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Auth\Auth.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Auth.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Settings\Settings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Customers\Customers.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Customers.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="StockItems\StockItems.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StockItems.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Invoices\Invoices.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Invoices.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Import\Import.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Import.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
 
