@@ -68,6 +68,6 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 
 	await page.getByRole("button", { name: "Artículos" }).click();
 	await page.getByRole("button", { name: "Importación de Excel" }).click();
-	await expect(page.getByRole("button", { name: "Importar" })).toBeDisabled();
+	await expect(page.getByRole("button", { name: "Vista previa" })).toBeDisabled();
 	await shot(page, "6-excel-import");
 });
