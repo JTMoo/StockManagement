@@ -9,6 +9,12 @@ This basis has:
 - Create a transaction history of all those checkin /-outs
 - Multilanguage support through settings
 
+# Quick start
+- PostgreSQL running locally on `127.0.0.1:5432`, user/password `postgres`/`postgres` (or override, see below)
+- macOS / Linux: `./scripts/quickstart.sh`
+- Windows: `./scripts/quickstart.ps1`
+- Checks prerequisites, restores the .NET solution, installs the web app's dependencies, then prints the two commands to run the API and the web app
+
 # Database config
 - API `appsettings.json`: `ConnectionStrings:Postgres`
 - Per install: `appsettings.local.json` with the keys to override (kept on upgrade)
