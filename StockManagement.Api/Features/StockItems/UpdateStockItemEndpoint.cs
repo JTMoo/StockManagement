@@ -45,7 +45,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		stockItem.Description = request.Description;
 		stockItem.Location = request.Location;
 		stockItem.Amount = request.Amount;
-		stockItem.Price = (double)request.Price;
+		stockItem.Price = request.Price;
 		stockItem.Manufacturer = request.Manufacturer;
 
 		try

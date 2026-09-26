@@ -14,15 +14,15 @@ public class StockItem : BaseDocument
 	private string _name = string.Empty;
 	private string _miscellaneous = string.Empty;
 	private string _manufacturer = string.Empty;
-	private double _price;
-	private double _factor;
+	private decimal _price;
+	private decimal _factor;
 	private int _amount;
 
 	public StockItem ()
 	{
 	}
 
-	public StockItem (string name, string code = "", string description = "", int amount=1, int price = 0, string manufacturer = "", string misc = "") 
+	public StockItem (string name, string code = "", string description = "", int amount=1, decimal price = 0, string manufacturer = "", string misc = "")
 	{
 		this.Name = name;
 		this.Code = code;
@@ -69,14 +69,14 @@ public class StockItem : BaseDocument
 	}
 
 	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.price))]
-	public double Price
+	public decimal Price
 	{
 		get { return _price; }
 		set { this.SetField(ref _price, value); }
 	}
 
 	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.factor))]
-	public double Factor
+	public decimal Factor
 	{
 		get { return _factor; }
 		set { this.SetField(ref _factor, value); }

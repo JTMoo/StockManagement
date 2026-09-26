@@ -162,4 +162,7 @@
   <data name="firstCustomerId" xml:space="preserve">
     <value>Primer número de cliente</value>
   </data>
+  <data name="currencyDecimalDigits" xml:space="preserve">
+    <value>Decimales de la moneda</value>
+  </data>
 </root>

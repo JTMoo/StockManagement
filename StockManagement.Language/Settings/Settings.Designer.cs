@@ -194,5 +194,14 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("firstCustomerId", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Currency decimal digits.
+        /// </summary>
+        public static string currencyDecimalDigits {
+            get {
+                return ResourceManager.GetString("currencyDecimalDigits", resourceCulture);
+            }
+        }
     }
 }

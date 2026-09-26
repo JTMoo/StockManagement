@@ -1,6 +1,6 @@
 # ADR-0014: `decimal` for money, no separate Money type
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-26
 
 ## Context
@@ -22,14 +22,16 @@
 ## Decision
 
 - Replace `double`/`long` money fields with `decimal`: `StockItem.Price`, `StockItem.Factor`, `SaleLine.UnitPrice`, `Invoice.Total`, `Invoice.Tax`
-- EF: `HasPrecision(18, 2)` on each money property (2 decimal digits fixed for now; revisit if a zero-decimal currency like PYG is configured in #31)
-- Switch rounding to commercial convention: `Math.Round(value, 2, MidpointRounding.AwayFromZero)` in `InvoiceCalculator` (changes current ToEven/banker's behavior)
-- No `Money` value object, no `Currency` type yet — single currency stays implicit until #31 introduces company settings; revisit then if multi-currency is actually needed
+- EF: `HasPrecision(18, 2)` storage on each money property — fixed column width, independent of rounding digits below
+- `CompanySettings.CurrencyDecimalDigits` (int, default 0): rounding precision for invoice totals/tax, set per company. Owner's main market is Paraguay (PYG), a zero-decimal currency, so the default keeps today's whole-unit behavior instead of assuming 2
+- `InvoiceCalculator.CalculateTotal`/`CalculateTax` take `currencyDecimalDigits` and round to it with `Math.Round(value, digits, MidpointRounding.AwayFromZero)` (changes current ToEven/banker's behavior); `StockItem.Price`/`Factor` stay unrounded — no currency-digit enforcement on entry
+- No `Money` value object, no `Currency`-linked type yet — `CompanySettings.Currency` (#31, ISO 4217 code) and `CurrencyDecimalDigits` are independent settings, not derived from each other; single currency per company stays implicit
 
 ## Consequences
 
 - Unblocks price import (erp-gaps.md #4)
-- A migration is needed for existing `double`/`long` columns → `numeric(18,2)`
+- A migration is needed for existing `double`/`long` columns → `numeric(18,2)`, plus the new `CurrencyDecimalDigits` column (default 0)
 - Rounding behavior changes from ToEven to AwayFromZero: totals/tax on existing invoices may recompute slightly differently if ever re-run
 - Cross-currency mistakes stay uncaught by the compiler until a `Money`/`Currency` type is introduced later, if ever needed
 - `TaxDivisor`-style flat-VAT math still lives in `InvoiceCalculator`; #31/#12 (VAT rates in settings) is a separate change
+- Setting `Currency` to a 2-decimal code does nothing on its own — `CurrencyDecimalDigits` must be set to match; no validation ties the two together yet

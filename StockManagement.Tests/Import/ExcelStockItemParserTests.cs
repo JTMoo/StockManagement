@@ -27,7 +27,7 @@ public sealed class ExcelStockItemParserTests
 		Assert.AreEqual(0, result.Errors.Count);
 		CollectionAssert.AreEqual(new[] { "A1", "B2" }, result.Items.Select(item => item.Code).ToList());
 		Assert.AreEqual(10, result.Items[0].Amount);
-		Assert.AreEqual(5.5, result.Items[0].Price);
+		Assert.AreEqual(5.5m, result.Items[0].Price);
 	}
 
 	[TestMethod]

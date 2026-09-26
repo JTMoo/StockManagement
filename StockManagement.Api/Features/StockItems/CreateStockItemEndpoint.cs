@@ -43,7 +43,7 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		var stockItem = new StockItem(request.Name, code: request.Code, description: request.Description, amount: request.Amount, manufacturer: request.Manufacturer)
 		{
 			Location = request.Location,
-			Price = (double)request.Price
+			Price = request.Price
 		};
 
 		try

@@ -10,7 +10,7 @@ public sealed class InvoiceCalculatorTests
 	public void CalculateTotal_NoLines_ReturnsZero()
 	{
 		// Act
-		var result = InvoiceCalculator.CalculateTotal([]);
+		var result = InvoiceCalculator.CalculateTotal([], 0);
 
 		// Assert
 		Assert.AreEqual(0, result);
@@ -20,7 +20,7 @@ public sealed class InvoiceCalculatorTests
 	public void CalculateTotal_NullLines_ReturnsZero()
 	{
 		// Act
-		var result = InvoiceCalculator.CalculateTotal(null);
+		var result = InvoiceCalculator.CalculateTotal(null, 0);
 
 		// Assert
 		Assert.AreEqual(0, result);
@@ -37,7 +37,7 @@ public sealed class InvoiceCalculatorTests
 		];
 
 		// Act
-		var result = InvoiceCalculator.CalculateTotal(lines);
+		var result = InvoiceCalculator.CalculateTotal(lines, 0);
 
 		// Assert
 		Assert.AreEqual(5000, result);
@@ -46,59 +46,82 @@ public sealed class InvoiceCalculatorTests
 	[DataTestMethod]
 	[DataRow(99.4, 99)]
 	[DataRow(99.6, 100)]
-	[DataRow(2.5, 2)]
+	[DataRow(2.5, 3)]
 	[DataRow(3.5, 4)]
-	public void CalculateTotal_FractionalPrice_RoundsUnitPriceHalfToEven(double unitPrice, long expected)
+	public void CalculateTotal_ZeroDigits_RoundsUnitPriceAwayFromZero(double unitPrice, long expected)
 	{
 		// Arrange
-		List<SaleLine> lines = [new("A1", "Screw", 1, unitPrice)];
+		List<SaleLine> lines = [new("A1", "Screw", 1, (decimal)unitPrice)];
 
 		// Act
-		var result = InvoiceCalculator.CalculateTotal(lines);
+		var result = InvoiceCalculator.CalculateTotal(lines, 0);
 
 		// Assert
 		Assert.AreEqual(expected, result);
 	}
 
 	[TestMethod]
-	public void CalculateTotal_FractionalPrice_RoundsBeforeMultiplying()
+	public void CalculateTotal_ZeroDigits_RoundsBeforeMultiplying()
 	{
 		// Arrange
-		List<SaleLine> lines = [new("A1", "Screw", 10, 0.4)];
+		List<SaleLine> lines = [new("A1", "Screw", 10, 0.4m)];
 
 		// Act
-		var result = InvoiceCalculator.CalculateTotal(lines);
+		var result = InvoiceCalculator.CalculateTotal(lines, 0);
 
 		// Assert
 		Assert.AreEqual(0, result);
 	}
 
-	[DataTestMethod]
-	[DataRow(0L, 0L)]
-	[DataRow(110L, 10L)]
-	[DataRow(11000L, 1000L)]
-	[DataRow(100L, 9L)]
-	[DataRow(105L, 10L)]
-	public void CalculateTax_TenPercentRate_ReturnsVatShare(long total, long expected)
+	[TestMethod]
+	public void CalculateTotal_TwoDigits_RoundsUnitPriceToCents()
 	{
+		// Arrange
+		List<SaleLine> lines = [new("A1", "Screw", 2, 1.005m)];
+
 		// Act
-		var result = InvoiceCalculator.CalculateTax(total, 10m);
+		var result = InvoiceCalculator.CalculateTotal(lines, 2);
 
 		// Assert
-		Assert.AreEqual(expected, result);
+		Assert.AreEqual(2.02m, result);
 	}
 
 	[DataTestMethod]
-	[DataRow(0L, 0L)]
-	[DataRow(105L, 5L)]
-	[DataRow(2100L, 100L)]
-	public void CalculateTax_FivePercentRate_ReturnsVatShare(long total, long expected)
+	[DataRow(0d, 10d, 0d)]
+	[DataRow(110d, 10d, 10d)]
+	[DataRow(11000d, 10d, 1000d)]
+	[DataRow(100d, 10d, 9d)]
+	[DataRow(105d, 10d, 10d)]
+	public void CalculateTax_ZeroDigits_ReturnsVatShareRoundedToWholeUnit(double total, double vatRatePercent, double expected)
 	{
 		// Act
-		var result = InvoiceCalculator.CalculateTax(total, 5m);
+		var result = InvoiceCalculator.CalculateTax((decimal)total, (decimal)vatRatePercent, 0);
 
 		// Assert
-		Assert.AreEqual(expected, result);
+		Assert.AreEqual((decimal)expected, result);
+	}
+
+	[DataTestMethod]
+	[DataRow(0d, 5d, 0d)]
+	[DataRow(105d, 5d, 5d)]
+	[DataRow(2100d, 5d, 100d)]
+	public void CalculateTax_FivePercentRate_ReturnsVatShare(double total, double vatRatePercent, double expected)
+	{
+		// Act
+		var result = InvoiceCalculator.CalculateTax((decimal)total, (decimal)vatRatePercent, 0);
+
+		// Assert
+		Assert.AreEqual((decimal)expected, result);
+	}
+
+	[TestMethod]
+	public void CalculateTax_TwoDigits_ReturnsVatShareRoundedToCents()
+	{
+		// Act
+		var result = InvoiceCalculator.CalculateTax(11m, 10m, 2);
+
+		// Assert
+		Assert.AreEqual(1.00m, result);
 	}
 
 	[TestMethod]

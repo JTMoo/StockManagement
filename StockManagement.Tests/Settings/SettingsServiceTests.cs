@@ -79,7 +79,7 @@ public sealed class SettingsServiceTests
 		var result = await this.CreateService().GetCompanySettingsAsync();
 
 		// Assert
-		Assert.AreEqual(new CompanySettings("", "", "", 10m, 30, 1, 1001), result);
+		Assert.AreEqual(new CompanySettings("", "", "", 10m, 30, 1, 1001, 0), result);
 	}
 
 	[TestMethod]
@@ -101,7 +101,7 @@ public sealed class SettingsServiceTests
 		var result = await this.CreateService().GetCompanySettingsAsync();
 
 		// Assert
-		Assert.AreEqual(new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000), result);
+		Assert.AreEqual(new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000, 0), result);
 	}
 
 	[TestMethod]
@@ -109,7 +109,7 @@ public sealed class SettingsServiceTests
 	{
 		// Arrange
 		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync((AppSettings?)null);
-		var settings = new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000);
+		var settings = new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000, 0);
 
 		// Act
 		await this.CreateService().SetCompanySettingsAsync(settings);
@@ -118,7 +118,7 @@ public sealed class SettingsServiceTests
 		_settings.Verify(provider => provider.AddSettingsAsync(It.Is<AppSettings>(stored =>
 			stored.CompanyName == "Acme" && stored.TaxId == "123456" && stored.Currency == "PYG" &&
 			stored.VatRatePercent == 5m && stored.PaymentTermInDays == 14 &&
-			stored.FirstInvoiceNumber == 100 && stored.FirstCustomerId == 2000)), Times.Once);
+			stored.FirstInvoiceNumber == 100 && stored.FirstCustomerId == 2000 && stored.CurrencyDecimalDigits == 0)), Times.Once);
 	}
 
 	[TestMethod]
@@ -127,7 +127,7 @@ public sealed class SettingsServiceTests
 		// Arrange
 		var stored = new AppSettings { Language = AvailableLanguages.Spanish };
 		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync(stored);
-		var settings = new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000);
+		var settings = new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000, 0);
 
 		// Act
 		await this.CreateService().SetCompanySettingsAsync(settings);

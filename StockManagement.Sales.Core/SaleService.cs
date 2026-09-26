@@ -15,9 +15,9 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 	private readonly ISettingsService _settingsService = settingsService;
 
 
-	public long CalculateTotal(IEnumerable<ShoppingCartItem> items)
+	public decimal CalculateTotal(IEnumerable<ShoppingCartItem> items, int currencyDecimalDigits)
 	{
-		return InvoiceCalculator.CalculateTotal((items ?? []).Select(ToSaleLine));
+		return InvoiceCalculator.CalculateTotal((items ?? []).Select(ToSaleLine), currencyDecimalDigits);
 	}
 
 	public async Task<Invoice> CreateInvoiceAsync(Customer customer, IEnumerable<ShoppingCartItem> items, DateTime date, CancellationToken cancellationToken = default)
@@ -25,8 +25,8 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		cancellationToken.ThrowIfCancellationRequested();
 
 		List<ShoppingCartItem> cartItems = [.. items ?? []];
-		var total = this.CalculateTotal(cartItems);
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+		var total = this.CalculateTotal(cartItems, companySettings.CurrencyDecimalDigits);
 
 		return new Invoice()
 		{
@@ -35,7 +35,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 			ExpirationDate = InvoiceCalculator.CalculateExpirationDate(date, companySettings.PaymentTermInDays),
 			Items = cartItems,
 			Total = total,
-			Tax = InvoiceCalculator.CalculateTax(total, companySettings.VatRatePercent)
+			Tax = InvoiceCalculator.CalculateTax(total, companySettings.VatRatePercent, companySettings.CurrencyDecimalDigits)
 		};
 	}
 

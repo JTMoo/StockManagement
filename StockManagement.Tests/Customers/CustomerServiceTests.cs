@@ -18,7 +18,7 @@ public sealed class CustomerServiceTests
 	public void Initialize()
 	{
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001));
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001, 0));
 	}
 
 	[TestMethod]
@@ -66,7 +66,7 @@ public sealed class CustomerServiceTests
 		// Arrange
 		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 2000));
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 2000, 0));
 
 		// Act
 		var result = await this.CreateService().GetNextCustomerIdAsync();

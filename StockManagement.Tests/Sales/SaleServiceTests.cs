@@ -21,7 +21,7 @@ public sealed class SaleServiceTests
 	public void Initialize()
 	{
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001));
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001, 0));
 	}
 
 	[TestMethod]
@@ -55,7 +55,7 @@ public sealed class SaleServiceTests
 	{
 		// Arrange
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CompanySettings("", "", "", 5m, 14, 1, 1001));
+			.ReturnsAsync(new CompanySettings("", "", "", 5m, 14, 1, 1001, 0));
 		var service = this.CreateService();
 		var date = new DateTime(2026, 9, 1);
 		List<ShoppingCartItem> items = [CreateCartItem("A1", "Screw", inStock: 10, price: 2100, quantity: 1)];
@@ -75,11 +75,11 @@ public sealed class SaleServiceTests
 		List<ShoppingCartItem> items =
 		[
 			CreateCartItem("A1", "Screw", inStock: 10, price: 5000, quantity: 2),
-			new ShoppingCartItem(new StockItem("Nut", code: "B2", amount: 10) { Price = 99.6 }) { Amount = 1 }
+			new ShoppingCartItem(new StockItem("Nut", code: "B2", amount: 10) { Price = 99.6m }) { Amount = 1 }
 		];
 
 		// Act
-		var result = this.CreateService().CalculateTotal(items);
+		var result = this.CreateService().CalculateTotal(items, 0);
 
 		// Assert
 		Assert.AreEqual(10100, result);

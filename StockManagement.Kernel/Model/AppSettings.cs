@@ -17,6 +17,7 @@ public class AppSettings : BaseDocument
 	private int _paymentTermInDays = 30;
 	private int _firstInvoiceNumber = 1;
 	private int _firstCustomerId = 1001;
+	private int _currencyDecimalDigits = 0;
 
 
 	public AvailableLanguages Language
@@ -40,11 +41,20 @@ public class AppSettings : BaseDocument
 	/// <summary>
 	/// ISO 4217 currency code (e.g. "PYG"); empty until set
 	/// </summary>
-	/// <remarks>Display only for now; not yet tied to any formatting or rounding behavior.</remarks>
+	/// <remarks>Display only; not tied to <see cref="CurrencyDecimalDigits"/>.</remarks>
 	public string Currency
 	{
 		get => this._currency;
 		set => this.SetField(ref this._currency, value);
+	}
+
+	/// <summary>
+	/// Decimal digits invoice totals/tax round to (0 for a zero-decimal currency like PYG)
+	/// </summary>
+	public int CurrencyDecimalDigits
+	{
+		get => this._currencyDecimalDigits;
+		set => this.SetField(ref this._currencyDecimalDigits, value);
 	}
 
 	/// <summary>
