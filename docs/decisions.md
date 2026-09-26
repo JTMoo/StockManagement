@@ -21,6 +21,7 @@ Read before an important decision. Update in the same PR.
 | [0013](adr/0013-electron-desktop-shell.md) | Electron desktop shell, opens the API's URL | Proposed |
 | [0014](adr/0014-decimal-money-type.md) | `decimal` for money, no separate Money type | Proposed |
 | [0015](adr/0015-company-settings-and-vat-rate.md) | Extend `AppSettings`/`ISettingsService` with company settings; one configurable VAT rate | Proposed |
+| [0016](adr/0016-electron-bundles-and-launches-api.md) | Electron bundles a self-contained API publish and launches it | Proposed |
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 
 ## Standing decisions
