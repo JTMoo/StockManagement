@@ -25,6 +25,7 @@ Read before an important decision. Update in the same PR.
 | [0017](adr/0017-roles-and-permissions.md) | Roles (Admin/Standard) + per-module Read/Write permission strings | Proposed |
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 | [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target: check-in against existing items, widened `UndoAsync` | Proposed |
+| [0021](adr/0021-ruc-validation.md) | RUC check-digit validation on create/update/import; unique index on normalized RUC | Proposed |
 
 ## Standing decisions
 

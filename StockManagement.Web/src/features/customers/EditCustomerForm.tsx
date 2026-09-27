@@ -34,7 +34,7 @@ export function EditCustomerForm({ customer, onSaved, onCancel }: { customer: Cu
 					</label>
 				))}
 			</div>
-			<FailureMessage failure={failure} />
+			<FailureMessage failure={failure} duplicate="identificationNumberAlreadyExists" />
 			<div className="form-actions">
 				<button type="submit" disabled={busy}>{t("saveCustomer")}</button>
 				<button type="button" onClick={onCancel} disabled={busy}>{t("cancel")}</button>
