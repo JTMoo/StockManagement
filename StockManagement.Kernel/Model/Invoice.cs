@@ -14,6 +14,7 @@ public class Invoice : BaseDocument
 	private decimal total;
 	private decimal tax;
 	private int number;
+	private bool isCancelled;
 
 
 	public Invoice()
@@ -61,5 +62,14 @@ public class Invoice : BaseDocument
 	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.customer))]
 	public Customer Customer { get; set; }
 	public List<ShoppingCartItem> Items { get; set; }
+	/// <summary>
+	/// Cancelled by a <see cref="CreditNote"/>; invoices are never deleted (#56)
+	/// </summary>
+	[Display(ResourceType = typeof(Language.Invoices), Name = nameof(Language.Invoices.cancelled))]
+	public bool IsCancelled
+	{
+		get { return this.isCancelled; }
+		set { this.SetField(ref this.isCancelled, value); }
+	}
 	#endregion Properties
 }

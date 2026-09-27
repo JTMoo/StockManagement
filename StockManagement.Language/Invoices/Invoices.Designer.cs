@@ -79,6 +79,33 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Cancel invoice.
+        /// </summary>
+        public static string cancelInvoice {
+            get {
+                return ResourceManager.GetString("cancelInvoice", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        public static string cancelled {
+            get {
+                return ResourceManager.GetString("cancelled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cancellation reason.
+        /// </summary>
+        public static string cancelReason {
+            get {
+                return ResourceManager.GetString("cancelReason", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Erstellungsdatum.
         /// </summary>
         public static string creationDate {
@@ -111,6 +138,24 @@ namespace StockManagement.Language {
         public static string expirationDate {
             get {
                 return ResourceManager.GetString("expirationDate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Credit Note.
+        /// </summary>
+        public static string creditNote {
+            get {
+                return ResourceManager.GetString("creditNote", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Credit Note ID.
+        /// </summary>
+        public static string creditNoteId {
+            get {
+                return ResourceManager.GetString("creditNoteId", resourceCulture);
             }
         }
 

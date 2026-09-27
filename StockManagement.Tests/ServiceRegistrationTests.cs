@@ -26,6 +26,7 @@ public sealed class ServiceRegistrationTests
 			.AddSingleton(new Mock<IStockItemServiceProvider>().Object)
 			.AddSingleton(new Mock<ICustomerServiceProvider>().Object)
 			.AddSingleton(new Mock<IInvoiceServiceProvider>().Object)
+			.AddSingleton(new Mock<ICreditNoteServiceProvider>().Object)
 			.AddSingleton(new Mock<IUserServiceProvider>().Object)
 			.AddSingleton(new Mock<ISettingsServiceProvider>().Object)
 			.AddSingleton(new Mock<IImportBatchServiceProvider>().Object)
@@ -40,6 +41,7 @@ public sealed class ServiceRegistrationTests
 
 		// Assert
 		Assert.IsNotNull(provider.GetRequiredService<ISaleService>());
+		Assert.IsNotNull(provider.GetRequiredService<ICreditNoteService>());
 		Assert.IsNotNull(provider.GetRequiredService<ICustomerService>());
 		Assert.IsNotNull(provider.GetRequiredService<IStockItemImportService>());
 		Assert.IsNotNull(provider.GetRequiredService<IImportBatchService>());

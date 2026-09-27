@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { invoice, mockApi, renderEnglish } from "../../test-utils";
+import { invoice, mockApi, renderEnglish, sentBody } from "../../test-utils";
 import { InvoiceView } from "./InvoiceView";
 import type { Invoice } from "../../api";
 
@@ -45,5 +45,32 @@ describe("InvoiceView", () =>
 
 		// Assert
 		expect(await screen.findByRole("article", { name: "Invoice 7" })).toBeInTheDocument();
+	});
+
+	it("CancelInvoice_ReasonGiven_ShowsCancelledAndHidesForm", async () =>
+	{
+		// Arrange
+		const fetchMock = mockApi({ "POST /api/invoices/7/cancel": { body: { number: 1, date: "2026-09-27T10:00:00", reason: "Customer returned the goods", total: 10000, tax: 909, invoiceNumber: 7 } } });
+		renderEnglish(<InvoiceView invoice={invoice as Invoice} />);
+		await userEvent.click(screen.getByRole("button", { name: "Cancel invoice" }));
+		await userEvent.type(screen.getByLabelText("Reason"), "Customer returned the goods");
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Cancel invoice" }));
+
+		// Assert
+		expect(await screen.findByTestId("invoice-cancelled")).toHaveTextContent("Cancelled");
+		expect(screen.queryByLabelText("Reason")).not.toBeInTheDocument();
+		expect(sentBody(fetchMock, "POST /api/invoices/7/cancel")).toEqual({ number: 7, reason: "Customer returned the goods" });
+	});
+
+	it("Render_AlreadyCancelledInvoice_HidesCancelButton", () =>
+	{
+		// Arrange / Act
+		renderEnglish(<InvoiceView invoice={{ ...invoice, isCancelled: true } as Invoice} />);
+
+		// Assert
+		expect(screen.getByTestId("invoice-cancelled")).toHaveTextContent("Cancelled");
+		expect(screen.queryByRole("button", { name: "Cancel invoice" })).not.toBeInTheDocument();
 	});
 });

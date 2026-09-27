@@ -12,7 +12,9 @@ export type NewCustomer = Partial<Omit<Customer, "customerId">> & { name: string
 
 export type InvoiceLine = { code: string; name: string; amount: number; unitPrice: number };
 
-export type Invoice = { number: number; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; customerName: string; lines: InvoiceLine[] };
+export type Invoice = { number: number; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; customerName: string; isCancelled: boolean; lines: InvoiceLine[] };
+
+export type CreditNote = { number: number; date: string; reason: string; total: number; tax: number; invoiceNumber: number };
 
 export type InvoiceListResult = { items: Invoice[]; totalCount: number };
 
@@ -160,6 +162,7 @@ export const api = {
 	createSale: (sale: NewSale) => send<Invoice>("/sales", { method: "POST", body: JSON.stringify(sale) }),
 	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
 	listInvoices: (filter: InvoiceFilter, signal?: AbortSignal) => send<InvoiceListResult>(`/invoices?${invoiceFilterQuery(filter)}`, { signal }),
+	cancelInvoice: (number: number, reason: string) => send<CreditNote>(`/invoices/${number}/cancel`, { method: "POST", body: JSON.stringify({ number, reason }) }),
 	getSettings: (signal?: AbortSignal) => send<Settings>("/settings", { signal }),
 	updateSettings: (language: Language) => send<Settings>("/settings", { method: "PUT", body: JSON.stringify({ language }) }),
 	getCompanySettings: (signal?: AbortSignal) => send<CompanySettings>("/company-settings", { signal }),

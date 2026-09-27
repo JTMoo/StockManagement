@@ -123,8 +123,23 @@
   <data name="cash" xml:space="preserve">
     <value>Contado</value>
   </data>
+  <data name="cancelInvoice" xml:space="preserve">
+    <value>Anular factura</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Anulada</value>
+  </data>
+  <data name="cancelReason" xml:space="preserve">
+    <value>Motivo de anulación</value>
+  </data>
   <data name="creationDate" xml:space="preserve">
     <value>Fecha de emisión</value>
+  </data>
+  <data name="creditNote" xml:space="preserve">
+    <value>Nota de crédito</value>
+  </data>
+  <data name="creditNoteId" xml:space="preserve">
+    <value>Número de nota de crédito</value>
   </data>
   <data name="credit" xml:space="preserve">
     <value>Credito</value>

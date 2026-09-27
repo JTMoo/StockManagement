@@ -123,8 +123,23 @@
   <data name="cash" xml:space="preserve">
     <value>Cash</value>
   </data>
+  <data name="cancelInvoice" xml:space="preserve">
+    <value>Cancel invoice</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="cancelReason" xml:space="preserve">
+    <value>Cancellation reason</value>
+  </data>
   <data name="creationDate" xml:space="preserve">
     <value>Creation date</value>
+  </data>
+  <data name="creditNote" xml:space="preserve">
+    <value>Credit Note</value>
+  </data>
+  <data name="creditNoteId" xml:space="preserve">
+    <value>Credit Note ID</value>
   </data>
   <data name="credit" xml:space="preserve">
     <value>Credit</value>
