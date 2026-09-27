@@ -41,7 +41,9 @@ public sealed class ServiceRegistrationTests
 
 		// Assert
 		Assert.IsNotNull(provider.GetRequiredService<ISaleService>());
-		Assert.IsNotNull(provider.GetRequiredService<ICreditNoteService>());
+		// ICreditNoteService is Scoped (it depends on the Scoped ICreditNoteServiceProvider), unlike the other Cores' Singletons
+		using var scope = provider.CreateScope();
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ICreditNoteService>());
 		Assert.IsNotNull(provider.GetRequiredService<ICustomerService>());
 		Assert.IsNotNull(provider.GetRequiredService<IStockItemImportService>());
 		Assert.IsNotNull(provider.GetRequiredService<IImportBatchService>());
