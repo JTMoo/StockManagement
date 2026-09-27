@@ -1,15 +1,17 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { api, type ApiFailure, type StockItem } from "../../api";
+import { api, type ApiFailure, type StockItem, type Supplier } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
 import { useI18n, type TextKey } from "../../i18n";
+import { useLoad } from "../../useLoad";
 
-const fields: (keyof StockItem & TextKey)[] = ["code", "name", "description", "location", "amount", "price", "manufacturer"];
-const numberFields = new Set<string>(["amount", "price"]);
-const empty: StockItem = { id: "", code: "", name: "", description: "", location: "", amount: 0, price: 0, manufacturer: "" };
+const fields: (keyof StockItem & TextKey)[] = ["code", "name", "description", "location", "amount", "price", "manufacturer", "minimumStock"];
+const numberFields = new Set<string>(["amount", "price", "minimumStock"]);
+const empty: StockItem = { id: "", code: "", name: "", description: "", location: "", amount: 0, price: 0, manufacturer: "", minimumStock: 0 };
 
 export function StockItemForm({ editing, onSaved, onCancel }: { editing?: StockItem; onSaved: (stockItem: StockItem) => void; onCancel: () => void })
 {
 	const { t } = useI18n();
+	const { data: suppliers = [] } = useLoad(api.listSuppliers);
 	const [stockItem, setStockItem] = useState<StockItem>(editing ?? empty);
 	const [failure, setFailure] = useState<ApiFailure>();
 	const [busy, setBusy] = useState(false);
@@ -44,6 +46,16 @@ export function StockItemForm({ editing, onSaved, onCancel }: { editing?: StockI
 						/>
 					</label>
 				))}
+				<label>
+					{t("supplier")}
+					<select
+						value={stockItem.supplierId ?? ""}
+						onChange={event => setStockItem({ ...stockItem, supplierId: event.target.value || undefined })}
+					>
+						<option value="">{t("noSupplier")}</option>
+						{suppliers.map((supplier: Supplier) => <option key={supplier.id} value={supplier.id}>{supplier.name}</option>)}
+					</select>
+				</label>
 			</div>
 			<FailureMessage failure={failure} />
 			<div className="form-actions">

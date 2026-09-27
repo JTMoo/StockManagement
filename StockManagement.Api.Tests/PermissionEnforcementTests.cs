@@ -61,6 +61,32 @@ public sealed class PermissionEnforcementTests
 	}
 
 	[TestMethod]
+	public async Task StandardUser_WithoutSuppliersWrite_CannotCreateSupplier()
+	{
+		// Arrange
+		var client = await this.CreateStandardUserClientAsync("plain2", []);
+
+		// Act
+		var response = await client.PostAsJsonAsync("/api/suppliers", new { Name = "Acme" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task StandardUser_WithSuppliersWrite_CanCreateSupplier()
+	{
+		// Arrange
+		var client = await this.CreateStandardUserClientAsync("buyer", [Permission.SuppliersWrite]);
+
+		// Act
+		var response = await client.PostAsJsonAsync("/api/suppliers", new { Name = "Acme" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+	}
+
+	[TestMethod]
 	public async Task StandardUser_WithoutUsersManage_CannotListUsers()
 	{
 		// Arrange
