@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using ClosedXML.Excel;
 using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Api.Features.Import;
+using StockManagement.Api.Features.StockItems;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
@@ -218,6 +219,65 @@ public sealed class ImportBatchEndpointsTests
 		Assert.AreEqual(1, batch.ReadyCount);
 		Assert.AreEqual(1, batch.ErrorCount);
 		Assert.AreEqual(3, batch.Rows.Single(row => row.Status == ImportRowStatus.Error).Row);
+	}
+
+	[TestMethod]
+	public async Task PreviewThenCommit_OpeningStockMatchingExistingCode_ChecksInAndReportsNothingCreated()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		await stockItems.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 3));
+
+		var content = ExcelFileContent(ImportTarget.OpeningStock, CreateWorkbook("Opening", ["Code", "Amount"], ["A1", "10"]));
+		var previewResponse = await _client.PostAsync("/api/import/batches", content);
+		var previewed = await previewResponse.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(1, previewed.ReadyCount);
+
+		// Act
+		var commitResponse = await _client.PostAsync($"/api/import/batches/{previewed.Id}/commit", null);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, commitResponse.StatusCode);
+		var item = await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(13, item.Amount);
+
+		var allItems = await stockItems.GetAllStockItemsAsync();
+		Assert.AreEqual(1, allItems.Count());
+	}
+
+	[TestMethod]
+	public async Task Preview_OpeningStockCodeNotAnExistingStockItem_ReportsAsDuplicate()
+	{
+		// Arrange
+		var content = ExcelFileContent(ImportTarget.OpeningStock, CreateWorkbook("Opening", ["Code", "Amount"], ["Unknown", "10"]));
+
+		// Act
+		var response = await _client.PostAsync("/api/import/batches", content);
+
+		// Assert
+		var batch = await response.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(0, batch.ReadyCount);
+		Assert.AreEqual(1, batch.DuplicateCount);
+	}
+
+	[TestMethod]
+	public async Task PreviewCommitThenUndo_OpeningStock_ChecksTheAmountBackOut()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		await stockItems.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 3));
+
+		var content = ExcelFileContent(ImportTarget.OpeningStock, CreateWorkbook("Opening", ["Code", "Amount"], ["A1", "10"]));
+		var previewed = await (await _client.PostAsync("/api/import/batches", content)).Content.ReadAsAsync<ImportBatchResponse>();
+		await _client.PostAsync($"/api/import/batches/{previewed.Id}/commit", null);
+
+		// Act
+		var undoResponse = await _client.PostAsync($"/api/import/batches/{previewed.Id}/undo", null);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, undoResponse.StatusCode);
+		var item = await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(3, item.Amount);
 	}
 
 	[TestMethod]

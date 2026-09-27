@@ -110,7 +110,7 @@ public sealed class CustomerImportTargetHandlerTests
 		_customers.Setup(provider => provider.GetCustomerByIdAsync("id-1")).ReturnsAsync(customer);
 
 		// Act
-		await _handler.UndoAsync(["id-1"]);
+		await _handler.UndoAsync([("id-1", customer)]);
 
 		// Assert
 		_customers.Verify(provider => provider.DeleteCustomerAsync(customer), Times.Once);

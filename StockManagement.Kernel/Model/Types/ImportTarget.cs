@@ -8,5 +8,7 @@ public enum ImportTarget
 {
 	StockItems = 0,
 
-	Customers
+	Customers,
+
+	OpeningStock
 }

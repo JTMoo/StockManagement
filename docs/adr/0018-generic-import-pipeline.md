@@ -1,6 +1,6 @@
 # ADR-0018: Generic import pipeline (batches, preview → commit, undo)
 
-- Status: Accepted
+- Status: Proposed
 - Date: 2026-09-26
 
 ## Context

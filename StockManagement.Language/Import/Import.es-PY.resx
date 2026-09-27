@@ -138,6 +138,9 @@
   <data name="imported" xml:space="preserve">
     <value>Importado</value>
   </data>
+  <data name="openingStock" xml:space="preserve">
+    <value>Stock Inicial</value>
+  </data>
   <data name="preview" xml:space="preserve">
     <value>Vista previa</value>
   </data>

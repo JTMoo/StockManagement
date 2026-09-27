@@ -4,6 +4,7 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { OpeningStockImport } from "./OpeningStockImport";
 import { StockCheckForm } from "./StockCheckForm";
 import { StockItemForm } from "./StockItemForm";
 import { StockItemImport } from "./StockItemImport";
@@ -16,6 +17,7 @@ export function StockItemList()
 	const [editing, setEditing] = useState<StockItem>();
 	const [checking, setChecking] = useState<StockItem>();
 	const [showImport, setShowImport] = useState(false);
+	const [showOpeningStock, setShowOpeningStock] = useState(false);
 
 	async function onImported()
 	{
@@ -53,10 +55,12 @@ export function StockItemList()
 		<Page title={t("stockItems")} toolbar={<>
 			<input type="search" aria-label={t("search")} placeholder={t("searchBoxDefault")} value={search} onChange={event => setSearch(event.target.value)} />
 			<button type="button" className="quiet" aria-pressed={showImport} onClick={() => setShowImport(!showImport)}>{t("excelImport")}</button>
+			<button type="button" className="quiet" aria-pressed={showOpeningStock} onClick={() => setShowOpeningStock(!showOpeningStock)}>{t("openingStock")}</button>
 		</>}>
 			<StockItemForm editing={editing} onSaved={onSaved} onCancel={() => setEditing(undefined)} />
 			{checking && <StockCheckForm stockItem={checking} onChecked={onChecked} onCancel={() => setChecking(undefined)} />}
 			{showImport && <StockItemImport onImported={onImported} />}
+			{showOpeningStock && <OpeningStockImport onImported={onImported} />}
 			<FailureMessage failure={failure} />
 			<table>
 				<thead>

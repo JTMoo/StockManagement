@@ -51,9 +51,9 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 		return [.. items.Select(item => item.Id)];
 	}
 
-	public async Task UndoAsync(IReadOnlyList<string> entityIds, CancellationToken cancellationToken = default)
+	public async Task UndoAsync(IReadOnlyList<(string EntityId, object Candidate)> entities, CancellationToken cancellationToken = default)
 	{
-		foreach (var id in entityIds)
+		foreach (var (id, _) in entities)
 		{
 			if (await _customerServiceProvider.GetCustomerByIdAsync(id) is Customer customer)
 			{

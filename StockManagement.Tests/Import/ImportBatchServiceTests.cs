@@ -90,13 +90,17 @@ public sealed class ImportBatchServiceTests
 		var batch = new ImportBatch(ImportTarget.Customers, "legacy.xlsx", "Sheet1", [new ImportBatchRow(1, ImportRowStatus.Ready, null, "payload:fresh")]);
 		batch.MarkCommitted(["new-id"]);
 		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id)).ReturnsAsync(batch);
+		_handler.Setup(handler => handler.DeserializeCandidate("payload:fresh")).Returns("fresh");
 
 		// Act
 		var result = await _service.UndoAsync(batch.Id);
 
 		// Assert
 		Assert.AreEqual(ImportBatchStatus.Undone, result.Status);
-		_handler.Verify(handler => handler.UndoAsync(It.Is<IReadOnlyList<string>>(ids => ids.SequenceEqual(new[] { "new-id" })), It.IsAny<CancellationToken>()), Times.Once);
+		var expected = new[] { ("new-id", (object)"fresh") };
+		_handler.Verify(handler => handler.UndoAsync(
+			It.Is<IReadOnlyList<(string EntityId, object Candidate)>>(entities => entities.SequenceEqual(expected)),
+			It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
