@@ -5,11 +5,13 @@ using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.ExtensionMethods;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "");
+public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0);
 
 
 public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
@@ -20,14 +22,19 @@ public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
 		this.RuleFor(request => request.Name).NotEmpty();
 		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.Factor).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
 	}
 }
 
 
-/// <remarks>Matches the stored item by <c>Id</c> (docs/decisions.md: update by Id, never by business key), so Code can be renamed.</remarks>
-public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceProvider) : Endpoint<UpdateStockItemRequest, Results<Ok<StockItemResponse>, NotFound, Conflict<DuplicateStockItemCodeResponse>>>
+/// <remarks>Matches the stored item by <c>Id</c> (docs/decisions.md: update by Id, never by business key), so Code can be renamed. When <c>Factor > 0</c>, <c>Price</c> is derived from the purchase fields (ADR-0020) instead of the request's <c>Price</c>.</remarks>
+public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceProvider, ISettingsService settingsService) : Endpoint<UpdateStockItemRequest, Results<Ok<StockItemResponse>, NotFound, Conflict<DuplicateStockItemCodeResponse>>>
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
+	private readonly ISettingsService _settingsService = settingsService;
 
 
 	public override void Configure()
@@ -45,8 +52,21 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		stockItem.Description = request.Description;
 		stockItem.Location = request.Location;
 		stockItem.Amount = request.Amount;
-		stockItem.Price = request.Price;
 		stockItem.Manufacturer = request.Manufacturer;
+		stockItem.Factor = request.Factor;
+		stockItem.PurchasePrice = request.PurchasePrice;
+		stockItem.PurchaseExchangeRate = request.PurchaseExchangeRate;
+		stockItem.AdditionalPurchaseCost = request.AdditionalPurchaseCost;
+
+		if (request.Factor > 0)
+		{
+			var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+			stockItem.Price = StockItemExtensions.CalculateSalePrice(request.PurchasePrice, request.PurchaseExchangeRate, request.AdditionalPurchaseCost, request.Factor, companySettings.CurrencyDecimalDigits);
+		}
+		else
+		{
+			stockItem.Price = request.Price;
+		}
 
 		try
 		{

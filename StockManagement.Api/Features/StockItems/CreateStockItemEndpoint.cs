@@ -5,11 +5,13 @@ using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.ExtensionMethods;
+using StockManagement.Settings.Core.Contracts;
 
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record CreateStockItemRequest(string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "");
+public sealed record CreateStockItemRequest(string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0);
 
 
 public class CreateStockItemValidator : Validator<CreateStockItemRequest>
@@ -20,6 +22,10 @@ public class CreateStockItemValidator : Validator<CreateStockItemRequest>
 		this.RuleFor(request => request.Name).NotEmpty();
 		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.Factor).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
 	}
 }
 
@@ -27,9 +33,11 @@ public class CreateStockItemValidator : Validator<CreateStockItemRequest>
 public sealed record DuplicateStockItemCodeResponse(string Code);
 
 
-public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceProvider) : Endpoint<CreateStockItemRequest, Results<Created<StockItemResponse>, Conflict<DuplicateStockItemCodeResponse>>>
+/// <remarks>When <c>Factor > 0</c>, <c>Price</c> is derived from the purchase fields (ADR-0020) instead of the request's <c>Price</c>.</remarks>
+public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceProvider, ISettingsService settingsService) : Endpoint<CreateStockItemRequest, Results<Created<StockItemResponse>, Conflict<DuplicateStockItemCodeResponse>>>
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
+	private readonly ISettingsService _settingsService = settingsService;
 
 
 	public override void Configure()
@@ -43,8 +51,21 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		var stockItem = new StockItem(request.Name, code: request.Code, description: request.Description, amount: request.Amount, manufacturer: request.Manufacturer)
 		{
 			Location = request.Location,
-			Price = request.Price
+			Factor = request.Factor,
+			PurchasePrice = request.PurchasePrice,
+			PurchaseExchangeRate = request.PurchaseExchangeRate,
+			AdditionalPurchaseCost = request.AdditionalPurchaseCost
 		};
+
+		if (request.Factor > 0)
+		{
+			var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+			stockItem.Price = StockItemExtensions.CalculateSalePrice(request.PurchasePrice, request.PurchaseExchangeRate, request.AdditionalPurchaseCost, request.Factor, companySettings.CurrencyDecimalDigits);
+		}
+		else
+		{
+			stockItem.Price = request.Price;
+		}
 
 		try
 		{

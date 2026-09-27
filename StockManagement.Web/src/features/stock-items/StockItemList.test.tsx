@@ -73,7 +73,7 @@ describe("StockItemList", () =>
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Screw" })).toBeInTheDocument();
-		expect(sentBody(fetchMock, "POST /api/stock-items")).toEqual({ id: "", code: "A1", name: "Screw", description: "", location: "", amount: 0, price: 0, manufacturer: "" });
+		expect(sentBody(fetchMock, "POST /api/stock-items")).toEqual({ id: "", code: "A1", name: "Screw", description: "", location: "", amount: 0, price: 0, manufacturer: "", factor: 0, purchasePrice: 0, purchaseExchangeRate: 0, additionalPurchaseCost: 0 });
 	});
 
 	it("Create_DuplicateCode_ShowsError", async () =>

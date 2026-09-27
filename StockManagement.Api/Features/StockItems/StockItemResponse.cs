@@ -6,10 +6,10 @@ namespace StockManagement.Api.Features.StockItems;
 /// <summary>
 /// Article with its units in stock
 /// </summary>
-public sealed record StockItemResponse(string Id, string Code, string Name, string Description, string Location, int Amount, decimal Price, string Manufacturer)
+public sealed record StockItemResponse(string Id, string Code, string Name, string Description, string Location, int Amount, decimal Price, string Manufacturer, decimal Factor, decimal PurchasePrice, decimal PurchaseExchangeRate, decimal AdditionalPurchaseCost)
 {
 	public static StockItemResponse From(StockItem stockItem)
 	{
-		return new(stockItem.Id, stockItem.Code, stockItem.Name, stockItem.Description, stockItem.Location, stockItem.Amount, stockItem.Price, stockItem.Manufacturer);
+		return new(stockItem.Id, stockItem.Code, stockItem.Name, stockItem.Description, stockItem.Location, stockItem.Amount, stockItem.Price, stockItem.Manufacturer, stockItem.Factor, stockItem.PurchasePrice, stockItem.PurchaseExchangeRate, stockItem.AdditionalPurchaseCost);
 	}
 }

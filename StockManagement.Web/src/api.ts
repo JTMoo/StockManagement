@@ -2,7 +2,7 @@
 
 export type SaleCondition = "Cash" | "Credit";
 
-export type StockItem = { id: string; code: string; name: string; description: string; location: string; amount: number; price: number; manufacturer: string };
+export type StockItem = { id: string; code: string; name: string; description: string; location: string; amount: number; price: number; manufacturer: string; factor: number; purchasePrice: number; purchaseExchangeRate: number; additionalPurchaseCost: number };
 
 export type NewStockItem = Partial<Omit<StockItem, "id" | "code">> & { code: string; name: string };
 
