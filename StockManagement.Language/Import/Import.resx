@@ -123,6 +123,9 @@
   <data name="commit" xml:space="preserve">
     <value>Commit</value>
   </data>
+  <data name="downloadReport" xml:space="preserve">
+    <value>Download report</value>
+  </data>
   <data name="duplicatesSkipped" xml:space="preserve">
     <value>Skipped as duplicate</value>
   </data>

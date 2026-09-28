@@ -56,6 +56,21 @@ export function ImportPanel({ target, onImported }: { target: ImportTarget; onIm
 		onImported?.();
 	}
 
+	async function onDownloadReport()
+	{
+		if (!batch) return;
+
+		const response = await api.downloadImportBatchReport(batch.id);
+		if (!response.ok) return setFailure({ kind: "unexpected" });
+
+		const url = URL.createObjectURL(await response.blob());
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = `${batch.fileName.replace(/\.[^.]+$/, "")}-report.csv`;
+		link.click();
+		URL.revokeObjectURL(url);
+	}
+
 	return (
 		<div className="panel">
 			<div className="form-actions">
@@ -71,6 +86,7 @@ export function ImportPanel({ target, onImported }: { target: ImportTarget; onIm
 					</div>
 					{batch.status === "Previewed" && <button type="button" disabled={batch.readyCount === 0 || busy} onClick={onCommit}>{t("commit")}</button>}
 					{batch.status === "Committed" && <button type="button" disabled={busy} onClick={onUndo}>{t("undo")}</button>}
+					{batch.rows.some(row => row.status !== "Ready") && <button type="button" onClick={onDownloadReport}>{t("downloadReport")}</button>}
 					<table>
 						<thead><tr><th>{t("row")}</th><th></th></tr></thead>
 						<tbody>

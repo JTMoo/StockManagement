@@ -28,6 +28,7 @@ Generated from `docs/adr/*.md` by `scripts/generate-adr-index.sh`. Don't hand-ed
 | [0017](adr/0017-roles-and-permissions.md) | Roles and permissions | Proposed |
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline (batches, preview → commit, undo) | Proposed |
 | [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target | Proposed |
+| [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers and reorder level | Proposed |
 <!-- ADR-INDEX:END -->
 
 ## Standing decisions
