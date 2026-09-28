@@ -18,6 +18,7 @@ export function StockItemList()
 	const [checking, setChecking] = useState<StockItem>();
 	const [showImport, setShowImport] = useState(false);
 	const [showOpeningStock, setShowOpeningStock] = useState(false);
+	const [belowMinimumOnly, setBelowMinimumOnly] = useState(false);
 
 	async function onImported()
 	{
@@ -26,7 +27,9 @@ export function StockItemList()
 	}
 
 	const term = search.trim().toLowerCase();
-	const visible = stockItems.filter(item => [item.code, item.name, item.description, item.location].some(value => value.toLowerCase().includes(term)));
+	const visible = stockItems
+		.filter(item => [item.code, item.name, item.description, item.location].some(value => value.toLowerCase().includes(term)))
+		.filter(item => !belowMinimumOnly || (item.minimumStock > 0 && item.amount < item.minimumStock));
 
 	function onSaved(stockItem: StockItem)
 	{
@@ -54,6 +57,7 @@ export function StockItemList()
 	return (
 		<Page title={t("stockItems")} toolbar={<>
 			<input type="search" aria-label={t("search")} placeholder={t("searchBoxDefault")} value={search} onChange={event => setSearch(event.target.value)} />
+			<button type="button" className="quiet" aria-pressed={belowMinimumOnly} onClick={() => setBelowMinimumOnly(!belowMinimumOnly)}>{t("belowMinimum")}</button>
 			<button type="button" className="quiet" aria-pressed={showImport} onClick={() => setShowImport(!showImport)}>{t("excelImport")}</button>
 			<button type="button" className="quiet" aria-pressed={showOpeningStock} onClick={() => setShowOpeningStock(!showOpeningStock)}>{t("openingStock")}</button>
 		</>}>
@@ -64,14 +68,14 @@ export function StockItemList()
 			<FailureMessage failure={failure} />
 			<table>
 				<thead>
-					<tr><th>{t("name")}</th><th>{t("code")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th>{t("manufacturer")}</th><th>{t("location")}</th><th></th></tr>
+					<tr><th>{t("name")}</th><th>{t("code")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th>{t("manufacturer")}</th><th>{t("location")}</th><th>{t("supplier")}</th><th></th></tr>
 				</thead>
 				<tbody>
 					{visible.map(item => (
-						<tr key={item.code} className={item.amount === 0 ? "sold-out" : undefined}>
+						<tr key={item.code} className={item.minimumStock > 0 && item.amount < item.minimumStock ? "below-minimum" : item.amount === 0 ? "sold-out" : undefined}>
 							<td>{item.name}</td><td>{item.code}</td>
 							<td className="number">{formatNumber(item.amount)}</td><td className="number">{formatNumber(item.price)}</td>
-							<td>{item.manufacturer}</td><td>{item.location}</td>
+							<td>{item.manufacturer}</td><td>{item.location}</td><td>{item.supplierName ?? ""}</td>
 							<td className="row-actions">
 								<button type="button" className="quiet" onClick={() => setEditing(item)}>{t("edit")}</button>
 								<button type="button" className="quiet" onClick={() => setChecking(item)}>{t("checkStock")}</button>

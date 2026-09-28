@@ -26,6 +26,7 @@ Read before an important decision. Update in the same PR.
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 | [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target: check-in against existing items, widened `UndoAsync` | Proposed |
 | [0021](adr/0021-ruc-validation.md) | RUC check-digit validation on create/update/import; unique index on normalized RUC | Proposed |
+| [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers domain (no Core layer, matches StockItems), `StockItem.SupplierId`/`MinimumStock`, delete blocked while in use | Proposed |
 
 ## Standing decisions
 

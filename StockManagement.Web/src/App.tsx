@@ -1,4 +1,4 @@
-import { Banknote, BookUser, Inbox, LogOut, Menu, Settings, ShoppingCart, Users, Wrench, type LucideIcon } from "lucide-react";
+import { Banknote, BookUser, Inbox, LogOut, Menu, Settings, ShoppingCart, Truck, Users, Wrench, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { useAuth } from "./auth";
@@ -9,15 +9,17 @@ import { SaleForm } from "./features/sales/SaleForm";
 import { CompanySettingsPage } from "./features/settings/CompanySettingsPage";
 import { SettingsPage } from "./features/settings/SettingsPage";
 import { StockItemList } from "./features/stock-items/StockItemList";
+import { SupplierList } from "./features/suppliers/SupplierList";
 import { UserList } from "./features/users/UserList";
 import { useI18n } from "./i18n";
 
-type View = "stockItems" | "clients" | "newSale" | "invoices" | "companySettings" | "settings" | "users";
+type View = "stockItems" | "clients" | "suppliers" | "newSale" | "invoices" | "companySettings" | "settings" | "users";
 
 // Same order and icons as the WPF menu (FontAwesome Wrench, AddressBook, Inbox)
 const views: { name: View; icon: LucideIcon }[] = [
 	{ name: "stockItems", icon: Wrench },
 	{ name: "clients", icon: BookUser },
+	{ name: "suppliers", icon: Truck },
 	{ name: "newSale", icon: ShoppingCart },
 	{ name: "invoices", icon: Inbox },
 	{ name: "companySettings", icon: Banknote },
@@ -41,13 +43,17 @@ export function App()
 	if (!username) return <LoginPage />;
 
 	// #14: user management is only useful (and only allowed by the server) with Users.Manage
-	const visibleViews = hasPermission("Users.Manage") ? [...views, { name: "users" as const, icon: Users }] : views;
+	const visibleViews = [
+		...views.filter(({ name }) => name !== "suppliers" || hasPermission("Suppliers.Read")),
+		...(hasPermission("Users.Manage") ? [{ name: "users" as const, icon: Users }] : [])
+	];
 
 	return (
 		<div className="shell">
 			<main>
 				{view === "stockItems" && <StockItemList />}
 				{view === "clients" && <CustomerList />}
+				{view === "suppliers" && <SupplierList />}
 				{view === "newSale" && <SaleForm onSold={onSold} />}
 				{view === "invoices" && <InvoiceBrowser invoice={invoice} />}
 				{view === "companySettings" && <CompanySettingsPage />}

@@ -9,6 +9,9 @@ public interface IStockItemServiceProvider
 	public Task<StockItem> GetStockItemByIdAsync(string id);
 	public Task<IEnumerable<StockItem>> GetAllStockItemsAsync();
 
+	/// <returns>Items with <see cref="StockItem.MinimumStock"/> &gt; 0 and <see cref="StockItem.Amount"/> below it (#57)</returns>
+	public Task<IEnumerable<StockItem>> GetStockItemsBelowMinimumAsync();
+
 	/// <returns>Rows affected; 1 on success</returns>
 	public Task<int> UpdateStockItemAsync(StockItem stockItem);
 
