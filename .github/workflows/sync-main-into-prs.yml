@@ -1,0 +1,42 @@
+name: Sync main into open PRs
+
+# No merge queue on a personal-account repo (ADR-0026): merge main into every open PR branch
+# after each push to main instead, so conflicts get resolved one PR at a time.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Merge main into each open PR branch
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        gh pr list --state open --base main --json number,headRefName | jq -c '.[]' | while read -r row; do
+          number=$(echo "$row" | jq -r .number)
+          branch=$(echo "$row" | jq -r .headRefName)
+
+          git fetch origin "$branch" main
+          git checkout -B "$branch" "origin/$branch"
+
+          if git merge --no-edit origin/main; then
+            git push origin "$branch"
+          else
+            git merge --abort
+            gh pr comment "$number" --body "Merge conflict with \`main\` after the latest push — needs a manual merge before this PR can go green."
+          fi
+        done

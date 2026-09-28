@@ -12,7 +12,14 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 
 1. Read [docs/decisions.md](docs/decisions.md). No silent contradiction of an accepted ADR.
 2. Grill it: `/grill-with-docs` (`~/.claude/skills/grill-with-docs`, owner's machine). Not available: ask the owner directly.
-3. Record it: ADR in [docs/adr/](docs/adr/README.md) + row in `docs/decisions.md`. Small rules: *Standing decisions*.
+3. Record it: ADR in [docs/adr/](docs/adr/README.md). ADR table in `docs/decisions.md` is generated, don't hand-edit it. Small rules: *Standing decisions*.
+
+## Merging (ADR-0026)
+
+- No owner review required. A PR merges itself once every required check is green: CI + `claude-review` (blocking findings only)
+- After pushing, enable auto-merge on your own PR
+- `main` gets merged into every open PR branch after each push to `main`; a real conflict gets a PR comment, not a silent merge
+- Owner is pulled in for architecture/scope calls or when the next step is unclear — not for a green PR
 
 ## Commands
 
@@ -21,7 +28,8 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - API tests (Docker): `dotnet test StockManagement.Api.Tests`
 - Run API: `dotnet run --project StockManagement.Api` (PostgreSQL on `127.0.0.1:5432`, see README)
 - Web (`StockManagement.Web`): `npm ci`, `npm run dev` (API running), `npm test`, `npm run e2e` (PostgreSQL), `npm run build` (→ API `wwwroot`)
-- CI: `Integration.yml` (Windows tests + Linux API and web tests on PR), `Delivery.yml` (MSI on tag)
+- CI: `Integration.yml` (adr-index check, API/web/unit tests, desktop build); `claude-review.yml` (blocking review); `sync-main-into-prs.yml`; `Release.yml` (installers on tag)
+- ADR index: `node scripts/generate-adr-index.mjs` (`--check` in CI)
 
 ## Style (existing)
 
