@@ -89,6 +89,34 @@ public sealed class InvoiceStatusCalculatorTests
 	}
 
 	[TestMethod]
+	public void GetStatus_Cancelled_ReturnsCancelled()
+	{
+		// Arrange
+		var invoice = CreateInvoice(total: 1000, expirationDate: Now.AddDays(-1), new Payment { Amount = 300 });
+		invoice.IsCancelled = true;
+
+		// Act
+		var status = InvoiceStatusCalculator.GetStatus(invoice, Now);
+
+		// Assert
+		Assert.AreEqual(InvoiceStatus.Cancelled, status);
+	}
+
+	[TestMethod]
+	public void AmountDue_Cancelled_ReturnsZero()
+	{
+		// Arrange
+		var invoice = CreateInvoice(total: 1000, expirationDate: Now.AddDays(10), new Payment { Amount = 300 });
+		invoice.IsCancelled = true;
+
+		// Act
+		var amountDue = InvoiceStatusCalculator.AmountDue(invoice);
+
+		// Assert
+		Assert.AreEqual(0, amountDue);
+	}
+
+	[TestMethod]
 	public void AmountPaid_NoPayments_ReturnsZero()
 	{
 		// Arrange

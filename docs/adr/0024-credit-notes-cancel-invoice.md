@@ -7,7 +7,7 @@
 
 - #56: invoices are never deleted; cancelling one returns the stock (#29) and leaves a record
 - `IInvoiceServiceProvider.DeleteInvoiceAsync` exists but has no endpoint or caller today — deleting an invoice would silently lose the sale and leave no trace
-- #55 (payments/open balance, PR #95) adds `Invoice.Payments` and a computed status; this ADR does not touch it — a cancelled invoice's balance/status is a follow-up once #95 merges
+- #55 (payments/open balance, PR #95, merged) adds `Invoice.Payments` and a computed `InvoiceStatus`; a cancelled invoice needs its own status so it doesn't read as unpaid/overdue
 - "Customers with invoices: deactivate, not delete" (#56) has no code to change yet: there is no customer delete endpoint
 
 ## Options
@@ -24,9 +24,9 @@
 - `POST /invoices/{Number}/cancel` (`Sales.Write`): 404 unknown invoice, 409 when already cancelled, 200 with the stored credit note; `GET /credit-notes/{Number}` (`Sales.Read`)
 - Full cancellation only, no partial credit notes: matches the issue ("cancel invoice"), not a resupply flow
 - React: a "Cancel invoice" action with a required reason on `InvoiceView`, replaced by a "Cancelled" label once done
+- `InvoiceStatus.Cancelled` (added to #55's enum): `InvoiceStatusCalculator.GetStatus` returns it before any payment check, and `AmountDue` returns 0 once `IsCancelled`, so a cancelled invoice never reads as Open/PartiallyPaid/Overdue and drops out of `GetOpenInvoicesAsync`/`GetOverdueInvoicesAsync`. `RecordPaymentAsync` already rejects any payment against it, since amount due is 0.
 
 ## Consequences
 
-- A cancelled invoice's `AmountDue`/status (once #95 lands) needs a follow-up: crediting it out but not touching `Payments` mixes an unpaid invoice's balance with the invoice being void
 - `DeleteInvoiceAsync` stays unused by the API; removing it is a separate cleanup, not part of this change
 - Customer deactivation from #56 stays undone until a customer delete endpoint exists

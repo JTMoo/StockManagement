@@ -51,7 +51,7 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 	{
 		var now = DateTime.Now;
 		var invoices = await this.LoadInvoicesAsync(customerId, cancellationToken);
-		var open = invoices.Where(invoice => InvoiceStatusCalculator.GetStatus(invoice, now) != InvoiceStatus.Paid);
+		var open = invoices.Where(invoice => InvoiceStatusCalculator.GetStatus(invoice, now) is not (InvoiceStatus.Paid or InvoiceStatus.Cancelled));
 		return Paginate(open, page, pageSize);
 	}
 
