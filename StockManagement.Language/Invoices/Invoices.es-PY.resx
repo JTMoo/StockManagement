@@ -153,6 +153,9 @@
   <data name="insufficientStock" xml:space="preserve">
     <value>No hay suficiente stock, disponible:</value>
   </data>
+  <data name="invalidPaymentAmount" xml:space="preserve">
+    <value>El monto del pago debe ser mayor que cero.</value>
+  </data>
   <data name="invoice" xml:space="preserve">
     <value>Factura</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="newSale" xml:space="preserve">
     <value>Nueva venta</value>
+  </data>
+  <data name="paymentExceedsAmountDue" xml:space="preserve">
+    <value>El monto del pago supera el saldo pendiente de la factura.</value>
   </data>
   <data name="saleCondition" xml:space="preserve">
     <value>Condición de Venta</value>

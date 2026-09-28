@@ -2,9 +2,13 @@
 
 export type SaleCondition = "Cash" | "Credit";
 
-export type StockItem = { id: string; code: string; name: string; description: string; location: string; amount: number; price: number; manufacturer: string };
+export type StockItem = { id: string; code: string; name: string; description: string; location: string; amount: number; price: number; manufacturer: string; supplierId?: string; supplierName?: string; minimumStock: number };
 
 export type NewStockItem = Partial<Omit<StockItem, "id" | "code">> & { code: string; name: string };
+
+export type Supplier = { id: string; name: string; contactName: string; country: string; currency: string; leadTimeDays: number; miscellaneous: string };
+
+export type NewSupplier = Partial<Omit<Supplier, "id">> & { name: string };
 
 export type Customer = { customerId: number; name: string; lastname: string; address: string; phoneNumber: string; identificationNumber: string; postboxNumber: string; email: string; miscellaneous: string };
 
@@ -55,7 +59,8 @@ export type Permission =
 	| "Customers.Read" | "Customers.Write"
 	| "StockItems.Read" | "StockItems.Write"
 	| "Sales.Read" | "Sales.Write"
-	| "Settings.Read" | "Settings.Write";
+	| "Settings.Read" | "Settings.Write"
+	| "Suppliers.Read" | "Suppliers.Write";
 
 export type LoginResult = { token: string; username: string; role: UserRole; permissions: Permission[] };
 
@@ -135,9 +140,10 @@ async function handleResponse<T>(fetchCall: () => Promise<Response>): Promise<Re
 	}
 	if (response.status === 409)
 	{
-		const body = (await response.json()) as { unavailableItems?: string[]; code?: string; inStock?: number; reason?: string };
+		const body = (await response.json()) as { unavailableItems?: string[]; code?: string; name?: string; inStock?: number; reason?: string };
 		if (body.unavailableItems) return { ok: false, failure: { kind: "conflict", unavailableItems: body.unavailableItems } };
 		if (body.code) return { ok: false, failure: { kind: "duplicate", code: body.code } };
+		if (body.name) return { ok: false, failure: { kind: "duplicate", code: body.name } };
 		if (body.inStock !== undefined) return { ok: false, failure: { kind: "insufficientStock", inStock: body.inStock } };
 		if (body.reason !== undefined) return { ok: false, failure: { kind: "invalidState", reason: body.reason } };
 		return { ok: false, failure: { kind: "cannotDeleteSelf" } };
@@ -148,6 +154,7 @@ async function handleResponse<T>(fetchCall: () => Promise<Response>): Promise<Re
 
 export const api = {
 	listStockItems: (signal?: AbortSignal) => send<StockItem[]>("/stock-items", { signal }),
+	listStockItemsBelowMinimum: (signal?: AbortSignal) => send<StockItem[]>("/stock-items/below-minimum", { signal }),
 	createStockItem: (stockItem: NewStockItem) => send<StockItem>("/stock-items", { method: "POST", body: JSON.stringify(stockItem) }),
 	updateStockItem: (stockItem: StockItem) => send<StockItem>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "PUT", body: JSON.stringify(stockItem) }),
 	deleteStockItem: (stockItem: StockItem) => send<void>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "DELETE" }),
@@ -156,9 +163,14 @@ export const api = {
 	previewImport: (target: ImportTarget, file: File) => sendForm<ImportBatch>("/import/batches", file, { Target: target }),
 	commitImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/commit`, { method: "POST" }),
 	undoImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/undo`, { method: "POST" }),
+	downloadImportBatchReport: (id: string) => fetch(`/api/import/batches/${encodeURIComponent(id)}/report`, { headers: authHeaders() }),
 	listCustomers: (signal?: AbortSignal) => send<Customer[]>("/customers", { signal }),
 	createCustomer: (customer: NewCustomer) => send<Customer>("/customers", { method: "POST", body: JSON.stringify(customer) }),
 	updateCustomer: (customer: Customer) => send<Customer>(`/customers/${customer.customerId}`, { method: "PUT", body: JSON.stringify(customer) }),
+	listSuppliers: (signal?: AbortSignal) => send<Supplier[]>("/suppliers", { signal }),
+	createSupplier: (supplier: NewSupplier) => send<Supplier>("/suppliers", { method: "POST", body: JSON.stringify(supplier) }),
+	updateSupplier: (supplier: Supplier) => send<Supplier>(`/suppliers/${encodeURIComponent(supplier.id)}`, { method: "PUT", body: JSON.stringify(supplier) }),
+	deleteSupplier: (supplier: Supplier) => send<void>(`/suppliers/${encodeURIComponent(supplier.id)}`, { method: "DELETE" }),
 	createSale: (sale: NewSale) => send<Invoice>("/sales", { method: "POST", body: JSON.stringify(sale) }),
 	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
 	listInvoices: (filter: InvoiceFilter, signal?: AbortSignal) => send<InvoiceListResult>(`/invoices?${invoiceFilterQuery(filter)}`, { signal }),

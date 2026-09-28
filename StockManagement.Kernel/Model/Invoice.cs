@@ -71,5 +71,6 @@ public class Invoice : BaseDocument
 		get { return this.isCancelled; }
 		set { this.SetField(ref this.isCancelled, value); }
 	}
+	public List<Payment> Payments { get; set; } = [];
 	#endregion Properties
 }

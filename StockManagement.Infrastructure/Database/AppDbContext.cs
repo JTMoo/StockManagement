@@ -37,6 +37,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<ImportBatch> ImportBatches => this.Set<ImportBatch>();
 
+	public DbSet<Supplier> Suppliers => this.Set<Supplier>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{

@@ -18,6 +18,8 @@ public static class Permission
 	public const string SalesWrite = "Sales.Write";
 	public const string SettingsRead = "Settings.Read";
 	public const string SettingsWrite = "Settings.Write";
+	public const string SuppliersRead = "Suppliers.Read";
+	public const string SuppliersWrite = "Suppliers.Write";
 
 	public static readonly IReadOnlyList<string> CatalogAll =
 	[
@@ -25,7 +27,8 @@ public static class Permission
 		CustomersRead, CustomersWrite,
 		StockItemsRead, StockItemsWrite,
 		SalesRead, SalesWrite,
-		SettingsRead, SettingsWrite
+		SettingsRead, SettingsWrite,
+		SuppliersRead, SuppliersWrite
 	];
 
 	/// <returns>Every permission for <see cref="UserRole.Admin"/>, otherwise <paramref name="user"/>'s stored <see cref="User.Permissions"/></returns>

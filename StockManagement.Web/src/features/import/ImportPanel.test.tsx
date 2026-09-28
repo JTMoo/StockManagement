@@ -85,6 +85,27 @@ describe("ImportPanel", () =>
 		expect(onImported).toHaveBeenCalledTimes(2);
 	});
 
+	it("PreviewWithErrorRows_DownloadReportClicked_FetchesTheReportAndTriggersADownload", async () =>
+	{
+		// Arrange
+		const csv = "Row,Status,Message,Data\r\n3,Duplicate,,Name=Bo\r\n";
+		mockApi({
+			"POST /api/import/batches": { body: previewed },
+			"GET /api/import/batches/batch-1/report": { body: csv }
+		});
+		vi.stubGlobal("URL", { ...URL, createObjectURL: vi.fn(() => "blob:mock"), revokeObjectURL: vi.fn() });
+		renderEnglish(<ImportPanel target="Customers" />);
+		await userEvent.upload(screen.getByLabelText("Choose file"), file);
+		await userEvent.click(screen.getByRole("button", { name: "Preview" }));
+		await screen.findByRole("button", { name: "Download report" });
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Download report" }));
+
+		// Assert
+		expect(URL.createObjectURL).toHaveBeenCalled();
+	});
+
 	it("NoFileChosen_PreviewButtonDisabled", () =>
 	{
 		// Arrange

@@ -25,6 +25,8 @@ Read before an important decision. Update in the same PR.
 | [0017](adr/0017-roles-and-permissions.md) | Roles (Admin/Standard) + per-module Read/Write permission strings | Proposed |
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 | [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target: check-in against existing items, widened `UndoAsync` | Proposed |
+| [0022](adr/0022-invoice-payments-and-status.md) | Invoice payments as an owned collection, status computed (never stored) | Proposed |
+| [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers domain (no Core layer, matches StockItems), `StockItem.SupplierId`/`MinimumStock`, delete blocked while in use | Proposed |
 | [0024](adr/0024-credit-notes-cancel-invoice.md) | Cancel an invoice with a credit note: invoice gets `IsCancelled`, never deleted | Proposed |
 
 ## Standing decisions

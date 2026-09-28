@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
 	{
 		services.AddSingleton<ISaleService, SaleService>();
 		services.AddScoped<ICreditNoteService, CreditNoteService>();
+		services.AddSingleton<IPaymentService, PaymentService>();
 		return services;
 	}
 }

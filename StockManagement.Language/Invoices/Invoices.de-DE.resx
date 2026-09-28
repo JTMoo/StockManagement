@@ -153,6 +153,9 @@
   <data name="insufficientStock" xml:space="preserve">
     <value>Nicht genug auf Lager, verfügbar:</value>
   </data>
+  <data name="invalidPaymentAmount" xml:space="preserve">
+    <value>Der Zahlungsbetrag muss größer als null sein.</value>
+  </data>
   <data name="invoice" xml:space="preserve">
     <value>Rechnung</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="newSale" xml:space="preserve">
     <value>Neuer Verkauf</value>
+  </data>
+  <data name="paymentExceedsAmountDue" xml:space="preserve">
+    <value>Der Zahlungsbetrag übersteigt den offenen Betrag der Rechnung.</value>
   </data>
   <data name="saleCondition" xml:space="preserve">
     <value>Verkaufsbedingung</value>

@@ -168,6 +168,15 @@
   <data name="manufacturer" xml:space="preserve">
     <value>Manufacturer</value>
   </data>
+  <data name="minimumStock" xml:space="preserve">
+    <value>Minimum stock</value>
+  </data>
+  <data name="belowMinimum" xml:space="preserve">
+    <value>Below minimum</value>
+  </data>
+  <data name="noSupplier" xml:space="preserve">
+    <value>No supplier</value>
+  </data>
   <data name="mapProperties" xml:space="preserve">
     <value>Map columsn to properties</value>
   </data>

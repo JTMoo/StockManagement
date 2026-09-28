@@ -40,12 +40,13 @@ public class CreateSaleValidator : Validator<CreateSaleRequest>
 
 
 /// <remarks>Takes the units out of stock and stores the invoice; 409 when any article is unavailable.</remarks>
-public class CreateSaleEndpoint(ISaleService saleService, ICustomerServiceProvider customerServiceProvider) : Endpoint<CreateSaleRequest, Results<Created<InvoiceResponse>, Conflict<SaleConflictResponse>>>
+public class CreateSaleEndpoint(ISaleService saleService, ICustomerServiceProvider customerServiceProvider, IPaymentService paymentService) : Endpoint<CreateSaleRequest, Results<Created<InvoiceResponse>, Conflict<SaleConflictResponse>>>
 {
 	public const string CustomerNotFound = "customerNotFound";
 
 	private readonly ISaleService _saleService = saleService;
 	private readonly ICustomerServiceProvider _customerServiceProvider = customerServiceProvider;
+	private readonly IPaymentService _paymentService = paymentService;
 
 
 	public override void Configure()
@@ -63,6 +64,6 @@ public class CreateSaleEndpoint(ISaleService saleService, ICustomerServiceProvid
 		var result = await _saleService.SellAsync(customer, items, request.SaleCondition, DateTime.Now, cancellationToken);
 		if (!result.Succeeded || result.Invoice is not Invoice invoice) return TypedResults.Conflict(new SaleConflictResponse(result.UnavailableItems));
 
-		return TypedResults.Created($"/api/invoices/{invoice.Number}", InvoiceResponse.From(invoice));
+		return TypedResults.Created($"/api/invoices/{invoice.Number}", InvoiceResponse.From(invoice, _paymentService));
 	}
 }
