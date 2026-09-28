@@ -31,6 +31,7 @@ Generated from `docs/adr/*.md` by `scripts/generate-adr-index.sh`. Don't hand-ed
 | [0021](adr/0021-ruc-validation.md) | RUC validation and duplicate matching | Proposed |
 | [0022](adr/0022-invoice-payments-and-status.md) | Invoice payments and status | Proposed |
 | [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers and reorder level | Proposed |
+| [0024](adr/0024-credit-notes-cancel-invoice.md) | Cancel an invoice with a credit note | Proposed |
 <!-- ADR-INDEX:END -->
 
 ## Standing decisions

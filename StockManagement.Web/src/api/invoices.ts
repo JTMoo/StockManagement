@@ -3,7 +3,9 @@ import type { SaleCondition } from "./sales";
 
 export type InvoiceLine = { code: string; name: string; amount: number; unitPrice: number };
 
-export type Invoice = { number: number; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; customerName: string; lines: InvoiceLine[] };
+export type Invoice = { number: number; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; customerName: string; isCancelled: boolean; lines: InvoiceLine[] };
+
+export type CreditNote = { number: number; date: string; reason: string; total: number; tax: number; invoiceNumber: number };
 
 export type InvoiceListResult = { items: Invoice[]; totalCount: number };
 
@@ -11,7 +13,8 @@ export type InvoiceFilter = { customerId?: number; from?: string; to?: string; p
 
 export const invoicesApi = {
 	getInvoice: (number: number, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
-	listInvoices: (filter: InvoiceFilter, signal?: AbortSignal) => send<InvoiceListResult>(`/invoices?${invoiceFilterQuery(filter)}`, { signal })
+	listInvoices: (filter: InvoiceFilter, signal?: AbortSignal) => send<InvoiceListResult>(`/invoices?${invoiceFilterQuery(filter)}`, { signal }),
+	cancelInvoice: (number: number, reason: string) => send<CreditNote>(`/invoices/${number}/cancel`, { method: "POST", body: JSON.stringify({ number, reason }) })
 };
 
 function invoiceFilterQuery(filter: InvoiceFilter): string

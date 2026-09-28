@@ -123,8 +123,23 @@
   <data name="cash" xml:space="preserve">
     <value>Bar</value>
   </data>
+  <data name="cancelInvoice" xml:space="preserve">
+    <value>Rechnung stornieren</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Storniert</value>
+  </data>
+  <data name="cancelReason" xml:space="preserve">
+    <value>Stornierungsgrund</value>
+  </data>
   <data name="creationDate" xml:space="preserve">
     <value>Erstellungsdatum</value>
+  </data>
+  <data name="creditNote" xml:space="preserve">
+    <value>Gutschrift</value>
+  </data>
+  <data name="creditNoteId" xml:space="preserve">
+    <value>Gutschriftsnummer</value>
   </data>
   <data name="credit" xml:space="preserve">
     <value>Kredit</value>
