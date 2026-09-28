@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,11 @@ public sealed class PreviewImportRequest
 	public ImportTarget Target { get; set; }
 
 	public IFormFile File { get; set; } = default!;
+
+	/// <summary>
+	/// Confirmed column mapping as JSON, column number → <see cref="ImportField.Name"/> (docs/adr/0025-import-column-mapping.md); omitted auto-matches headers by name
+	/// </summary>
+	public string? Mapping { get; set; }
 }
 
 
@@ -51,7 +57,8 @@ public class PreviewImportEndpoint(IImportBatchService importBatchService, ILogg
 
 		try
 		{
-			var batch = await _importBatchService.PreviewAsync(request.Target, request.File.FileName, stream, cancellationToken);
+			var columnMapping = request.Mapping is null ? null : JsonSerializer.Deserialize<Dictionary<int, string>>(request.Mapping);
+			var batch = await _importBatchService.PreviewAsync(request.Target, request.File.FileName, stream, columnMapping, cancellationToken);
 			return TypedResults.Ok(ImportBatchResponse.From(batch));
 		}
 		catch (Exception ex)

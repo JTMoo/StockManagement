@@ -97,6 +97,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Column.
+        /// </summary>
+        public static string column {
+            get {
+                return ResourceManager.GetString("column", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Excel Import.
         /// </summary>
         public static string excelImport {
@@ -111,6 +120,24 @@ namespace StockManagement.Language {
         public static string failedConversion {
             get {
                 return ResourceManager.GetString("failedConversion", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Field.
+        /// </summary>
+        public static string field {
+            get {
+                return ResourceManager.GetString("field", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore this column.
+        /// </summary>
+        public static string ignoreColumn {
+            get {
+                return ResourceManager.GetString("ignoreColumn", resourceCulture);
             }
         }
 

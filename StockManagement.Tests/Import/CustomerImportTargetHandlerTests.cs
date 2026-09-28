@@ -34,13 +34,54 @@ public sealed class CustomerImportTargetHandlerTests
 		using var workbook = CreateWorkbook(["Name", "Lastname"], ["Ann", "Miller"], ["Bo", "Nolan"]);
 
 		// Act
-		var (sheetName, candidates, errors) = await _handler.ParseAsync(ToStream(workbook));
+		var (sheetName, candidates, errors) = await _handler.ParseAsync(ToStream(workbook), null);
 
 		// Assert
 		Assert.AreEqual("Customers", sheetName);
 		Assert.AreEqual(0, errors.Count);
 		CollectionAssert.AreEqual(new[] { 2, 3 }, candidates.Select(candidate => candidate.Row).ToList());
 		Assert.AreEqual("Ann", ((Customer)candidates[0].Candidate).Name);
+	}
+
+	[TestMethod]
+	public void GetFields_ReturnsCustomerPropertyAndDisplayNames()
+	{
+		// Act
+		var fields = _handler.GetFields();
+
+		// Assert
+		Assert.IsTrue(fields.Any(field => field.Name == nameof(Customer.Name)));
+	}
+
+	[TestMethod]
+	public async Task DetectColumnsAsync_KnownAndUnknownHeaders_MatchesTheKnownOneOnly()
+	{
+		// Arrange
+		using var workbook = CreateWorkbook(["Name", "Something Else"], ["Ann", "?"]);
+
+		// Act
+		var (sheetName, columns) = await _handler.DetectColumnsAsync(ToStream(workbook));
+
+		// Assert
+		Assert.AreEqual("Customers", sheetName);
+		Assert.AreEqual(nameof(Customer.Name), columns.Single(column => column.Column == 1).MatchedFieldName);
+		Assert.IsNull(columns.Single(column => column.Column == 2).MatchedFieldName);
+	}
+
+	[TestMethod]
+	public async Task ParseAsync_ExplicitColumnMapping_UsesItInsteadOfHeaderNames()
+	{
+		// Arrange
+		using var workbook = CreateWorkbook(["Vorname", "Nachname"], ["Ann", "Miller"]);
+		var mapping = new Dictionary<int, string> { [1] = nameof(Customer.Name), [2] = nameof(Customer.Lastname) };
+
+		// Act
+		var (_, candidates, _) = await _handler.ParseAsync(ToStream(workbook), mapping);
+
+		// Assert
+		var customer = (Customer)candidates.Single().Candidate;
+		Assert.AreEqual("Ann", customer.Name);
+		Assert.AreEqual("Miller", customer.Lastname);
 	}
 
 	[TestMethod]

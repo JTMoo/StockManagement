@@ -20,8 +20,19 @@ export type ImportBatch = {
 	rows: ImportBatchRow[];
 };
 
+export type ImportField = { name: string; displayName: string };
+
+export type DetectedColumn = { column: number; header: string; matchedFieldName?: string };
+
+export type DetectedColumns = { sheetName: string; columns: DetectedColumn[]; fields: ImportField[] };
+
+/** Column number → target field name (ImportField.name); confirmed by the user before preview (ADR-0025) */
+export type ImportColumnMapping = Record<number, string>;
+
 export const importApi = {
-	previewImport: (target: ImportTarget, file: File) => sendForm<ImportBatch>("/import/batches", file, { Target: target }),
+	detectImportColumns: (target: ImportTarget, file: File) => sendForm<DetectedColumns>("/import/batches/columns", file, { Target: target }),
+	previewImport: (target: ImportTarget, file: File, mapping?: ImportColumnMapping) =>
+		sendForm<ImportBatch>("/import/batches", file, { Target: target, ...(mapping ? { Mapping: JSON.stringify(mapping) } : {}) }),
 	commitImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/commit`, { method: "POST" }),
 	undoImportBatch: (id: string) => send<ImportBatch>(`/import/batches/${encodeURIComponent(id)}/undo`, { method: "POST" }),
 	downloadImportBatchReport: (id: string) => fetch(`/api/import/batches/${encodeURIComponent(id)}/report`, { headers: authHeaders() })

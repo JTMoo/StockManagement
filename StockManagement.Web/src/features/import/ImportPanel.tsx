@@ -1,30 +1,48 @@
 import { useRef, useState } from "react";
-import { api, type ApiFailure, type ImportBatch, type ImportTarget } from "../../api";
+import { api, type ApiFailure, type DetectedColumns, type ImportBatch, type ImportColumnMapping, type ImportTarget } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
 import { useI18n } from "../../i18n";
 
-/** Upload → preview → commit/undo panel shared by every import target (ADR-0018). */
+/** Upload → map columns → preview → commit/undo panel shared by every import target (ADR-0018, ADR-0025). */
 export function ImportPanel({ target, onImported }: { target: ImportTarget; onImported?: () => void })
 {
 	const { t } = useI18n();
 	const fileInput = useRef<HTMLInputElement>(null);
 	const [file, setFile] = useState<File>();
+	const [columns, setColumns] = useState<DetectedColumns>();
+	const [mapping, setMapping] = useState<ImportColumnMapping>({});
 	const [batch, setBatch] = useState<ImportBatch>();
 	const [failure, setFailure] = useState<ApiFailure>();
 	const [busy, setBusy] = useState(false);
+
+	async function onDetectColumns()
+	{
+		if (!file) return;
+
+		setBusy(true);
+		const response = await api.detectImportColumns(target, file);
+		setBusy(false);
+		if (!response.ok) return setFailure(response.failure);
+
+		setFailure(undefined);
+		setColumns(response.value);
+		setMapping(Object.fromEntries(response.value.columns.filter(column => column.matchedFieldName).map(column => [column.column, column.matchedFieldName!])));
+	}
 
 	async function onPreview()
 	{
 		if (!file) return;
 
 		setBusy(true);
-		const response = await api.previewImport(target, file);
+		const response = await api.previewImport(target, file, mapping);
 		setBusy(false);
 		if (!response.ok) return setFailure(response.failure);
 
 		setFailure(undefined);
 		setBatch(response.value);
 		setFile(undefined);
+		setColumns(undefined);
+		setMapping({});
 		if (fileInput.current) fileInput.current.value = "";
 	}
 
@@ -74,10 +92,31 @@ export function ImportPanel({ target, onImported }: { target: ImportTarget; onIm
 	return (
 		<div className="panel">
 			<div className="form-actions">
-				<input ref={fileInput} type="file" accept=".xlsx" aria-label={t("chooseFile")} onChange={event => setFile(event.target.files?.[0])} />
-				<button type="button" disabled={!file || busy} onClick={onPreview}>{t("preview")}</button>
+				<input ref={fileInput} type="file" accept=".xlsx" aria-label={t("chooseFile")} onChange={event => { setFile(event.target.files?.[0]); setColumns(undefined); }} />
+				{!columns && <button type="button" disabled={!file || busy} onClick={onDetectColumns}>{t("preview")}</button>}
 			</div>
 			<FailureMessage failure={failure} />
+			{columns && !batch && (
+				<>
+					<table>
+						<thead><tr><th>{t("column")}</th><th>{t("field")}</th></tr></thead>
+						<tbody>
+							{columns.columns.map(column => (
+								<tr key={column.column}>
+									<td>{column.header}</td>
+									<td>
+										<select aria-label={column.header} value={mapping[column.column] ?? ""} onChange={event => setMapping({ ...mapping, [column.column]: event.target.value })}>
+											<option value="">{t("ignoreColumn")}</option>
+											{columns.fields.map(field => <option key={field.name} value={field.name}>{field.displayName}</option>)}
+										</select>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+					<button type="button" disabled={busy} onClick={onPreview}>{t("preview")}</button>
+				</>
+			)}
 			{batch && (
 				<>
 					<div className="form-grid">
