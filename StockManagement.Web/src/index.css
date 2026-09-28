@@ -87,6 +87,7 @@ th { text-align: left; font-size: 0.85rem; font-weight: 600; color: var(--mist);
 td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--slate); vertical-align: top; }
 tbody tr:hover { background: var(--slate); }
 tr.sold-out td { color: var(--mist); }
+tr.below-minimum td:first-child { border-left: 3px solid var(--error); }
 .number { text-align: right; font-variant-numeric: tabular-nums; }
 .row-actions { display: flex; gap: 0.4rem; justify-content: flex-end; }
 tfoot th, tfoot td { border-bottom: 0; }
