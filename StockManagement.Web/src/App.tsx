@@ -1,28 +1,19 @@
-import { Banknote, BookUser, Inbox, LogOut, Menu, Settings, ShoppingCart, Users, Wrench, type LucideIcon } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import type { Invoice } from "./api";
 import { useAuth } from "./auth";
 import { LoginPage } from "./features/auth/LoginPage";
-import { CustomerList } from "./features/customers/CustomerList";
-import { InvoiceBrowser } from "./features/invoices/InvoiceBrowser";
-import { SaleForm } from "./features/sales/SaleForm";
-import { CompanySettingsPage } from "./features/settings/CompanySettingsPage";
-import { SettingsPage } from "./features/settings/SettingsPage";
-import { StockItemList } from "./features/stock-items/StockItemList";
-import { UserList } from "./features/users/UserList";
+import { customersRoute } from "./features/customers/route";
+import { invoicesRoute } from "./features/invoices/route";
+import { salesRoute } from "./features/sales/route";
+import { companySettingsRoute, settingsRoute } from "./features/settings/routes";
+import { stockItemsRoute } from "./features/stock-items/route";
+import { usersRoute } from "./features/users/route";
 import { useI18n } from "./i18n";
-
-type View = "stockItems" | "clients" | "newSale" | "invoices" | "companySettings" | "settings" | "users";
+import type { NavRoute, View } from "./routes";
 
 // Same order and icons as the WPF menu (FontAwesome Wrench, AddressBook, Inbox)
-const views: { name: View; icon: LucideIcon }[] = [
-	{ name: "stockItems", icon: Wrench },
-	{ name: "clients", icon: BookUser },
-	{ name: "newSale", icon: ShoppingCart },
-	{ name: "invoices", icon: Inbox },
-	{ name: "companySettings", icon: Banknote },
-	{ name: "settings", icon: Settings }
-];
+const routes: NavRoute[] = [stockItemsRoute, customersRoute, salesRoute, invoicesRoute, companySettingsRoute, settingsRoute, usersRoute];
 
 export function App()
 {
@@ -40,26 +31,18 @@ export function App()
 
 	if (!username) return <LoginPage />;
 
-	// #14: user management is only useful (and only allowed by the server) with Users.Manage
-	const visibleViews = hasPermission("Users.Manage") ? [...views, { name: "users" as const, icon: Users }] : views;
+	const visibleRoutes = routes.filter(route => !route.permission || hasPermission(route.permission));
+	const activeRoute = visibleRoutes.find(route => route.name === view) ?? visibleRoutes[0];
 
 	return (
 		<div className="shell">
-			<main>
-				{view === "stockItems" && <StockItemList />}
-				{view === "clients" && <CustomerList />}
-				{view === "newSale" && <SaleForm onSold={onSold} />}
-				{view === "invoices" && <InvoiceBrowser invoice={invoice} />}
-				{view === "companySettings" && <CompanySettingsPage />}
-				{view === "settings" && <SettingsPage />}
-				{view === "users" && <UserList />}
-			</main>
+			<main>{activeRoute.render({ invoice, onSold })}</main>
 			<nav className={menuExtended ? "menu" : "menu collapsed"}>
 				<button className="menu-item" aria-label="Menu" aria-expanded={menuExtended} onClick={() => setMenuExtended(!menuExtended)}>
 					<Menu />
 				</button>
 				<div className="menu-bottom">
-					{visibleViews.map(({ name, icon: Icon }) => (
+					{visibleRoutes.map(({ name, icon: Icon }) => (
 						<button key={name} className="menu-item" aria-label={t(name)} aria-pressed={view === name} onClick={() => setView(name)}>
 							<Icon />{menuExtended && <span>{t(name)}</span>}
 						</button>
