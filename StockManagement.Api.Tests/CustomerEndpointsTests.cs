@@ -66,6 +66,41 @@ public sealed class CustomerEndpointsTests
 	}
 
 	[TestMethod]
+	public async Task CreateCustomer_ValidRucWithoutHyphen_NormalizesIt()
+	{
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana", IdentificationNumber: "19465203"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+		Assert.AreEqual("1946520-3", (await response.Content.ReadAsAsync<CustomerResponse>()).IdentificationNumber);
+	}
+
+	[TestMethod]
+	public async Task CreateCustomer_NonRucIdentificationNumber_Returns201Unchanged()
+	{
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana", IdentificationNumber: "ID-1"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+		Assert.AreEqual("ID-1", (await response.Content.ReadAsAsync<CustomerResponse>()).IdentificationNumber);
+	}
+
+	[TestMethod]
+	public async Task CreateCustomer_DuplicateNormalizedRuc_Returns409()
+	{
+		// Arrange
+		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana", IdentificationNumber: "1946520-3"));
+
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Luis", IdentificationNumber: "19465203"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Conflict, response.StatusCode);
+	}
+
+	[TestMethod]
 	public async Task GetCustomer_Created_ReturnsIt()
 	{
 		// Arrange
@@ -112,6 +147,34 @@ public sealed class CustomerEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task UpdateCustomer_ValidRucWithoutHyphen_NormalizesIt()
+	{
+		// Arrange
+		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana"));
+
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/customers/1001", new UpdateCustomerRequest(1001, "Ana", IdentificationNumber: "19465203"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		Assert.AreEqual("1946520-3", (await response.Content.ReadAsAsync<CustomerResponse>()).IdentificationNumber);
+	}
+
+	[TestMethod]
+	public async Task UpdateCustomer_DuplicateNormalizedRuc_Returns409()
+	{
+		// Arrange
+		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Ana", IdentificationNumber: "1946520-3"));
+		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Luis"));
+
+		// Act
+		var response = await _client.PutAsJsonAsync("/api/customers/1002", new UpdateCustomerRequest(1002, "Luis", IdentificationNumber: "19465203"));
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Conflict, response.StatusCode);
 	}
 
 	[TestMethod]

@@ -20,9 +20,16 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 	public ImportTarget Target => ImportTarget.Customers;
 
 
+	/// <remarks><see cref="Customer.IdentificationNumber"/> also holds a plain C.I. (no check digit); only a value that verifies as a RUC is normalized, everything else is imported as entered.</remarks>
 	public async Task<(string SheetName, IReadOnlyList<(int Row, object Candidate)> Candidates, IReadOnlyList<ImportRowError> Errors)> ParseAsync(Stream excelFile, CancellationToken cancellationToken = default)
 	{
 		var (sheetName, items, errors) = await ExcelEntityParser<Customer>.ParseAsync(excelFile, cancellationToken);
+
+		foreach (var (_, item) in items)
+		{
+			if (RucValidator.TryNormalize(item.IdentificationNumber, out var normalized)) item.IdentificationNumber = normalized;
+		}
+
 		return (sheetName, [.. items.Select(item => (item.Row, (object)item.Item))], errors);
 	}
 

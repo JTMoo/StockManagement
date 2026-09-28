@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockManagement.Infrastructure.Database;
@@ -11,9 +12,11 @@ using StockManagement.Infrastructure.Database;
 namespace StockManagement.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260927064445_AddCustomerIdentificationNumberUniqueIndex")]
+    partial class AddCustomerIdentificationNumberUniqueIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,9 +225,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("MinimumStock")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Miscellaneous")
                         .IsRequired()
                         .HasColumnType("text");
@@ -237,54 +237,12 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
-                    b.Property<string>("SupplierId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("SupplierId");
-
                     b.ToTable("StockItems");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.Supplier", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContactName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("LeadTimeDays")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Miscellaneous")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.Transaction", b =>
@@ -410,36 +368,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("StockManagement.Kernel.Model.Payment", "Payments", b1 =>
-                        {
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("numeric(18,2)");
-
-                            b1.Property<DateTime>("Date")
-                                .HasColumnType("timestamp without time zone");
-
-                            b1.Property<string>("InvoiceId")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<int>("Method")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("InvoiceId");
-
-                            b1.ToTable("Payments", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("InvoiceId");
-                        });
-
                     b.OwnsMany("StockManagement.Kernel.Model.ShoppingCartItem", "Items", b1 =>
                         {
                             b1.Property<Guid>("Id")
@@ -483,17 +411,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Items");
-
-                    b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.StockItem", b =>
-                {
-                    b.HasOne("StockManagement.Kernel.Model.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId");
-
-                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.Transaction", b =>

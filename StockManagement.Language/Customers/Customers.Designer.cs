@@ -142,6 +142,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to A customer with this identification number already exists:.
+        /// </summary>
+        public static string identificationNumberAlreadyExists {
+            get {
+                return ResourceManager.GetString("identificationNumberAlreadyExists", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Lastname.
         /// </summary>
         public static string lastname {
