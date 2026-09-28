@@ -17,17 +17,24 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 
 	public Task<StockItem> GetStockItemAsync(string code)
 	{
-		return _db.StockItems.SingleOrDefaultAsync(item => item.Code == code)!;
+		return _db.StockItems.Include(item => item.Supplier).SingleOrDefaultAsync(item => item.Code == code)!;
 	}
 
 	public Task<StockItem> GetStockItemByIdAsync(string id)
 	{
-		return _db.StockItems.SingleOrDefaultAsync(item => item.Id == id)!;
+		return _db.StockItems.Include(item => item.Supplier).SingleOrDefaultAsync(item => item.Id == id)!;
 	}
 
 	public async Task<IEnumerable<StockItem>> GetAllStockItemsAsync()
 	{
-		return await _db.StockItems.ToListAsync();
+		return await _db.StockItems.Include(item => item.Supplier).ToListAsync();
+	}
+
+	public async Task<IEnumerable<StockItem>> GetStockItemsBelowMinimumAsync()
+	{
+		return await _db.StockItems.Include(item => item.Supplier)
+			.Where(item => item.MinimumStock > 0 && item.Amount < item.MinimumStock)
+			.ToListAsync();
 	}
 
 	/// <exception cref="StockItemCodeAlreadyExistsException">Code already in use</exception>
