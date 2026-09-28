@@ -1,0 +1,11 @@
+<svg viewBox="0 0 320 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Kora lockup: mark.svg (ink brand #C1502E) plus the wordmark (ink #2B241C) at space-4-equivalent (20px at this scale) clear space. Reference use only (a favicon, an external README, an org avatar) - inside the product, place mark.svg (or mark-reversed.svg) next to live "Kora" text in the real Archivo font instead of this flattened asset, so it follows the theme. -->
+  <mask id="bins">
+    <rect x="8" y="8" width="112" height="112" rx="24" fill="#fff"/>
+    <rect x="32" y="32" width="64" height="28" rx="10" fill="#000"/>
+    <rect x="32" y="68" width="28" height="28" rx="10" fill="#000"/>
+    <rect x="68" y="68" width="28" height="28" rx="10" fill="#000"/>
+  </mask>
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="#C1502E" mask="url(#bins)"/>
+  <text x="148" y="86" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="64" fill="#2B241C">Kora</text>
+</svg>

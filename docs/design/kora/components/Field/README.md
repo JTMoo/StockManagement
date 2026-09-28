@@ -1,0 +1,3 @@
+A label in `small`/`ink-muted` above its control, always - never a placeholder standing in for a label. Controls are 40px tall, `radius-md`, `border` at rest, `focus-ring` on focus (2px, 2px offset), `border-strong`... no - `danger` border plus one `small` line of `danger` text below on error, naming the fix ("El RUC ya existe en Clientes"), not just "Campo inválido". Helper text (when there's no error) sits in the same spot, `small`/`ink-faint`.
+
+Fields live in a `form-grid`: `repeat(auto-fill, minmax(15rem, 1fr))`, `space-4` gap, so a form reflows without a media query. A required field needs no asterisk if every field on the form is required (the common case); mark only the optional ones, in `small`/`ink-faint`, "(opcional)".

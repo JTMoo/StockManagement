@@ -1,0 +1,21 @@
+<!-- @dsCard group="Actions" height=90 subtitle="Contado / Crédito" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--surface-page); font-family: var(--font-sans); }
+  .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+  .segmented button { border: 0; height: 40px; padding: 0 20px; font-family: var(--font-sans); font-size: 15px; font-weight: 600; background: var(--surface-raised); color: var(--ink-muted); }
+  .segmented button.selected { background: var(--brand); color: var(--on-fill); }
+</style>
+</head>
+<body>
+  <div class="segmented">
+    <button class="selected">Contado</button>
+    <button>Crédito</button>
+  </div>
+</body>
+</html>
