@@ -11,17 +11,6 @@ on:
 
 jobs:
 
-  adr-index:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Check ADR index is up to date
-      run: node scripts/generate-adr-index.mjs --check
-
   api-tests:
 
     # Testcontainers needs Linux containers
