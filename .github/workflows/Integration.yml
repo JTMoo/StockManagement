@@ -11,6 +11,20 @@ on:
 
 jobs:
 
+  adr-index:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Regenerate ADR index
+      run: ./scripts/generate-adr-index.sh
+
+    - name: Fail if docs/decisions.md is stale
+      run: git diff --exit-code docs/decisions.md
+
   api-tests:
 
     # Testcontainers needs Linux containers
