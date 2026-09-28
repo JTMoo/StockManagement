@@ -169,6 +169,33 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Purchase Price.
+        /// </summary>
+        public static string purchasePrice {
+            get {
+                return ResourceManager.GetString("purchasePrice", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange Rate.
+        /// </summary>
+        public static string purchaseExchangeRate {
+            get {
+                return ResourceManager.GetString("purchaseExchangeRate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Additional Purchase Cost.
+        /// </summary>
+        public static string additionalPurchaseCost {
+            get {
+                return ResourceManager.GetString("additionalPurchaseCost", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Hide unavailable items.
         /// </summary>
         public static string hideUnavailableItems {

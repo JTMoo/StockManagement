@@ -14,6 +14,9 @@ internal sealed class StockItemConfiguration : IEntityTypeConfiguration<StockIte
 		builder.HasIndex(item => item.Code).IsUnique();
 		builder.Property(item => item.Price).HasPrecision(18, 2);
 		builder.Property(item => item.Factor).HasPrecision(18, 2);
+		builder.Property(item => item.PurchasePrice).HasPrecision(18, 2);
+		builder.Property(item => item.PurchaseExchangeRate).HasPrecision(18, 6);
+		builder.Property(item => item.AdditionalPurchaseCost).HasPrecision(18, 2);
 		builder.HasOne(item => item.Supplier).WithMany().HasForeignKey(item => item.SupplierId).IsRequired(false);
 	}
 }

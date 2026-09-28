@@ -1,6 +1,6 @@
 import { send } from "./client";
 
-export type StockItem = { id: string; code: string; name: string; description: string; location: string; amount: number; price: number; manufacturer: string; supplierId?: string; supplierName?: string; minimumStock: number };
+export type StockItem = { id: string; code: string; name: string; description: string; location: string; amount: number; price: number; manufacturer: string; factor: number; purchasePrice: number; purchaseExchangeRate: number; additionalPurchaseCost: number; supplierId?: string; supplierName?: string; minimumStock: number };
 
 export type NewStockItem = Partial<Omit<StockItem, "id" | "code">> & { code: string; name: string };
 

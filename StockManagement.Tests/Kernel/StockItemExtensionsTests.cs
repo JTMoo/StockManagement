@@ -46,4 +46,34 @@ public sealed class StockItemExtensionsTests
 		// Assert
 		Assert.AreEqual("Kuhn", stockItem.Manufacturer);
 	}
+
+	[TestMethod]
+	public void CalculateSalePrice_AppliesFactorToCostPlusAdditionalCost_RoundsToCurrencyDigits()
+	{
+		// Act
+		var result = StockItemExtensions.CalculateSalePrice(purchasePrice: 10m, purchaseExchangeRate: 7300m, additionalPurchaseCost: 5000m, factor: 1.25m, currencyDecimalDigits: 0);
+
+		// Assert
+		Assert.AreEqual(97500m, result);
+	}
+
+	[TestMethod]
+	public void CalculateSalePrice_ZeroFactor_ReturnsZero()
+	{
+		// Act
+		var result = StockItemExtensions.CalculateSalePrice(purchasePrice: 10m, purchaseExchangeRate: 7300m, additionalPurchaseCost: 5000m, factor: 0m, currencyDecimalDigits: 0);
+
+		// Assert
+		Assert.AreEqual(0m, result);
+	}
+
+	[TestMethod]
+	public void CalculateSalePrice_MidpointRoundsAwayFromZero()
+	{
+		// Act
+		var result = StockItemExtensions.CalculateSalePrice(purchasePrice: 1m, purchaseExchangeRate: 1m, additionalPurchaseCost: 0.005m, factor: 1m, currencyDecimalDigits: 2);
+
+		// Assert
+		Assert.AreEqual(1.01m, result);
+	}
 }

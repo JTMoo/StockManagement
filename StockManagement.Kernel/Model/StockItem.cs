@@ -16,6 +16,9 @@ public class StockItem : BaseDocument
 	private string _manufacturer = string.Empty;
 	private decimal _price;
 	private decimal _factor;
+	private decimal _purchasePrice;
+	private decimal _purchaseExchangeRate;
+	private decimal _additionalPurchaseCost;
 	private int _amount;
 	private string? _supplierId;
 	private int _minimumStock;
@@ -82,6 +85,27 @@ public class StockItem : BaseDocument
 	{
 		get { return _factor; }
 		set { this.SetField(ref _factor, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.purchasePrice))]
+	public decimal PurchasePrice
+	{
+		get { return _purchasePrice; }
+		set { this.SetField(ref _purchasePrice, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.purchaseExchangeRate))]
+	public decimal PurchaseExchangeRate
+	{
+		get { return _purchaseExchangeRate; }
+		set { this.SetField(ref _purchaseExchangeRate, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.additionalPurchaseCost))]
+	public decimal AdditionalPurchaseCost
+	{
+		get { return _additionalPurchaseCost; }
+		set { this.SetField(ref _additionalPurchaseCost, value); }
 	}
 
 	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.manufacturer))]
