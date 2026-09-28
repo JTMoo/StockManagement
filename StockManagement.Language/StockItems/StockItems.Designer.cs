@@ -232,6 +232,33 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Minimum stock.
+        /// </summary>
+        public static string minimumStock {
+            get {
+                return ResourceManager.GetString("minimumStock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Below minimum.
+        /// </summary>
+        public static string belowMinimum {
+            get {
+                return ResourceManager.GetString("belowMinimum", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No supplier.
+        /// </summary>
+        public static string noSupplier {
+            get {
+                return ResourceManager.GetString("noSupplier", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Map columns to properties.
         /// </summary>
         public static string mapProperties {

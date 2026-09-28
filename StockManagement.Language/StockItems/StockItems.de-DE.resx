@@ -168,6 +168,15 @@
   <data name="manufacturer" xml:space="preserve">
     <value>Hersteller</value>
   </data>
+  <data name="minimumStock" xml:space="preserve">
+    <value>Mindestbestand</value>
+  </data>
+  <data name="belowMinimum" xml:space="preserve">
+    <value>Unter Mindestbestand</value>
+  </data>
+  <data name="noSupplier" xml:space="preserve">
+    <value>Kein Lieferant</value>
+  </data>
   <data name="mapProperties" xml:space="preserve">
     <value>Spalten zu Eigenschaften zuordnen</value>
   </data>

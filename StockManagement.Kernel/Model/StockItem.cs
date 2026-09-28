@@ -17,6 +17,8 @@ public class StockItem : BaseDocument
 	private decimal _price;
 	private decimal _factor;
 	private int _amount;
+	private string? _supplierId;
+	private int _minimumStock;
 
 	public StockItem ()
 	{
@@ -95,5 +97,22 @@ public class StockItem : BaseDocument
 	{
 		get { return _miscellaneous; }
 		set { this.SetField(ref _miscellaneous, value); }
+	}
+
+	[Display(ResourceType = typeof(Language.Suppliers), Name = nameof(Language.Suppliers.supplier))]
+	public string? SupplierId
+	{
+		get { return _supplierId; }
+		set { this.SetField(ref _supplierId, value); }
+	}
+
+	/// <remarks>Optional; navigation to the preferred supplier for reordering (#57)</remarks>
+	public Supplier? Supplier { get; set; }
+
+	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.minimumStock))]
+	public int MinimumStock
+	{
+		get { return _minimumStock; }
+		set { this.SetField(ref _minimumStock, value); }
 	}
 }

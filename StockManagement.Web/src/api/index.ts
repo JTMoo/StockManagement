@@ -4,6 +4,7 @@
 export * from "./client";
 export * from "./stockItems";
 export * from "./customers";
+export * from "./suppliers";
 export * from "./sales";
 export * from "./invoices";
 export * from "./settings";
@@ -20,11 +21,13 @@ import { invoicesApi } from "./invoices";
 import { salesApi } from "./sales";
 import { settingsApi } from "./settings";
 import { stockItemsApi } from "./stockItems";
+import { suppliersApi } from "./suppliers";
 import { usersApi } from "./users";
 
 export const api = {
 	...stockItemsApi,
 	...customersApi,
+	...suppliersApi,
 	...salesApi,
 	...invoicesApi,
 	...settingsApi,

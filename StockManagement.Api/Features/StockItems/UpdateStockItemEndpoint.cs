@@ -9,7 +9,7 @@ using StockManagement.Kernel.Model;
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "");
+public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", string? SupplierId = null, int MinimumStock = 0);
 
 
 public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
@@ -20,6 +20,7 @@ public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
 		this.RuleFor(request => request.Name).NotEmpty();
 		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
 	}
 }
 
@@ -47,6 +48,8 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		stockItem.Amount = request.Amount;
 		stockItem.Price = request.Price;
 		stockItem.Manufacturer = request.Manufacturer;
+		stockItem.SupplierId = request.SupplierId;
+		stockItem.MinimumStock = request.MinimumStock;
 
 		try
 		{
@@ -57,6 +60,8 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 			return TypedResults.Conflict(new DuplicateStockItemCodeResponse(request.Code));
 		}
 
-		return TypedResults.Ok(StockItemResponse.From(stockItem));
+		// Reload: stockItem.Supplier may still reference the old row after a SupplierId change
+		var updated = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		return TypedResults.Ok(StockItemResponse.From(updated));
 	}
 }

@@ -7,7 +7,8 @@ export type Permission =
 	| "Customers.Read" | "Customers.Write"
 	| "StockItems.Read" | "StockItems.Write"
 	| "Sales.Read" | "Sales.Write"
-	| "Settings.Read" | "Settings.Write";
+	| "Settings.Read" | "Settings.Write"
+	| "Suppliers.Read" | "Suppliers.Write";
 
 export type User = { id: string; username: string; fullName: string; email: string; phone: string; position: string; role: UserRole; permissions: Permission[] };
 

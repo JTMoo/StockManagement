@@ -79,6 +79,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Download report.
+        /// </summary>
+        public static string downloadReport {
+            get {
+                return ResourceManager.GetString("downloadReport", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Skipped as duplicate.
         /// </summary>
         public static string duplicatesSkipped {
