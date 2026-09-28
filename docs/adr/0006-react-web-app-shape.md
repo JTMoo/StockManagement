@@ -2,6 +2,7 @@
 
 - Status: Proposed
 - Date: 2026-09-24
+- Note: the "Look follows WPF..." sentence below is superseded by [ADR-0025](0025-kora-design-system.md); the rest of this ADR still holds.
 
 ## Context
 
