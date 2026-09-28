@@ -1,0 +1,43 @@
+<!-- @dsCard group="Navigation" height=420 width=220 subtitle="Expanded, Facturas active" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; background: var(--surface-page); font-family: var(--font-sans); display: flex; }
+  .sidebar { width: 192px; background: var(--surface-raised); border-right: 1px solid var(--border); box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 4px; height: 420px; }
+  .quick { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 10px; border-radius: var(--radius-md); color: var(--brand-strong); font-weight: 600; font-size: 14px; }
+  .search { display: flex; align-items: center; gap: 8px; height: 36px; margin: 8px 0 4px; padding: 0 10px; border-radius: var(--radius-md); border: 1px solid var(--border); color: var(--ink-faint); font-size: 13px; }
+  .divider { height: 1px; background: var(--border); margin: 4px 0 8px; }
+  .section { font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-faint); margin: 10px 10px 2px; }
+  .item { display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: var(--radius-md); color: var(--ink-muted); font-weight: 600; font-size: 15px; }
+  .item.active { color: var(--brand-strong); background: var(--brand-subtle); }
+  .dot { width: 8px; height: 8px; border-radius: 3px; background: currentColor; opacity: 0.55; flex: none; }
+  .item.active .dot { opacity: 1; }
+</style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="quick"><span class="dot"></span>Venta rápida</div>
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Buscar (Ctrl+K)
+    </div>
+    <div class="divider"></div>
+    <div class="section">Diario</div>
+    <div class="item"><span class="dot"></span>Ventas</div>
+    <div class="item active"><span class="dot"></span>Facturas</div>
+    <div class="item"><span class="dot"></span>Stock</div>
+    <div class="section">Gestión</div>
+    <div class="item"><span class="dot"></span>Clientes</div>
+    <div class="item"><span class="dot"></span>Proveedores</div>
+    <div style="flex:1"></div>
+    <div class="section">Sistema</div>
+    <div class="item"><span class="dot"></span>Importar</div>
+    <div class="item"><span class="dot"></span>Usuarios</div>
+    <div class="item"><span class="dot"></span>Config</div>
+  </nav>
+</body>
+</html>
