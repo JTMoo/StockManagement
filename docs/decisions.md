@@ -26,6 +26,7 @@ Read before an important decision. Update in the same PR.
 | [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
 | [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target: check-in against existing items, widened `UndoAsync` | Proposed |
 | [0020](adr/0020-stock-item-purchase-price-and-exchange-rate.md) | Purchase price/exchange rate/additional cost per stock item, sale price derived via `Factor` | Proposed |
+| [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers domain (no Core layer, matches StockItems), `StockItem.SupplierId`/`MinimumStock`, delete blocked while in use | Proposed |
 
 ## Standing decisions
 

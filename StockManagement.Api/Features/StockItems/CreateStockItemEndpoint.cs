@@ -11,7 +11,7 @@ using StockManagement.Settings.Core.Contracts;
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record CreateStockItemRequest(string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0);
+public sealed record CreateStockItemRequest(string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0);
 
 
 public class CreateStockItemValidator : Validator<CreateStockItemRequest>
@@ -26,6 +26,7 @@ public class CreateStockItemValidator : Validator<CreateStockItemRequest>
 		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
 	}
 }
 
@@ -54,7 +55,9 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 			Factor = request.Factor,
 			PurchasePrice = request.PurchasePrice,
 			PurchaseExchangeRate = request.PurchaseExchangeRate,
-			AdditionalPurchaseCost = request.AdditionalPurchaseCost
+			AdditionalPurchaseCost = request.AdditionalPurchaseCost,
+			SupplierId = request.SupplierId,
+			MinimumStock = request.MinimumStock
 		};
 
 		if (request.Factor > 0)
@@ -76,6 +79,8 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 			return TypedResults.Conflict(new DuplicateStockItemCodeResponse(request.Code));
 		}
 
-		return TypedResults.Created($"/api/stock-items/{stockItem.Code}", StockItemResponse.From(stockItem));
+		// Reload to fill the Supplier navigation (AddStockItemAsync only tracked the FK)
+		var created = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		return TypedResults.Created($"/api/stock-items/{stockItem.Code}", StockItemResponse.From(created));
 	}
 }

@@ -73,7 +73,7 @@ describe("StockItemList", () =>
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Screw" })).toBeInTheDocument();
-		expect(sentBody(fetchMock, "POST /api/stock-items")).toEqual({ id: "", code: "A1", name: "Screw", description: "", location: "", amount: 0, price: 0, manufacturer: "", factor: 0, purchasePrice: 0, purchaseExchangeRate: 0, additionalPurchaseCost: 0 });
+		expect(sentBody(fetchMock, "POST /api/stock-items")).toEqual({ id: "", code: "A1", name: "Screw", description: "", location: "", amount: 0, price: 0, manufacturer: "", factor: 0, purchasePrice: 0, purchaseExchangeRate: 0, additionalPurchaseCost: 0, minimumStock: 0 });
 	});
 
 	it("Create_DuplicateCode_ShowsError", async () =>
@@ -140,6 +140,21 @@ describe("StockItemList", () =>
 
 		// Assert
 		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
+	});
+
+	it("ToggleBelowMinimum_Click_FiltersToItemsBelowTheirMinimum", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items": { body: [{ ...screw, minimumStock: 20 }, { ...nut, minimumStock: 0 }] } });
+		renderEnglish(<StockItemList />);
+		await screen.findByRole("cell", { name: "Screw" });
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Below minimum" }));
+
+		// Assert
+		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
+		expect(screen.queryByRole("cell", { name: "Nut" })).not.toBeInTheDocument();
 	});
 
 	it("ToggleExcelImport_Click_ShowsAndHidesImportPanel", async () =>

@@ -177,6 +177,15 @@
   <data name="manufacturer" xml:space="preserve">
     <value>Fabricante</value>
   </data>
+  <data name="minimumStock" xml:space="preserve">
+    <value>Stock mínimo</value>
+  </data>
+  <data name="belowMinimum" xml:space="preserve">
+    <value>Por debajo del mínimo</value>
+  </data>
+  <data name="noSupplier" xml:space="preserve">
+    <value>Sin proveedor</value>
+  </data>
   <data name="mapProperties" xml:space="preserve">
     <value>Mapear columnas á propiedades</value>
   </data>

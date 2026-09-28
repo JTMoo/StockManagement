@@ -186,6 +186,12 @@
   <data name="permSettingsWrite" xml:space="preserve">
     <value>Einstellungen bearbeiten</value>
   </data>
+  <data name="permSuppliersRead" xml:space="preserve">
+    <value>Lieferanten ansehen</value>
+  </data>
+  <data name="permSuppliersWrite" xml:space="preserve">
+    <value>Lieferanten bearbeiten</value>
+  </data>
   <data name="permUsersManage" xml:space="preserve">
     <value>Benutzer verwalten</value>
   </data>

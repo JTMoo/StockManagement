@@ -11,7 +11,7 @@ using StockManagement.Settings.Core.Contracts;
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0);
+public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0);
 
 
 public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
@@ -26,6 +26,7 @@ public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
 		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
 	}
 }
 
@@ -57,6 +58,8 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		stockItem.PurchasePrice = request.PurchasePrice;
 		stockItem.PurchaseExchangeRate = request.PurchaseExchangeRate;
 		stockItem.AdditionalPurchaseCost = request.AdditionalPurchaseCost;
+		stockItem.SupplierId = request.SupplierId;
+		stockItem.MinimumStock = request.MinimumStock;
 
 		if (request.Factor > 0)
 		{
@@ -77,6 +80,8 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 			return TypedResults.Conflict(new DuplicateStockItemCodeResponse(request.Code));
 		}
 
-		return TypedResults.Ok(StockItemResponse.From(stockItem));
+		// Reload: stockItem.Supplier may still reference the old row after a SupplierId change
+		var updated = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		return TypedResults.Ok(StockItemResponse.From(updated));
 	}
 }
