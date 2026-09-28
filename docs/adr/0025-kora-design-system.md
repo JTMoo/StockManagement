@@ -2,6 +2,7 @@
 
 - Status: Proposed
 - Date: 2026-09-28
+- Note: the `CommandPalette` search backend is its own decision, [ADR-0026](0026-cross-domain-search.md).
 
 ## Context
 
@@ -23,7 +24,7 @@
 
 - New design system, "Kora" (Guaraní for a livestock corral - holding and ordering stock), authored as a Design-System-type artifact: two themes (`light` default, `dark`), a 24-token color set (brand/accent + neutrals + 4 color-blind-safe semantic statuses), one type family (Archivo, Google Fonts) in 7 styles, a 7-step 4px spacing scale, 3 radii, no shadows.
 - Navigation moves from the WPF-derived right-side menu to a persistent **left** sidebar (max 9 top-level items, grouped by frequency of use) plus a **command palette** (`Ctrl`/`Cmd`+K) as the fast path to any screen or record by name/number - the concrete answer to "fewest clicks."
-- Ten components specified with guidelines + a live preview each: `Button`, `Field`, `StatusBadge`, `Sidebar`, `Page` (title-left/toolbar-right/content-below, kept from the current app - it's a sound, skin-independent layout, not part of the WPF look), `Panel`, `Segmented`, `DataTable`, and two intentional additions the current app has none of - `Toast` (non-blocking save confirmation) and `CommandPalette`.
+- Eleven components specified with guidelines + a live preview each: `Button`, `Field`, `StatusBadge`, `Sidebar`, `Page` (title-left/toolbar-right/content-below, kept from the current app - it's a sound, skin-independent layout, not part of the WPF look), `Panel`, `Segmented`, `DataTable`, and three intentional additions the current app has none of - `Toast` (non-blocking save confirmation), `Dialog` (create/edit overlay - replaces today's `StockItemForm`/`CreateCustomerForm`-style forms sitting permanently inline atop a list page), and `CommandPalette` (rescoped after review into full cross-domain search - see the Note above).
 - Component behavior (dialogs, comboboxes, the command palette's listbox) is expected to be built on headless primitives (e.g. `@radix-ui/react-*`) skinned with Kora's tokens, not a full styled component library - this ADR records the direction; the concrete package choice is a normal implementation PR, not a separate ADR.
 - Supersedes the "Look follows WPF..." paragraph of ADR-0006's Decision section; the rest of ADR-0006 (Vite/React/TS, `/api` proxy, `src/api.ts`, feature folders, texts via resx→JSON) is unaffected.
 
