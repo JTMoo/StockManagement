@@ -61,5 +61,6 @@ public class Invoice : BaseDocument
 	[Display(ResourceType = typeof(Language.Customers), Name = nameof(Language.Customers.customer))]
 	public Customer Customer { get; set; }
 	public List<ShoppingCartItem> Items { get; set; }
+	public List<Payment> Payments { get; set; } = [];
 	#endregion Properties
 }

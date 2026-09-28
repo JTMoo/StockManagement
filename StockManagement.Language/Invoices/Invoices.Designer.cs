@@ -124,6 +124,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to The payment amount must be greater than zero..
+        /// </summary>
+        public static string invalidPaymentAmount {
+            get {
+                return ResourceManager.GetString("invalidPaymentAmount", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Rechnung.
         /// </summary>
         public static string invoice {
@@ -165,6 +174,15 @@ namespace StockManagement.Language {
         public static string newSale {
             get {
                 return ResourceManager.GetString("newSale", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The payment amount exceeds the invoice's amount due..
+        /// </summary>
+        public static string paymentExceedsAmountDue {
+            get {
+                return ResourceManager.GetString("paymentExceedsAmountDue", resourceCulture);
             }
         }
 
