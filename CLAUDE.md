@@ -39,6 +39,7 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 
 - Logic in Domain/Application only ([ADR-0002](docs/adr/0002-business-logic-in-domain-and-application.md))
 - FastEndpoints, one endpoint per file, feature folders; React + TS ([ADR-0003](docs/adr/0003-fastendpoints-api-and-react-frontend.md))
+- `StockManagement.Web` UI: Kora design system ([ADR-0025](docs/adr/0025-kora-design-system.md); search backend [ADR-0026](docs/adr/0026-cross-domain-search.md)) — tokens, brand book, component guidelines and live previews at https://claude.ai/artifact/BUpwjaRezNtGkkiTSc6DTj (a private Claude artifact; ask the owner for access if you can't open it)
 - `Request`/`Response` records, not persistence models
 - Built-in DI; one `IMongoClient`; config for connection/DB name
 - Update by `Id`; business keys = unique indexes
