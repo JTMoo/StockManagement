@@ -40,6 +40,7 @@ public sealed class ServiceRegistrationTests
 
 		// Assert
 		Assert.IsNotNull(provider.GetRequiredService<ISaleService>());
+		Assert.IsNotNull(provider.GetRequiredService<IPaymentService>());
 		Assert.IsNotNull(provider.GetRequiredService<ICustomerService>());
 		Assert.IsNotNull(provider.GetRequiredService<IStockItemImportService>());
 		Assert.IsNotNull(provider.GetRequiredService<IImportBatchService>());
