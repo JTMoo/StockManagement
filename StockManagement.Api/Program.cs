@@ -37,6 +37,7 @@ builder.Services
 // AddSalesCore/AddCustomersCore/AddSettingsCore/AddAuthCore register these Singleton for the GUI's Mongo Kernel providers;
 // the API's providers above are Scoped (EF's AppDbContext isn't thread-safe), so override to match
 MakeScoped<ISaleService>(builder.Services);
+MakeScoped<IPaymentService>(builder.Services);
 MakeScoped<ICustomerService>(builder.Services);
 MakeScoped<ISettingsService>(builder.Services);
 MakeScoped<IStockItemImportService>(builder.Services);

@@ -1,0 +1,50 @@
+{
+	"hooks": {
+		"SessionStart": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh"
+					}
+				]
+			}
+		]
+	},
+	"permissions": {
+		"allow": [
+			"Bash(dotnet build:*)",
+			"Bash(dotnet test:*)",
+			"Bash(dotnet restore:*)",
+			"Bash(dotnet run:*)",
+			"Bash(dotnet format:*)",
+			"Bash(npm ci:*)",
+			"Bash(npm install:*)",
+			"Bash(npm run:*)",
+			"Bash(npm test:*)",
+			"Bash(npx playwright:*)",
+			"Bash(npx tsc:*)",
+			"Bash(git status:*)",
+			"Bash(git diff:*)",
+			"Bash(git log:*)",
+			"Bash(git branch:*)",
+			"Bash(git fetch:*)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(git push:*)",
+			"Bash(git checkout:*)",
+			"Bash(git merge:*)",
+			"Bash(git rev-parse:*)",
+			"Bash(psql:*)",
+			"Bash(pg_isready:*)",
+			"Bash(docker ps:*)",
+			"Bash(docker info:*)",
+			"Bash(docker pull:*)",
+			"Bash(docker images:*)",
+			"WebFetch(domain:github.com)",
+			"WebFetch(domain:raw.githubusercontent.com)",
+			"WebFetch(domain:learn.microsoft.com)",
+			"WebFetch(domain:docs.fast-endpoints.com)"
+		]
+	}
+}
