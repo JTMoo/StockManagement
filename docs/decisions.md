@@ -30,6 +30,7 @@ Generated from `docs/adr/*.md` by `scripts/generate-adr-index.sh`. Don't hand-ed
 | [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target | Proposed |
 | [0022](adr/0022-invoice-payments-and-status.md) | Invoice payments and status | Proposed |
 | [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers and reorder level | Proposed |
+| [0025](adr/0025-import-column-mapping.md) | Import column mapping | Proposed |
 <!-- ADR-INDEX:END -->
 
 ## Standing decisions
