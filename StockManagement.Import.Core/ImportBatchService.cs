@@ -23,10 +23,15 @@ internal sealed class ImportBatchService : IImportBatchService
 	}
 
 
-	public async Task<ImportBatch> PreviewAsync(ImportTarget target, string fileName, Stream excelFile, CancellationToken cancellationToken = default)
+	public IReadOnlyList<ImportField> GetFields(ImportTarget target) => this.GetHandler(target).GetFields();
+
+	public Task<(string SheetName, IReadOnlyList<DetectedColumn> Columns)> DetectColumnsAsync(ImportTarget target, Stream excelFile, CancellationToken cancellationToken = default) =>
+		this.GetHandler(target).DetectColumnsAsync(excelFile, cancellationToken);
+
+	public async Task<ImportBatch> PreviewAsync(ImportTarget target, string fileName, Stream excelFile, IReadOnlyDictionary<int, string>? columnMapping, CancellationToken cancellationToken = default)
 	{
 		var handler = this.GetHandler(target);
-		var (sheetName, candidates, parseErrors) = await handler.ParseAsync(excelFile, cancellationToken);
+		var (sheetName, candidates, parseErrors) = await handler.ParseAsync(excelFile, columnMapping, cancellationToken);
 
 		var split = await handler.SplitDuplicatesAsync([.. candidates.Select(candidate => candidate.Candidate)], cancellationToken);
 		var uniqueCandidates = new HashSet<object>(split.Unique, ReferenceEqualityComparer.Instance);

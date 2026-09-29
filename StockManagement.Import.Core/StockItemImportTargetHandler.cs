@@ -19,9 +19,14 @@ internal sealed class StockItemImportTargetHandler(IStockItemImportService impor
 	public ImportTarget Target => ImportTarget.StockItems;
 
 
-	public async Task<(string SheetName, IReadOnlyList<(int Row, object Candidate)> Candidates, IReadOnlyList<ImportRowError> Errors)> ParseAsync(Stream excelFile, CancellationToken cancellationToken = default)
+	public IReadOnlyList<ImportField> GetFields() => ExcelEntityParser<StockItem>.GetFields();
+
+	public Task<(string SheetName, IReadOnlyList<DetectedColumn> Columns)> DetectColumnsAsync(Stream excelFile, CancellationToken cancellationToken = default) =>
+		ExcelEntityParser<StockItem>.DetectColumnsAsync(excelFile, cancellationToken);
+
+	public async Task<(string SheetName, IReadOnlyList<(int Row, object Candidate)> Candidates, IReadOnlyList<ImportRowError> Errors)> ParseAsync(Stream excelFile, IReadOnlyDictionary<int, string>? columnMapping, CancellationToken cancellationToken = default)
 	{
-		var (sheetName, items, errors) = await ExcelEntityParser<StockItem>.ParseAsync(excelFile, cancellationToken);
+		var (sheetName, items, errors) = await ExcelEntityParser<StockItem>.ParseAsync(excelFile, columnMapping, cancellationToken);
 		return (sheetName, [.. items.Select(item => (item.Row, (object)item.Item))], errors);
 	}
 

@@ -31,7 +31,7 @@ public sealed class ImportBatchServiceTests
 		// Arrange
 		object fresh = "fresh";
 		object clash = "clash";
-		_handler.Setup(handler => handler.ParseAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+		_handler.Setup(handler => handler.ParseAsync(It.IsAny<Stream>(), It.IsAny<IReadOnlyDictionary<int, string>?>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(("Sheet1", (IReadOnlyList<(int Row, object Candidate)>)[(2, fresh), (3, clash)], (IReadOnlyList<ImportRowError>)[new ImportRowError(4, "bad")]));
 		_handler.Setup(handler => handler.SplitDuplicatesAsync(It.IsAny<IReadOnlyList<object>>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new DuplicateFilterResult<object>([fresh], [clash]));
@@ -40,7 +40,7 @@ public sealed class ImportBatchServiceTests
 		_batches.Setup(provider => provider.AddImportBatchAsync(It.IsAny<ImportBatch>())).Callback<ImportBatch>(batch => added = batch).Returns(Task.CompletedTask);
 
 		// Act
-		var batch = await _service.PreviewAsync(ImportTarget.Customers, "legacy.xlsx", Stream.Null);
+		var batch = await _service.PreviewAsync(ImportTarget.Customers, "legacy.xlsx", Stream.Null, null);
 
 		// Assert
 		Assert.AreSame(added, batch);

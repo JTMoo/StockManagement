@@ -12,9 +12,20 @@ public interface IImportTargetHandler
 	public ImportTarget Target { get; }
 
 	/// <summary>
+	/// This target's importable fields, for the web column-mapping UI
+	/// </summary>
+	public IReadOnlyList<ImportField> GetFields();
+
+	/// <summary>
+	/// Reads the first worksheet's header row, with each column's auto-matched field (or none)
+	/// </summary>
+	public Task<(string SheetName, IReadOnlyList<DetectedColumn> Columns)> DetectColumnsAsync(Stream excelFile, CancellationToken cancellationToken = default);
+
+	/// <summary>
 	/// Reads candidates from the first worksheet of an Excel file, each with its 1-based source row number
 	/// </summary>
-	public Task<(string SheetName, IReadOnlyList<(int Row, object Candidate)> Candidates, IReadOnlyList<ImportRowError> Errors)> ParseAsync(Stream excelFile, CancellationToken cancellationToken = default);
+	/// <param name="columnMapping">Column number → <see cref="ImportField.Name"/>; <see langword="null"/> auto-matches headers by name instead</param>
+	public Task<(string SheetName, IReadOnlyList<(int Row, object Candidate)> Candidates, IReadOnlyList<ImportRowError> Errors)> ParseAsync(Stream excelFile, IReadOnlyDictionary<int, string>? columnMapping, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Splits candidates into ones whose key is new and ones that would clash with an existing record or an earlier candidate
