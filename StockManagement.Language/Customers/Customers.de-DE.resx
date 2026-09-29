@@ -144,6 +144,9 @@
   <data name="identificationNumber" xml:space="preserve">
     <value>Identifikationsnnummer (C.I. / RUC)</value>
   </data>
+  <data name="identificationNumberAlreadyExists" xml:space="preserve">
+    <value>Ein Kunde mit dieser Identifikationsnummer existiert bereits:</value>
+  </data>
   <data name="lastname" xml:space="preserve">
     <value>Nachname</value>
   </data>

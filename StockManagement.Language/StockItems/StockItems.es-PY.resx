@@ -147,6 +147,15 @@
   <data name="factor" xml:space="preserve">
     <value>Factor</value>
   </data>
+  <data name="purchasePrice" xml:space="preserve">
+    <value>Precio de Compra</value>
+  </data>
+  <data name="purchaseExchangeRate" xml:space="preserve">
+    <value>Tipo de Cambio</value>
+  </data>
+  <data name="additionalPurchaseCost" xml:space="preserve">
+    <value>Costo Adicional de Compra</value>
+  </data>
   <data name="hideUnavailableItems" xml:space="preserve">
     <value>Ocultar elementos no disponibles</value>
   </data>
@@ -167,6 +176,15 @@
   </data>
   <data name="manufacturer" xml:space="preserve">
     <value>Fabricante</value>
+  </data>
+  <data name="minimumStock" xml:space="preserve">
+    <value>Stock mínimo</value>
+  </data>
+  <data name="belowMinimum" xml:space="preserve">
+    <value>Por debajo del mínimo</value>
+  </data>
+  <data name="noSupplier" xml:space="preserve">
+    <value>Sin proveedor</value>
   </data>
   <data name="mapProperties" xml:space="preserve">
     <value>Mapear columnas á propiedades</value>

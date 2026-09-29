@@ -1,0 +1,78 @@
+/* Compiled from tokens.json - hand-edit tokens.json, then re-run this compilation, never edit here directly. */
+
+:root, [data-theme="light"] {
+	--brand: #C1502E;
+	--brand-strong: #8F3A1F;
+	--brand-subtle: #F6E4DB;
+	--accent: #3F6B4E;
+	--accent-strong: #2A4B36;
+	--accent-subtle: #E4EEE7;
+	--on-fill: #FFFFFF;
+	--surface-page: #FAF7F2;
+	--surface-raised: #FFFFFF;
+	--surface-sunken: #F1EBE1;
+	--border: #DCD3C4;
+	--border-strong: #B8AC96;
+	--ink: #2B241C;
+	--ink-muted: #6B6154;
+	--ink-faint: #8D8272;
+	--success: #1B6E52;
+	--success-subtle: #E1F0EA;
+	--danger: #A6362A;
+	--danger-subtle: #F7E5E2;
+	--warning: #8A5A12;
+	--warning-subtle: #F3E7D2;
+	--info: #24578C;
+	--info-subtle: #E1EBF5;
+	--focus-ring: var(--brand-strong);
+	--scrim: rgba(20, 17, 13, 0.55);
+}
+
+[data-theme="dark"] {
+	--brand: #E2764E;
+	--brand-strong: #F0A07C;
+	--brand-subtle: #3A2318;
+	--accent: #6FA083;
+	--accent-strong: #9CC7AE;
+	--accent-subtle: #1E2C22;
+	--on-fill: #1B1712;
+	--surface-page: #1B1712;
+	--surface-raised: #26211A;
+	--surface-sunken: #14110D;
+	--border: #3A3327;
+	--border-strong: #52493A;
+	--ink: #F3ECE2;
+	--ink-muted: #C4B9A8;
+	--ink-faint: #8F8371;
+	--success: #5FBE99;
+	--success-subtle: #173328;
+	--danger: #E08579;
+	--danger-subtle: #3A1E19;
+	--warning: #DDAE5C;
+	--warning-subtle: #332711;
+	--info: #7FAEDD;
+	--info-subtle: #182636;
+	--focus-ring: var(--brand-strong);
+}
+
+:root {
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 24px;
+	--space-6: 32px;
+	--space-7: 48px;
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 14px;
+	--font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.display { font-family: var(--font-sans); font-size: 28px; line-height: 34px; font-weight: 700; }
+.heading { font-family: var(--font-sans); font-size: 20px; line-height: 26px; font-weight: 600; }
+.body-strong { font-family: var(--font-sans); font-size: 15px; line-height: 22px; font-weight: 600; }
+.body { font-family: var(--font-sans); font-size: 15px; line-height: 22px; font-weight: 400; }
+.numeric { font-family: var(--font-sans); font-size: 15px; line-height: 22px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.small { font-family: var(--font-sans); font-size: 13px; line-height: 18px; font-weight: 400; }
+.control { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; }

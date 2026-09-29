@@ -12,9 +12,9 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 
 1. Read [docs/decisions.md](docs/decisions.md). No silent contradiction of an accepted ADR.
 2. Grill it: `/grill-with-docs` (`~/.claude/skills/grill-with-docs`, owner's machine). Not available: ask the owner directly.
-3. Record it: ADR in [docs/adr/](docs/adr/README.md) + row in `docs/decisions.md`. Small rules: *Standing decisions*.
+3. Record it: ADR in [docs/adr/](docs/adr/README.md), next free number (check the index and open PRs). Then run `./scripts/generate-adr-index.sh` and commit the result — CI fails if `docs/decisions.md`'s table is stale. Never hand-edit the table. Small rules: *Standing decisions*.
 
-## Merging (ADR-0026)
+## Merging (ADR-0027)
 
 - No owner review required. A PR merges itself once every required check is green: CI + `claude-review` (blocking findings only)
 - After pushing, enable auto-merge on your own PR
@@ -46,6 +46,7 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 
 - Logic in Domain/Application only ([ADR-0002](docs/adr/0002-business-logic-in-domain-and-application.md))
 - FastEndpoints, one endpoint per file, feature folders; React + TS ([ADR-0003](docs/adr/0003-fastendpoints-api-and-react-frontend.md))
+- `StockManagement.Web` UI: Kora design system ([ADR-0025](docs/adr/0025-kora-design-system.md); search backend [ADR-0026](docs/adr/0026-cross-domain-search.md)) — tokens, brand book, component guidelines and previews in [docs/design/kora/](docs/design/kora/README.md), the source of truth (open a `components/<Name>/preview.html` directly, no build step)
 - `Request`/`Response` records, not persistence models
 - Built-in DI; one `IMongoClient`; config for connection/DB name
 - Update by `Id`; business keys = unique indexes

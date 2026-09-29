@@ -10,8 +10,11 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 	const [number, setNumber] = useState(initial ? String(initial.number) : "");
 	const [invoice, setInvoice] = useState(initial);
 	const [failure, setFailure] = useState<ApiFailure>();
+	const [cancelling, setCancelling] = useState(false);
+	const [cancelReason, setCancelReason] = useState("");
 
 	useEffect(() => setInvoice(initial), [initial]);
+	useEffect(() => setCancelling(false), [invoice?.number]);
 
 	async function onSubmit(event: FormEvent)
 	{
@@ -19,6 +22,18 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 		const result = await api.getInvoice(Number(number));
 		setInvoice(result.ok ? result.value : undefined);
 		setFailure(result.ok ? undefined : result.failure);
+	}
+
+	async function onCancelInvoice(event: FormEvent)
+	{
+		event.preventDefault();
+		const result = await api.cancelInvoice(invoice!.number, cancelReason);
+		if (!result.ok) return setFailure(result.failure);
+
+		setFailure(undefined);
+		setCancelling(false);
+		setCancelReason("");
+		setInvoice({ ...invoice!, isCancelled: true });
 	}
 
 	return (
@@ -35,6 +50,7 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 					<header>
 						<h3>{t("invoice")} {invoice.number}</h3>
 						<span>{t(invoice.saleCondition === "Cash" ? "cash" : "credit")}</span>
+						{invoice.isCancelled && <span data-testid="invoice-cancelled">{t("cancelled")}</span>}
 					</header>
 					<dl>
 						<dt>{t("customerName")}</dt><dd>{invoice.customerName} ({invoice.customerId})</dd>
@@ -57,6 +73,23 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 							<tr className="total"><th colSpan={3}>{t("total")}</th><td className="number" data-testid="invoice-total">{formatNumber(invoice.total)}</td></tr>
 						</tfoot>
 					</table>
+					{!invoice.isCancelled && !cancelling && (
+						<div className="form-actions">
+							<button type="button" onClick={() => setCancelling(true)}>{t("cancelInvoice")}</button>
+						</div>
+					)}
+					{!invoice.isCancelled && cancelling && (
+						<form onSubmit={onCancelInvoice} className="form-grid">
+							<label>
+								{t("reason")}
+								<input type="text" required value={cancelReason} onChange={event => setCancelReason(event.target.value)} />
+							</label>
+							<div className="form-actions">
+								<button type="submit">{t("cancelInvoice")}</button>
+								<button type="button" onClick={() => setCancelling(false)}>{t("cancel")}</button>
+							</div>
+						</form>
+					)}
 				</article>
 			)}
 		</Page>

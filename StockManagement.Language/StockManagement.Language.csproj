@@ -55,6 +55,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Users.resx</DependentUpon>
     </Compile>
+    <Compile Update="Suppliers\Suppliers.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Suppliers.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -101,6 +106,11 @@
     <EmbeddedResource Update="Users\Users.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Users.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Suppliers\Suppliers.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Suppliers.Designer.cs</LastGenOutput>
       <CustomToolNamespace>StockManagement.Language</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

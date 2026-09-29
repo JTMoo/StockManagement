@@ -1,0 +1,10 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Kora mark, reversed. Same geometry as mark.svg; this file's ink is white #FFFFFF, for a dark surface or a brand/accent fill. -->
+  <mask id="bins">
+    <rect x="8" y="8" width="112" height="112" rx="24" fill="#fff"/>
+    <rect x="32" y="32" width="64" height="28" rx="10" fill="#000"/>
+    <rect x="32" y="68" width="28" height="28" rx="10" fill="#000"/>
+    <rect x="68" y="68" width="28" height="28" rx="10" fill="#000"/>
+  </mask>
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="#FFFFFF" mask="url(#bins)"/>
+</svg>

@@ -4,28 +4,39 @@ Read before an important decision. Update in the same PR.
 
 ## ADRs
 
+Generated from `docs/adr/*.md` by `scripts/generate-adr-index.sh`. Don't hand-edit the table; add/rename an ADR file and re-run the script. CI fails the PR if this is stale.
+
+<!-- ADR-INDEX:START -->
 | ADR | Decision | Status |
 |---|---|---|
 | [0001](adr/0001-record-architecture-decisions.md) | Decisions live in the repo as ADRs | Accepted |
 | [0002](adr/0002-business-logic-in-domain-and-application.md) | Business logic in Domain and Application | Accepted |
-| [0003](adr/0003-fastendpoints-api-and-react-frontend.md) | FastEndpoints API + React, desktop-first | Accepted |
-| [0004](adr/0004-api-host-shape-and-tests.md) | API routes, errors, config, integration tests | Proposed |
-| [0005](adr/0005-manufacturer-as-free-text.md) | Manufacturer as free text, old enum numbers read as names | Proposed |
-| [0006](adr/0006-react-web-app-shape.md) | Vite + React web app served by the API, resx texts, Vitest + Playwright | Proposed |
-| [0007](adr/0007-mongo-replica-set-and-transactions.md) | MongoDB single-node replica set, multi-step writes in transactions | Superseded by 0008 |
-| [0008](adr/0008-ef-core-on-postgresql.md) | EF Core on PostgreSQL, one `AppDbContext`, change handlers | Proposed |
-| [0009](adr/0009-web-stock-item-excel-import.md) | Web Excel import: auto-matched headers, one upload-and-import call | Superseded by 0018 |
+| [0003](adr/0003-fastendpoints-api-and-react-frontend.md) | FastEndpoints API + React, desktop-first | Accepted (desktop shell open) |
+| [0004](adr/0004-api-host-shape-and-tests.md) | API host shape and integration tests | Proposed |
+| [0005](adr/0005-manufacturer-as-free-text.md) | Manufacturer as free text | Proposed |
+| [0006](adr/0006-react-web-app-shape.md) | React web app shape | Proposed |
+| [0007](adr/0007-mongo-replica-set-and-transactions.md) | MongoDB as single-node replica set, multi-step writes in transactions | Superseded by [ADR-0008](0008-ef-core-on-postgresql.md) |
+| [0008](adr/0008-ef-core-on-postgresql.md) | EF Core on PostgreSQL, one context, change handlers | Proposed |
+| [0009](adr/0009-web-stock-item-excel-import.md) | Web stock item Excel import | Superseded by [0018](0018-generic-import-pipeline.md) |
 | [0010](adr/0010-jwt-authentication.md) | JWT bearer authentication | Proposed |
-| [0011](adr/0011-retire-wpf-gui.md) | Retire the WPF GUI, browser-only for now | Proposed |
-| [0012](adr/0012-stock-check-in-check-out.md) | Stock check-in/check-out: `Transaction.Reason`, conditional-update check-out | Proposed |
-| [0013](adr/0013-electron-desktop-shell.md) | Electron desktop shell, opens the API's URL | Proposed |
-| [0014](adr/0014-decimal-money-type.md) | `decimal` for money, no separate Money type, per-company `CurrencyDecimalDigits` rounding (amended for PYG) | Accepted |
-| [0015](adr/0015-company-settings-and-vat-rate.md) | Extend `AppSettings`/`ISettingsService` with company settings; one configurable VAT rate | Proposed |
-| [0016](adr/0016-electron-bundles-and-launches-api.md) | Electron bundles a self-contained API publish and launches it | Proposed |
-| [0017](adr/0017-roles-and-permissions.md) | Roles (Admin/Standard) + per-module Read/Write permission strings | Proposed |
-| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline: batches, preview → commit, undo | Proposed |
-| [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target: check-in against existing items, widened `UndoAsync` | Proposed |
-| [0026](adr/0026-auto-merge-and-claude-review.md) | Unattended PR merging: required checks + Claude review, no owner click | Proposed |
+| [0011](adr/0011-retire-wpf-gui.md) | Retire the WPF GUI | Proposed |
+| [0012](adr/0012-stock-check-in-check-out.md) | Stock check-in / check-out with a reason | Proposed |
+| [0013](adr/0013-electron-desktop-shell.md) | Electron desktop shell | Proposed |
+| [0014](adr/0014-decimal-money-type.md) | `decimal` for money, no separate Money type | Accepted |
+| [0015](adr/0015-company-settings-and-vat-rate.md) | Company settings and configurable VAT rate | Proposed |
+| [0016](adr/0016-electron-bundles-and-launches-api.md) | Electron shell bundles and launches the API | Proposed |
+| [0017](adr/0017-roles-and-permissions.md) | Roles and permissions | Proposed |
+| [0018](adr/0018-generic-import-pipeline.md) | Generic import pipeline (batches, preview → commit, undo) | Proposed |
+| [0019](adr/0019-opening-stock-import.md) | Opening stock as an import target | Proposed |
+| [0020](adr/0020-stock-item-purchase-price-and-exchange-rate.md) | Stock item purchase price, additional cost, and exchange rate | Proposed |
+| [0021](adr/0021-ruc-validation.md) | RUC validation and duplicate matching | Proposed |
+| [0022](adr/0022-invoice-payments-and-status.md) | Invoice payments and status | Proposed |
+| [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers and reorder level | Proposed |
+| [0024](adr/0024-credit-notes-cancel-invoice.md) | Cancel an invoice with a credit note | Proposed |
+| [0025](adr/0025-kora-design-system.md) | Kora design system, full replacement of the WPF look | Proposed |
+| [0026](adr/0026-cross-domain-search.md) | Cross-domain search via Postgres full-text + trigram | Proposed |
+| [0027](adr/0027-auto-merge-and-claude-review.md) | Unattended PR merging: required checks + Claude review, no owner click | Proposed |
+<!-- ADR-INDEX:END -->
 
 ## Standing decisions
 

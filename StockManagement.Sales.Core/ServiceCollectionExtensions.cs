@@ -12,6 +12,8 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddSalesCore(this IServiceCollection services)
 	{
 		services.AddSingleton<ISaleService, SaleService>();
+		services.AddScoped<ICreditNoteService, CreditNoteService>();
+		services.AddSingleton<IPaymentService, PaymentService>();
 		return services;
 	}
 }

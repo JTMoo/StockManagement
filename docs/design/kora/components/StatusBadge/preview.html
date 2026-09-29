@@ -1,0 +1,28 @@
+<!-- @dsCard group="Feedback" height=100 subtitle="Stock and invoice statuses" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--surface-page); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-family: var(--font-sans); }
+  .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-sm); padding: 4px 10px; font-size: 14px; line-height: 20px; font-weight: 600; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .success { background: var(--success-subtle); color: var(--success); }
+  .success .dot { background: var(--success); }
+  .warning { background: var(--warning-subtle); color: var(--warning); }
+  .warning .dot { background: var(--warning); }
+  .danger { background: var(--danger-subtle); color: var(--danger); }
+  .danger .dot { background: var(--danger); }
+  .info { background: var(--info-subtle); color: var(--info); }
+  .info .dot { background: var(--info); }
+</style>
+</head>
+<body>
+  <span class="badge success"><span class="dot"></span>En stock</span>
+  <span class="badge warning"><span class="dot"></span>Por agotarse</span>
+  <span class="badge danger"><span class="dot"></span>Agotado</span>
+  <span class="badge info"><span class="dot"></span>Borrador</span>
+</body>
+</html>

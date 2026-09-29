@@ -29,11 +29,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<Invoice> Invoices => this.Set<Invoice>();
 
+	public DbSet<CreditNote> CreditNotes => this.Set<CreditNote>();
+
 	public DbSet<AppSettings> AppSettings => this.Set<AppSettings>();
 
 	public DbSet<User> Users => this.Set<User>();
 
 	public DbSet<ImportBatch> ImportBatches => this.Set<ImportBatch>();
+
+	public DbSet<Supplier> Suppliers => this.Set<Supplier>();
 
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)

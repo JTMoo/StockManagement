@@ -123,8 +123,23 @@
   <data name="cash" xml:space="preserve">
     <value>Contado</value>
   </data>
+  <data name="cancelInvoice" xml:space="preserve">
+    <value>Anular factura</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Anulada</value>
+  </data>
+  <data name="cancelReason" xml:space="preserve">
+    <value>Motivo de anulación</value>
+  </data>
   <data name="creationDate" xml:space="preserve">
     <value>Fecha de emisión</value>
+  </data>
+  <data name="creditNote" xml:space="preserve">
+    <value>Nota de crédito</value>
+  </data>
+  <data name="creditNoteId" xml:space="preserve">
+    <value>Número de nota de crédito</value>
   </data>
   <data name="credit" xml:space="preserve">
     <value>Credito</value>
@@ -137,6 +152,9 @@
   </data>
   <data name="insufficientStock" xml:space="preserve">
     <value>No hay suficiente stock, disponible:</value>
+  </data>
+  <data name="invalidPaymentAmount" xml:space="preserve">
+    <value>El monto del pago debe ser mayor que cero.</value>
   </data>
   <data name="invoice" xml:space="preserve">
     <value>Factura</value>
@@ -152,6 +170,9 @@
   </data>
   <data name="newSale" xml:space="preserve">
     <value>Nueva venta</value>
+  </data>
+  <data name="paymentExceedsAmountDue" xml:space="preserve">
+    <value>El monto del pago supera el saldo pendiente de la factura.</value>
   </data>
   <data name="saleCondition" xml:space="preserve">
     <value>Condición de Venta</value>

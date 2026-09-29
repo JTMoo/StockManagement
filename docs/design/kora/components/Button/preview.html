@@ -1,0 +1,26 @@
+<!-- @dsCard group="Actions" height=120 subtitle="Primary, secondary, quiet, danger, disabled" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--surface-page); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .btn { font-family: var(--font-sans); border-radius: var(--radius-md); padding: 0 16px; height: 40px; display: inline-flex; align-items: center; border: 0; cursor: pointer; }
+  .btn.control, .control { font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
+  .btn.primary { background: var(--brand); color: var(--on-fill); }
+  .btn.secondary { background: transparent; color: var(--accent-strong); border: 1px solid var(--accent); }
+  .btn.quiet { background: transparent; color: var(--ink-muted); padding: 0 10px; }
+  .btn.danger { background: var(--danger); color: var(--on-fill); }
+  .btn.disabled { opacity: 0.45; cursor: default; }
+</style>
+</head>
+<body>
+  <button class="btn control primary">Cobrar</button>
+  <button class="btn control secondary">Guardar y nuevo</button>
+  <button class="btn control quiet">Cancelar</button>
+  <button class="btn control danger">Anular factura</button>
+  <button class="btn control primary disabled">Cobrar</button>
+</body>
+</html>

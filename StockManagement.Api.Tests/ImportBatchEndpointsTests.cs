@@ -281,6 +281,43 @@ public sealed class ImportBatchEndpointsTests
 	}
 
 	[TestMethod]
+	public async Task GetReport_BatchWithDuplicateAndErrorRows_ReturnsCsvOfNonReadyRows()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		await stockItems.AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10));
+
+		var content = ExcelFileContent(ImportTarget.StockItems, CreateWorkbook("Stock",
+			["Code", "Name", "Amount"],
+			["A1", "Screw again", "5"],
+			["B2", "Nut", "not-a-number"]));
+		var previewed = await (await _client.PostAsync("/api/import/batches", content)).Content.ReadAsAsync<ImportBatchResponse>();
+
+		// Act
+		var response = await _client.GetAsync($"/api/import/batches/{previewed.Id}/report");
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		Assert.AreEqual("text/csv", response.Content.Headers.ContentType!.MediaType);
+		var csv = await response.Content.ReadAsStringAsync();
+		var lines = csv.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+		Assert.AreEqual("Row,Status,Message,Data", lines[0]);
+		Assert.AreEqual(2, lines.Length - 1);
+		StringAssert.Contains(lines[1], "Duplicate");
+		StringAssert.Contains(lines[2], "Error");
+	}
+
+	[TestMethod]
+	public async Task GetReport_UnknownBatch_Returns404()
+	{
+		// Act
+		var response = await _client.GetAsync($"/api/import/batches/{Guid.NewGuid()}/report");
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+	}
+
+	[TestMethod]
 	public async Task Preview_NoFile_Returns400()
 	{
 		// Arrange

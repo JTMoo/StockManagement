@@ -30,6 +30,7 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
+	/// <exception cref="CustomerIdentificationNumberAlreadyExistsException">Identification number already in use</exception>
 	public async Task AddCustomerAsync(Customer customer)
 	{
 		_db.Customers.Add(customer);
@@ -37,6 +38,7 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
+	/// <exception cref="CustomerIdentificationNumberAlreadyExistsException">Identification number already in use</exception>
 	public async Task AddManyCustomersAsync(IList<Customer> customers)
 	{
 		if (customers is not { Count: > 0 }) return;
@@ -46,6 +48,7 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
+	/// <exception cref="CustomerIdentificationNumberAlreadyExistsException">Identification number already in use</exception>
 	public async Task<int> UpdateCustomerAsync(Customer customer)
 	{
 		_db.Customers.Update(customer);
@@ -65,6 +68,10 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 		try
 		{
 			await _db.SaveChangesAsync();
+		}
+		catch (DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException { SqlState: "23505", ConstraintName: CustomerConfiguration.IdentificationNumberIndexName })
+		{
+			throw new CustomerIdentificationNumberAlreadyExistsException();
 		}
 		catch (DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException { SqlState: "23505" })
 		{

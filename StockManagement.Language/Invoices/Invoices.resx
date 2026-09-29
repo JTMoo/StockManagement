@@ -120,8 +120,26 @@
   <data name="addToShoppingCart" xml:space="preserve">
     <value>Add to Shopping Cart</value>
   </data>
+  <data name="cancelInvoice" xml:space="preserve">
+    <value>Cancel invoice</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="cancelReason" xml:space="preserve">
+    <value>Cancellation reason</value>
+  </data>
+  <data name="creditNote" xml:space="preserve">
+    <value>Credit Note</value>
+  </data>
+  <data name="creditNoteId" xml:space="preserve">
+    <value>Credit Note ID</value>
+  </data>
   <data name="insufficientStock" xml:space="preserve">
     <value>Not enough in stock, only available:</value>
+  </data>
+  <data name="invalidPaymentAmount" xml:space="preserve">
+    <value>The payment amount must be greater than zero.</value>
   </data>
   <data name="invoiceId" xml:space="preserve">
     <value>Invoice ID</value>
@@ -134,6 +152,9 @@
   </data>
   <data name="newSale" xml:space="preserve">
     <value>New sale</value>
+  </data>
+  <data name="paymentExceedsAmountDue" xml:space="preserve">
+    <value>The payment amount exceeds the invoice's amount due.</value>
   </data>
   <data name="searchDates" xml:space="preserve">
     <value>Search in dates:</value>

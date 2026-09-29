@@ -1,6 +1,6 @@
 name: Sync main into open PRs
 
-# No merge queue on a personal-account repo (ADR-0026): merge main into every open PR branch
+# No merge queue on a personal-account repo (ADR-0027): merge main into every open PR branch
 # after each push to main instead, so conflicts get resolved one PR at a time.
 on:
   push:

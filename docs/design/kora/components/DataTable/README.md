@@ -1,0 +1,3 @@
+`body-strong`/`ink-muted` headers on `surface-sunken`, `border` between rows, `surface-sunken` on row hover. Every money/quantity/RUC column is `numeric` and right-aligned so digits line up down the column; every other column is left-aligned `body`. Row actions (editar, duplicar, anular) sit inline at the row's right edge, `Button.quiet` size - never a click-through to a separate page for a one-field change.
+
+A row that needs attention gets a 3px `danger` left border on its first cell (below-minimum stock, an overdue invoice) - a real state marker, not decoration, which is exactly why it's allowed to break the "no left-border accent" rule the rest of this system follows. Pair it with the row's `StatusBadge`, never the border alone.

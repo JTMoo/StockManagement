@@ -1,6 +1,8 @@
 name: Claude Code Review
 
-# Blocking review findings gate auto-merge alongside required CI (see docs/adr/0026, CLAUDE.md merge rule).
+# Blocking review findings gate auto-merge alongside required CI (see docs/adr/0027, CLAUDE.md merge rule).
+# Needs a CLAUDE_CODE_OAUTH_TOKEN repo secret (generate with `claude setup-token`, Pro/Max subscription — no API key needed).
+# Skips cleanly (not a failing required check) until that secret is added.
 on:
   pull_request:
     types: [opened, synchronize]
@@ -12,6 +14,7 @@ permissions:
 
 jobs:
   review:
+    if: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -22,5 +25,5 @@ jobs:
     - name: Run Claude Code Review
       uses: anthropics/claude-code-action@v1
       with:
-        anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+        claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         prompt: /code-review

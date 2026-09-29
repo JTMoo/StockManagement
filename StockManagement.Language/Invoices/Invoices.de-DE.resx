@@ -123,8 +123,23 @@
   <data name="cash" xml:space="preserve">
     <value>Bar</value>
   </data>
+  <data name="cancelInvoice" xml:space="preserve">
+    <value>Rechnung stornieren</value>
+  </data>
+  <data name="cancelled" xml:space="preserve">
+    <value>Storniert</value>
+  </data>
+  <data name="cancelReason" xml:space="preserve">
+    <value>Stornierungsgrund</value>
+  </data>
   <data name="creationDate" xml:space="preserve">
     <value>Erstellungsdatum</value>
+  </data>
+  <data name="creditNote" xml:space="preserve">
+    <value>Gutschrift</value>
+  </data>
+  <data name="creditNoteId" xml:space="preserve">
+    <value>Gutschriftsnummer</value>
   </data>
   <data name="credit" xml:space="preserve">
     <value>Kredit</value>
@@ -137,6 +152,9 @@
   </data>
   <data name="insufficientStock" xml:space="preserve">
     <value>Nicht genug auf Lager, verfügbar:</value>
+  </data>
+  <data name="invalidPaymentAmount" xml:space="preserve">
+    <value>Der Zahlungsbetrag muss größer als null sein.</value>
   </data>
   <data name="invoice" xml:space="preserve">
     <value>Rechnung</value>
@@ -152,6 +170,9 @@
   </data>
   <data name="newSale" xml:space="preserve">
     <value>Neuer Verkauf</value>
+  </data>
+  <data name="paymentExceedsAmountDue" xml:space="preserve">
+    <value>Der Zahlungsbetrag übersteigt den offenen Betrag der Rechnung.</value>
   </data>
   <data name="saleCondition" xml:space="preserve">
     <value>Verkaufsbedingung</value>

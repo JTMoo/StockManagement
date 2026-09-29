@@ -29,7 +29,17 @@ internal sealed class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 			item.Navigation(cartItem => cartItem.StockItem).AutoInclude();
 			item.ToTable("InvoiceItems");
 		});
+		builder.OwnsMany(invoice => invoice.Payments, payment =>
+		{
+			payment.WithOwner().HasForeignKey("InvoiceId");
+			payment.Property<Guid>("Id").ValueGeneratedOnAdd();
+			payment.HasKey("Id");
+			payment.Property(p => p.Amount).HasPrecision(18, 2);
+			payment.Property(p => p.Date).HasColumnType("timestamp without time zone");
+			payment.ToTable("Payments");
+		});
 		builder.Navigation(invoice => invoice.Items).AutoInclude();
+		builder.Navigation(invoice => invoice.Payments).AutoInclude();
 		builder.Navigation(invoice => invoice.Customer).AutoInclude();
 	}
 }

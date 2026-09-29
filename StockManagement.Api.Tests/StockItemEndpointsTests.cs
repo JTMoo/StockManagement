@@ -85,6 +85,30 @@ public sealed class StockItemEndpointsTests
 	}
 
 	[TestMethod]
+	public async Task CreateStockItem_FactorGreaterThanZero_DerivesPriceFromPurchaseData()
+	{
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/stock-items", new { Code = "C3", Name = "Bolt", PurchasePrice = 10m, PurchaseExchangeRate = 7300m, AdditionalPurchaseCost = 5000m, Factor = 1.25m });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+		var stockItem = await response.Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(97500m, stockItem.Price);
+	}
+
+	[TestMethod]
+	public async Task CreateStockItem_FactorZero_KeepsManualPrice()
+	{
+		// Act
+		var response = await _client.PostAsJsonAsync("/api/stock-items", new { Code = "C3", Name = "Bolt", Price = 250m });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+		var stockItem = await response.Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(250m, stockItem.Price);
+	}
+
+	[TestMethod]
 	public async Task CreateStockItem_DuplicateCode_Returns409()
 	{
 		// Act
@@ -118,6 +142,21 @@ public sealed class StockItemEndpointsTests
 		var stockItem = await response.Content.ReadAsAsync<StockItemResponse>();
 		Assert.AreEqual("Screw XL", stockItem.Name);
 		Assert.AreEqual(20, stockItem.Amount);
+	}
+
+	[TestMethod]
+	public async Task UpdateStockItem_FactorGreaterThanZero_DerivesPriceFromPurchaseData()
+	{
+		// Arrange
+		var id = (await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>()).Id;
+
+		// Act
+		var response = await _client.PutAsJsonAsync($"/api/stock-items/{id}", new { Id = id, Code = "A1", Name = "Screw", PurchasePrice = 10m, PurchaseExchangeRate = 7300m, AdditionalPurchaseCost = 5000m, Factor = 1.25m, Price = 1m });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var stockItem = await response.Content.ReadAsAsync<StockItemResponse>();
+		Assert.AreEqual(97500m, stockItem.Price);
 	}
 
 	[TestMethod]
