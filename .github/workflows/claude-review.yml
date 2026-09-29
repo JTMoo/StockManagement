@@ -1,0 +1,37 @@
+name: Claude Code Review
+
+# Blocking review findings gate auto-merge alongside required CI (see docs/adr/0027, CLAUDE.md merge rule).
+# Needs a CLAUDE_CODE_OAUTH_TOKEN repo secret (generate with `claude setup-token`, Pro/Max subscription — no API key needed).
+# Skips its steps cleanly (job still succeeds, not a failing required check) until that secret is added.
+# Secrets can't be used in a job-level `if:` (invalidates the whole workflow) — checked in a step instead.
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check for CLAUDE_CODE_OAUTH_TOKEN
+      id: check
+      env:
+        TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      run: echo "has-token=${TOKEN:+true}" >> "$GITHUB_OUTPUT"
+
+    - name: Checkout
+      if: steps.check.outputs.has-token == 'true'
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 1
+
+    - name: Run Claude Code Review
+      if: steps.check.outputs.has-token == 'true'
+      uses: anthropics/claude-code-action@v1
+      with:
+        claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        prompt: /code-review
