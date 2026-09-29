@@ -3,7 +3,7 @@ import { api, type ApiFailure, type DetectedColumns, type ImportBatch, type Impo
 import { FailureMessage } from "../../FailureMessage";
 import { useI18n } from "../../i18n";
 
-/** Upload → map columns → preview → commit/undo panel shared by every import target (ADR-0018, ADR-0025). */
+/** Upload → map columns → preview → commit/undo panel shared by every import target (ADR-0018, ADR-0028). */
 export function ImportPanel({ target, onImported }: { target: ImportTarget; onImported?: () => void })
 {
 	const { t } = useI18n();

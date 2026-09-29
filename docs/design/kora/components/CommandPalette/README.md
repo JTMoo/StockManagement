@@ -1,0 +1,7 @@
+**Intentional addition** - the concrete answer to "fewest clicks": `Ctrl`/`Cmd`+`K` from anywhere, or the search field pinned atop the `Sidebar`, opens a centered `surface-raised`/`radius-lg` overlay on a `scrim` backdrop with one input and grouped, ranked results below it - full cross-domain search, not just the nine-or-fewer screens.
+
+Groups, in this order: **Pantallas** (the sidebar's own destinations - screens before records, because jumping between modules a person already knows is the highest-frequency use), then one group per domain with a match - **Facturas**, **Clientes**, **Productos**, **Proveedores** - each searched across its identity fields at once (name, code, RUC, invoice/phone number), typo- and accent-tolerant ("sement" finds "cemento"). A domain group shows at most five results, ranked by relevance then recency, with a closing "Ver los N resultados en Facturas →" line that opens that domain's own `Page`, pre-filtered to the same query - the palette previews, the list paginates.
+
+Results are **active records only** by default (no `Anulada` invoices, no filtered-out items) - one filter chip at the top of the results ("Incluir anuladas") widens the search when it's genuinely needed, matching the sidebar's own "what staff touch daily" framing. Enter opens the top result, arrow keys move the selection - a mouse never has to touch it.
+
+It never offers an action the `Sidebar` or a `Page` toolbar doesn't already have; it's a second, faster door to the same rooms and records, not a hidden second app.

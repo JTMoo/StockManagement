@@ -1,0 +1,1 @@
+A `surface-raised` container, `border`, `radius-lg`, `space-5` padding, `space-5` internal gap - the box around a form or a related group of fields. No shadow: it separates from `surface-page` by fill and border alone. A `heading` at its top when it's one of several panels on a page; skip the heading when the `Page` title already names it.

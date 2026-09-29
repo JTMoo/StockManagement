@@ -1,0 +1,40 @@
+<!-- @dsCard group="Overlays" height=420 subtitle="Ctrl/Cmd+K, typing 'cemento' - active records only" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; font-family: var(--font-sans); }
+  .backdrop { height: 420px; background: var(--scrim); display: flex; justify-content: center; padding-top: 30px; box-sizing: border-box; }
+  .palette { width: 440px; height: fit-content; background: var(--surface-raised); border-radius: var(--radius-lg); overflow: hidden; }
+  .search { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--ink); font-size: 16px; }
+  .search svg { color: var(--ink-faint); flex: none; }
+  .filter { margin-left: auto; font-size: 12px; color: var(--ink-faint); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 2px 8px; }
+  .section { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-faint); padding: 10px 16px 4px; }
+  .result { display: flex; justify-content: space-between; padding: 8px 16px; font-size: 15px; color: var(--ink); }
+  .result.selected { background: var(--brand-subtle); color: var(--brand-strong); font-weight: 600; }
+  .result span.meta { color: var(--ink-faint); font-size: 13px; }
+  .more { padding: 8px 16px 12px; font-size: 13px; color: var(--accent-strong); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="backdrop">
+    <div class="palette">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        cemento
+        <span class="filter">Activos</span>
+      </div>
+      <div class="section">Productos <span>18 resultados</span></div>
+      <div class="result selected">Cemento Portland 25kg <span class="meta">140 en stock</span></div>
+      <div class="result">Cemento Portland 50kg <span class="meta">Agotado</span></div>
+      <div class="result">Cemento de albañilería 25kg <span class="meta">62 en stock</span></div>
+      <div class="more">Ver los 18 resultados en Productos →</div>
+      <div class="section">Proveedores <span>1 resultado</span></div>
+      <div class="result">Cementos Paraguay S.A. <span class="meta">RUC 80045123-1</span></div>
+    </div>
+  </div>
+</body>
+</html>

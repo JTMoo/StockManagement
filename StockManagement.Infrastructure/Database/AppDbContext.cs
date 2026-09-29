@@ -29,6 +29,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<Invoice> Invoices => this.Set<Invoice>();
 
+	public DbSet<CreditNote> CreditNotes => this.Set<CreditNote>();
+
 	public DbSet<AppSettings> AppSettings => this.Set<AppSettings>();
 
 	public DbSet<User> Users => this.Set<User>();

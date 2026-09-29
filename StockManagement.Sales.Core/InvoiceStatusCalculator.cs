@@ -14,14 +14,16 @@ internal static class InvoiceStatusCalculator
 		return (invoice.Payments ?? []).Sum(payment => payment.Amount);
 	}
 
+	/// <remarks>Zero once the invoice is cancelled (#56): a voided invoice owes nothing, whatever was paid before.</remarks>
 	public static decimal AmountDue(Invoice invoice)
 	{
-		return invoice.Total - AmountPaid(invoice);
+		return invoice.IsCancelled ? 0 : invoice.Total - AmountPaid(invoice);
 	}
 
-	/// <remarks><see cref="InvoiceStatus.Overdue"/> takes priority over <see cref="InvoiceStatus.PartiallyPaid"/>.</remarks>
+	/// <remarks><see cref="InvoiceStatus.Cancelled"/> takes priority over everything else; <see cref="InvoiceStatus.Overdue"/> takes priority over <see cref="InvoiceStatus.PartiallyPaid"/>.</remarks>
 	public static InvoiceStatus GetStatus(Invoice invoice, DateTime asOf)
 	{
+		if (invoice.IsCancelled) return InvoiceStatus.Cancelled;
 		if (AmountDue(invoice) <= 0) return InvoiceStatus.Paid;
 		if (asOf > invoice.ExpirationDate) return InvoiceStatus.Overdue;
 

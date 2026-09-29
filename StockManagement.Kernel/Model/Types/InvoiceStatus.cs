@@ -9,5 +9,7 @@ public enum InvoiceStatus
 
 	Paid,
 
-	Overdue
+	Overdue,
+
+	Cancelled
 }

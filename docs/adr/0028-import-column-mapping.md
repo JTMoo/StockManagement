@@ -1,4 +1,4 @@
-# ADR-0025: Import column mapping
+# ADR-0028: Import column mapping
 
 - Status: Proposed
 - Date: 2026-09-28

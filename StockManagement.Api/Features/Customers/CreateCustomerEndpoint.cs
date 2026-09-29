@@ -3,7 +3,9 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using StockManagement.Auth.Core.Contracts;
 using StockManagement.Customers.Core.Contracts;
+using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Util;
 
 namespace StockManagement.Api.Features.Customers;
 
@@ -20,8 +22,11 @@ public class CreateCustomerValidator : Validator<CreateCustomerRequest>
 }
 
 
+public sealed record DuplicateCustomerIdentificationNumberResponse(string Code);
+
+
 /// <remarks>The customer id is assigned by the server.</remarks>
-public class CreateCustomerEndpoint(ICustomerService customerService) : Endpoint<CreateCustomerRequest, Created<CustomerResponse>>
+public class CreateCustomerEndpoint(ICustomerService customerService) : Endpoint<CreateCustomerRequest, Results<Created<CustomerResponse>, Conflict<DuplicateCustomerIdentificationNumberResponse>>>
 {
 	private readonly ICustomerService _customerService = customerService;
 
@@ -32,19 +37,29 @@ public class CreateCustomerEndpoint(ICustomerService customerService) : Endpoint
 		this.Permissions(Permission.CustomersWrite);
 	}
 
-	public override async Task<Created<CustomerResponse>> ExecuteAsync(CreateCustomerRequest request, CancellationToken cancellationToken)
+	public override async Task<Results<Created<CustomerResponse>, Conflict<DuplicateCustomerIdentificationNumberResponse>>> ExecuteAsync(CreateCustomerRequest request, CancellationToken cancellationToken)
 	{
-		var customer = await _customerService.CreateCustomerAsync(new Customer()
+		var identificationNumber = RucValidator.TryNormalize(request.IdentificationNumber, out var normalized) ? normalized : request.IdentificationNumber;
+
+		Customer customer;
+		try
 		{
-			Name = request.Name,
-			Lastname = request.Lastname,
-			Address = request.Address,
-			PhoneNumber = request.PhoneNumber,
-			IdentificationNumber = request.IdentificationNumber,
-			PostboxNumber = request.PostboxNumber,
-			Email = request.Email,
-			Miscellaneous = request.Miscellaneous
-		}, cancellationToken);
+			customer = await _customerService.CreateCustomerAsync(new Customer()
+			{
+				Name = request.Name,
+				Lastname = request.Lastname,
+				Address = request.Address,
+				PhoneNumber = request.PhoneNumber,
+				IdentificationNumber = identificationNumber,
+				PostboxNumber = request.PostboxNumber,
+				Email = request.Email,
+				Miscellaneous = request.Miscellaneous
+			}, cancellationToken);
+		}
+		catch (CustomerIdentificationNumberAlreadyExistsException)
+		{
+			return TypedResults.Conflict(new DuplicateCustomerIdentificationNumberResponse(identificationNumber));
+		}
 
 		return TypedResults.Created($"/api/customers/{customer.CustomerId}", CustomerResponse.From(customer));
 	}

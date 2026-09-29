@@ -85,6 +85,48 @@ public sealed class CustomerImportTargetHandlerTests
 	}
 
 	[TestMethod]
+	public async Task ParseAsync_ValidRucWithoutHyphen_NormalizesIdentificationNumber()
+	{
+		// Arrange
+		using var workbook = CreateWorkbook(["Name", "IdentificationNumber"], ["Ann", "19465203"]);
+
+		// Act
+		var (_, candidates, errors) = await _handler.ParseAsync(ToStream(workbook), null);
+
+		// Assert
+		Assert.AreEqual(0, errors.Count);
+		Assert.AreEqual("1946520-3", ((Customer)candidates[0].Candidate).IdentificationNumber);
+	}
+
+	[TestMethod]
+	public async Task ParseAsync_NonRucIdentificationNumber_ImportsAsEnteredWithoutError()
+	{
+		// Arrange: e.g. a plain C.I. with no check digit
+		using var workbook = CreateWorkbook(["Name", "IdentificationNumber"], ["Ann", "ID-1"]);
+
+		// Act
+		var (_, candidates, errors) = await _handler.ParseAsync(ToStream(workbook), null);
+
+		// Assert
+		Assert.AreEqual(0, errors.Count);
+		Assert.AreEqual("ID-1", ((Customer)candidates[0].Candidate).IdentificationNumber);
+	}
+
+	[TestMethod]
+	public async Task ParseAsync_BlankIdentificationNumber_ImportsWithoutError()
+	{
+		// Arrange
+		using var workbook = CreateWorkbook(["Name"], ["Ann"]);
+
+		// Act
+		var (_, candidates, errors) = await _handler.ParseAsync(ToStream(workbook), null);
+
+		// Assert
+		Assert.AreEqual(0, errors.Count);
+		Assert.AreEqual(1, candidates.Count);
+	}
+
+	[TestMethod]
 	public async Task SplitDuplicatesAsync_SameIdentificationNumberAsStored_IsDuplicate()
 	{
 		// Arrange

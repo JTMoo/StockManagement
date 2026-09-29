@@ -4,9 +4,9 @@ import { FailureMessage } from "../../FailureMessage";
 import { useI18n, type TextKey } from "../../i18n";
 import { useLoad } from "../../useLoad";
 
-const fields: (keyof StockItem & TextKey)[] = ["code", "name", "description", "location", "amount", "price", "manufacturer", "minimumStock"];
-const numberFields = new Set<string>(["amount", "price", "minimumStock"]);
-const empty: StockItem = { id: "", code: "", name: "", description: "", location: "", amount: 0, price: 0, manufacturer: "", minimumStock: 0 };
+const fields: (keyof StockItem & TextKey)[] = ["code", "name", "description", "location", "amount", "manufacturer", "purchasePrice", "purchaseExchangeRate", "additionalPurchaseCost", "factor", "price", "minimumStock"];
+const numberFields = new Set<string>(["amount", "price", "factor", "purchasePrice", "purchaseExchangeRate", "additionalPurchaseCost", "minimumStock"]);
+const empty: StockItem = { id: "", code: "", name: "", description: "", location: "", amount: 0, price: 0, manufacturer: "", factor: 0, purchasePrice: 0, purchaseExchangeRate: 0, additionalPurchaseCost: 0, minimumStock: 0 };
 
 export function StockItemForm({ editing, onSaved, onCancel }: { editing?: StockItem; onSaved: (stockItem: StockItem) => void; onCancel: () => void })
 {
@@ -41,7 +41,7 @@ export function StockItemForm({ editing, onSaved, onCancel }: { editing?: StockI
 							type={numberFields.has(field) ? "number" : "text"}
 							value={stockItem[field]}
 							required={field === "code" || field === "name"}
-							disabled={field === "code" && !!editing}
+							disabled={(field === "code" && !!editing) || (field === "price" && stockItem.factor > 0)}
 							onChange={event => setStockItem({ ...stockItem, [field]: numberFields.has(field) ? Number(event.target.value) : event.target.value })}
 						/>
 					</label>

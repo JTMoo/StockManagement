@@ -18,7 +18,7 @@ public sealed class PreviewImportRequest
 	public IFormFile File { get; set; } = default!;
 
 	/// <summary>
-	/// Confirmed column mapping as JSON, column number → <see cref="ImportField.Name"/> (docs/adr/0025-import-column-mapping.md); omitted auto-matches headers by name
+	/// Confirmed column mapping as JSON, column number → <see cref="ImportField.Name"/> (docs/adr/0028-import-column-mapping.md); omitted auto-matches headers by name
 	/// </summary>
 	public string? Mapping { get; set; }
 }

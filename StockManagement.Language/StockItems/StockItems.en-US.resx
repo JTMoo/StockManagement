@@ -147,6 +147,15 @@
   <data name="factor" xml:space="preserve">
     <value>Factor</value>
   </data>
+  <data name="purchasePrice" xml:space="preserve">
+    <value>Purchase Price</value>
+  </data>
+  <data name="purchaseExchangeRate" xml:space="preserve">
+    <value>Exchange Rate</value>
+  </data>
+  <data name="additionalPurchaseCost" xml:space="preserve">
+    <value>Additional Purchase Cost</value>
+  </data>
   <data name="hideUnavailableItems" xml:space="preserve">
     <value>Hide unavailable items</value>
   </data>

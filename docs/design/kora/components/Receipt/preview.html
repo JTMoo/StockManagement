@@ -1,0 +1,43 @@
+<!-- @dsCard group="Print" height=380 subtitle="Fixed light colors - ignores the active theme on purpose" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  /* Literal colors, not var(--token): a receipt is paper, not app chrome - it must not follow a dark preview theme. */
+  body { margin: 0; padding: 20px; background: #F1EBE1; font-family: var(--font-sans); display: flex; justify-content: center; }
+  .paper { width: 360px; background: #FFFFFF; color: #2B241C; border-radius: 4px; padding: 32px; box-sizing: border-box; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid #B8AC96; }
+  .head strong { font-size: 15px; }
+  .head span { font-size: 13px; color: #4A5C6A; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 24px; margin: 0 0 20px; font-size: 14px; }
+  dt { color: #4A5C6A; }
+  dd { margin: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-weight: 600; color: #4A5C6A; padding: 0 0 6px; border-bottom: 1px solid #B8AC96; }
+  td { padding: 6px 0; border-bottom: 1px solid #E5DFD3; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.total th, tr.total td { padding-top: 14px; font-size: 20px; font-weight: 700; border-top: 2px solid #2B241C; border-bottom: 0; }
+</style>
+</head>
+<body>
+  <div class="paper">
+    <div class="head"><strong>Ferretería La Cosecha</strong><span>Factura #4521 · 28/09/2026</span></div>
+    <dl>
+      <dt>RUC</dt><dd>80045123-1</dd>
+      <dt>Cliente</dt><dd>Construcciones Ybycuí S.A.</dd>
+      <dt>Forma de pago</dt><dd>Contado</dd>
+    </dl>
+    <table>
+      <thead><tr><th>Producto</th><th class="num">Cant.</th><th class="num">Precio</th></tr></thead>
+      <tbody>
+        <tr><td>Cemento Portland 25kg</td><td class="num">10</td><td class="num">520.000</td></tr>
+        <tr><td>Clavo 2" (caja)</td><td class="num">3</td><td class="num">45.000</td></tr>
+        <tr class="total"><th colspan="2">Total</th><td class="num">565.000 Gs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

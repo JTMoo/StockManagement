@@ -26,7 +26,7 @@ export type DetectedColumn = { column: number; header: string; matchedFieldName?
 
 export type DetectedColumns = { sheetName: string; columns: DetectedColumn[]; fields: ImportField[] };
 
-/** Column number → target field name (ImportField.name); confirmed by the user before preview (ADR-0025) */
+/** Column number → target field name (ImportField.name); confirmed by the user before preview (ADR-0028) */
 export type ImportColumnMapping = Record<number, string>;
 
 export const importApi = {

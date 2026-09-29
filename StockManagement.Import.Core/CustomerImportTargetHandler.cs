@@ -25,9 +25,16 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 	public Task<(string SheetName, IReadOnlyList<DetectedColumn> Columns)> DetectColumnsAsync(Stream excelFile, CancellationToken cancellationToken = default) =>
 		ExcelEntityParser<Customer>.DetectColumnsAsync(excelFile, cancellationToken);
 
+	/// <remarks><see cref="Customer.IdentificationNumber"/> also holds a plain C.I. (no check digit); only a value that verifies as a RUC is normalized, everything else is imported as entered.</remarks>
 	public async Task<(string SheetName, IReadOnlyList<(int Row, object Candidate)> Candidates, IReadOnlyList<ImportRowError> Errors)> ParseAsync(Stream excelFile, IReadOnlyDictionary<int, string>? columnMapping, CancellationToken cancellationToken = default)
 	{
 		var (sheetName, items, errors) = await ExcelEntityParser<Customer>.ParseAsync(excelFile, columnMapping, cancellationToken);
+
+		foreach (var (_, item) in items)
+		{
+			if (RucValidator.TryNormalize(item.IdentificationNumber, out var normalized)) item.IdentificationNumber = normalized;
+		}
+
 		return (sheetName, [.. items.Select(item => (item.Row, (object)item.Item))], errors);
 	}
 

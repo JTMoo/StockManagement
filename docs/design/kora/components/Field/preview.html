@@ -1,0 +1,35 @@
+<!-- @dsCard group="Forms" height=160 subtitle="Default, focused, error" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--surface-page); display: flex; gap: 20px; font-family: var(--font-sans); }
+  .field { display: flex; flex-direction: column; gap: 6px; width: 180px; }
+  label { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+  input { font-family: var(--font-sans); font-size: 15px; height: 40px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface-raised); color: var(--ink); padding: 0 12px; box-sizing: border-box; }
+  input.focused { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-color: var(--focus-ring); }
+  input.error { border-color: var(--danger); }
+  .help { font-size: 13px; line-height: 18px; color: var(--ink-faint); }
+  .error-text { font-size: 13px; line-height: 18px; color: var(--danger); }
+</style>
+</head>
+<body>
+  <div class="field">
+    <label>Nombre del producto</label>
+    <input value="Cemento Portland 25kg">
+    <span class="help">Como figura en la factura</span>
+  </div>
+  <div class="field">
+    <label>RUC</label>
+    <input class="focused" value="80012345-6">
+  </div>
+  <div class="field">
+    <label>RUC</label>
+    <input class="error" value="80012345-6">
+    <span class="error-text">El RUC ya existe en Clientes</span>
+  </div>
+</body>
+</html>

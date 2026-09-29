@@ -30,7 +30,7 @@ public class DetectImportColumnsValidator : Validator<DetectImportColumnsRequest
 public sealed record DetectedColumnsResponse(string SheetName, IReadOnlyList<DetectedColumn> Columns, IReadOnlyList<ImportField> Fields);
 
 
-/// <remarks>Reads only the header row, for the web column-mapping step ahead of preview (docs/adr/0025-import-column-mapping.md).</remarks>
+/// <remarks>Reads only the header row, for the web column-mapping step ahead of preview (docs/adr/0028-import-column-mapping.md).</remarks>
 public class DetectImportColumnsEndpoint(IImportBatchService importBatchService, ILogger<DetectImportColumnsEndpoint> logger)
 	: Endpoint<DetectImportColumnsRequest, Results<Ok<DetectedColumnsResponse>, BadRequest<InvalidExcelFileResponse>>>
 {

@@ -36,7 +36,7 @@ export function CreateCustomerForm({ onCreated }: { onCreated: (customer: Custom
 					</label>
 				))}
 			</div>
-			<FailureMessage failure={failure} />
+			<FailureMessage failure={failure} duplicate="identificationNumberAlreadyExists" />
 			<div className="form-actions">
 				<button type="submit" disabled={busy}>{t("createCustomer")}</button>
 			</div>

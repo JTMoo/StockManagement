@@ -1,0 +1,27 @@
+<!-- @dsCard group="Layout" height=200 subtitle="Form panel" -->
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../tokens.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--surface-page); font-family: var(--font-sans); }
+  .panel { background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+  h2 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; color: var(--ink); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label { font-size: 13px; color: var(--ink-muted); }
+  input { height: 40px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface-page); padding: 0 12px; box-sizing: border-box; font-family: var(--font-sans); }
+</style>
+</head>
+<body>
+  <div class="panel">
+    <h2>Nuevo producto</h2>
+    <div class="grid">
+      <div class="field"><label>Nombre</label><input value="Cemento Portland 25kg"></div>
+      <div class="field"><label>Precio (Gs)</label><input value="52.000"></div>
+    </div>
+  </div>
+</body>
+</html>

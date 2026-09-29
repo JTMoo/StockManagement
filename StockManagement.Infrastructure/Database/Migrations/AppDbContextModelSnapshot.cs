@@ -65,6 +65,45 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.ToTable("AppSettings");
                 });
 
+            modelBuilder.Entity("StockManagement.Kernel.Model.CreditNote", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("InvoiceId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Tax")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId")
+                        .IsUnique();
+
+                    b.HasIndex("Number")
+                        .IsUnique();
+
+                    b.ToTable("CreditNotes");
+                });
+
             modelBuilder.Entity("StockManagement.Kernel.Model.Customer", b =>
                 {
                     b.Property<string>("Id")
@@ -110,6 +149,11 @@ namespace StockManagement.Infrastructure.Database.Migrations
 
                     b.HasIndex("CustomerId")
                         .IsUnique();
+
+                    b.HasIndex("IdentificationNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Customers_IdentificationNumber")
+                        .HasFilter("\"IdentificationNumber\" <> ''");
 
                     b.ToTable("Customers");
                 });
@@ -164,6 +208,9 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("Number")
                         .HasColumnType("integer");
 
@@ -193,6 +240,10 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
+
+                    b.Property<decimal>("AdditionalPurchaseCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
@@ -229,6 +280,14 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .HasColumnType("text");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PurchaseExchangeRate")
+                        .HasPrecision(18, 6)
+                        .HasColumnType("numeric(18,6)");
+
+                    b.Property<decimal>("PurchasePrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
@@ -355,6 +414,17 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("StockManagement.Kernel.Model.CreditNote", b =>
+                {
+                    b.HasOne("StockManagement.Kernel.Model.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.ImportBatch", b =>
