@@ -129,11 +129,20 @@
   <data name="duplicatesSkipped" xml:space="preserve">
     <value>Als Duplikat übersprungen</value>
   </data>
+  <data name="column" xml:space="preserve">
+    <value>Spalte</value>
+  </data>
   <data name="excelImport" xml:space="preserve">
     <value>Excel Import</value>
   </data>
   <data name="failedConversion" xml:space="preserve">
     <value>Der Umwandlungsprozess ist fehlgeschlagen, da die angegebene Excel Spalte nicht mit dem Parametertyp übereingestimmt hat. Der Parameter heißt {0} und die Spalte Nummer {1}.</value>
+  </data>
+  <data name="field" xml:space="preserve">
+    <value>Feld</value>
+  </data>
+  <data name="ignoreColumn" xml:space="preserve">
+    <value>Diese Spalte ignorieren</value>
   </data>
   <data name="import" xml:space="preserve">
     <value>Importieren</value>

@@ -11,13 +11,15 @@ describe("OpeningStockImport", () =>
 	it("Preview_Valid_SendsOpeningStockAsTheTarget", async () =>
 	{
 		// Arrange
+		const detected = { sheetName: "Sheet1", columns: [], fields: [] };
 		const previewed = { id: "batch-1", target: "OpeningStock", fileName: "opening-stock.xlsx", sheetName: "Sheet1", status: "Previewed", readyCount: 1, duplicateCount: 0, errorCount: 0, rows: [] };
-		const fetchMock = mockApi({ "POST /api/import/batches": { body: previewed } });
+		const fetchMock = mockApi({ "POST /api/import/batches/columns": { body: detected }, "POST /api/import/batches": { body: previewed } });
 		renderEnglish(<OpeningStockImport />);
 
 		// Act
 		await userEvent.upload(screen.getByLabelText("Choose file"), file);
 		await userEvent.click(screen.getByRole("button", { name: "Preview" }));
+		await userEvent.click(await screen.findByRole("button", { name: "Preview" }));
 
 		// Assert
 		await screen.findByText("1");

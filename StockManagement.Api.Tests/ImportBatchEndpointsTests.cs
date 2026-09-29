@@ -1,9 +1,11 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using ClosedXML.Excel;
 using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Api.Features.Import;
 using StockManagement.Api.Features.StockItems;
+using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
@@ -278,6 +280,50 @@ public sealed class ImportBatchEndpointsTests
 		Assert.AreEqual(HttpStatusCode.OK, undoResponse.StatusCode);
 		var item = await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>();
 		Assert.AreEqual(3, item.Amount);
+	}
+
+	[TestMethod]
+	public async Task GetFields_Customers_ReturnsNamePropertyField()
+	{
+		// Act
+		var response = await _client.GetAsync("/api/import/fields?Target=Customers");
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var fields = await response.Content.ReadAsAsync<List<ImportField>>();
+		Assert.IsTrue(fields.Any(field => field.Name == nameof(Customer.Name)));
+	}
+
+	[TestMethod]
+	public async Task DetectColumns_UnrecognizedHeader_ReportsColumnWithNoMatchedField()
+	{
+		// Arrange
+		var content = ExcelFileContent(ImportTarget.Customers, CreateWorkbook("Customers", ["Name", "Unrecognized"], ["Ann", "?"]));
+
+		// Act
+		var response = await _client.PostAsync("/api/import/batches/columns", content);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+		var detected = await response.Content.ReadAsAsync<DetectedColumnsResponse>();
+		Assert.AreEqual(nameof(Customer.Name), detected.Columns.Single(column => column.Column == 1).MatchedFieldName);
+		Assert.IsNull(detected.Columns.Single(column => column.Column == 2).MatchedFieldName);
+		Assert.IsTrue(detected.Fields.Any(field => field.Name == nameof(Customer.Name)));
+	}
+
+	[TestMethod]
+	public async Task Preview_WithColumnMapping_UsesItInsteadOfHeaderNames()
+	{
+		// Arrange
+		var content = ExcelFileContent(ImportTarget.Customers, CreateWorkbook("Customers", ["Vorname"], ["Ann"]));
+		content.Add(new StringContent(JsonSerializer.Serialize(new Dictionary<int, string> { [1] = nameof(Customer.Name) })), "Mapping");
+
+		// Act
+		var response = await _client.PostAsync("/api/import/batches", content);
+
+		// Assert
+		var batch = await response.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(1, batch.ReadyCount);
 	}
 
 	[TestMethod]

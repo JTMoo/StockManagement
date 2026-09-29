@@ -187,6 +187,7 @@ describe("StockItemList", () =>
 		};
 		const fetchMock = mockApi({
 			"GET /api/stock-items": { body: [] },
+			"POST /api/import/batches/columns": { body: { sheetName: "Sheet1", columns: [], fields: [] } },
 			"POST /api/import/batches": { body: batch },
 			"POST /api/import/batches/batch-1/commit": { body: { ...batch, status: "Committed" } }
 		});
@@ -196,6 +197,7 @@ describe("StockItemList", () =>
 		const file = new File(["dummy"], "stock.xlsx");
 		await userEvent.upload(screen.getByLabelText("Choose file"), file);
 		await userEvent.click(screen.getByRole("button", { name: "Preview" }));
+		await userEvent.click(await screen.findByRole("button", { name: "Preview" }));
 
 		// Act
 		await userEvent.click(await screen.findByRole("button", { name: "Commit" }));

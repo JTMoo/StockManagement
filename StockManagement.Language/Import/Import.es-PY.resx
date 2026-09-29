@@ -129,11 +129,20 @@
   <data name="duplicatesSkipped" xml:space="preserve">
     <value>Omitido como duplicado</value>
   </data>
+  <data name="column" xml:space="preserve">
+    <value>Columna</value>
+  </data>
   <data name="excelImport" xml:space="preserve">
     <value>Importación de Excel</value>
   </data>
   <data name="failedConversion" xml:space="preserve">
     <value>Se produjo un error en el proceso de conversión de una columna de Excel determinada al parámetro especificado. Esto sucedió para el parámetro {0} y la columna numeró {1}.</value>
+  </data>
+  <data name="field" xml:space="preserve">
+    <value>Campo</value>
+  </data>
+  <data name="ignoreColumn" xml:space="preserve">
+    <value>Ignorar esta columna</value>
   </data>
   <data name="import" xml:space="preserve">
     <value>Importar</value>
