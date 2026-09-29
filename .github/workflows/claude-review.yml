@@ -4,6 +4,7 @@ name: Claude Code Review
 # Needs a CLAUDE_CODE_OAUTH_TOKEN repo secret (generate with `claude setup-token`, Pro/Max subscription — no API key needed).
 # Skips its steps cleanly (job still succeeds, not a failing required check) until that secret is added.
 # Secrets can't be used in a job-level `if:` (invalidates the whole workflow) — checked in a step instead.
+# allowed_bots lets sync-main-into-prs.yml's merge-commit pushes (authored by github-actions[bot]) trigger this too.
 on:
   pull_request:
     types: [opened, synchronize]
@@ -35,3 +36,4 @@ jobs:
       with:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         prompt: /code-review
+        allowed_bots: github-actions[bot]
