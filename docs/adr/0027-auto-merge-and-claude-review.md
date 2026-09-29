@@ -18,7 +18,7 @@
 ## Decision
 
 - Branch protection on `main`: required status checks (`api-tests`, `web-tests`, `unit-tests`, `adr-index` from #100, `claude-review`), require branches up to date, no owner review required. Repo setting, not API-settable — owner does this once (see PR body)
-- `.github/workflows/claude-review.yml`: `anthropics/claude-code-action` runs `/code-review` on every PR; a blocking finding fails the check, same as a failing test. Auth: `CLAUDE_CODE_OAUTH_TOKEN` (owner has no API key — subscription-based, `claude setup-token`), not `anthropic_api_key`. The job's `if:` skips it cleanly (not a failing required check) until that secret exists
+- `.github/workflows/claude-review.yml`: `anthropics/claude-code-action` runs `/code-review` on every PR; a blocking finding fails the check, same as a failing test. Auth: `CLAUDE_CODE_OAUTH_TOKEN` (owner has no API key — subscription-based, `claude setup-token`), not `anthropic_api_key`. Secrets can't be used in a job-level `if:` (GitHub invalidates the whole workflow file — hit this in #103); a step checks the secret into an output instead, and the checkout/review steps are conditioned on that, so the job succeeds (not skipped, not failed) until the secret exists
 - Threads enable GitHub's native per-PR auto-merge on their own PR once pushed (`enable_pr_auto_merge`); it merges once every required check is green
 - `.github/workflows/sync-main-into-prs.yml`: after each push to `main`, merge `main` into every open PR branch; a real conflict gets a PR comment instead of a silent merge
 
