@@ -6,7 +6,7 @@ export function Page({ title, toolbar, children }: { title: string; toolbar?: Re
 	return (
 		<section className="page">
 			<header className="page-header">
-				<h2>{title}</h2>
+				<h2 className="display">{title}</h2>
 				{toolbar && <div className="toolbar">{toolbar}</div>}
 			</header>
 			{children}
