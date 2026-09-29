@@ -37,22 +37,24 @@ export function App()
 
 	return (
 		<div className="shell">
-			<main>{activeRoute.render({ invoice, onSold })}</main>
-			<nav className={menuExtended ? "menu" : "menu collapsed"}>
-				<button className="menu-item" aria-label="Menu" aria-expanded={menuExtended} onClick={() => setMenuExtended(!menuExtended)}>
+			<nav className={menuExtended ? "sidebar" : "sidebar collapsed"}>
+				<button className="sidebar-item" aria-label="Menu" aria-expanded={menuExtended} onClick={() => setMenuExtended(!menuExtended)}>
 					<Menu />
 				</button>
-				<div className="menu-bottom">
+				<div className="sidebar-items">
 					{visibleRoutes.map(({ name, icon: Icon }) => (
-						<button key={name} className="menu-item" aria-label={t(name)} aria-pressed={view === name} onClick={() => setView(name)}>
+						<button key={name} className="sidebar-item" aria-label={t(name)} aria-pressed={view === name} onClick={() => setView(name)}>
 							<Icon />{menuExtended && <span>{t(name)}</span>}
 						</button>
 					))}
-					<button className="menu-item" aria-label={t("logout")} onClick={logout}>
+				</div>
+				<div className="sidebar-bottom">
+					<button className="sidebar-item" aria-label={t("logout")} onClick={logout}>
 						<LogOut />{menuExtended && <span>{t("logout")}</span>}
 					</button>
 				</div>
 			</nav>
+			<main>{activeRoute.render({ invoice, onSold })}</main>
 		</div>
 	);
 }
