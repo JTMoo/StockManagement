@@ -15,6 +15,8 @@ public class Invoice : BaseDocument
 	private decimal tax;
 	private string number = "";
 	private bool isCancelled;
+	private string cdc = "";
+	private TransmissionStatus transmissionStatus = TransmissionStatus.Pending;
 
 
 	public Invoice()
@@ -75,5 +77,20 @@ public class Invoice : BaseDocument
 		set { this.SetField(ref this.isCancelled, value); }
 	}
 	public List<Payment> Payments { get; set; } = [];
+	/// <summary>
+	/// 44-digit SIFEN control code; empty until the first transmission attempt builds the DE (ADR-0031)
+	/// </summary>
+	[Display(ResourceType = typeof(Language.Invoices), Name = nameof(Language.Invoices.cdc))]
+	public string Cdc
+	{
+		get { return this.cdc; }
+		set { this.SetField(ref this.cdc, value); }
+	}
+	[Display(ResourceType = typeof(Language.Invoices), Name = nameof(Language.Invoices.transmissionStatus))]
+	public TransmissionStatus TransmissionStatus
+	{
+		get { return this.transmissionStatus; }
+		set { this.SetField(ref this.transmissionStatus, value); }
+	}
 	#endregion Properties
 }

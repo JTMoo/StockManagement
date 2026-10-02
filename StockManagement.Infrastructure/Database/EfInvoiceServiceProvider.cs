@@ -3,6 +3,7 @@ using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Infrastructure.Database;
 
@@ -105,6 +106,8 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 		// Reuse the tracked instance, same reason as the StockItem swap above
 		invoice.Customer = await _db.Customers.FindAsync([invoice.Customer.Id], cancellationToken) ?? invoice.Customer;
 		_db.Invoices.Add(invoice);
+		// Outbox row for the SIFEN transmission worker (ADR-0031); same transaction as the invoice write
+		_db.PendingTransmissions.Add(new PendingTransmission(invoice, DateTime.Now));
 
 		try
 		{
@@ -120,6 +123,14 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 
 		taken.ForEach(line => line.Item.StockItem.Amount = line.AmountLeft);
 		return [];
+	}
+
+	public async Task<IReadOnlyList<Invoice>> GetStuckTransmissionsAsync(CancellationToken cancellationToken = default)
+	{
+		return await _db.Invoices
+			.Where(invoice => invoice.TransmissionStatus == TransmissionStatus.Rejected || invoice.TransmissionStatus == TransmissionStatus.Error)
+			.OrderByDescending(invoice => invoice.Date)
+			.ToListAsync(cancellationToken);
 	}
 
 	private async Task SaveChangesAsync()

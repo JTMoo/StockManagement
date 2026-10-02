@@ -129,6 +129,12 @@
   <data name="cancelReason" xml:space="preserve">
     <value>Cancellation reason</value>
   </data>
+  <data name="cdc" xml:space="preserve">
+    <value>CDC</value>
+  </data>
+  <data name="transmissionStatus" xml:space="preserve">
+    <value>SIFEN status</value>
+  </data>
   <data name="creditNote" xml:space="preserve">
     <value>Credit Note</value>
   </data>

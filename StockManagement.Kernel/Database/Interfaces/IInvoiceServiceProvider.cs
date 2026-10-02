@@ -33,4 +33,9 @@ public interface IInvoiceServiceProvider
 	/// <returns>Names of the short lines; empty when the sale was stored</returns>
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Invoice number already exists; nothing written</exception>
 	public Task<IReadOnlyList<string>> TryAddSaleAsync(Invoice invoice, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Invoices SIFEN rejected, or that errored out past the 72h retry deadline (ADR-0031) - legally unresolved until cleared
+	/// </summary>
+	public Task<IReadOnlyList<Invoice>> GetStuckTransmissionsAsync(CancellationToken cancellationToken = default);
 }

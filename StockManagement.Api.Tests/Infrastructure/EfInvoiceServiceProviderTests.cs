@@ -67,6 +67,31 @@ public sealed class EfInvoiceServiceProviderTests
 	}
 
 	[TestMethod]
+	public async Task TryAddSaleAsync_EnoughStock_WritesPendingTransmissionOutboxRow()
+	{
+		// Arrange
+		await using var scope = _services.CreateAsyncScope();
+		var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+		var stockItem = new StockItem("Screw", code: "A1", amount: 10);
+		var customer = new Customer { CustomerId = 1001, Name = "Ann" };
+		db.StockItems.Add(stockItem);
+		db.Customers.Add(customer);
+		await db.SaveChangesAsync();
+
+		var invoice = new Invoice { Number = "1", Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 4 }] };
+		var provider = new EfInvoiceServiceProvider(db);
+
+		// Act
+		await provider.TryAddSaleAsync(invoice);
+
+		// Assert
+		var transmission = await db.PendingTransmissions.AsNoTracking().SingleAsync();
+		Assert.AreEqual(invoice.Id, transmission.Invoice.Id);
+		Assert.AreEqual(0, transmission.Attempts);
+		Assert.AreEqual(TransmissionStatus.Pending, (await db.Invoices.AsNoTracking().SingleAsync()).TransmissionStatus);
+	}
+
+	[TestMethod]
 	public async Task TryAddSaleAsync_NotEnoughStock_ReturnsShortageAndWritesNothing()
 	{
 		// Arrange

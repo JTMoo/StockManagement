@@ -142,6 +142,24 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to CDC.
+        /// </summary>
+        public static string cdc {
+            get {
+                return ResourceManager.GetString("cdc", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to SIFEN status.
+        /// </summary>
+        public static string transmissionStatus {
+            get {
+                return ResourceManager.GetString("transmissionStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Credit Note.
         /// </summary>
         public static string creditNote {
