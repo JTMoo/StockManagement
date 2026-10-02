@@ -72,7 +72,7 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 		try
 		{
-			await _stockItemServiceProvider.AddStockItemAsync(stockItem);
+			await _stockItemServiceProvider.AddStockItemAsync(stockItem, cancellationToken);
 		}
 		catch (StockItemCodeAlreadyExistsException)
 		{
@@ -80,7 +80,7 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		}
 
 		// Reload to fill the Supplier navigation (AddStockItemAsync only tracked the FK)
-		var created = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		var created = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id, cancellationToken);
 		return TypedResults.Created($"/api/stock-items/{stockItem.Code}", StockItemResponse.From(created));
 	}
 }

@@ -130,7 +130,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_SameIdentificationNumberAsStored_IsDuplicate()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { IdentificationNumber = "ID-1" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "ID-1" }]);
 		object clash = new Customer { Name = "Again", IdentificationNumber = "id-1" };
 		object fresh = new Customer { Name = "New", IdentificationNumber = "ID-2" };
 
@@ -146,7 +146,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_BlankIdentificationNumbers_NeverMatchEachOther()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		object first = new Customer { Name = "A" };
 		object second = new Customer { Name = "B" };
 
@@ -162,7 +162,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task CommitAsync_NewCustomers_AssignsConsecutiveIdsAfterHighestStored()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { CustomerId = 1005 }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { CustomerId = 1005 }]);
 		object first = new Customer { Name = "A" };
 		object second = new Customer { Name = "B" };
 
@@ -172,7 +172,7 @@ public sealed class CustomerImportTargetHandlerTests
 		// Assert
 		Assert.AreEqual(1006, ((Customer)first).CustomerId);
 		Assert.AreEqual(1007, ((Customer)second).CustomerId);
-		_customers.Verify(provider => provider.AddManyCustomersAsync(It.Is<IList<Customer>>(list => list.SequenceEqual(new[] { first, second }))), Times.Once);
+		_customers.Verify(provider => provider.AddManyCustomersAsync(It.Is<IList<Customer>>(list => list.SequenceEqual(new[] { first, second })), It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -182,7 +182,7 @@ public sealed class CustomerImportTargetHandlerTests
 		await _handler.CommitAsync([]);
 
 		// Assert
-		_customers.Verify(provider => provider.AddManyCustomersAsync(It.IsAny<IList<Customer>>()), Times.Never);
+		_customers.Verify(provider => provider.AddManyCustomersAsync(It.IsAny<IList<Customer>>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -190,13 +190,13 @@ public sealed class CustomerImportTargetHandlerTests
 	{
 		// Arrange
 		var customer = new Customer();
-		_customers.Setup(provider => provider.GetCustomerByIdAsync("id-1")).ReturnsAsync(customer);
+		_customers.Setup(provider => provider.GetCustomerByIdAsync("id-1", It.IsAny<CancellationToken>())).ReturnsAsync(customer);
 
 		// Act
 		await _handler.UndoAsync([("id-1", customer)]);
 
 		// Assert
-		_customers.Verify(provider => provider.DeleteCustomerAsync(customer), Times.Once);
+		_customers.Verify(provider => provider.DeleteCustomerAsync(customer, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]

@@ -57,7 +57,7 @@ public class CreateUserEndpoint(IUserServiceProvider userServiceProvider, IAuthS
 
 		try
 		{
-			await _userServiceProvider.AddUserAsync(user);
+			await _userServiceProvider.AddUserAsync(user, cancellationToken);
 		}
 		catch (UsernameAlreadyExistsException)
 		{

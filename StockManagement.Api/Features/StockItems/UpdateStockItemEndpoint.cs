@@ -46,7 +46,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound, Conflict<DuplicateStockItemCodeResponse>>> ExecuteAsync(UpdateStockItemRequest request, CancellationToken cancellationToken)
 	{
-		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id) is not StockItem stockItem) return TypedResults.NotFound();
+		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id, cancellationToken) is not StockItem stockItem) return TypedResults.NotFound();
 
 		stockItem.Code = request.Code;
 		stockItem.Name = request.Name;
@@ -73,7 +73,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 		try
 		{
-			await _stockItemServiceProvider.UpdateStockItemAsync(stockItem);
+			await _stockItemServiceProvider.UpdateStockItemAsync(stockItem, cancellationToken);
 		}
 		catch (StockItemCodeAlreadyExistsException)
 		{
@@ -81,7 +81,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		}
 
 		// Reload: stockItem.Supplier may still reference the old row after a SupplierId change
-		var updated = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		var updated = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id, cancellationToken);
 		return TypedResults.Ok(StockItemResponse.From(updated));
 	}
 }

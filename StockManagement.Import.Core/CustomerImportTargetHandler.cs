@@ -42,7 +42,7 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var existing = await _customerServiceProvider.GetCustomersAsync() ?? [];
+		var existing = await _customerServiceProvider.GetCustomersAsync(cancellationToken) ?? [];
 		var split = DuplicateFilter.Split(candidates.Cast<Customer>(), existing, DuplicateKey, StringComparer.OrdinalIgnoreCase);
 		return new([.. split.Unique.Cast<object>()], [.. split.Duplicates.Cast<object>()]);
 	}
@@ -52,14 +52,14 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 		var items = candidates.Cast<Customer>().ToList();
 		if (items.Count == 0) return [];
 
-		var existing = await _customerServiceProvider.GetCustomersAsync() ?? [];
+		var existing = await _customerServiceProvider.GetCustomersAsync(cancellationToken) ?? [];
 		var nextId = SequenceNumber.Next(existing.Select(customer => customer.CustomerId), Customer.FirstCustomerId);
 		foreach (var customer in items)
 		{
 			customer.CustomerId = nextId++;
 		}
 
-		await _customerServiceProvider.AddManyCustomersAsync(items);
+		await _customerServiceProvider.AddManyCustomersAsync(items, cancellationToken);
 		return [.. items.Select(item => item.Id)];
 	}
 
@@ -67,9 +67,9 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 	{
 		foreach (var (id, _) in entities)
 		{
-			if (await _customerServiceProvider.GetCustomerByIdAsync(id) is Customer customer)
+			if (await _customerServiceProvider.GetCustomerByIdAsync(id, cancellationToken) is Customer customer)
 			{
-				await _customerServiceProvider.DeleteCustomerAsync(customer);
+				await _customerServiceProvider.DeleteCustomerAsync(customer, cancellationToken);
 			}
 		}
 	}

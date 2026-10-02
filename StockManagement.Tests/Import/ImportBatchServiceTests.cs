@@ -37,7 +37,7 @@ public sealed class ImportBatchServiceTests
 			.ReturnsAsync(new DuplicateFilterResult<object>([fresh], [clash]));
 
 		ImportBatch? added = null;
-		_batches.Setup(provider => provider.AddImportBatchAsync(It.IsAny<ImportBatch>())).Callback<ImportBatch>(batch => added = batch).Returns(Task.CompletedTask);
+		_batches.Setup(provider => provider.AddImportBatchAsync(It.IsAny<ImportBatch>(), It.IsAny<CancellationToken>())).Callback<ImportBatch, CancellationToken>((batch, _) => added = batch).Returns(Task.CompletedTask);
 
 		// Act
 		var batch = await _service.PreviewAsync(ImportTarget.Customers, "legacy.xlsx", Stream.Null, null);
@@ -57,7 +57,7 @@ public sealed class ImportBatchServiceTests
 	public async Task CommitAsync_UnknownBatch_ThrowsNotFound()
 	{
 		// Arrange
-		_batches.Setup(provider => provider.GetImportBatchAsync("missing")).ReturnsAsync((ImportBatch?)null);
+		_batches.Setup(provider => provider.GetImportBatchAsync("missing", It.IsAny<CancellationToken>())).ReturnsAsync((ImportBatch?)null);
 
 		// Act & Assert
 		await Assert.ThrowsExceptionAsync<ImportBatchNotFoundException>(() => _service.CommitAsync("missing"));
@@ -69,7 +69,7 @@ public sealed class ImportBatchServiceTests
 		// Arrange
 		var batch = new ImportBatch(ImportTarget.Customers, "legacy.xlsx", "Sheet1",
 			[new ImportBatchRow(1, ImportRowStatus.Ready, null, "payload:fresh"), new ImportBatchRow(2, ImportRowStatus.Duplicate, null, "payload:clash")]);
-		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id)).ReturnsAsync(batch);
+		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id, It.IsAny<CancellationToken>())).ReturnsAsync(batch);
 		_handler.Setup(handler => handler.DeserializeCandidate("payload:fresh")).Returns("fresh");
 		_handler.Setup(handler => handler.CommitAsync(It.Is<IReadOnlyList<object>>(list => list.SequenceEqual(new object[] { "fresh" })), It.IsAny<CancellationToken>()))
 			.ReturnsAsync((IReadOnlyList<string>)["new-id"]);
@@ -80,7 +80,7 @@ public sealed class ImportBatchServiceTests
 		// Assert
 		Assert.AreEqual(ImportBatchStatus.Committed, result.Status);
 		Assert.AreEqual("new-id", result.ReadyRows[0].ImportedEntityId);
-		_batches.Verify(provider => provider.UpdateImportBatchAsync(batch), Times.Once);
+		_batches.Verify(provider => provider.UpdateImportBatchAsync(batch, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -89,7 +89,7 @@ public sealed class ImportBatchServiceTests
 		// Arrange
 		var batch = new ImportBatch(ImportTarget.Customers, "legacy.xlsx", "Sheet1", [new ImportBatchRow(1, ImportRowStatus.Ready, null, "payload:fresh")]);
 		batch.MarkCommitted(["new-id"]);
-		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id)).ReturnsAsync(batch);
+		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id, It.IsAny<CancellationToken>())).ReturnsAsync(batch);
 		_handler.Setup(handler => handler.DeserializeCandidate("payload:fresh")).Returns("fresh");
 
 		// Act
@@ -108,7 +108,7 @@ public sealed class ImportBatchServiceTests
 	{
 		// Arrange
 		var batch = new ImportBatch(ImportTarget.Customers, "legacy.xlsx", "Sheet1", [new ImportBatchRow(1, ImportRowStatus.Ready, null, "payload:fresh")]);
-		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id)).ReturnsAsync(batch);
+		_batches.Setup(provider => provider.GetImportBatchAsync(batch.Id, It.IsAny<CancellationToken>())).ReturnsAsync(batch);
 
 		// Act & Assert
 		await Assert.ThrowsExceptionAsync<InvalidImportBatchStatusException>(() => _service.UndoAsync(batch.Id));
