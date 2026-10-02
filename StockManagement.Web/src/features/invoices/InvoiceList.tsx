@@ -11,26 +11,39 @@ export function InvoiceList({ onSelect, refreshToken }: { onSelect: (invoice: In
 	const [customerId, setCustomerId] = useState("");
 	const [from, setFrom] = useState("");
 	const [to, setTo] = useState("");
-	const [page, setPage] = useState(1);
+	// Cursor history (ADR-0029): cursorHistory[pageIndex] is the cursor used to fetch the current page; "previous" pops it
+	const [cursorHistory, setCursorHistory] = useState<(string | undefined)[]>([undefined]);
+	const [pageIndex, setPageIndex] = useState(0);
 	const [items, setItems] = useState<Invoice[]>([]);
-	const [totalCount, setTotalCount] = useState(0);
+	const [nextCursor, setNextCursor] = useState<string | null>(null);
 	const [failure, setFailure] = useState<ApiFailure>();
 
 	useEffect(() =>
 	{
 		const controller = new AbortController();
-		const filter = { customerId: customerId ? Number(customerId) : undefined, from: from || undefined, to: to || undefined, page, pageSize };
+		const filter = { customerId: customerId ? Number(customerId) : undefined, from: from || undefined, to: to || undefined, cursor: cursorHistory[pageIndex], pageSize };
 		api.listInvoices(filter, controller.signal).then(result =>
 		{
 			if (controller.signal.aborted) return;
 			setFailure(result.ok ? undefined : result.failure);
 			setItems(result.ok ? result.value.items : []);
-			setTotalCount(result.ok ? result.value.totalCount : 0);
+			setNextCursor(result.ok ? result.value.nextCursor : null);
 		});
 		return () => controller.abort();
-	}, [customerId, from, to, page, refreshToken]);
+	}, [customerId, from, to, cursorHistory, pageIndex, refreshToken]);
 
-	const lastPage = Math.max(1, Math.ceil(totalCount / pageSize));
+	function resetToFirstPage()
+	{
+		setCursorHistory([undefined]);
+		setPageIndex(0);
+	}
+
+	function goToNextPage()
+	{
+		if (!nextCursor) return;
+		setCursorHistory([...cursorHistory.slice(0, pageIndex + 1), nextCursor]);
+		setPageIndex(pageIndex + 1);
+	}
 
 	return (
 		<>
@@ -38,15 +51,15 @@ export function InvoiceList({ onSelect, refreshToken }: { onSelect: (invoice: In
 				<div className="form-grid">
 					<label>
 						{t("customerId")}
-						<input type="number" min={1} value={customerId} onChange={event => { setCustomerId(event.target.value); setPage(1); }} />
+						<input type="number" min={1} value={customerId} onChange={event => { setCustomerId(event.target.value); resetToFirstPage(); }} />
 					</label>
 					<label>
 						{t("from")}
-						<input type="date" value={from} onChange={event => { setFrom(event.target.value); setPage(1); }} />
+						<input type="date" value={from} onChange={event => { setFrom(event.target.value); resetToFirstPage(); }} />
 					</label>
 					<label>
 						{t("to")}
-						<input type="date" value={to} onChange={event => { setTo(event.target.value); setPage(1); }} />
+						<input type="date" value={to} onChange={event => { setTo(event.target.value); resetToFirstPage(); }} />
 					</label>
 				</div>
 			</form>
@@ -66,8 +79,8 @@ export function InvoiceList({ onSelect, refreshToken }: { onSelect: (invoice: In
 				</tbody>
 			</table>
 			<div className="form-actions">
-				<button type="button" disabled={page <= 1} onClick={() => setPage(page - 1)}>{t("previous")}</button>
-				<button type="button" disabled={page >= lastPage} onClick={() => setPage(page + 1)}>{t("next")}</button>
+				<button type="button" disabled={pageIndex <= 0} onClick={() => setPageIndex(pageIndex - 1)}>{t("previous")}</button>
+				<button type="button" disabled={!nextCursor} onClick={goToNextPage}>{t("next")}</button>
 			</div>
 		</>
 	);

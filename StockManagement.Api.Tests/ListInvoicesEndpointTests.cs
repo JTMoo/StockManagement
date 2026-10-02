@@ -50,7 +50,8 @@ public sealed class ListInvoicesEndpointTests
 		var response = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.AreEqual(2, response!.TotalCount);
+		Assert.AreEqual(2, response!.Items.Count);
+		Assert.IsNull(response.NextCursor);
 		Assert.AreEqual("2", response.Items[0].Number);
 		Assert.AreEqual("1", response.Items[1].Number);
 		Assert.AreEqual("Ana Gómez", response.Items[1].CustomerName);
@@ -63,7 +64,7 @@ public sealed class ListInvoicesEndpointTests
 		var response = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices?customerId=1002", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.AreEqual(1, response!.TotalCount);
+		Assert.AreEqual(1, response!.Items.Count);
 		Assert.AreEqual("2", response.Items.Single().Number);
 	}
 
@@ -74,7 +75,7 @@ public sealed class ListInvoicesEndpointTests
 		var response = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices?from=2026-01-15&to=2026-12-31", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.AreEqual(1, response!.TotalCount);
+		Assert.AreEqual(1, response!.Items.Count);
 		Assert.AreEqual("2", response.Items.Single().Number);
 	}
 
@@ -82,13 +83,13 @@ public sealed class ListInvoicesEndpointTests
 	public async Task ListInvoices_PageSizeOne_PagesAcrossBothInvoices()
 	{
 		// Act
-		var first = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices?page=1&pageSize=1", ApiFactory.JsonOptions);
-		var second = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices?page=2&pageSize=1", ApiFactory.JsonOptions);
+		var first = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices?pageSize=1", ApiFactory.JsonOptions);
+		var second = await _client.GetFromJsonAsync<InvoiceListResponse>($"/api/invoices?pageSize=1&cursor={Uri.EscapeDataString(first!.NextCursor!)}", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.AreEqual(2, first!.TotalCount);
+		Assert.IsNotNull(first.NextCursor);
 		Assert.AreEqual("2", first.Items.Single().Number);
-		Assert.AreEqual(2, second!.TotalCount);
+		Assert.IsNull(second!.NextCursor);
 		Assert.AreEqual("1", second.Items.Single().Number);
 	}
 }

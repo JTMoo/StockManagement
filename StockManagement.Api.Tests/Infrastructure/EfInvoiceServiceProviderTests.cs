@@ -144,10 +144,10 @@ public sealed class EfInvoiceServiceProviderTests
 		var provider = new EfInvoiceServiceProvider(db);
 
 		// Act
-		var result = await provider.GetInvoicesAsync(customerId: 1001, from: null, to: null, page: 1, pageSize: 20);
+		var result = await provider.GetInvoicesAsync(customerId: 1001, from: null, to: null, cursor: null, pageSize: 20);
 
 		// Assert
-		Assert.AreEqual(1, result.TotalCount);
+		Assert.AreEqual(1, result.Items.Count);
 		Assert.AreEqual("1", result.Items.Single().Number);
 	}
 
@@ -167,7 +167,7 @@ public sealed class EfInvoiceServiceProviderTests
 		var provider = new EfInvoiceServiceProvider(db);
 
 		// Act
-		var result = await provider.GetInvoicesAsync(customerId: null, from: new DateTime(2026, 3, 1), to: new DateTime(2026, 9, 1), page: 1, pageSize: 20);
+		var result = await provider.GetInvoicesAsync(customerId: null, from: new DateTime(2026, 3, 1), to: new DateTime(2026, 9, 1), cursor: null, pageSize: 20);
 
 		// Assert
 		Assert.AreEqual("2", result.Items.Single().Number);
@@ -189,10 +189,11 @@ public sealed class EfInvoiceServiceProviderTests
 		var provider = new EfInvoiceServiceProvider(db);
 
 		// Act
-		var result = await provider.GetInvoicesAsync(customerId: null, from: null, to: null, page: 2, pageSize: 2);
+		var firstPage = await provider.GetInvoicesAsync(customerId: null, from: null, to: null, cursor: null, pageSize: 2);
+		var result = await provider.GetInvoicesAsync(customerId: null, from: null, to: null, cursor: firstPage.NextCursor, pageSize: 2);
 
 		// Assert
-		Assert.AreEqual(3, result.TotalCount);
+		Assert.IsNull(result.NextCursor);
 		Assert.AreEqual("1", result.Items.Single().Number);
 	}
 

@@ -1,3 +1,4 @@
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Model;
 
 namespace StockManagement.Kernel.Database.Interfaces;
@@ -9,8 +10,14 @@ public interface IStockItemServiceProvider
 	public Task<StockItem> GetStockItemByIdAsync(string id, CancellationToken cancellationToken = default);
 	public Task<IEnumerable<StockItem>> GetAllStockItemsAsync(CancellationToken cancellationToken = default);
 
+	/// <summary>Stock items by <see cref="StockItem.Code"/> then <see cref="BaseDocument.Id"/>, one page at a time</summary>
+	public Task<CursorPage<StockItem>> GetStockItemsAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default);
+
 	/// <returns>Items with <see cref="StockItem.MinimumStock"/> &gt; 0 and <see cref="StockItem.Amount"/> below it (#57)</returns>
 	public Task<IEnumerable<StockItem>> GetStockItemsBelowMinimumAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>Paged version of <see cref="GetStockItemsBelowMinimumAsync(CancellationToken)"/>, by <see cref="StockItem.Code"/> then <see cref="BaseDocument.Id"/></summary>
+	public Task<CursorPage<StockItem>> GetStockItemsBelowMinimumAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default);
 
 	/// <returns>Rows affected; 1 on success</returns>
 	public Task<int> UpdateStockItemAsync(StockItem stockItem, CancellationToken cancellationToken = default);

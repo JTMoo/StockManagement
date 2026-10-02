@@ -25,20 +25,26 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 		return await _db.Invoices.ToListAsync();
 	}
 
-	public async Task<PagedResult<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, int page, int pageSize)
+	public async Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize)
 	{
 		var query = _db.Invoices.AsQueryable();
 		if (customerId is int id) query = query.Where(invoice => invoice.Customer.CustomerId == id);
 		if (from is DateTime start) query = query.Where(invoice => invoice.Date >= start);
 		if (to is DateTime end) query = query.Where(invoice => invoice.Date <= end);
 
-		var totalCount = await query.CountAsync();
-		var items = await query.OrderByDescending(invoice => invoice.Date)
-			.Skip((page - 1) * pageSize)
-			.Take(pageSize)
+		if (Cursor.TryDecode(cursor, 2) is [var dateText, var lastId])
+		{
+			var lastDate = DateTime.Parse(dateText, null, System.Globalization.DateTimeStyles.RoundtripKind);
+			query = query.Where(invoice => invoice.Date < lastDate || (invoice.Date == lastDate && invoice.Id.CompareTo(lastId) < 0));
+		}
+
+		var page = await query.OrderByDescending(invoice => invoice.Date).ThenByDescending(invoice => invoice.Id)
+			.Take(pageSize + 1)
 			.ToListAsync();
 
-		return new(items, totalCount);
+		var items = page.Take(pageSize).ToList();
+		var nextCursor = page.Count > pageSize ? Cursor.Encode(items[^1].Date.ToString("O"), items[^1].Id) : null;
+		return new(items, nextCursor);
 	}
 
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use</exception>

@@ -6,7 +6,7 @@ import { SaleForm } from "./SaleForm";
 
 async function renderSaleForm(sale: Route = { status: 201, body: invoice })
 {
-	const fetchMock = mockApi({ "GET /api/customers": { body: [ana] }, "GET /api/stock-items": { body: [screw, nut] }, "POST /api/sales": sale });
+	const fetchMock = mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } }, "GET /api/stock-items?pageSize=100": { body: { items: [screw, nut], nextCursor: null } }, "POST /api/sales": sale });
 	const onSold = vi.fn();
 	renderEnglish(<SaleForm onSold={onSold} />);
 	await screen.findByRole("option", { name: "1001 Ana Gómez" });
