@@ -47,9 +47,9 @@ internal sealed class StockItemImportTargetHandler(IStockItemImportService impor
 	{
 		foreach (var (id, _) in entities)
 		{
-			if (await _stockItemServiceProvider.GetStockItemByIdAsync(id) is StockItem item)
+			if (await _stockItemServiceProvider.GetStockItemByIdAsync(id, cancellationToken) is StockItem item)
 			{
-				await _stockItemServiceProvider.DeleteStockItemAsync(item);
+				await _stockItemServiceProvider.DeleteStockItemAsync(item, cancellationToken);
 			}
 		}
 	}

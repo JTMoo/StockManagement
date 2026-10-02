@@ -23,7 +23,7 @@ public class GetStockItemEndpoint(IStockItemServiceProvider stockItemServiceProv
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound>> ExecuteAsync(GetStockItemRequest request, CancellationToken cancellationToken)
 	{
-		if (await _stockItemServiceProvider.GetStockItemAsync(request.Code) is not StockItem stockItem) return TypedResults.NotFound();
+		if (await _stockItemServiceProvider.GetStockItemAsync(request.Code, cancellationToken) is not StockItem stockItem) return TypedResults.NotFound();
 
 		return TypedResults.Ok(StockItemResponse.From(stockItem));
 	}

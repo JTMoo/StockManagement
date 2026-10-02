@@ -130,7 +130,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_SameIdentificationNumberAsStored_IsDuplicate()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { IdentificationNumber = "ID-1" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "ID-1" }]);
 		object clash = new Customer { Name = "Again", IdentificationNumber = "id-1" };
 		object fresh = new Customer { Name = "New", IdentificationNumber = "ID-2" };
 
@@ -146,7 +146,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_DistinctNamesNoIdentificationNumber_NeitherIsADuplicate()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		object first = new Customer { Name = "A" };
 		object second = new Customer { Name = "B" };
 
@@ -162,7 +162,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_BlankNamesAndIdentificationNumber_NeverMatchEachOther()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		object first = new Customer();
 		object second = new Customer();
 
@@ -178,7 +178,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NoIdentificationNumberNameMatchesStoredCustomer_IsDuplicate()
 	{
 		// Arrange: accents, case and word order differ, and the stored customer has a RUC the import row doesn't repeat
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { Name = "Jose", Lastname = "Perez", IdentificationNumber = "1946520-3" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { Name = "Jose", Lastname = "Perez", IdentificationNumber = "1946520-3" }]);
 		object clash = new Customer { Name = "PEREZ", Lastname = "José" };
 
 		// Act
@@ -193,7 +193,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NoIdentificationNumberCompanySuffixVariant_IsDuplicate()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { Name = "Acme S.A." }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { Name = "Acme S.A." }]);
 		object clash = new Customer { Name = "Acme SA" };
 
 		// Act
@@ -208,7 +208,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NoIdentificationNumberTwoCandidatesSameName_SecondIsDuplicate()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		object first = new Customer { Name = "Ann", Lastname = "Miller" };
 		object second = new Customer { Name = "ann", Lastname = "miller" };
 
@@ -224,7 +224,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_IdentificationNumberPresent_NameIsIgnored()
 	{
 		// Arrange: same name as a stored blank-number customer, but this row has its own RUC, so it is not a name clash
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { Name = "Ann", Lastname = "Miller" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { Name = "Ann", Lastname = "Miller" }]);
 		object candidate = new Customer { Name = "Ann", Lastname = "Miller", IdentificationNumber = "1946520-3" };
 
 		// Act
@@ -239,7 +239,7 @@ public sealed class CustomerImportTargetHandlerTests
 	public async Task CommitAsync_NewCustomers_AssignsConsecutiveIdsAfterHighestStored()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { CustomerId = 1005 }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { CustomerId = 1005 }]);
 		object first = new Customer { Name = "A" };
 		object second = new Customer { Name = "B" };
 
@@ -249,7 +249,7 @@ public sealed class CustomerImportTargetHandlerTests
 		// Assert
 		Assert.AreEqual(1006, ((Customer)first).CustomerId);
 		Assert.AreEqual(1007, ((Customer)second).CustomerId);
-		_customers.Verify(provider => provider.AddManyCustomersAsync(It.Is<IList<Customer>>(list => list.SequenceEqual(new[] { first, second }))), Times.Once);
+		_customers.Verify(provider => provider.AddManyCustomersAsync(It.Is<IList<Customer>>(list => list.SequenceEqual(new[] { first, second })), It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -259,7 +259,7 @@ public sealed class CustomerImportTargetHandlerTests
 		await _handler.CommitAsync([]);
 
 		// Assert
-		_customers.Verify(provider => provider.AddManyCustomersAsync(It.IsAny<IList<Customer>>()), Times.Never);
+		_customers.Verify(provider => provider.AddManyCustomersAsync(It.IsAny<IList<Customer>>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -267,13 +267,13 @@ public sealed class CustomerImportTargetHandlerTests
 	{
 		// Arrange
 		var customer = new Customer();
-		_customers.Setup(provider => provider.GetCustomerByIdAsync("id-1")).ReturnsAsync(customer);
+		_customers.Setup(provider => provider.GetCustomerByIdAsync("id-1", It.IsAny<CancellationToken>())).ReturnsAsync(customer);
 
 		// Act
 		await _handler.UndoAsync([("id-1", customer)]);
 
 		// Assert
-		_customers.Verify(provider => provider.DeleteCustomerAsync(customer), Times.Once);
+		_customers.Verify(provider => provider.DeleteCustomerAsync(customer, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]

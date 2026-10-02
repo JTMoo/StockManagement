@@ -42,7 +42,7 @@ public class CreateSupplierEndpoint(ISupplierServiceProvider supplierServiceProv
 
 		try
 		{
-			await _supplierServiceProvider.AddSupplierAsync(supplier);
+			await _supplierServiceProvider.AddSupplierAsync(supplier, cancellationToken);
 		}
 		catch (SupplierNameAlreadyExistsException)
 		{

@@ -14,7 +14,7 @@ internal class StockItemImportService(IStockItemServiceProvider stockItemService
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var existing = await _stockItemServiceProvider.GetAllStockItemsAsync() ?? [];
+		var existing = await _stockItemServiceProvider.GetAllStockItemsAsync(cancellationToken) ?? [];
 		return DuplicateFilter.Split(candidates, existing, stockItem => stockItem.Code ?? string.Empty, StringComparer.Ordinal);
 	}
 
@@ -26,6 +26,6 @@ internal class StockItemImportService(IStockItemServiceProvider stockItemService
 		List<StockItem> items = [.. stockItems ?? []];
 		if (items.Count == 0) return Task.CompletedTask;
 
-		return _stockItemServiceProvider.AddManyStockItemsAsync(items);
+		return _stockItemServiceProvider.AddManyStockItemsAsync(items, cancellationToken);
 	}
 }

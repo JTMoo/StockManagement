@@ -14,60 +14,60 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 	private readonly AppDbContext _db = db;
 
 
-	public Task<Customer> GetCustomerAsync(int customerId)
+	public Task<Customer> GetCustomerAsync(int customerId, CancellationToken cancellationToken = default)
 	{
-		return _db.Customers.SingleOrDefaultAsync(customer => customer.CustomerId == customerId)!;
+		return _db.Customers.SingleOrDefaultAsync(customer => customer.CustomerId == customerId, cancellationToken)!;
 	}
 
-	public Task<Customer> GetCustomerByIdAsync(string id)
+	public Task<Customer> GetCustomerByIdAsync(string id, CancellationToken cancellationToken = default)
 	{
-		return _db.Customers.SingleOrDefaultAsync(customer => customer.Id == id)!;
+		return _db.Customers.SingleOrDefaultAsync(customer => customer.Id == id, cancellationToken)!;
 	}
 
-	public async Task<IEnumerable<Customer>> GetCustomersAsync()
+	public async Task<IEnumerable<Customer>> GetCustomersAsync(CancellationToken cancellationToken = default)
 	{
-		return await _db.Customers.ToListAsync();
+		return await _db.Customers.ToListAsync(cancellationToken);
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
 	/// <exception cref="CustomerIdentificationNumberAlreadyExistsException">Identification number already in use</exception>
-	public async Task AddCustomerAsync(Customer customer)
+	public async Task AddCustomerAsync(Customer customer, CancellationToken cancellationToken = default)
 	{
 		_db.Customers.Add(customer);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
 	/// <exception cref="CustomerIdentificationNumberAlreadyExistsException">Identification number already in use</exception>
-	public async Task AddManyCustomersAsync(IList<Customer> customers)
+	public async Task AddManyCustomersAsync(IList<Customer> customers, CancellationToken cancellationToken = default)
 	{
 		if (customers is not { Count: > 0 }) return;
 
 		_db.Customers.AddRange(customers);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>
 	/// <exception cref="CustomerIdentificationNumberAlreadyExistsException">Identification number already in use</exception>
-	public async Task<int> UpdateCustomerAsync(Customer customer)
+	public async Task<int> UpdateCustomerAsync(Customer customer, CancellationToken cancellationToken = default)
 	{
 		_db.Customers.Update(customer);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 
-	public async Task<int> DeleteCustomerAsync(Customer customer)
+	public async Task<int> DeleteCustomerAsync(Customer customer, CancellationToken cancellationToken = default)
 	{
 		_db.Customers.Remove(customer);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 
-	private async Task SaveChangesAsync()
+	private async Task SaveChangesAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
-			await _db.SaveChangesAsync();
+			await _db.SaveChangesAsync(cancellationToken);
 		}
 		catch (DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException { SqlState: "23505", ConstraintName: CustomerConfiguration.IdentificationNumberIndexName })
 		{

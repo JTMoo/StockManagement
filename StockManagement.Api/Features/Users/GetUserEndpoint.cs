@@ -23,7 +23,7 @@ public class GetUserEndpoint(IUserServiceProvider userServiceProvider) : Endpoin
 
 	public override async Task<Results<Ok<UserResponse>, NotFound>> ExecuteAsync(GetUserRequest request, CancellationToken cancellationToken)
 	{
-		if (await _userServiceProvider.GetUserAsync(request.Id) is not User user) return TypedResults.NotFound();
+		if (await _userServiceProvider.GetUserAsync(request.Id, cancellationToken) is not User user) return TypedResults.NotFound();
 
 		return TypedResults.Ok(UserResponse.From(user));
 	}

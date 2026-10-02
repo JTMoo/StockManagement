@@ -36,7 +36,7 @@ internal sealed class OpeningStockImportTargetHandler(IStockItemServiceProvider 
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var existingCodes = (await _stockItemServiceProvider.GetAllStockItemsAsync())
+		var existingCodes = (await _stockItemServiceProvider.GetAllStockItemsAsync(cancellationToken))
 			.Select(item => item.Code)
 			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -57,8 +57,8 @@ internal sealed class OpeningStockImportTargetHandler(IStockItemServiceProvider 
 		List<string> stockItemIds = [];
 		foreach (var row in candidates.Cast<OpeningStockRow>())
 		{
-			var item = await _stockItemServiceProvider.GetStockItemAsync(row.Code);
-			await _stockItemServiceProvider.CheckInStockItemAsync(item, row.Amount, CheckInReason);
+			var item = await _stockItemServiceProvider.GetStockItemAsync(row.Code, cancellationToken);
+			await _stockItemServiceProvider.CheckInStockItemAsync(item, row.Amount, CheckInReason, cancellationToken);
 			stockItemIds.Add(item.Id);
 		}
 
@@ -70,9 +70,9 @@ internal sealed class OpeningStockImportTargetHandler(IStockItemServiceProvider 
 		foreach (var (id, candidate) in entities)
 		{
 			var row = (OpeningStockRow)candidate;
-			if (await _stockItemServiceProvider.GetStockItemByIdAsync(id) is StockItem item)
+			if (await _stockItemServiceProvider.GetStockItemByIdAsync(id, cancellationToken) is StockItem item)
 			{
-				await _stockItemServiceProvider.TryCheckOutStockItemAsync(item, row.Amount, $"{CheckInReason} (undo)");
+				await _stockItemServiceProvider.TryCheckOutStockItemAsync(item, row.Amount, $"{CheckInReason} (undo)", cancellationToken);
 			}
 		}
 	}
