@@ -1,6 +1,9 @@
 import { send } from "./client";
 
-export type CompanySettings = { companyName: string; taxId: string; currency: string; vatRatePercent: number; paymentTermInDays: number; firstInvoiceNumber: number; firstCustomerId: number; currencyDecimalDigits: number };
+export type CompanySettings = {
+	companyName: string; taxId: string; currency: string; vatRatePercent: number; paymentTermInDays: number; firstInvoiceNumber: number; firstCustomerId: number; currencyDecimalDigits: number;
+	ruc: string; timbradoNumber: string; timbradoValidFrom: string | null; timbradoValidTo: string | null; establishmentCode: string; pointOfSaleCode: string;
+};
 
 export const companySettingsApi = {
 	getCompanySettings: (signal?: AbortSignal) => send<CompanySettings>("/company-settings", { signal }),

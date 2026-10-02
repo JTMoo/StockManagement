@@ -15,7 +15,7 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 	private readonly AppDbContext _db = db;
 
 
-	public Task<Invoice> GetInvoiceAync(int invoiceNumber)
+	public Task<Invoice> GetInvoiceAync(string invoiceNumber)
 	{
 		return _db.Invoices.SingleOrDefaultAsync(invoice => invoice.Number == invoiceNumber)!;
 	}

@@ -19,10 +19,10 @@ public interface ISaleService
 	public Task<Invoice> CreateInvoiceAsync(Customer customer, IEnumerable<ShoppingCartItem> items, DateTime date, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Number for the next new invoice
+	/// DNIT composite number for the next new invoice, scoped to the configured establishment/point of sale
 	/// </summary>
-	/// <remarks>Highest stored number + 1, or 1 when no invoice exists.</remarks>
-	public Task<int> GetNextInvoiceNumberAsync(CancellationToken cancellationToken = default);
+	/// <remarks>Highest stored sequence in that scope + 1, or the company's configured first invoice number when none exists.</remarks>
+	public Task<string> GetNextInvoiceNumberAsync(CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Takes the sold units out of stock and stores the invoice
