@@ -81,3 +81,30 @@ Electron/scripts/CI: **no dead code found.** Every script/workflow verified refe
 
 - Dead code items #1-#8 above: PR opened (zero behavior change, see PR link in issue tracker)
 - Quality issues #1-#11: filed as GitHub issues (see issue numbers in tracker)
+
+## Cycle 2, 2026-10-02
+
+Repo @ main (42b3afa). Delta since cycle 1 - merged: cursor pagination (ADR-0029), #52 validation codes, #113 CancellationToken, per-item VAT, invoice composite numbering, Sifen.Core + gateway/outbox worker, landed cost (#120), open-invoice import, name-matching, design-system rollout (Dialog/CommandPalette/DataTable/StatusBadge/Toast), `/api/search`, `sync-main-into-prs.yml` fix.
+
+### Findings (new)
+
+| # | File | What | Issue |
+|---|------|------|-------|
+| 1 | `StockItems/CheckInStockItemEndpoint.cs`, `CheckOutStockItemEndpoint.cs` | No `Permissions()` call - any authenticated user can mutate stock | #151 |
+| 2 | `IInvoiceServiceProvider`, `ICreditNoteServiceProvider` | Missing `CancellationToken`, same bug class as #113 but excluded from its "6 of 8"; includes the new ADR-0029 cursor-pagination method, so `EfInvoiceServiceProvider`'s `.ToListAsync()` for it also drops the token | #152 |
+| 3 | `StockItemList.tsx`, `SupplierList.tsx`, `UserList.tsx` | `window.confirm()` / no confirm at all on delete, no `danger` Button exists - cycle-1 finding, #105 closed without fixing it | #153 |
+| 4 | `Invoices.resx` (`cash`, `credit`, `exceptionShoppingCartItemOutOfRange`, `invoice`), `StockItems.resx` (`checkin`, `checkout`) | More of #137's pattern: `Designer.cs` getter, no matching `<data>` entry in any locale | comment on #137 |
+
+### Verified clean / no new dead code
+
+- `SifenTransmissionWorker`: correct `IServiceScopeFactory` use, no fire-and-forget, exceptions caught + logged
+- DI lifetimes (#97/#1 fix): all `*.Core` + `Sifen.Core` services now `AddScoped`, matches their Kernel/EF provider dependencies
+- Cursor pagination (#107/ADR-0029): `Customer`/`StockItem`/`Supplier`/`User` providers all correctly threaded with `CancellationToken`; only `Invoice` missed (finding #2 above)
+- `SearchEndpoint`: no endpoint-level `Permissions()` by design (filters per-domain internally, documented in its `<summary>`) - not a gap
+- `/api/search`, `sync-main-into-prs.yml`, `AllocateLandedCostEndpoint`, open-invoice import target, name-matching: no dead code, no missing CancellationToken, Permission checks present
+- No new `async void`, empty `catch`, fire-and-forget, or `double`-for-money
+
+### Actions taken this cycle
+
+- No dead code to remove (nothing newly zero-ref found)
+- Findings above filed as #151-#153 + comment on #137
