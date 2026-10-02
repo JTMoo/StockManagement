@@ -39,7 +39,8 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var settings = await _settingsServiceProvider.GetSettingsAsync() ?? new AppSettings();
-		return new CompanySettings(settings.CompanyName, settings.TaxId, settings.Currency, settings.VatRatePercent, settings.PaymentTermInDays, settings.FirstInvoiceNumber, settings.FirstCustomerId, settings.CurrencyDecimalDigits);
+		return new CompanySettings(settings.CompanyName, settings.TaxId, settings.Currency, settings.VatRatePercent, settings.PaymentTermInDays, settings.FirstInvoiceNumber, settings.FirstCustomerId, settings.CurrencyDecimalDigits,
+			settings.Ruc, settings.TimbradoNumber, settings.TimbradoValidFrom, settings.TimbradoValidTo, settings.EstablishmentCode, settings.PointOfSaleCode);
 	}
 
 	public async Task SetCompanySettingsAsync(CompanySettings companySettings, CancellationToken cancellationToken = default)
@@ -57,6 +58,12 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 			settings.FirstInvoiceNumber = companySettings.FirstInvoiceNumber;
 			settings.FirstCustomerId = companySettings.FirstCustomerId;
 			settings.CurrencyDecimalDigits = companySettings.CurrencyDecimalDigits;
+			settings.Ruc = companySettings.Ruc;
+			settings.TimbradoNumber = companySettings.TimbradoNumber;
+			settings.TimbradoValidFrom = companySettings.TimbradoValidFrom;
+			settings.TimbradoValidTo = companySettings.TimbradoValidTo;
+			settings.EstablishmentCode = companySettings.EstablishmentCode;
+			settings.PointOfSaleCode = companySettings.PointOfSaleCode;
 			await _settingsServiceProvider.UpdateSettingsAsync(settings);
 		}
 		else
@@ -70,7 +77,13 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 				PaymentTermInDays = companySettings.PaymentTermInDays,
 				FirstInvoiceNumber = companySettings.FirstInvoiceNumber,
 				FirstCustomerId = companySettings.FirstCustomerId,
-				CurrencyDecimalDigits = companySettings.CurrencyDecimalDigits
+				CurrencyDecimalDigits = companySettings.CurrencyDecimalDigits,
+				Ruc = companySettings.Ruc,
+				TimbradoNumber = companySettings.TimbradoNumber,
+				TimbradoValidFrom = companySettings.TimbradoValidFrom,
+				TimbradoValidTo = companySettings.TimbradoValidTo,
+				EstablishmentCode = companySettings.EstablishmentCode,
+				PointOfSaleCode = companySettings.PointOfSaleCode
 			});
 		}
 	}

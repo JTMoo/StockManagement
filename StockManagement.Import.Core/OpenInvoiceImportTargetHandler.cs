@@ -39,18 +39,19 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 
 		var existingNumbers = (await _invoiceServiceProvider.GetInvoicesAsync())
 			.Select(invoice => invoice.Number)
-			.ToHashSet();
+			.ToHashSet(StringComparer.Ordinal);
 		var knownIdentificationNumbers = (await _customerServiceProvider.GetCustomersAsync())
 			.Select(customer => customer.IdentificationNumber)
 			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-		var seenNumbers = new HashSet<int>();
+		var seenNumbers = new HashSet<string>(StringComparer.Ordinal);
 		List<object> unique = [];
 		List<object> duplicates = [];
 		foreach (var candidate in candidates)
 		{
 			var row = (OpenInvoiceRow)candidate;
-			var isNewNumber = !existingNumbers.Contains(row.Number) && seenNumbers.Add(row.Number);
+			var rowNumber = row.Number.ToString();
+			var isNewNumber = !existingNumbers.Contains(rowNumber) && seenNumbers.Add(rowNumber);
 			var hasMatchingCustomer = knownIdentificationNumbers.Contains(row.CustomerIdentificationNumber);
 			(isNewNumber && hasMatchingCustomer ? unique : duplicates).Add(candidate);
 		}
@@ -68,7 +69,7 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 		{
 			var invoice = new Invoice
 			{
-				Number = row.Number,
+				Number = row.Number.ToString(),
 				Customer = customersByIdentificationNumber[row.CustomerIdentificationNumber],
 				Date = row.Date,
 				ExpirationDate = row.ExpirationDate,
@@ -91,7 +92,7 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 		foreach (var (_, candidate) in entities)
 		{
 			var row = (OpenInvoiceRow)candidate;
-			if (await _invoiceServiceProvider.GetInvoiceAync(row.Number) is Invoice invoice)
+			if (await _invoiceServiceProvider.GetInvoiceAync(row.Number.ToString()) is Invoice invoice)
 			{
 				await _invoiceServiceProvider.DeleteInvoiceAsync(invoice);
 			}

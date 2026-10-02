@@ -29,7 +29,7 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 		return InvoiceStatusCalculator.GetStatus(invoice, asOf);
 	}
 
-	public async Task<RecordPaymentResult> RecordPaymentAsync(int invoiceNumber, decimal amount, PaymentMethod method, DateTime date, CancellationToken cancellationToken = default)
+	public async Task<RecordPaymentResult> RecordPaymentAsync(string invoiceNumber, decimal amount, PaymentMethod method, DateTime date, CancellationToken cancellationToken = default)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 

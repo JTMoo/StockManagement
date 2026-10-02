@@ -9,7 +9,7 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Payments;
 
 
-public sealed record ListPaymentsRequest(int Number);
+public sealed record ListPaymentsRequest(string Number);
 
 
 public sealed record InvoicePaymentsResponse(IReadOnlyList<PaymentResponse> Items, decimal AmountPaid, decimal AmountDue, InvoiceStatus Status);

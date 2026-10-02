@@ -68,6 +68,30 @@ export function CompanySettingsPage()
 						{t("currencyDecimalDigits")}
 						<input type="number" min={0} max={4} step="1" value={current.currencyDecimalDigits} onChange={event => setDraft({ ...current, currencyDecimalDigits: Number(event.target.value) })} />
 					</label>
+					<label>
+						{t("ruc")}
+						<input value={current.ruc} onChange={event => setDraft({ ...current, ruc: event.target.value })} />
+					</label>
+					<label>
+						{t("timbradoNumber")}
+						<input value={current.timbradoNumber} onChange={event => setDraft({ ...current, timbradoNumber: event.target.value })} />
+					</label>
+					<label>
+						{t("timbradoValidFrom")}
+						<input type="date" value={current.timbradoValidFrom?.slice(0, 10) ?? ""} onChange={event => setDraft({ ...current, timbradoValidFrom: event.target.value || null })} />
+					</label>
+					<label>
+						{t("timbradoValidTo")}
+						<input type="date" value={current.timbradoValidTo?.slice(0, 10) ?? ""} onChange={event => setDraft({ ...current, timbradoValidTo: event.target.value || null })} />
+					</label>
+					<label>
+						{t("establishmentCode")}
+						<input value={current.establishmentCode} pattern="\d{3}" onChange={event => setDraft({ ...current, establishmentCode: event.target.value })} />
+					</label>
+					<label>
+						{t("pointOfSaleCode")}
+						<input value={current.pointOfSaleCode} pattern="\d{3}" onChange={event => setDraft({ ...current, pointOfSaleCode: event.target.value })} />
+					</label>
 				</div>
 				<FailureMessage failure={failure} />
 				<div className="form-actions">

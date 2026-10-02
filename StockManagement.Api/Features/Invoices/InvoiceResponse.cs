@@ -8,7 +8,7 @@ namespace StockManagement.Api.Features.Invoices;
 /// <summary>
 /// Stored invoice; amounts rounded to the company's configured currency digits
 /// </summary>
-public sealed record InvoiceResponse(int Number, DateTime Date, DateTime ExpirationDate, decimal Total, decimal Tax, decimal AmountPaid, decimal AmountDue, InvoiceStatus Status, SaleCondition SaleCondition, int CustomerId, string CustomerName, bool IsCancelled, IReadOnlyList<InvoiceLineResponse> Lines)
+public sealed record InvoiceResponse(string Number, DateTime Date, DateTime ExpirationDate, decimal Total, decimal Tax, decimal AmountPaid, decimal AmountDue, InvoiceStatus Status, SaleCondition SaleCondition, int CustomerId, string CustomerName, bool IsCancelled, IReadOnlyList<InvoiceLineResponse> Lines)
 {
 	public static InvoiceResponse From(Invoice invoice, IPaymentService paymentService)
 	{

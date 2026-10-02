@@ -49,7 +49,7 @@ public sealed class EfCreditNoteServiceProviderTests
 		db.StockItems.Add(stockItem);
 		db.Customers.Add(customer);
 		await db.SaveChangesAsync();
-		await new EfInvoiceServiceProvider(db).TryAddSaleAsync(new Invoice { Number = 1, Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 4 }] });
+		await new EfInvoiceServiceProvider(db).TryAddSaleAsync(new Invoice { Number = "1", Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 4 }] });
 		var invoice = await db.Invoices.SingleAsync();
 
 		var creditNote = new CreditNote { Number = 1, Reason = "Customer returned the goods", Invoice = invoice, Total = invoice.Total, Tax = invoice.Tax };
@@ -80,7 +80,7 @@ public sealed class EfCreditNoteServiceProviderTests
 		db.StockItems.Add(stockItem);
 		db.Customers.Add(customer);
 		await db.SaveChangesAsync();
-		await new EfInvoiceServiceProvider(db).TryAddSaleAsync(new Invoice { Number = 1, Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 4 }] });
+		await new EfInvoiceServiceProvider(db).TryAddSaleAsync(new Invoice { Number = "1", Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 4 }] });
 		var invoice = await db.Invoices.SingleAsync();
 		var provider = new EfCreditNoteServiceProvider(db);
 		await provider.TryAddCreditNoteAsync(new CreditNote { Number = 1, Reason = "First cancellation", Invoice = invoice, Total = invoice.Total, Tax = invoice.Tax });
@@ -107,18 +107,18 @@ public sealed class EfCreditNoteServiceProviderTests
 		db.Customers.Add(customer);
 		await db.SaveChangesAsync();
 		var invoiceProvider = new EfInvoiceServiceProvider(db);
-		await invoiceProvider.TryAddSaleAsync(new Invoice { Number = 1, Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 1 }] });
-		await invoiceProvider.TryAddSaleAsync(new Invoice { Number = 2, Customer = await db.Customers.SingleAsync(), SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(await db.StockItems.SingleAsync()) { Amount = 1 }] });
+		await invoiceProvider.TryAddSaleAsync(new Invoice { Number = "1", Customer = customer, SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(stockItem) { Amount = 1 }] });
+		await invoiceProvider.TryAddSaleAsync(new Invoice { Number = "2", Customer = await db.Customers.SingleAsync(), SaleCondition = SaleCondition.Cash, Items = [new ShoppingCartItem(await db.StockItems.SingleAsync()) { Amount = 1 }] });
 		var provider = new EfCreditNoteServiceProvider(db);
-		var firstInvoice = await db.Invoices.SingleAsync(invoice => invoice.Number == 1);
+		var firstInvoice = await db.Invoices.SingleAsync(invoice => invoice.Number == "1");
 		await provider.TryAddCreditNoteAsync(new CreditNote { Number = 1, Reason = "First", Invoice = firstInvoice, Total = firstInvoice.Total, Tax = firstInvoice.Tax });
 
 		// Act + Assert
-		var secondInvoice = await db.Invoices.SingleAsync(invoice => invoice.Number == 2);
+		var secondInvoice = await db.Invoices.SingleAsync(invoice => invoice.Number == "2");
 		await Assert.ThrowsExceptionAsync<CreditNoteNumberAlreadyExistsException>(() =>
 			provider.TryAddCreditNoteAsync(new CreditNote { Number = 1, Reason = "Duplicate", Invoice = secondInvoice, Total = secondInvoice.Total, Tax = secondInvoice.Tax }));
 		// Rolled back with the rest of the transaction: the second invoice's IsCancelled claim and its stock return don't stick
 		Assert.AreEqual(1, await db.CreditNotes.CountAsync());
-		Assert.IsFalse((await db.Invoices.AsNoTracking().SingleAsync(invoice => invoice.Number == 2)).IsCancelled);
+		Assert.IsFalse((await db.Invoices.AsNoTracking().SingleAsync(invoice => invoice.Number == "2")).IsCancelled);
 	}
 }

@@ -165,4 +165,22 @@
   <data name="currencyDecimalDigits" xml:space="preserve">
     <value>Decimales de la moneda</value>
   </data>
+  <data name="ruc" xml:space="preserve">
+    <value>RUC</value>
+  </data>
+  <data name="timbradoNumber" xml:space="preserve">
+    <value>Número de timbrado</value>
+  </data>
+  <data name="timbradoValidFrom" xml:space="preserve">
+    <value>Timbrado válido desde</value>
+  </data>
+  <data name="timbradoValidTo" xml:space="preserve">
+    <value>Timbrado válido hasta</value>
+  </data>
+  <data name="establishmentCode" xml:space="preserve">
+    <value>Código de establecimiento</value>
+  </data>
+  <data name="pointOfSaleCode" xml:space="preserve">
+    <value>Código de punto de expedición</value>
+  </data>
 </root>

@@ -8,7 +8,7 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Invoices;
 
 
-public sealed record GetInvoiceRequest(int Number);
+public sealed record GetInvoiceRequest(string Number);
 
 
 public class GetInvoiceEndpoint(IInvoiceServiceProvider invoiceServiceProvider, IPaymentService paymentService) : Endpoint<GetInvoiceRequest, Results<Ok<InvoiceResponse>, NotFound>>

@@ -46,7 +46,7 @@ public sealed class SaleEndpointsTests
 		// Assert
 		Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 		var invoice = await response.Content.ReadAsAsync<InvoiceResponse>();
-		Assert.AreEqual(1, invoice.Number);
+		Assert.AreEqual("001-001-0000001", invoice.Number);
 		Assert.AreEqual(15000, invoice.Total);
 		Assert.AreEqual(1364, invoice.Tax);
 		Assert.AreEqual(1001, invoice.CustomerId);
@@ -121,7 +121,7 @@ public sealed class SaleEndpointsTests
 		// Arrange
 		var invoices = _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>();
 		var customer = await _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>().GetCustomerAsync(1001);
-		await invoices.AddInvoiceAsync(new Invoice() { Number = 1, Customer = customer, Items = [] });
+		await invoices.AddInvoiceAsync(new Invoice() { Number = "1", Customer = customer, Items = [] });
 
 		// Act
 		await Assert.ThrowsExceptionAsync<InvoiceNumberAlreadyExistsException>(() => invoices.TryAddSaleAsync(CreateInvoice(customer, 1, ("A1", 3))));
@@ -174,11 +174,11 @@ public sealed class SaleEndpointsTests
 	private async Task AssertNothingSoldAsync()
 	{
 		Assert.AreEqual(10, (await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().GetStockItemAsync("A1")).Amount);
-		Assert.IsNull(await _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>().GetInvoiceAync(1));
+		Assert.IsNull(await _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>().GetInvoiceAync("1"));
 	}
 
 	private static Invoice CreateInvoice(Customer customer, int number, params (string Code, int Amount)[] lines)
 	{
-		return new Invoice() { Number = number, Customer = customer, Items = [.. lines.Select(line => new ShoppingCartItem(new StockItem(line.Code, code: line.Code, amount: 100)) { Amount = line.Amount })] };
+		return new Invoice() { Number = number.ToString(), Customer = customer, Items = [.. lines.Select(line => new ShoppingCartItem(new StockItem(line.Code, code: line.Code, amount: 100)) { Amount = line.Amount })] };
 	}
 }

@@ -6,7 +6,7 @@ namespace StockManagement.Kernel.Database.Interfaces;
 
 public interface IInvoiceServiceProvider
 {
-	public Task<Invoice> GetInvoiceAync(int invoiceNumber);
+	public Task<Invoice> GetInvoiceAync(string invoiceNumber);
 	public Task<IEnumerable<Invoice>> GetInvoicesAsync();
 
 	/// <summary>

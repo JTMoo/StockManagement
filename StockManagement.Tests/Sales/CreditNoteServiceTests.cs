@@ -44,7 +44,7 @@ public sealed class CreditNoteServiceTests
 		// Arrange
 		_creditNotes.Setup(provider => provider.GetCreditNotesAsync()).ReturnsAsync([new CreditNote() { Number = 4 }]);
 		_creditNotes.Setup(provider => provider.TryAddCreditNoteAsync(It.IsAny<CreditNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-		var invoice = new Invoice() { Number = 12, Total = 11000, Tax = 1000 };
+		var invoice = new Invoice() { Number = "12", Total = 11000, Tax = 1000 };
 		var date = new DateTime(2026, 9, 27);
 
 		// Act
@@ -66,7 +66,7 @@ public sealed class CreditNoteServiceTests
 		// Arrange
 		_creditNotes.Setup(provider => provider.GetCreditNotesAsync()).ReturnsAsync([]);
 		_creditNotes.Setup(provider => provider.TryAddCreditNoteAsync(It.IsAny<CreditNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-		var invoice = new Invoice() { Number = 12 };
+		var invoice = new Invoice() { Number = "12" };
 
 		// Act
 		var result = await this.CreateService().CancelInvoiceAsync(invoice, "Duplicate cancellation", DateTime.Today);
