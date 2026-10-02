@@ -15,7 +15,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var settings = await _settingsServiceProvider.GetSettingsAsync();
+		var settings = await _settingsServiceProvider.GetSettingsAsync(cancellationToken);
 		return settings?.Language ?? AvailableLanguages.German;
 	}
 
@@ -23,14 +23,14 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		if (await _settingsServiceProvider.GetSettingsAsync() is AppSettings settings)
+		if (await _settingsServiceProvider.GetSettingsAsync(cancellationToken) is AppSettings settings)
 		{
 			settings.Language = language;
-			await _settingsServiceProvider.UpdateSettingsAsync(settings);
+			await _settingsServiceProvider.UpdateSettingsAsync(settings, cancellationToken);
 		}
 		else
 		{
-			await _settingsServiceProvider.AddSettingsAsync(new AppSettings { Language = language });
+			await _settingsServiceProvider.AddSettingsAsync(new AppSettings { Language = language }, cancellationToken);
 		}
 	}
 
@@ -38,7 +38,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var settings = await _settingsServiceProvider.GetSettingsAsync() ?? new AppSettings();
+		var settings = await _settingsServiceProvider.GetSettingsAsync(cancellationToken) ?? new AppSettings();
 		return new CompanySettings(settings.CompanyName, settings.TaxId, settings.Currency, settings.VatRatePercent, settings.PaymentTermInDays, settings.FirstInvoiceNumber, settings.FirstCustomerId, settings.CurrencyDecimalDigits,
 			settings.Ruc, settings.TimbradoNumber, settings.TimbradoValidFrom, settings.TimbradoValidTo, settings.EstablishmentCode, settings.PointOfSaleCode);
 	}
@@ -48,7 +48,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 		cancellationToken.ThrowIfCancellationRequested();
 		ArgumentNullException.ThrowIfNull(companySettings);
 
-		if (await _settingsServiceProvider.GetSettingsAsync() is AppSettings settings)
+		if (await _settingsServiceProvider.GetSettingsAsync(cancellationToken) is AppSettings settings)
 		{
 			settings.CompanyName = companySettings.CompanyName;
 			settings.TaxId = companySettings.TaxId;
@@ -64,7 +64,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 			settings.TimbradoValidTo = companySettings.TimbradoValidTo;
 			settings.EstablishmentCode = companySettings.EstablishmentCode;
 			settings.PointOfSaleCode = companySettings.PointOfSaleCode;
-			await _settingsServiceProvider.UpdateSettingsAsync(settings);
+			await _settingsServiceProvider.UpdateSettingsAsync(settings, cancellationToken);
 		}
 		else
 		{
@@ -84,7 +84,7 @@ internal class SettingsService(ISettingsServiceProvider settingsServiceProvider)
 				TimbradoValidTo = companySettings.TimbradoValidTo,
 				EstablishmentCode = companySettings.EstablishmentCode,
 				PointOfSaleCode = companySettings.PointOfSaleCode
-			});
+			}, cancellationToken);
 		}
 	}
 }

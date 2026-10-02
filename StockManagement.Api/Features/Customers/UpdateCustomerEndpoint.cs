@@ -22,7 +22,7 @@ public class UpdateCustomerEndpoint(ICustomerServiceProvider customerServiceProv
 
 	public override async Task<Results<Ok<CustomerResponse>, NotFound, Conflict<DuplicateCustomerIdentificationNumberResponse>>> ExecuteAsync(UpdateCustomerRequest request, CancellationToken cancellationToken)
 	{
-		if (await _customerServiceProvider.GetCustomerAsync(request.CustomerId) is not Customer customer) return TypedResults.NotFound();
+		if (await _customerServiceProvider.GetCustomerAsync(request.CustomerId, cancellationToken) is not Customer customer) return TypedResults.NotFound();
 
 		var identificationNumber = RucValidator.TryNormalize(request.IdentificationNumber, out var normalized) ? normalized : request.IdentificationNumber;
 
@@ -37,7 +37,7 @@ public class UpdateCustomerEndpoint(ICustomerServiceProvider customerServiceProv
 
 		try
 		{
-			await _customerServiceProvider.UpdateCustomerAsync(customer);
+			await _customerServiceProvider.UpdateCustomerAsync(customer, cancellationToken);
 		}
 		catch (CustomerIdentificationNumberAlreadyExistsException)
 		{

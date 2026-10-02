@@ -40,7 +40,7 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 		var existingNumbers = (await _invoiceServiceProvider.GetInvoicesAsync())
 			.Select(invoice => invoice.Number)
 			.ToHashSet(StringComparer.Ordinal);
-		var knownIdentificationNumbers = (await _customerServiceProvider.GetCustomersAsync())
+		var knownIdentificationNumbers = (await _customerServiceProvider.GetCustomersAsync(cancellationToken))
 			.Select(customer => customer.IdentificationNumber)
 			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -61,7 +61,7 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 
 	public async Task<IReadOnlyList<string>> CommitAsync(IReadOnlyList<object> candidates, CancellationToken cancellationToken = default)
 	{
-		var customersByIdentificationNumber = (await _customerServiceProvider.GetCustomersAsync())
+		var customersByIdentificationNumber = (await _customerServiceProvider.GetCustomersAsync(cancellationToken))
 			.ToDictionary(customer => customer.IdentificationNumber, StringComparer.OrdinalIgnoreCase);
 
 		List<string> invoiceIds = [];
