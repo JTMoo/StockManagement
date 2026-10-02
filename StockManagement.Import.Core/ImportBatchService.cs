@@ -45,32 +45,31 @@ internal sealed class ImportBatchService : IImportBatchService
 		rows.Sort((left, right) => left.RowNumber.CompareTo(right.RowNumber));
 
 		var batch = new ImportBatch(target, fileName, sheetName, rows);
-		await _importBatchServiceProvider.AddImportBatchAsync(batch);
+		await _importBatchServiceProvider.AddImportBatchAsync(batch, cancellationToken);
 		return batch;
 	}
 
 	public Task<ImportBatch?> GetAsync(string batchId, CancellationToken cancellationToken = default)
 	{
-		cancellationToken.ThrowIfCancellationRequested();
-		return _importBatchServiceProvider.GetImportBatchAsync(batchId);
+		return _importBatchServiceProvider.GetImportBatchAsync(batchId, cancellationToken);
 	}
 
 	public async Task<ImportBatch> CommitAsync(string batchId, CancellationToken cancellationToken = default)
 	{
-		var batch = await this.GetExistingBatchAsync(batchId);
+		var batch = await this.GetExistingBatchAsync(batchId, cancellationToken);
 		var handler = this.GetHandler(batch.Target);
 
 		var candidates = batch.ReadyRows.Select(row => handler.DeserializeCandidate(row.PayloadJson!)).ToList();
 		var importedIds = await handler.CommitAsync(candidates, cancellationToken);
 
 		batch.MarkCommitted(importedIds);
-		await _importBatchServiceProvider.UpdateImportBatchAsync(batch);
+		await _importBatchServiceProvider.UpdateImportBatchAsync(batch, cancellationToken);
 		return batch;
 	}
 
 	public async Task<ImportBatch> UndoAsync(string batchId, CancellationToken cancellationToken = default)
 	{
-		var batch = await this.GetExistingBatchAsync(batchId);
+		var batch = await this.GetExistingBatchAsync(batchId, cancellationToken);
 		var handler = this.GetHandler(batch.Target);
 
 		var committed = batch.ReadyRows
@@ -80,13 +79,13 @@ internal sealed class ImportBatchService : IImportBatchService
 		await handler.UndoAsync(committed, cancellationToken);
 
 		batch.MarkUndone();
-		await _importBatchServiceProvider.UpdateImportBatchAsync(batch);
+		await _importBatchServiceProvider.UpdateImportBatchAsync(batch, cancellationToken);
 		return batch;
 	}
 
-	private async Task<ImportBatch> GetExistingBatchAsync(string batchId)
+	private async Task<ImportBatch> GetExistingBatchAsync(string batchId, CancellationToken cancellationToken)
 	{
-		return await _importBatchServiceProvider.GetImportBatchAsync(batchId) ?? throw new ImportBatchNotFoundException();
+		return await _importBatchServiceProvider.GetImportBatchAsync(batchId, cancellationToken) ?? throw new ImportBatchNotFoundException();
 	}
 
 	private IImportTargetHandler GetHandler(ImportTarget target)

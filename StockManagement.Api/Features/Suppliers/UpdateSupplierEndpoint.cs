@@ -36,7 +36,7 @@ public class UpdateSupplierEndpoint(ISupplierServiceProvider supplierServiceProv
 
 	public override async Task<Results<Ok<SupplierResponse>, NotFound, Conflict<DuplicateSupplierNameResponse>>> ExecuteAsync(UpdateSupplierRequest request, CancellationToken cancellationToken)
 	{
-		if (await _supplierServiceProvider.GetSupplierByIdAsync(request.Id) is not Supplier supplier) return TypedResults.NotFound();
+		if (await _supplierServiceProvider.GetSupplierByIdAsync(request.Id, cancellationToken) is not Supplier supplier) return TypedResults.NotFound();
 
 		supplier.Name = request.Name;
 		supplier.ContactName = request.ContactName;
@@ -47,7 +47,7 @@ public class UpdateSupplierEndpoint(ISupplierServiceProvider supplierServiceProv
 
 		try
 		{
-			await _supplierServiceProvider.UpdateSupplierAsync(supplier);
+			await _supplierServiceProvider.UpdateSupplierAsync(supplier, cancellationToken);
 		}
 		catch (SupplierNameAlreadyExistsException)
 		{

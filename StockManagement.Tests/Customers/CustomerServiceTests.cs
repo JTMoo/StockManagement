@@ -25,7 +25,7 @@ public sealed class CustomerServiceTests
 	public async Task GetNextCustomerIdAsync_NoCustomers_Returns1001()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 
 		// Act
 		var result = await this.CreateService().GetNextCustomerIdAsync();
@@ -38,7 +38,7 @@ public sealed class CustomerServiceTests
 	public async Task GetNextCustomerIdAsync_ProviderReturnsNull_Returns1001()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync((IEnumerable<Customer>)null);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync((IEnumerable<Customer>)null);
 
 		// Act
 		var result = await this.CreateService().GetNextCustomerIdAsync();
@@ -51,7 +51,7 @@ public sealed class CustomerServiceTests
 	public async Task GetNextCustomerIdAsync_ExistingCustomers_ReturnsHighestPlusOne()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer() { CustomerId = 1001 }, new Customer() { CustomerId = 1017 }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer() { CustomerId = 1001 }, new Customer() { CustomerId = 1017 }]);
 
 		// Act
 		var result = await this.CreateService().GetNextCustomerIdAsync();
@@ -64,7 +64,7 @@ public sealed class CustomerServiceTests
 	public async Task GetNextCustomerIdAsync_NoCustomers_UsesConfiguredFirstCustomerId()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 2000, 0));
 
@@ -80,7 +80,7 @@ public sealed class CustomerServiceTests
 	public async Task CreateCustomerAsync_ExistingCustomers_StoresWithNextId()
 	{
 		// Arrange
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer() { CustomerId = 1001 }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer() { CustomerId = 1001 }]);
 		var customer = new Customer() { Name = "Ana", CustomerId = 5 };
 
 		// Act
@@ -89,7 +89,7 @@ public sealed class CustomerServiceTests
 		// Assert
 		Assert.AreSame(customer, result);
 		Assert.AreEqual(1002, result.CustomerId);
-		_customers.Verify(provider => provider.AddCustomerAsync(customer), Times.Once);
+		_customers.Verify(provider => provider.AddCustomerAsync(customer, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	private CustomerService CreateService()

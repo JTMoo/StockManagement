@@ -15,48 +15,48 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 	private readonly AppDbContext _db = db;
 
 
-	public Task<StockItem> GetStockItemAsync(string code)
+	public Task<StockItem> GetStockItemAsync(string code, CancellationToken cancellationToken = default)
 	{
-		return _db.StockItems.Include(item => item.Supplier).SingleOrDefaultAsync(item => item.Code == code)!;
+		return _db.StockItems.Include(item => item.Supplier).SingleOrDefaultAsync(item => item.Code == code, cancellationToken)!;
 	}
 
-	public Task<StockItem> GetStockItemByIdAsync(string id)
+	public Task<StockItem> GetStockItemByIdAsync(string id, CancellationToken cancellationToken = default)
 	{
-		return _db.StockItems.Include(item => item.Supplier).SingleOrDefaultAsync(item => item.Id == id)!;
+		return _db.StockItems.Include(item => item.Supplier).SingleOrDefaultAsync(item => item.Id == id, cancellationToken)!;
 	}
 
-	public async Task<IEnumerable<StockItem>> GetAllStockItemsAsync()
+	public async Task<IEnumerable<StockItem>> GetAllStockItemsAsync(CancellationToken cancellationToken = default)
 	{
-		return await _db.StockItems.Include(item => item.Supplier).ToListAsync();
+		return await _db.StockItems.Include(item => item.Supplier).ToListAsync(cancellationToken);
 	}
 
-	public async Task<IEnumerable<StockItem>> GetStockItemsBelowMinimumAsync()
+	public async Task<IEnumerable<StockItem>> GetStockItemsBelowMinimumAsync(CancellationToken cancellationToken = default)
 	{
 		return await _db.StockItems.Include(item => item.Supplier)
 			.Where(item => item.MinimumStock > 0 && item.Amount < item.MinimumStock)
-			.ToListAsync();
+			.ToListAsync(cancellationToken);
 	}
 
 	/// <exception cref="StockItemCodeAlreadyExistsException">Code already in use</exception>
-	public async Task AddStockItemAsync(StockItem stockItem)
+	public async Task AddStockItemAsync(StockItem stockItem, CancellationToken cancellationToken = default)
 	{
 		_db.StockItems.Add(stockItem);
 		_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount));
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 	}
 
 	/// <exception cref="StockItemCodeAlreadyExistsException">Code already in use</exception>
-	public async Task AddManyStockItemsAsync(IList<StockItem> stockItem)
+	public async Task AddManyStockItemsAsync(IList<StockItem> stockItem, CancellationToken cancellationToken = default)
 	{
 		_db.StockItems.AddRange(stockItem);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 	}
 
 	/// <exception cref="StockItemCodeAlreadyExistsException">Code already in use</exception>
-	public async Task<int> UpdateStockItemAsync(StockItem stockItem)
+	public async Task<int> UpdateStockItemAsync(StockItem stockItem, CancellationToken cancellationToken = default)
 	{
 		// Track StockItem's own state first: Add() on the Transaction below would otherwise graph-fixup StockItem as Added too
-		var stored = await _db.StockItems.AsNoTracking().SingleOrDefaultAsync(item => item.Id == stockItem.Id);
+		var stored = await _db.StockItems.AsNoTracking().SingleOrDefaultAsync(item => item.Id == stockItem.Id, cancellationToken);
 		_db.StockItems.Update(stockItem);
 
 		if (stored is not null && stored.Amount != stockItem.Amount)
@@ -64,57 +64,57 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 			_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, stockItem.Amount - stored.Amount));
 		}
 
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 
-	public async Task<int> DeleteStockItemAsync(StockItem stockItem)
+	public async Task<int> DeleteStockItemAsync(StockItem stockItem, CancellationToken cancellationToken = default)
 	{
 		// Same ordering reason as UpdateStockItemAsync
 		_db.StockItems.Remove(stockItem);
 		_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Deletion, 1));
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 
-	public async Task CheckInStockItemAsync(StockItem stockItem, int amount, string reason)
+	public async Task CheckInStockItemAsync(StockItem stockItem, int amount, string reason, CancellationToken cancellationToken = default)
 	{
-		await using var transaction = await _db.Database.BeginTransactionAsync();
+		await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
 
 		// Track StockItem's own state first: Add() on the Transaction below would otherwise graph-fixup StockItem as Added too
 		this.AttachUnchanged(stockItem);
 		await _db.StockItems
 			.Where(item => item.Id == stockItem.Id)
-			.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Amount, item => item.Amount + amount));
+			.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Amount, item => item.Amount + amount), cancellationToken);
 
 		_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, amount, reason));
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 
-		await transaction.CommitAsync();
+		await transaction.CommitAsync(cancellationToken);
 		stockItem.Amount += amount;
 	}
 
 	/// <remarks>Conditional <c>UPDATE ... WHERE Amount &gt;= @amount</c>, same oversell guard as <see cref="EfInvoiceServiceProvider.TryAddSaleAsync"/></remarks>
-	public async Task<bool> TryCheckOutStockItemAsync(StockItem stockItem, int amount, string reason)
+	public async Task<bool> TryCheckOutStockItemAsync(StockItem stockItem, int amount, string reason, CancellationToken cancellationToken = default)
 	{
-		await using var transaction = await _db.Database.BeginTransactionAsync();
+		await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
 
 		// Same ordering reason as CheckInStockItemAsync
 		this.AttachUnchanged(stockItem);
 		var affected = await _db.StockItems
 			.Where(item => item.Id == stockItem.Id && item.Amount >= amount)
-			.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Amount, item => item.Amount - amount));
+			.ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Amount, item => item.Amount - amount), cancellationToken);
 
 		if (affected == 0)
 		{
-			await transaction.RollbackAsync();
+			await transaction.RollbackAsync(cancellationToken);
 			return false;
 		}
 
 		_db.Transactions.Add(new Transaction(stockItem, DateTime.Now, Transaction.Kind.Amount, -amount, reason));
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 
-		await transaction.CommitAsync();
+		await transaction.CommitAsync(cancellationToken);
 		stockItem.Amount -= amount;
 		return true;
 	}
@@ -130,11 +130,11 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 	/// <summary>
 	/// Every write succeeds fully or throws: EF has no partial-row upsert like the old Mongo layer
 	/// </summary>
-	private async Task SaveChangesAsync()
+	private async Task SaveChangesAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
-			await _db.SaveChangesAsync();
+			await _db.SaveChangesAsync(cancellationToken);
 		}
 		catch (DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException { SqlState: "23505" })
 		{

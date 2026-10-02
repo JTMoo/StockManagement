@@ -18,7 +18,7 @@ public class ListSuppliersEndpoint(ISupplierServiceProvider supplierServiceProvi
 
 	public override async Task<IReadOnlyList<SupplierResponse>> ExecuteAsync(CancellationToken cancellationToken)
 	{
-		var suppliers = await _supplierServiceProvider.GetAllSuppliersAsync() ?? [];
+		var suppliers = await _supplierServiceProvider.GetAllSuppliersAsync(cancellationToken) ?? [];
 		return suppliers.Select(SupplierResponse.From).ToList();
 	}
 }
