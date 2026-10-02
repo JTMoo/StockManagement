@@ -5,8 +5,11 @@ using StockManagement.Kernel.Database.Interfaces;
 namespace StockManagement.Api.Features.StockItems;
 
 
+public sealed record ListStockItemsBelowMinimumRequest(string? Cursor, int? PageSize);
+
+
 /// <remarks>Reorder candidates (#57): items with a minimum stock set and fewer units on hand</remarks>
-public class ListStockItemsBelowMinimumEndpoint(IStockItemServiceProvider stockItemServiceProvider) : EndpointWithoutRequest<IReadOnlyList<StockItemResponse>>
+public class ListStockItemsBelowMinimumEndpoint(IStockItemServiceProvider stockItemServiceProvider) : Endpoint<ListStockItemsBelowMinimumRequest, StockItemListResponse>
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
 
@@ -17,9 +20,10 @@ public class ListStockItemsBelowMinimumEndpoint(IStockItemServiceProvider stockI
 		this.Permissions(Permission.StockItemsRead);
 	}
 
-	public override async Task<IReadOnlyList<StockItemResponse>> ExecuteAsync(CancellationToken cancellationToken)
+	public override async Task<StockItemListResponse> ExecuteAsync(ListStockItemsBelowMinimumRequest request, CancellationToken cancellationToken)
 	{
-		var stockItems = await _stockItemServiceProvider.GetStockItemsBelowMinimumAsync(cancellationToken) ?? [];
-		return stockItems.Select(StockItemResponse.From).ToList();
+		var pageSize = Math.Clamp(request.PageSize ?? 20, 1, 100);
+		var result = await _stockItemServiceProvider.GetStockItemsBelowMinimumAsync(request.Cursor, pageSize, cancellationToken);
+		return new(result.Items.Select(StockItemResponse.From).ToList(), result.NextCursor);
 	}
 }

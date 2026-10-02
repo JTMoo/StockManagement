@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
@@ -27,6 +28,22 @@ public class EfUserServiceProvider(AppDbContext db) : IUserServiceProvider
 	public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken = default)
 	{
 		return await _db.Users.ToListAsync(cancellationToken);
+	}
+
+	/// <summary>Keyset page by <see cref="User.Username"/> then <see cref="User.Id"/> (ADR-0029)</summary>
+	public async Task<CursorPage<User>> GetUsersAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default)
+	{
+		var query = _db.Users.AsQueryable();
+		if (Cursor.TryDecode(cursor, 2) is [var lastUsername, var lastId])
+		{
+			query = query.Where(user => user.Username.CompareTo(lastUsername) > 0 || (user.Username == lastUsername && user.Id.CompareTo(lastId) > 0));
+		}
+
+		var page = await query.OrderBy(user => user.Username).ThenBy(user => user.Id).Take(pageSize + 1).ToListAsync(cancellationToken);
+
+		var items = page.Take(pageSize).ToList();
+		var nextCursor = page.Count > pageSize ? Cursor.Encode(items[^1].Username, items[^1].Id) : null;
+		return new(items, nextCursor);
 	}
 
 	/// <exception cref="UsernameAlreadyExistsException">Username already in use</exception>

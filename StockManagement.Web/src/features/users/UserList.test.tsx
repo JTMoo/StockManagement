@@ -11,7 +11,7 @@ describe("UserList", () =>
 	it("Create_Valid_PostsAndAddsRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/users": { body: [] }, "POST /api/users": { status: 201, body: ana } });
+		const fetchMock = mockApi({ "GET /api/users?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/users": { status: 201, body: ana } });
 		renderEnglish(<UserList />);
 
 		// Act
@@ -27,7 +27,7 @@ describe("UserList", () =>
 	it("Create_DuplicateUsername_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/users": { body: [] }, "POST /api/users": { status: 409, body: { code: "ana" } } });
+		mockApi({ "GET /api/users?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/users": { status: 409, body: { code: "ana" } } });
 		renderEnglish(<UserList />);
 
 		// Act
@@ -42,7 +42,7 @@ describe("UserList", () =>
 	it("SelectAdminRole_HidesPermissionCheckboxes", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/users": { body: [] } });
+		mockApi({ "GET /api/users?pageSize=100": { body: { items: [], nextCursor: null } } });
 		renderEnglish(<UserList />);
 
 		// Act
@@ -55,7 +55,7 @@ describe("UserList", () =>
 	it("DeleteUser_NotSelf_RemovesRow", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/users": { body: [ana] }, "DELETE /api/users/u1": { status: 204 } });
+		mockApi({ "GET /api/users?pageSize=100": { body: { items: [ana], nextCursor: null } }, "DELETE /api/users/u1": { status: 204 } });
 		renderEnglish(<UserList />);
 		await screen.findByRole("cell", { name: "ana" });
 
@@ -70,7 +70,7 @@ describe("UserList", () =>
 	{
 		// Arrange: renderEnglish logs in as "admin"
 		const self = { ...ana, id: "u0", username: "admin" };
-		mockApi({ "GET /api/users": { body: [self] } });
+		mockApi({ "GET /api/users?pageSize=100": { body: { items: [self], nextCursor: null } } });
 		renderEnglish(<UserList />);
 
 		// Act

@@ -9,7 +9,7 @@ describe("CustomerList", () =>
 	it("Create_Valid_PostsAndAddsRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/customers": { body: [] }, "POST /api/customers": { status: 201, body: ana } });
+		const fetchMock = mockApi({ "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/customers": { status: 201, body: ana } });
 		renderEnglish(<CustomerList />);
 
 		// Act
@@ -26,7 +26,7 @@ describe("CustomerList", () =>
 	it("Create_Rejected_ShowsErrorAndKeepsInput", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/customers": { body: [] }, "POST /api/customers": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/customers": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
 		renderEnglish(<CustomerList />);
 
 		// Act
@@ -42,7 +42,7 @@ describe("CustomerList", () =>
 	{
 		// Arrange
 		const updated = { ...ana, lastname: "Silva" };
-		const fetchMock = mockApi({ "GET /api/customers": { body: [ana] }, "PUT /api/customers/1001": { body: updated } });
+		const fetchMock = mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } }, "PUT /api/customers/1001": { body: updated } });
 		renderEnglish(<CustomerList />);
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 
@@ -60,7 +60,7 @@ describe("CustomerList", () =>
 	it("Edit_Cancelled_ShowsCreateFormAgainWithoutSaving", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/customers": { body: [ana] } });
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } } });
 		renderEnglish(<CustomerList />);
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 
@@ -74,7 +74,7 @@ describe("CustomerList", () =>
 	it("Edit_Rejected_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/customers": { body: [ana] }, "PUT /api/customers/1001": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } }, "PUT /api/customers/1001": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
 		renderEnglish(<CustomerList />);
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 

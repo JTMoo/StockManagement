@@ -6,11 +6,11 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Invoices;
 
 
-public sealed record ListInvoicesRequest(int? CustomerId, DateTime? From, DateTime? To, int? Page, int? PageSize);
+public sealed record ListInvoicesRequest(int? CustomerId, DateTime? From, DateTime? To, string? Cursor, int? PageSize);
 
 
-/// <param name="TotalCount">Matching invoices across every page, not just <paramref name="Items"/></param>
-public sealed record InvoiceListResponse(IReadOnlyList<InvoiceResponse> Items, int TotalCount);
+/// <param name="NextCursor">Opaque cursor for the next page; <see langword="null"/> on the last page</param>
+public sealed record InvoiceListResponse(IReadOnlyList<InvoiceResponse> Items, string? NextCursor);
 
 
 public class ListInvoicesEndpoint(IInvoiceServiceProvider invoiceServiceProvider, IPaymentService paymentService) : Endpoint<ListInvoicesRequest, InvoiceListResponse>
@@ -27,10 +27,9 @@ public class ListInvoicesEndpoint(IInvoiceServiceProvider invoiceServiceProvider
 
 	public override async Task<InvoiceListResponse> ExecuteAsync(ListInvoicesRequest request, CancellationToken cancellationToken)
 	{
-		var page = Math.Max(request.Page ?? 1, 1);
 		var pageSize = Math.Clamp(request.PageSize ?? 20, 1, 100);
-		var result = await _invoiceServiceProvider.GetInvoicesAsync(request.CustomerId, request.From, request.To, page, pageSize);
+		var result = await _invoiceServiceProvider.GetInvoicesAsync(request.CustomerId, request.From, request.To, request.Cursor, pageSize);
 
-		return new(result.Items.Select(invoice => InvoiceResponse.From(invoice, _paymentService)).ToList(), result.TotalCount);
+		return new(result.Items.Select(invoice => InvoiceResponse.From(invoice, _paymentService)).ToList(), result.NextCursor);
 	}
 }

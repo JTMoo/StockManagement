@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
@@ -30,11 +31,37 @@ public class EfStockItemServiceProvider(AppDbContext db) : IStockItemServiceProv
 		return await _db.StockItems.Include(item => item.Supplier).ToListAsync(cancellationToken);
 	}
 
+	public Task<CursorPage<StockItem>> GetStockItemsAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default)
+	{
+		return this.GetPageAsync(_db.StockItems.Include(item => item.Supplier), cursor, pageSize, cancellationToken);
+	}
+
 	public async Task<IEnumerable<StockItem>> GetStockItemsBelowMinimumAsync(CancellationToken cancellationToken = default)
 	{
 		return await _db.StockItems.Include(item => item.Supplier)
 			.Where(item => item.MinimumStock > 0 && item.Amount < item.MinimumStock)
 			.ToListAsync(cancellationToken);
+	}
+
+	public Task<CursorPage<StockItem>> GetStockItemsBelowMinimumAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default)
+	{
+		var query = _db.StockItems.Include(item => item.Supplier).Where(item => item.MinimumStock > 0 && item.Amount < item.MinimumStock);
+		return this.GetPageAsync(query, cursor, pageSize, cancellationToken);
+	}
+
+	/// <summary>Keyset page by <see cref="StockItem.Code"/> then <see cref="StockItem.Id"/> (ADR-0029)</summary>
+	private async Task<CursorPage<StockItem>> GetPageAsync(IQueryable<StockItem> query, string? cursor, int pageSize, CancellationToken cancellationToken)
+	{
+		if (Cursor.TryDecode(cursor, 2) is [var lastCode, var lastId])
+		{
+			query = query.Where(item => item.Code.CompareTo(lastCode) > 0 || (item.Code == lastCode && item.Id.CompareTo(lastId) > 0));
+		}
+
+		var page = await query.OrderBy(item => item.Code).ThenBy(item => item.Id).Take(pageSize + 1).ToListAsync(cancellationToken);
+
+		var items = page.Take(pageSize).ToList();
+		var nextCursor = page.Count > pageSize ? Cursor.Encode(items[^1].Code, items[^1].Id) : null;
+		return new(items, nextCursor);
 	}
 
 	/// <exception cref="StockItemCodeAlreadyExistsException">Code already in use</exception>
