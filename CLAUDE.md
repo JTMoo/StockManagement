@@ -6,6 +6,17 @@
 2. **No prose. Never.** Bullets, tables, code.
 3. **Cut whenever possible.** Dead code, outdated comments, decisions that need revisiting.
 
+## Communication
+
+Applies to chat replies, PR bodies/comments, status updates, questions to owner.
+
+- Telegraphic: bullets, not paragraphs. Fragments OK.
+- Reply = result + what's needed from owner. Max ~6 bullets / ~60 words. Longer → file, link it.
+- No recap of the ask, no narration of investigation, no "I will now...", no closing offers/hedging.
+- Exact names: `file:line`, PR/issue #, ADR-nnnn. No marketing wording.
+- Status/progress → status update, not a reply. Reply only for result, blocker, or decision.
+- Questions: one line, options as short bullets, recommendation marked.
+
 ## Before an important decision
 
 Important = hard to undo or spans features (layers, frameworks, persistence, API contracts, auth, money, import, tests, packaging).
