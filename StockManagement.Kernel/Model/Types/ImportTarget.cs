@@ -10,5 +10,7 @@ public enum ImportTarget
 
 	Customers,
 
-	OpeningStock
+	OpeningStock,
+
+	OpenInvoices
 }
