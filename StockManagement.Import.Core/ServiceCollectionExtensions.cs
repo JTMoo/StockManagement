@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IImportTargetHandler, StockItemImportTargetHandler>();
 		services.AddScoped<IImportTargetHandler, CustomerImportTargetHandler>();
 		services.AddScoped<IImportTargetHandler, OpeningStockImportTargetHandler>();
+		services.AddScoped<IImportTargetHandler, OpenInvoiceImportTargetHandler>();
 		services.AddScoped<IImportBatchService, ImportBatchService>();
 		return services;
 	}
