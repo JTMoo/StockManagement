@@ -61,9 +61,26 @@ describe("UserList", () =>
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete User" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(screen.queryByRole("cell", { name: "ana" })).not.toBeInTheDocument();
+	});
+
+	it("DeleteUser_Cancelled_KeepsRow", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/users?pageSize=100": { body: { items: [ana], nextCursor: null } } });
+		renderEnglish(<UserList />);
+		await screen.findByRole("cell", { name: "ana" });
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "Delete User" }));
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+		// Assert
+		expect(screen.getByRole("cell", { name: "ana" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Delete User" })).toBeInTheDocument();
 	});
 
 	it("OwnRow_HasNoDeleteButton", async () =>
