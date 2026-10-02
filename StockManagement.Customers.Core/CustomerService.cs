@@ -18,7 +18,7 @@ internal class CustomerService(ICustomerServiceProvider customerServiceProvider,
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var customers = await _customerServiceProvider.GetCustomersAsync() ?? [];
+		var customers = await _customerServiceProvider.GetCustomersAsync(cancellationToken) ?? [];
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
 		return SequenceNumber.Next(customers.Select(customer => customer.CustomerId), companySettings.FirstCustomerId);
 	}
@@ -28,7 +28,7 @@ internal class CustomerService(ICustomerServiceProvider customerServiceProvider,
 		ArgumentNullException.ThrowIfNull(customer);
 
 		customer.CustomerId = await this.GetNextCustomerIdAsync(cancellationToken);
-		await _customerServiceProvider.AddCustomerAsync(customer);
+		await _customerServiceProvider.AddCustomerAsync(customer, cancellationToken);
 		return customer;
 	}
 }

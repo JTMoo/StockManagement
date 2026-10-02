@@ -32,7 +32,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([]);
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object row = MakeRow("123", 1);
 
 		// Act
@@ -48,7 +48,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice { Number = 1 }]);
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object row = MakeRow("123", 1);
 
 		// Act
@@ -64,7 +64,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([]);
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object first = MakeRow("123", 1);
 		object second = MakeRow("123", 1);
 
@@ -81,7 +81,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([]);
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		object row = MakeRow("Unknown", 1);
 
 		// Act
@@ -97,7 +97,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		var customer = new Customer { IdentificationNumber = "123" };
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([customer]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([customer]);
 		Invoice? stored = null;
 		_invoices.Setup(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()))
 			.Callback<Invoice>(invoice => { invoice.Id = "invoice-1"; stored = invoice; })
@@ -121,7 +121,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		var customer = new Customer { IdentificationNumber = "123" };
-		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([customer]);
+		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([customer]);
 		Invoice? stored = null;
 		_invoices.Setup(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()))
 			.Callback<Invoice>(invoice => { invoice.Id = "invoice-1"; stored = invoice; })

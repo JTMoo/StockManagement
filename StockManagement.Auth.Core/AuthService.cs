@@ -14,7 +14,7 @@ internal class AuthService(IUserServiceProvider userServiceProvider) : IAuthServ
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var user = await _userServiceProvider.GetUserByUsernameAsync(username);
+		var user = await _userServiceProvider.GetUserByUsernameAsync(username, cancellationToken);
 		if (user is null || !PasswordHasher.Verify(password, user.PasswordHash)) return null;
 		return user;
 	}

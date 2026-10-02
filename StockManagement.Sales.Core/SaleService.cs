@@ -97,7 +97,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			if (await _stockItemServiceProvider.GetStockItemAsync(code) is not StockItem stockItem) continue;
+			if (await _stockItemServiceProvider.GetStockItemAsync(code, cancellationToken) is not StockItem stockItem) continue;
 			currentStock[code] = stockItem;
 		}
 

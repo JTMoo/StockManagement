@@ -17,7 +17,7 @@ public sealed class AuthServiceTests
 	{
 		// Arrange
 		var user = new User { Username = "ana", PasswordHash = PasswordHasher.Hash("s3cret!") };
-		_users.Setup(provider => provider.GetUserByUsernameAsync("ana")).ReturnsAsync(user);
+		_users.Setup(provider => provider.GetUserByUsernameAsync("ana", It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
 		// Act
 		var result = await this.CreateService().ValidateCredentialsAsync("ana", "s3cret!");
@@ -31,7 +31,7 @@ public sealed class AuthServiceTests
 	{
 		// Arrange
 		var user = new User { Username = "ana", PasswordHash = PasswordHasher.Hash("s3cret!") };
-		_users.Setup(provider => provider.GetUserByUsernameAsync("ana")).ReturnsAsync(user);
+		_users.Setup(provider => provider.GetUserByUsernameAsync("ana", It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
 		// Act
 		var result = await this.CreateService().ValidateCredentialsAsync("ana", "wrong");
@@ -44,7 +44,7 @@ public sealed class AuthServiceTests
 	public async Task ValidateCredentialsAsync_UnknownUsername_ReturnsNull()
 	{
 		// Arrange
-		_users.Setup(provider => provider.GetUserByUsernameAsync("ghost")).ReturnsAsync((User?)null);
+		_users.Setup(provider => provider.GetUserByUsernameAsync("ghost", It.IsAny<CancellationToken>())).ReturnsAsync((User?)null);
 
 		// Act
 		var result = await this.CreateService().ValidateCredentialsAsync("ghost", "whatever");

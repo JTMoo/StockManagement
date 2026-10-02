@@ -13,21 +13,21 @@ public class EfSettingsServiceProvider(AppDbContext db) : ISettingsServiceProvid
 	private readonly AppDbContext _db = db;
 
 
-	public Task<AppSettings?> GetSettingsAsync()
+	public Task<AppSettings?> GetSettingsAsync(CancellationToken cancellationToken = default)
 	{
-		return _db.AppSettings.FirstOrDefaultAsync();
+		return _db.AppSettings.FirstOrDefaultAsync(cancellationToken);
 	}
 
-	public async Task AddSettingsAsync(AppSettings settings)
+	public async Task AddSettingsAsync(AppSettings settings, CancellationToken cancellationToken = default)
 	{
 		_db.AppSettings.Add(settings);
-		await _db.SaveChangesAsync();
+		await _db.SaveChangesAsync(cancellationToken);
 	}
 
-	public async Task<int> UpdateSettingsAsync(AppSettings settings)
+	public async Task<int> UpdateSettingsAsync(AppSettings settings, CancellationToken cancellationToken = default)
 	{
 		_db.AppSettings.Update(settings);
-		await _db.SaveChangesAsync();
+		await _db.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 }
