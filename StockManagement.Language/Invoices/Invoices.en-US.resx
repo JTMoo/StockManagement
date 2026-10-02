@@ -123,6 +123,9 @@
   <data name="cash" xml:space="preserve">
     <value>Cash</value>
   </data>
+  <data name="cdc" xml:space="preserve">
+    <value>CDC</value>
+  </data>
   <data name="cancelInvoice" xml:space="preserve">
     <value>Cancel invoice</value>
   </data>
@@ -218,5 +221,8 @@
   </data>
   <data name="invoiceSavedToast" xml:space="preserve">
     <value>Invoice {0} saved.</value>
+  </data>
+  <data name="transmissionStatus" xml:space="preserve">
+    <value>SIFEN status</value>
   </data>
 </root>

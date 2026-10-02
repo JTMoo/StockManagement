@@ -257,5 +257,32 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("fileRequired", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Imported.
+        /// </summary>
+        public static string statusImported {
+            get {
+                return ResourceManager.GetString("statusImported", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string statusDuplicate {
+            get {
+                return ResourceManager.GetString("statusDuplicate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string statusError {
+            get {
+                return ResourceManager.GetString("statusError", resourceCulture);
+            }
+        }
     }
 }

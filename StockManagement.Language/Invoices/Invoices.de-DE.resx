@@ -123,6 +123,9 @@
   <data name="cash" xml:space="preserve">
     <value>Bar</value>
   </data>
+  <data name="cdc" xml:space="preserve">
+    <value>CDC</value>
+  </data>
   <data name="cancelInvoice" xml:space="preserve">
     <value>Rechnung stornieren</value>
   </data>
@@ -218,5 +221,8 @@
   </data>
   <data name="invoiceSavedToast" xml:space="preserve">
     <value>Rechnung {0} gespeichert.</value>
+  </data>
+  <data name="transmissionStatus" xml:space="preserve">
+    <value>SIFEN-Status</value>
   </data>
 </root>
