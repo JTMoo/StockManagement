@@ -143,7 +143,7 @@ public sealed class CustomerImportTargetHandlerTests
 	}
 
 	[TestMethod]
-	public async Task SplitDuplicatesAsync_BlankIdentificationNumbers_NeverMatchEachOther()
+	public async Task SplitDuplicatesAsync_DistinctNamesNoIdentificationNumber_NeitherIsADuplicate()
 	{
 		// Arrange
 		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
@@ -155,6 +155,83 @@ public sealed class CustomerImportTargetHandlerTests
 
 		// Assert
 		Assert.AreEqual(2, result.Unique.Count);
+		Assert.AreEqual(0, result.Duplicates.Count);
+	}
+
+	[TestMethod]
+	public async Task SplitDuplicatesAsync_BlankNamesAndIdentificationNumber_NeverMatchEachOther()
+	{
+		// Arrange
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		object first = new Customer();
+		object second = new Customer();
+
+		// Act
+		var result = await _handler.SplitDuplicatesAsync([first, second]);
+
+		// Assert
+		Assert.AreEqual(2, result.Unique.Count);
+		Assert.AreEqual(0, result.Duplicates.Count);
+	}
+
+	[TestMethod]
+	public async Task SplitDuplicatesAsync_NoIdentificationNumberNameMatchesStoredCustomer_IsDuplicate()
+	{
+		// Arrange: accents, case and word order differ, and the stored customer has a RUC the import row doesn't repeat
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { Name = "Jose", Lastname = "Perez", IdentificationNumber = "1946520-3" }]);
+		object clash = new Customer { Name = "PEREZ", Lastname = "José" };
+
+		// Act
+		var result = await _handler.SplitDuplicatesAsync([clash]);
+
+		// Assert
+		Assert.AreEqual(0, result.Unique.Count);
+		CollectionAssert.AreEqual(new[] { clash }, result.Duplicates.ToList());
+	}
+
+	[TestMethod]
+	public async Task SplitDuplicatesAsync_NoIdentificationNumberCompanySuffixVariant_IsDuplicate()
+	{
+		// Arrange
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { Name = "Acme S.A." }]);
+		object clash = new Customer { Name = "Acme SA" };
+
+		// Act
+		var result = await _handler.SplitDuplicatesAsync([clash]);
+
+		// Assert
+		Assert.AreEqual(0, result.Unique.Count);
+		CollectionAssert.AreEqual(new[] { clash }, result.Duplicates.ToList());
+	}
+
+	[TestMethod]
+	public async Task SplitDuplicatesAsync_NoIdentificationNumberTwoCandidatesSameName_SecondIsDuplicate()
+	{
+		// Arrange
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([]);
+		object first = new Customer { Name = "Ann", Lastname = "Miller" };
+		object second = new Customer { Name = "ann", Lastname = "miller" };
+
+		// Act
+		var result = await _handler.SplitDuplicatesAsync([first, second]);
+
+		// Assert
+		CollectionAssert.AreEqual(new[] { first }, result.Unique.ToList());
+		CollectionAssert.AreEqual(new[] { second }, result.Duplicates.ToList());
+	}
+
+	[TestMethod]
+	public async Task SplitDuplicatesAsync_IdentificationNumberPresent_NameIsIgnored()
+	{
+		// Arrange: same name as a stored blank-number customer, but this row has its own RUC, so it is not a name clash
+		_customers.Setup(provider => provider.GetCustomersAsync()).ReturnsAsync([new Customer { Name = "Ann", Lastname = "Miller" }]);
+		object candidate = new Customer { Name = "Ann", Lastname = "Miller", IdentificationNumber = "1946520-3" };
+
+		// Act
+		var result = await _handler.SplitDuplicatesAsync([candidate]);
+
+		// Assert
+		CollectionAssert.AreEqual(new[] { candidate }, result.Unique.ToList());
 		Assert.AreEqual(0, result.Duplicates.Count);
 	}
 
