@@ -277,6 +277,42 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Screens.
+        /// </summary>
+        public static string searchScreens {
+            get {
+                return ResourceManager.GetString("searchScreens", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No results.
+        /// </summary>
+        public static string searchNoResults {
+            get {
+                return ResourceManager.GetString("searchNoResults", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Include cancelled.
+        /// </summary>
+        public static string searchIncludeInactive {
+            get {
+                return ResourceManager.GetString("searchIncludeInactive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to View all {0} results in {1} &#8594;.
+        /// </summary>
+        public static string searchViewAllResults {
+            get {
+                return ResourceManager.GetString("searchViewAllResults", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string show {

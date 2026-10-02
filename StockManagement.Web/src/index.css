@@ -113,3 +113,19 @@ tr.total th, tr.total td { padding-top: var(--space-4); font-size: 20px; font-we
 	.sidebar-item span { display: none; }
 	.paper { padding: var(--space-4); }
 }
+
+/* CommandPalette (ADR-0025/0026): cross-domain search overlay */
+.scrim { position: fixed; inset: 0; background: var(--scrim); display: flex; justify-content: center; padding-top: 10vh; z-index: 100; }
+.palette { width: 440px; max-height: 70vh; overflow-y: auto; background: var(--surface-raised); border-radius: var(--radius-lg); }
+.palette-search { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-4); border-bottom: 1px solid var(--border); color: var(--ink); position: sticky; top: 0; background: var(--surface-raised); }
+.palette-search svg { color: var(--ink-faint); flex: none; }
+.palette-search input { flex: 1; border: 0; height: auto; padding: 0; background: none; }
+.palette-search input:focus { outline: none; }
+.palette-filter { margin-left: auto; font-size: 12px; color: var(--ink-faint); background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 2px 8px; cursor: pointer; }
+.palette-filter[aria-pressed="true"] { color: var(--brand-strong); border-color: var(--brand-strong); }
+.palette-section-title { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-faint); padding: var(--space-3) var(--space-4) var(--space-1); }
+.palette-result { display: flex; justify-content: space-between; width: 100%; box-sizing: border-box; padding: var(--space-2) var(--space-4); font-size: 15px; color: var(--ink); background: none; border: 0; text-align: left; cursor: pointer; }
+.palette-result[aria-selected="true"] { background: var(--brand-subtle); color: var(--brand-strong); font-weight: 600; }
+.palette-meta { color: var(--ink-faint); font-size: 13px; }
+.palette-more { display: block; width: 100%; box-sizing: border-box; padding: var(--space-2) var(--space-4) var(--space-3); font-size: 13px; color: var(--accent-strong); font-weight: 600; background: none; border: 0; text-align: left; cursor: pointer; }
+.palette-empty { padding: var(--space-5) var(--space-4); color: var(--ink-faint); text-align: center; }

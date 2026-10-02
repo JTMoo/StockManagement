@@ -189,6 +189,18 @@
   <data name="searchBoxDefault" xml:space="preserve">
     <value>Search...</value>
   </data>
+  <data name="searchScreens" xml:space="preserve">
+    <value>Screens</value>
+  </data>
+  <data name="searchNoResults" xml:space="preserve">
+    <value>No results</value>
+  </data>
+  <data name="searchIncludeInactive" xml:space="preserve">
+    <value>Include cancelled</value>
+  </data>
+  <data name="searchViewAllResults" xml:space="preserve">
+    <value>View all {0} results in {1} →</value>
+  </data>
   <data name="show" xml:space="preserve">
     <value>Show</value>
   </data>
