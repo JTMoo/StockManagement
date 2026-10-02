@@ -9,12 +9,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StockManagement.Sifen.Core.Contracts\StockManagement.Sifen.Core.Contracts.csproj" />
     <ProjectReference Include="..\StockManagement.Kernel\StockManagement.Kernel.csproj" />
+    <ProjectReference Include="..\StockManagement.Settings.Core.Contracts\StockManagement.Settings.Core.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

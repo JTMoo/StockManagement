@@ -39,6 +39,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<Supplier> Suppliers => this.Set<Supplier>();
 
+	public DbSet<PendingTransmission> PendingTransmissions => this.Set<PendingTransmission>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{

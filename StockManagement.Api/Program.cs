@@ -10,6 +10,7 @@ using StockManagement.Infrastructure;
 using StockManagement.Infrastructure.Database;
 using StockManagement.Sales.Core;
 using StockManagement.Settings.Core;
+using StockManagement.Sifen.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services
 	.AddSettingsCore()
 	.AddImportCore()
 	.AddAuthCore()
+	.AddSifenCore(builder.Configuration)
 	.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddHealthChecks();
