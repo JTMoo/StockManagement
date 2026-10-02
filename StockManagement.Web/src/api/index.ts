@@ -12,6 +12,7 @@ export * from "./companySettings";
 export * from "./users";
 export * from "./auth";
 export * from "./import";
+export * from "./search";
 
 import { authApi } from "./auth";
 import { companySettingsApi } from "./companySettings";
@@ -19,6 +20,7 @@ import { customersApi } from "./customers";
 import { importApi } from "./import";
 import { invoicesApi } from "./invoices";
 import { salesApi } from "./sales";
+import { searchApi } from "./search";
 import { settingsApi } from "./settings";
 import { stockItemsApi } from "./stockItems";
 import { suppliersApi } from "./suppliers";
@@ -34,5 +36,6 @@ export const api = {
 	...companySettingsApi,
 	...usersApi,
 	...authApi,
-	...importApi
+	...importApi,
+	...searchApi
 };

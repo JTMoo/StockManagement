@@ -1,6 +1,6 @@
 # ADR-0026: Cross-domain search via Postgres full-text + trigram
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-28
 
 ## Context
@@ -30,3 +30,9 @@
 - `search_vector` must be kept in every insert/update path for these entities (or generated as a stored computed column so EF/Postgres keeps it in sync automatically - preferred, avoids an application-level bug class).
 - Query-side: one new endpoint, one new `search.ts` client function; no change to existing list endpoints or their pagination.
 - No new service to deploy, back up, or monitor; search quality is bounded by what Postgres FTS/trigram can do - materially worse relevance than a dedicated engine at very large scale, accepted per the revisit trigger above.
+
+## Amendments (implementation, 2026-10-02)
+
+- `word_similarity()`, not `similarity()`: a query like "cemento" is short next to a long concatenated identity-field string, and whole-string `similarity()` is diluted by length - `word_similarity()` matches against the best substring and is what actually finds typos in practice. Threshold 0.3.
+- Invoices' generated column can only cover its own table (`Number`) - Postgres generated columns can't reference another table. Customer name/RUC match is a join to `Customers` done live in the query, not pre-baked into `Invoices.search_vector`.
+- No separate recency index needed: `Invoices.Date` already supports `ORDER BY ... DESC`; StockItems/Customers/Suppliers have no natural recency column and are ranked by score then name - recency only mattered for Invoices per the scale concern above.
