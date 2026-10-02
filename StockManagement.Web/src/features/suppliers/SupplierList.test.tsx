@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { acme, mockApi, renderEnglish, sentBody } from "../../test-utils";
 import { SupplierList } from "./SupplierList";
 
@@ -51,12 +51,12 @@ describe("SupplierList", () =>
 	{
 		// Arrange
 		const fetchMock = mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [acme], nextCursor: null } }, "DELETE /api/suppliers/1": { status: 204 } });
-		vi.spyOn(window, "confirm").mockReturnValue(true);
 		renderEnglish(<SupplierList />);
 		await screen.findByRole("cell", { name: "Acme" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete Supplier" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(screen.queryByRole("cell", { name: "Acme" })).not.toBeInTheDocument();
@@ -67,12 +67,12 @@ describe("SupplierList", () =>
 	{
 		// Arrange
 		mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [acme], nextCursor: null } }, "DELETE /api/suppliers/1": { status: 409, body: { reason: "Supplier is assigned to stock items and can't be deleted." } } });
-		vi.spyOn(window, "confirm").mockReturnValue(true);
 		renderEnglish(<SupplierList />);
 		await screen.findByRole("cell", { name: "Acme" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete Supplier" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(await screen.findByRole("alert")).toHaveTextContent("Supplier is assigned to stock items and can't be deleted.");

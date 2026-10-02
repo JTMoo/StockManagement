@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { mockApi, nut, renderEnglish, screw, sentBody } from "../../test-utils";
 import { StockItemList } from "./StockItemList";
 
@@ -131,12 +131,12 @@ describe("StockItemList", () =>
 	{
 		// Arrange
 		const fetchMock = mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw, nut], nextCursor: null } }, "DELETE /api/stock-items/1": { status: 204 } });
-		vi.spyOn(window, "confirm").mockReturnValue(true);
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
 		// Act
 		await userEvent.click(screen.getAllByRole("button", { name: "Delete Item" })[0]);
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(screen.queryByRole("cell", { name: "Screw" })).not.toBeInTheDocument();
@@ -148,15 +148,16 @@ describe("StockItemList", () =>
 	{
 		// Arrange
 		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw], nextCursor: null } } });
-		vi.spyOn(window, "confirm").mockReturnValue(false);
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete Item" }));
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
 		// Assert
 		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Delete Item" })).toBeInTheDocument();
 	});
 
 	it("Load_OutOfStockAndBelowMinimum_ShowStatusBadges", async () =>

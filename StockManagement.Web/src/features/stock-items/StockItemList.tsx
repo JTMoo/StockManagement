@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api, type StockItem } from "../../api";
+import { ConfirmAction } from "../../ConfirmAction";
 import { Dialog } from "../../Dialog";
 import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
@@ -70,7 +71,6 @@ export function StockItemList()
 
 	async function onDelete(stockItem: StockItem)
 	{
-		if (!window.confirm(t("itemDeletionPrompt").replace("{0}", stockItem.name))) return;
 		const result = await api.deleteStockItem(stockItem);
 		if (!result.ok) return;
 
@@ -114,7 +114,7 @@ export function StockItemList()
 							<td className="row-actions">
 								<button type="button" className="quiet" onClick={() => onEdit(item)}>{t("edit")}</button>
 								<button type="button" className="quiet" onClick={() => setChecking(item)}>{t("checkStock")}</button>
-								<button type="button" className="quiet" onClick={() => onDelete(item)}>{t("deleteItem")}</button>
+								<ConfirmAction label={t("deleteItem")} message={t("itemDeletionPrompt").replace("{0}", item.name)} onConfirm={() => onDelete(item)} />
 							</td>
 						</tr>
 						);
