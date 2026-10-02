@@ -138,4 +138,10 @@
   <data name="username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="usernameRequired" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="passwordRequired" xml:space="preserve">
+    <value>Password is required.</value>
+  </data>
 </root>

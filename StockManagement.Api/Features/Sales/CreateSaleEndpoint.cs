@@ -28,12 +28,12 @@ public class CreateSaleValidator : Validator<CreateSaleRequest>
 {
 	public CreateSaleValidator()
 	{
-		this.RuleFor(request => request.SaleCondition).IsInEnum().NotEqual(SaleCondition.None);
-		this.RuleFor(request => request.Items).NotEmpty();
+		this.RuleFor(request => request.SaleCondition).IsInEnum().WithMessage("saleConditionInvalid").NotEqual(SaleCondition.None).WithMessage("saleConditionInvalid");
+		this.RuleFor(request => request.Items).NotEmpty().WithMessage("saleItemsRequired");
 		this.RuleForEach(request => request.Items).ChildRules(item =>
 		{
-			item.RuleFor(line => line.Code).NotEmpty();
-			item.RuleFor(line => line.Amount).GreaterThan(0);
+			item.RuleFor(line => line.Code).NotEmpty().WithMessage("codeRequired");
+			item.RuleFor(line => line.Amount).GreaterThan(0).WithMessage("amountNotPositive");
 		});
 	}
 }

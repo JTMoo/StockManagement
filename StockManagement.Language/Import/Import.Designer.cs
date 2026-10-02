@@ -248,5 +248,14 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("tax", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A file is required...
+        /// </summary>
+        public static string fileRequired {
+            get {
+                return ResourceManager.GetString("fileRequired", resourceCulture);
+            }
+        }
     }
 }
