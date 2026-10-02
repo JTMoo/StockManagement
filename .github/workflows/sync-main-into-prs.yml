@@ -26,7 +26,7 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
-        gh pr list --state open --base main --json number,headRefName | jq -c '.[]' | while read -r row; do
+        gh pr list --state open --base main --limit 100 --json number,headRefName | jq -c '.[]' | while read -r row; do
           number=$(echo "$row" | jq -r .number)
           branch=$(echo "$row" | jq -r .headRefName)
 
