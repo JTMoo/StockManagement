@@ -1,11 +1,12 @@
-import { LogOut, Menu } from "lucide-react";
-import { useState } from "react";
+import { LogOut, Menu, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { Invoice } from "./api";
 import { useAuth } from "./auth";
 import { LoginPage } from "./features/auth/LoginPage";
 import { customersRoute } from "./features/customers/route";
 import { invoicesRoute } from "./features/invoices/route";
 import { salesRoute } from "./features/sales/route";
+import { CommandPalette } from "./features/search/CommandPalette";
 import { companySettingsRoute, settingsRoute } from "./features/settings/routes";
 import { stockItemsRoute } from "./features/stock-items/route";
 import { suppliersRoute } from "./features/suppliers/route";
@@ -23,6 +24,7 @@ export function App()
 	const [view, setView] = useState<View>("stockItems");
 	const [invoice, setInvoice] = useState<Invoice>();
 	const [menuExtended, setMenuExtended] = useState(true);
+	const [paletteOpen, setPaletteOpen] = useState(false);
 
 	function onSold(sold: Invoice)
 	{
@@ -30,16 +32,37 @@ export function App()
 		setView("invoices");
 	}
 
+	const visibleRoutes = routes.filter(route => !route.permission || hasPermission(route.permission));
+
+	useEffect(() =>
+	{
+		function onKeyDown(event: KeyboardEvent)
+		{
+			if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k")
+			{
+				event.preventDefault();
+				setPaletteOpen(true);
+			}
+		}
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, []);
+
 	if (!username) return <LoginPage />;
 
-	const visibleRoutes = routes.filter(route => !route.permission || hasPermission(route.permission));
 	const activeRoute = visibleRoutes.find(route => route.name === view) ?? visibleRoutes[0];
 
 	return (
 		<div className="shell">
+			{paletteOpen && (
+				<CommandPalette routes={visibleRoutes} onNavigate={setView} onClose={() => setPaletteOpen(false)} />
+			)}
 			<nav className={menuExtended ? "sidebar" : "sidebar collapsed"}>
 				<button className="sidebar-item" aria-label="Menu" aria-expanded={menuExtended} onClick={() => setMenuExtended(!menuExtended)}>
 					<Menu />
+				</button>
+				<button className="sidebar-item" aria-label={t("search")} onClick={() => setPaletteOpen(true)}>
+					<Search />{menuExtended && <span>{t("searchBoxDefault")}</span>}
 				</button>
 				<div className="sidebar-items">
 					{visibleRoutes.map(({ name, icon: Icon }) => (
