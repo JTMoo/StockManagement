@@ -48,7 +48,7 @@ public class PreviewImportEndpoint(IImportBatchService importBatchService, ILogg
 	{
 		this.Post("/import/batches");
 		this.AllowFileUploads();
-		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite, Permission.SalesWrite);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, BadRequest<InvalidExcelFileResponse>>> ExecuteAsync(PreviewImportRequest request, CancellationToken cancellationToken)

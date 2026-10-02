@@ -1,6 +1,6 @@
-name:  CI StockManagement
+name: CI StockManagement
 
-# Trigger on every master branch push and pull request
+# Trigger on every main branch push and pull request
 on:
   push:
     branches:

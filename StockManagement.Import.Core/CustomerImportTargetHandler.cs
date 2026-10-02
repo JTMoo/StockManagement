@@ -11,7 +11,7 @@ namespace StockManagement.Import.Core;
 /// <summary>
 /// <see cref="IImportTargetHandler"/> for <see cref="Customer"/>: assigns the next free <see cref="Customer.CustomerId"/> per commit, same rule as <c>CustomerService.CreateCustomerAsync</c>
 /// </summary>
-/// <remarks>De-duplicates on <see cref="Customer.IdentificationNumber"/> only; a blank number never matches another, so most legacy rows import as new until a fuzzy check lands (#5).</remarks>
+/// <remarks>De-duplicates on <see cref="Customer.IdentificationNumber"/>; a blank number falls back to the normalized full name (<see cref="NameNormalizer"/>), so most legacy rows still get a duplicate check.</remarks>
 internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider customerServiceProvider) : IImportTargetHandler
 {
 	private readonly ICustomerServiceProvider _customerServiceProvider = customerServiceProvider;
@@ -38,13 +38,35 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 		return (sheetName, [.. items.Select(item => (item.Row, (object)item.Item))], errors);
 	}
 
+	/// <remarks>Two independent keys: non-blank <see cref="Customer.IdentificationNumber"/> (as before), and the normalized full name (<see cref="NameNormalizer"/>) for everything else - checked against every existing customer's name, with or without an identification number, since that's the case a blank-number row actually needs catching.</remarks>
 	public async Task<DuplicateFilterResult<object>> SplitDuplicatesAsync(IReadOnlyList<object> candidates, CancellationToken cancellationToken = default)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var existing = await _customerServiceProvider.GetCustomersAsync(cancellationToken) ?? [];
-		var split = DuplicateFilter.Split(candidates.Cast<Customer>(), existing, DuplicateKey, StringComparer.OrdinalIgnoreCase);
-		return new([.. split.Unique.Cast<object>()], [.. split.Duplicates.Cast<object>()]);
+		var takenIds = new HashSet<string>(
+			existing.Select(customer => customer.IdentificationNumber).Where(id => !string.IsNullOrWhiteSpace(id)),
+			StringComparer.OrdinalIgnoreCase);
+		var takenNames = new HashSet<string>(
+			existing.Select(FullNameKey).Where(name => name.Length > 0),
+			StringComparer.Ordinal);
+
+		List<Customer> unique = [];
+		List<Customer> duplicates = [];
+		foreach (var customer in candidates.Cast<Customer>())
+		{
+			if (!string.IsNullOrWhiteSpace(customer.IdentificationNumber))
+			{
+				(takenIds.Add(customer.IdentificationNumber) ? unique : duplicates).Add(customer);
+				continue;
+			}
+
+			var nameKey = FullNameKey(customer);
+			var isDuplicate = nameKey.Length > 0 && !takenNames.Add(nameKey);
+			(isDuplicate ? duplicates : unique).Add(customer);
+		}
+
+		return new([.. unique.Cast<object>()], [.. duplicates.Cast<object>()]);
 	}
 
 	public async Task<IReadOnlyList<string>> CommitAsync(IReadOnlyList<object> candidates, CancellationToken cancellationToken = default)
@@ -78,6 +100,5 @@ internal sealed class CustomerImportTargetHandler(ICustomerServiceProvider custo
 
 	public object DeserializeCandidate(string json) => JsonSerializer.Deserialize<Customer>(json)!;
 
-	private static string DuplicateKey(Customer customer) =>
-		string.IsNullOrWhiteSpace(customer.IdentificationNumber) ? Guid.NewGuid().ToString() : customer.IdentificationNumber;
+	private static string FullNameKey(Customer customer) => NameNormalizer.Normalize($"{customer.Name} {customer.Lastname}");
 }

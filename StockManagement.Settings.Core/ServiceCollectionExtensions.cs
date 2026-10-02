@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
 	/// </summary>
 	public static IServiceCollection AddSettingsCore(this IServiceCollection services)
 	{
-		services.AddSingleton<ISettingsService, SettingsService>();
+		services.AddScoped<ISettingsService, SettingsService>();
 		return services;
 	}
 }
