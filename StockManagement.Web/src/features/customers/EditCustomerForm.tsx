@@ -25,7 +25,7 @@ export function EditCustomerForm({ customer, onSaved, onCancel }: { customer: Cu
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="panel">
+		<form onSubmit={onSubmit}>
 			<div className="form-grid">
 				{fields.map(field => (
 					<label key={field}>

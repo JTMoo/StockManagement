@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api, type StockItem } from "../../api";
+import { Dialog } from "../../Dialog";
 import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
@@ -15,10 +16,29 @@ export function StockItemList()
 	const { data: stockItems = [], setData, failure } = useLoad(api.listStockItems);
 	const [search, setSearch] = useState("");
 	const [editing, setEditing] = useState<StockItem>();
+	const [formOpen, setFormOpen] = useState(false);
 	const [checking, setChecking] = useState<StockItem>();
 	const [showImport, setShowImport] = useState(false);
 	const [showOpeningStock, setShowOpeningStock] = useState(false);
 	const [belowMinimumOnly, setBelowMinimumOnly] = useState(false);
+
+	function onAddNew()
+	{
+		setEditing(undefined);
+		setFormOpen(true);
+	}
+
+	function onEdit(item: StockItem)
+	{
+		setEditing(item);
+		setFormOpen(true);
+	}
+
+	function onFormCancel()
+	{
+		setFormOpen(false);
+		setEditing(undefined);
+	}
 
 	async function onImported()
 	{
@@ -35,6 +55,7 @@ export function StockItemList()
 	{
 		setData(editing ? stockItems.map(item => item.id === editing.id ? stockItem : item) : [...stockItems, stockItem]);
 		setEditing(undefined);
+		setFormOpen(false);
 	}
 
 	function onChecked(stockItem: StockItem)
@@ -50,7 +71,7 @@ export function StockItemList()
 		if (!result.ok) return;
 
 		setData(stockItems.filter(item => item.id !== stockItem.id));
-		if (editing?.id === stockItem.id) setEditing(undefined);
+		if (editing?.id === stockItem.id) onFormCancel();
 		if (checking?.id === stockItem.id) setChecking(undefined);
 	}
 
@@ -60,8 +81,11 @@ export function StockItemList()
 			<button type="button" className="quiet" aria-pressed={belowMinimumOnly} onClick={() => setBelowMinimumOnly(!belowMinimumOnly)}>{t("belowMinimum")}</button>
 			<button type="button" className="quiet" aria-pressed={showImport} onClick={() => setShowImport(!showImport)}>{t("excelImport")}</button>
 			<button type="button" className="quiet" aria-pressed={showOpeningStock} onClick={() => setShowOpeningStock(!showOpeningStock)}>{t("openingStock")}</button>
+			<button type="button" className="primary" onClick={onAddNew}>+ {t("addNew")}</button>
 		</>}>
-			<StockItemForm editing={editing} onSaved={onSaved} onCancel={() => setEditing(undefined)} />
+			<Dialog open={formOpen} onClose={onFormCancel} title={t(editing ? "edit" : "addNew")}>
+				<StockItemForm editing={editing} onSaved={onSaved} onCancel={onFormCancel} />
+			</Dialog>
 			{checking && <StockCheckForm stockItem={checking} onChecked={onChecked} onCancel={() => setChecking(undefined)} />}
 			{showImport && <StockItemImport onImported={onImported} />}
 			{showOpeningStock && <OpeningStockImport onImported={onImported} />}
@@ -77,7 +101,7 @@ export function StockItemList()
 							<td className="number">{formatNumber(item.amount)}</td><td className="number">{formatNumber(item.price)}</td>
 							<td>{item.manufacturer}</td><td>{item.location}</td><td>{item.supplierName ?? ""}</td>
 							<td className="row-actions">
-								<button type="button" className="quiet" onClick={() => setEditing(item)}>{t("edit")}</button>
+								<button type="button" className="quiet" onClick={() => onEdit(item)}>{t("edit")}</button>
 								<button type="button" className="quiet" onClick={() => setChecking(item)}>{t("checkStock")}</button>
 								<button type="button" className="quiet" onClick={() => onDelete(item)}>{t("deleteItem")}</button>
 							</td>

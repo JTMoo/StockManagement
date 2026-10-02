@@ -67,12 +67,14 @@ describe("StockItemList", () =>
 		renderEnglish(<StockItemList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Code"), "A1");
 		await userEvent.type(screen.getByLabelText("Name"), "Screw");
 		await userEvent.click(screen.getByRole("button", { name: "Create Stock item" }));
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Screw" })).toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 		expect(sentBody(fetchMock, "POST /api/stock-items")).toEqual({ id: "", code: "A1", name: "Screw", description: "", location: "", amount: 0, price: 0, manufacturer: "", factor: 0, purchasePrice: 0, purchaseExchangeRate: 0, additionalPurchaseCost: 0, minimumStock: 0 });
 	});
 
@@ -83,12 +85,27 @@ describe("StockItemList", () =>
 		renderEnglish(<StockItemList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Code"), "A1");
 		await userEvent.type(screen.getByLabelText("Name"), "Screw");
 		await userEvent.click(screen.getByRole("button", { name: "Create Stock item" }));
 
 		// Assert
 		expect(await screen.findByRole("alert")).toHaveTextContent("A stock item with this code already exists: A1");
+	});
+
+	it("AddNew_Click_OpensAndClosesDialog", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } } });
+		renderEnglish(<StockItemList />);
+
+		// Act + Assert
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
+		expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("Edit_Valid_UpdatesRow", async () =>
@@ -107,7 +124,7 @@ describe("StockItemList", () =>
 		// Assert
 		expect(await screen.findByRole("cell", { name: "25" })).toBeInTheDocument();
 		expect(sentBody(fetchMock, "PUT /api/stock-items/1")).toMatchObject({ id: "1", code: "A1", amount: 25 });
-		expect(screen.getByLabelText("Code")).toHaveValue("");
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("Delete_Confirmed_RemovesRow", async () =>
@@ -216,7 +233,7 @@ describe("StockItemList", () =>
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Check In/Out" }));
-		const amountField = screen.getAllByLabelText("Amount")[1];
+		const amountField = screen.getByLabelText("Amount");
 		await userEvent.clear(amountField);
 		await userEvent.type(amountField, "5");
 		await userEvent.type(screen.getByLabelText("Reason"), "Delivery");

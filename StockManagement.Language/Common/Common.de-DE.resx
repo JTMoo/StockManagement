@@ -120,6 +120,9 @@
   <data name="additionalInformation" xml:space="preserve">
     <value>Zusätzliche Informationen</value>
   </data>
+  <data name="addNew" xml:space="preserve">
+    <value>Neu</value>
+  </data>
   <data name="back" xml:space="preserve">
     <value>Zurück zur Liste</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="changeInfo" xml:space="preserve">
     <value>Artikelinfos ändern</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Schließen</value>
   </data>
   <data name="confirm" xml:space="preserve">
     <value>Bestätigen</value>
