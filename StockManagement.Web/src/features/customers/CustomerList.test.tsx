@@ -13,14 +13,15 @@ describe("CustomerList", () =>
 		renderEnglish(<CustomerList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Name"), "Ana");
 		await userEvent.type(screen.getByLabelText("Lastname"), "Gómez");
 		await userEvent.click(screen.getByRole("button", { name: "Create Customer" }));
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Gómez" })).toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 		expect(sentBody(fetchMock, "POST /api/customers")).toEqual({ name: "Ana", lastname: "Gómez" });
-		expect(screen.getByLabelText("Name")).toHaveValue("");
 	});
 
 	it("Create_Rejected_ShowsErrorAndKeepsInput", async () =>
@@ -30,12 +31,28 @@ describe("CustomerList", () =>
 		renderEnglish(<CustomerList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Name"), " ");
 		await userEvent.click(screen.getByRole("button", { name: "Create Customer" }));
 
 		// Assert
 		expect(await screen.findByRole("alert")).toHaveTextContent("Please check your input.");
 		expect(screen.getByLabelText("Name")).toHaveValue(" ");
+	});
+
+	it("AddNew_Cancel_ClosesDialogWithoutSaving", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } } });
+		renderEnglish(<CustomerList />);
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
+		expect(screen.getByRole("dialog")).toBeInTheDocument();
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+		// Assert
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("Edit_Valid_PutsAndUpdatesRow", async () =>
@@ -54,10 +71,10 @@ describe("CustomerList", () =>
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Silva" })).toBeInTheDocument();
 		expect(sentBody(fetchMock, "PUT /api/customers/1001")).toEqual(updated);
-		expect(screen.queryByRole("button", { name: "Save Customer" })).not.toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
-	it("Edit_Cancelled_ShowsCreateFormAgainWithoutSaving", async () =>
+	it("Edit_Cancelled_ClosesDialogWithoutSaving", async () =>
 	{
 		// Arrange
 		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } } });
@@ -68,7 +85,7 @@ describe("CustomerList", () =>
 		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
 		// Assert
-		expect(screen.getByRole("button", { name: "Create Customer" })).toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("Edit_Rejected_ShowsError", async () =>

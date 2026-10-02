@@ -19,6 +19,7 @@ test("full sale: create customer, sell, view invoice, stock goes down", async ({
 	await shot(page, "1-stock-items");
 
 	await page.getByRole("button", { name: "Clients" }).click();
+	await page.getByRole("button", { name: "+ Add New" }).click();
 	await page.getByLabel("Name", { exact: true }).fill("Ana");
 	await page.getByLabel("Lastname").fill("Gómez");
 	await page.getByRole("button", { name: "Create customer" }).click();

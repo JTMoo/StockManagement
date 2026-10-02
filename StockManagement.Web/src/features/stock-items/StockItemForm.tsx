@@ -32,7 +32,7 @@ export function StockItemForm({ editing, onSaved, onCancel }: { editing?: StockI
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="panel">
+		<form onSubmit={onSubmit}>
 			<div className="form-grid">
 				{fields.map(field => (
 					<label key={field}>
@@ -60,7 +60,7 @@ export function StockItemForm({ editing, onSaved, onCancel }: { editing?: StockI
 			<FailureMessage failure={failure} />
 			<div className="form-actions">
 				<button type="submit" disabled={busy}>{t(editing ? "save" : "createItem")}</button>
-				{editing && <button type="button" onClick={onCancel}>{t("cancel")}</button>}
+				<button type="button" onClick={onCancel} disabled={busy}>{t("cancel")}</button>
 			</div>
 		</form>
 	);
