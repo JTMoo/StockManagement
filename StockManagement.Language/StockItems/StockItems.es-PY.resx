@@ -180,6 +180,9 @@
   <data name="minimumStock" xml:space="preserve">
     <value>Stock mínimo</value>
   </data>
+  <data name="vatRatePercent" xml:space="preserve">
+    <value>Tasa de IVA (%)</value>
+  </data>
   <data name="belowMinimum" xml:space="preserve">
     <value>Por debajo del mínimo</value>
   </data>

@@ -26,7 +26,8 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 
 		List<ShoppingCartItem> cartItems = [.. items ?? []];
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
-		var total = this.CalculateTotal(cartItems, companySettings.CurrencyDecimalDigits);
+		var lines = cartItems.Select(ToSaleLine).ToList();
+		var total = InvoiceCalculator.CalculateTotal(lines, companySettings.CurrencyDecimalDigits);
 
 		return new Invoice()
 		{
@@ -35,7 +36,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 			ExpirationDate = InvoiceCalculator.CalculateExpirationDate(date, companySettings.PaymentTermInDays),
 			Items = cartItems,
 			Total = total,
-			Tax = InvoiceCalculator.CalculateTax(total, companySettings.VatRatePercent, companySettings.CurrencyDecimalDigits)
+			Tax = InvoiceCalculator.CalculateTax(lines, companySettings.CurrencyDecimalDigits)
 		};
 	}
 
@@ -106,6 +107,6 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 
 	private static SaleLine ToSaleLine(ShoppingCartItem item)
 	{
-		return new SaleLine(item.StockItem.Code, item.StockItem.Name, item.Amount, item.StockItem.Price);
+		return new SaleLine(item.StockItem.Code, item.StockItem.Name, item.Amount, item.StockItem.Price, item.StockItem.VatRatePercent);
 	}
 }

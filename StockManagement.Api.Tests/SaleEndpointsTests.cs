@@ -25,7 +25,7 @@ public sealed class SaleEndpointsTests
 		_factory = new();
 		_client = await _factory.CreateAuthenticatedClientAsync();
 
-		await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10, price: 5000));
+		await _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>().AddStockItemAsync(new StockItem("Screw", code: "A1", amount: 10, price: 5000) { VatRatePercent = 10m });
 		await _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>().AddCustomerAsync(new Customer() { CustomerId = 1001, Name = "Ana" });
 	}
 
