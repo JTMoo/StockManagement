@@ -319,5 +319,14 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("permissionInvalid", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string user {
+            get {
+                return ResourceManager.GetString("user", resourceCulture);
+            }
+        }
     }
 }

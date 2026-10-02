@@ -97,24 +97,6 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Checkin.
-        /// </summary>
-        public static string checkin {
-            get {
-                return ResourceManager.GetString("checkin", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Checkout.
-        /// </summary>
-        public static string checkout {
-            get {
-                return ResourceManager.GetString("checkout", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         public static string code {
@@ -523,6 +505,33 @@ namespace StockManagement.Language {
         public static string vatRateNegative {
             get {
                 return ResourceManager.GetString("vatRateNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Out of stock.
+        /// </summary>
+        public static string statusOutOfStock {
+            get {
+                return ResourceManager.GetString("statusOutOfStock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Low stock.
+        /// </summary>
+        public static string statusLowStock {
+            get {
+                return ResourceManager.GetString("statusLowStock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to In stock.
+        /// </summary>
+        public static string statusInStock {
+            get {
+                return ResourceManager.GetString("statusInStock", resourceCulture);
             }
         }
     }

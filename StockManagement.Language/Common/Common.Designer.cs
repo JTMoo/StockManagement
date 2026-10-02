@@ -382,5 +382,23 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("amountNotPositive", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string status {
+            get {
+                return ResourceManager.GetString("status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} saved..
+        /// </summary>
+        public static string savedToast {
+            get {
+                return ResourceManager.GetString("savedToast", resourceCulture);
+            }
+        }
     }
 }

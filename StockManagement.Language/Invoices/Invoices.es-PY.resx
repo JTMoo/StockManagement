@@ -123,6 +123,9 @@
   <data name="cash" xml:space="preserve">
     <value>Contado</value>
   </data>
+  <data name="cdc" xml:space="preserve">
+    <value>CDC</value>
+  </data>
   <data name="cancelInvoice" xml:space="preserve">
     <value>Anular factura</value>
   </data>
@@ -218,5 +221,8 @@
   </data>
   <data name="invoiceSavedToast" xml:space="preserve">
     <value>Factura {0} guardada.</value>
+  </data>
+  <data name="transmissionStatus" xml:space="preserve">
+    <value>Estado SIFEN</value>
   </data>
 </root>
