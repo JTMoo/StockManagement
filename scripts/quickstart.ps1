@@ -33,10 +33,12 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Restoring .NET solution..."
 dotnet restore StockManagement.sln
+if ($LASTEXITCODE -ne 0) { exit 1 }
 
 Write-Host "Installing web app dependencies..."
 Push-Location StockManagement.Web
 npm ci
+if ($LASTEXITCODE -ne 0) { Pop-Location; exit 1 }
 Pop-Location
 
 Write-Host ""
