@@ -198,4 +198,13 @@
   <data name="total" xml:space="preserve">
     <value>Total</value>
   </data>
+  <data name="saleConditionInvalid" xml:space="preserve">
+    <value>Die Verkaufsbedingung ist ungültig.</value>
+  </data>
+  <data name="saleItemsRequired" xml:space="preserve">
+    <value>Mindestens ein Artikel ist erforderlich.</value>
+  </data>
+  <data name="paymentMethodInvalid" xml:space="preserve">
+    <value>Die Zahlungsmethode ist ungültig.</value>
+  </data>
 </root>

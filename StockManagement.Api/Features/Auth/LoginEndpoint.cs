@@ -17,8 +17,8 @@ public class LoginValidator : Validator<LoginRequest>
 {
 	public LoginValidator()
 	{
-		this.RuleFor(request => request.Username).NotEmpty();
-		this.RuleFor(request => request.Password).NotEmpty();
+		this.RuleFor(request => request.Username).NotEmpty().WithMessage("usernameRequired");
+		this.RuleFor(request => request.Password).NotEmpty().WithMessage("passwordRequired");
 	}
 }
 

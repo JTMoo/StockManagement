@@ -165,6 +165,21 @@
   <data name="currencyDecimalDigits" xml:space="preserve">
     <value>Currency decimal digits</value>
   </data>
+  <data name="vatRateOutOfRange" xml:space="preserve">
+    <value>VAT rate must be between 0 and 100.</value>
+  </data>
+  <data name="paymentTermNegative" xml:space="preserve">
+    <value>Payment term cannot be negative.</value>
+  </data>
+  <data name="firstInvoiceNumberNotPositive" xml:space="preserve">
+    <value>First invoice number must be greater than zero.</value>
+  </data>
+  <data name="firstCustomerIdNotPositive" xml:space="preserve">
+    <value>First customer id must be greater than zero.</value>
+  </data>
+  <data name="currencyDecimalDigitsOutOfRange" xml:space="preserve">
+    <value>Currency decimal digits must be between 0 and 4.</value>
+  </data>
   <data name="ruc" xml:space="preserve">
     <value>RUC</value>
   </data>
@@ -182,5 +197,17 @@
   </data>
   <data name="pointOfSaleCode" xml:space="preserve">
     <value>Point of sale code</value>
+  </data>
+  <data name="rucInvalid" xml:space="preserve">
+    <value>RUC check digit is invalid.</value>
+  </data>
+  <data name="establishmentCodeInvalid" xml:space="preserve">
+    <value>Establishment code must be 3 digits.</value>
+  </data>
+  <data name="pointOfSaleCodeInvalid" xml:space="preserve">
+    <value>Point of sale code must be 3 digits.</value>
+  </data>
+  <data name="timbradoDateRangeInvalid" xml:space="preserve">
+    <value>Timbrado valid-to date cannot be before valid-from.</value>
   </data>
 </root>

@@ -8,6 +8,6 @@ public class UpdateCustomerValidator : Validator<UpdateCustomerRequest>
 {
 	public UpdateCustomerValidator()
 	{
-		this.RuleFor(request => request.Name).NotEmpty();
+		this.RuleFor(request => request.Name).NotEmpty().WithMessage("nameRequired");
 	}
 }

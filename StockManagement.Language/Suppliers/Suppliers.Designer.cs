@@ -158,5 +158,13 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("supplierDeletionPrompt", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Lead time cannot be negative...
+        /// </summary>
+        public static string leadTimeNegative {
+            get {
+                return ResourceManager.GetString("leadTimeNegative", resourceCulture);
+            }
+        }
     }
 }
