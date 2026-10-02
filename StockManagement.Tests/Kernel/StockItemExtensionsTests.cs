@@ -76,4 +76,51 @@ public sealed class StockItemExtensionsTests
 		// Assert
 		Assert.AreEqual(1.01m, result);
 	}
+
+	[TestMethod]
+	public void TryAllocateLandedCost_SplitsProportionalToPurchaseValue()
+	{
+		// Arrange
+		var cheap = new StockItem("cheap") { Id = "a", PurchasePrice = 10m, PurchaseExchangeRate = 1m, Amount = 10 }; // value 100
+		var expensive = new StockItem("expensive") { Id = "b", PurchasePrice = 10m, PurchaseExchangeRate = 1m, Amount = 30 }; // value 300
+
+		// Act
+		var ok = StockItemExtensions.TryAllocateLandedCost([cheap, expensive], totalLandedCost: 400m, currencyDecimalDigits: 0, out var allocations);
+
+		// Assert
+		Assert.IsTrue(ok);
+		Assert.AreEqual(100m, allocations.Single(a => a.StockItemId == "a").AllocatedCost);
+		Assert.AreEqual(10m, allocations.Single(a => a.StockItemId == "a").AdditionalPurchaseCostPerUnit); // 100 / 10 units
+		Assert.AreEqual(300m, allocations.Single(a => a.StockItemId == "b").AllocatedCost);
+		Assert.AreEqual(10m, allocations.Single(a => a.StockItemId == "b").AdditionalPurchaseCostPerUnit); // 300 / 30 units
+	}
+
+	[TestMethod]
+	public void TryAllocateLandedCost_ZeroAmountItem_GetsZeroPerUnitCost()
+	{
+		// Arrange
+		var item = new StockItem("a") { Id = "a", PurchasePrice = 10m, PurchaseExchangeRate = 1m, Amount = 0 };
+		var other = new StockItem("b") { Id = "b", PurchasePrice = 10m, PurchaseExchangeRate = 1m, Amount = 10 };
+
+		// Act
+		var ok = StockItemExtensions.TryAllocateLandedCost([item, other], totalLandedCost: 100m, currencyDecimalDigits: 0, out var allocations);
+
+		// Assert
+		Assert.IsTrue(ok);
+		Assert.AreEqual(0m, allocations.Single(a => a.StockItemId == "a").AdditionalPurchaseCostPerUnit);
+	}
+
+	[TestMethod]
+	public void TryAllocateLandedCost_NoPurchaseValue_ReturnsFalse()
+	{
+		// Arrange
+		var items = new List<StockItem> { new("a") { Id = "a", PurchasePrice = 0m, Amount = 10 } };
+
+		// Act
+		var ok = StockItemExtensions.TryAllocateLandedCost(items, totalLandedCost: 100m, currencyDecimalDigits: 0, out var allocations);
+
+		// Assert
+		Assert.IsFalse(ok);
+		Assert.AreEqual(0, allocations.Count);
+	}
 }
