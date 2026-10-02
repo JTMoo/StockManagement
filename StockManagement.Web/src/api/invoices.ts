@@ -3,7 +3,9 @@ import type { SaleCondition } from "./sales";
 
 export type InvoiceLine = { code: string; name: string; amount: number; unitPrice: number };
 
-export type Invoice = { number: string; date: string; expirationDate: string; total: number; tax: number; saleCondition: SaleCondition; customerId: number; customerName: string; isCancelled: boolean; lines: InvoiceLine[] };
+export type InvoiceStatus = "Open" | "PartiallyPaid" | "Paid" | "Overdue" | "Cancelled";
+
+export type Invoice = { number: string; date: string; expirationDate: string; total: number; tax: number; amountPaid: number; amountDue: number; status: InvoiceStatus; saleCondition: SaleCondition; customerId: number; customerName: string; isCancelled: boolean; lines: InvoiceLine[] };
 
 export type CreditNote = { number: number; date: string; reason: string; total: number; tax: number; invoiceNumber: string };
 

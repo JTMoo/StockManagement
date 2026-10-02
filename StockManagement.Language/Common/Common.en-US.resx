@@ -225,4 +225,10 @@
   <data name="amountNotPositive" xml:space="preserve">
     <value>Amount must be greater than zero.</value>
   </data>
+  <data name="status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="savedToast" xml:space="preserve">
+    <value>{0} saved.</value>
+  </data>
 </root>

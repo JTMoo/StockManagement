@@ -17,6 +17,7 @@ describe("InvoiceView", () =>
 		expect(screen.getByTestId("invoice-total")).toHaveTextContent("10,000");
 		expect(screen.getByRole("heading", { name: "Invoice 001-001-0000007" })).toBeInTheDocument();
 		expect(screen.getByText("Cash")).toBeInTheDocument();
+		expect(screen.getByText("Paid")).toBeInTheDocument();
 	});
 
 	it("Search_UnknownNumber_ShowsInvoiceNotFound", async () =>

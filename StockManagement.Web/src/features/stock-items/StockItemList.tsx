@@ -3,8 +3,10 @@ import { api, type StockItem } from "../../api";
 import { Dialog } from "../../Dialog";
 import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
+import { StatusBadge, type StatusTone } from "../../StatusBadge";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { useToast } from "../../Toast";
 import { OpeningStockImport } from "./OpeningStockImport";
 import { StockCheckForm } from "./StockCheckForm";
 import { StockItemForm } from "./StockItemForm";
@@ -13,6 +15,7 @@ import { StockItemImport } from "./StockItemImport";
 export function StockItemList()
 {
 	const { t, formatNumber } = useI18n();
+	const { show: showToast } = useToast();
 	const { data: stockItems = [], setData, failure } = useLoad(api.listStockItems);
 	const [search, setSearch] = useState("");
 	const [editing, setEditing] = useState<StockItem>();
@@ -56,6 +59,7 @@ export function StockItemList()
 		setData(editing ? stockItems.map(item => item.id === editing.id ? stockItem : item) : [...stockItems, stockItem]);
 		setEditing(undefined);
 		setFormOpen(false);
+		showToast(t("savedToast").replace("{0}", t("stockItem")));
 	}
 
 	function onChecked(stockItem: StockItem)
@@ -92,21 +96,29 @@ export function StockItemList()
 			<FailureMessage failure={failure} />
 			<table>
 				<thead>
-					<tr><th>{t("name")}</th><th>{t("code")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th>{t("manufacturer")}</th><th>{t("location")}</th><th>{t("supplier")}</th><th></th></tr>
+					<tr><th>{t("name")}</th><th>{t("code")}</th><th className="number">{t("quantity")}</th><th className="number">{t("price")}</th><th>{t("manufacturer")}</th><th>{t("location")}</th><th>{t("supplier")}</th><th>{t("status")}</th><th></th></tr>
 				</thead>
 				<tbody>
-					{visible.map(item => (
-						<tr key={item.code} className={item.minimumStock > 0 && item.amount < item.minimumStock ? "below-minimum" : item.amount === 0 ? "sold-out" : undefined}>
+					{visible.map(item =>
+					{
+						const belowMinimum = item.minimumStock > 0 && item.amount < item.minimumStock;
+						const status: { tone: StatusTone; label: string } = item.amount === 0
+							? { tone: "danger", label: t("statusOutOfStock") }
+							: belowMinimum ? { tone: "warning", label: t("statusLowStock") } : { tone: "success", label: t("statusInStock") };
+						return (
+						<tr key={item.code} className={belowMinimum ? "below-minimum" : item.amount === 0 ? "sold-out" : undefined}>
 							<td>{item.name}</td><td>{item.code}</td>
 							<td className="number">{formatNumber(item.amount)}</td><td className="number">{formatNumber(item.price)}</td>
 							<td>{item.manufacturer}</td><td>{item.location}</td><td>{item.supplierName ?? ""}</td>
+							<td><StatusBadge tone={status.tone}>{status.label}</StatusBadge></td>
 							<td className="row-actions">
 								<button type="button" className="quiet" onClick={() => onEdit(item)}>{t("edit")}</button>
 								<button type="button" className="quiet" onClick={() => setChecking(item)}>{t("checkStock")}</button>
 								<button type="button" className="quiet" onClick={() => onDelete(item)}>{t("deleteItem")}</button>
 							</td>
 						</tr>
-					))}
+						);
+					})}
 				</tbody>
 			</table>
 		</Page>

@@ -159,6 +159,20 @@ describe("StockItemList", () =>
 		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
 	});
 
+	it("Load_OutOfStockAndBelowMinimum_ShowStatusBadges", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [nut, { ...screw, minimumStock: 20 }], nextCursor: null } } });
+
+		// Act
+		renderEnglish(<StockItemList />);
+		await screen.findByRole("cell", { name: "Screw" });
+
+		// Assert
+		expect(screen.getByText("Out of stock")).toBeInTheDocument();
+		expect(screen.getByText("Low stock")).toBeInTheDocument();
+	});
+
 	it("ToggleBelowMinimum_Click_FiltersToItemsBelowTheirMinimum", async () =>
 	{
 		// Arrange
