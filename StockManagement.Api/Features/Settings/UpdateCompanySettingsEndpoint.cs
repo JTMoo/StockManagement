@@ -15,15 +15,15 @@ public class UpdateCompanySettingsValidator : Validator<UpdateCompanySettingsReq
 {
 	public UpdateCompanySettingsValidator()
 	{
-		this.RuleFor(request => request.VatRatePercent).InclusiveBetween(0, 100);
-		this.RuleFor(request => request.PaymentTermInDays).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.FirstInvoiceNumber).GreaterThan(0);
-		this.RuleFor(request => request.FirstCustomerId).GreaterThan(0);
-		this.RuleFor(request => request.CurrencyDecimalDigits).InclusiveBetween(0, 4);
-		this.RuleFor(request => request.Ruc).Must(ruc => string.IsNullOrEmpty(ruc) || RucValidator.TryNormalize(ruc, out _)).WithMessage("Invalid RUC check digit.");
-		this.RuleFor(request => request.EstablishmentCode).Matches(@"^\d{3}$");
-		this.RuleFor(request => request.PointOfSaleCode).Matches(@"^\d{3}$");
-		this.RuleFor(request => request.TimbradoValidTo).GreaterThanOrEqualTo(request => request.TimbradoValidFrom).When(request => request.TimbradoValidFrom is not null && request.TimbradoValidTo is not null);
+		this.RuleFor(request => request.VatRatePercent).InclusiveBetween(0, 100).WithMessage("vatRateOutOfRange");
+		this.RuleFor(request => request.PaymentTermInDays).GreaterThanOrEqualTo(0).WithMessage("paymentTermNegative");
+		this.RuleFor(request => request.FirstInvoiceNumber).GreaterThan(0).WithMessage("firstInvoiceNumberNotPositive");
+		this.RuleFor(request => request.FirstCustomerId).GreaterThan(0).WithMessage("firstCustomerIdNotPositive");
+		this.RuleFor(request => request.CurrencyDecimalDigits).InclusiveBetween(0, 4).WithMessage("currencyDecimalDigitsOutOfRange");
+		this.RuleFor(request => request.Ruc).Must(ruc => string.IsNullOrEmpty(ruc) || RucValidator.TryNormalize(ruc, out _)).WithMessage("rucInvalid");
+		this.RuleFor(request => request.EstablishmentCode).Matches(@"^\d{3}$").WithMessage("establishmentCodeInvalid");
+		this.RuleFor(request => request.PointOfSaleCode).Matches(@"^\d{3}$").WithMessage("pointOfSaleCodeInvalid");
+		this.RuleFor(request => request.TimbradoValidTo).GreaterThanOrEqualTo(request => request.TimbradoValidFrom).When(request => request.TimbradoValidFrom is not null && request.TimbradoValidTo is not null).WithMessage("timbradoDateRangeInvalid");
 	}
 }
 

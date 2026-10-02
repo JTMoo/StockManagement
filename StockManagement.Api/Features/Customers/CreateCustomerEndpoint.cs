@@ -17,7 +17,7 @@ public class CreateCustomerValidator : Validator<CreateCustomerRequest>
 {
 	public CreateCustomerValidator()
 	{
-		this.RuleFor(request => request.Name).NotEmpty();
+		this.RuleFor(request => request.Name).NotEmpty().WithMessage("nameRequired");
 	}
 }
 

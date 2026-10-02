@@ -293,5 +293,31 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("permUsersManage", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be at least 8 characters...
+        /// </summary>
+        public static string passwordTooShort {
+            get {
+                return ResourceManager.GetString("passwordTooShort", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Role is invalid...
+        /// </summary>
+        public static string roleInvalid {
+            get {
+                return ResourceManager.GetString("roleInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Permission is invalid...
+        /// </summary>
+        public static string permissionInvalid {
+            get {
+                return ResourceManager.GetString("permissionInvalid", resourceCulture);
+            }
+        }
     }
 }

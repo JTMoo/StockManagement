@@ -68,5 +68,6 @@ public sealed class LoginEndpointTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "passwordRequired");
 	}
 }

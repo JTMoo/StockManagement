@@ -14,8 +14,8 @@ public class CheckOutStockItemValidator : Validator<CheckOutStockItemRequest>
 {
 	public CheckOutStockItemValidator()
 	{
-		this.RuleFor(request => request.Amount).GreaterThan(0);
-		this.RuleFor(request => request.Reason).NotEmpty();
+		this.RuleFor(request => request.Amount).GreaterThan(0).WithMessage("amountNotPositive");
+		this.RuleFor(request => request.Reason).NotEmpty().WithMessage("reasonRequired");
 	}
 }
 

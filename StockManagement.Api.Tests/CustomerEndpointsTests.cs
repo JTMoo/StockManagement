@@ -63,6 +63,7 @@ public sealed class CustomerEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "nameRequired");
 	}
 
 	[TestMethod]
@@ -188,5 +189,6 @@ public sealed class CustomerEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "nameRequired");
 	}
 }
