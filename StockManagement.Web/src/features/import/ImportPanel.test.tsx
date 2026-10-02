@@ -69,6 +69,7 @@ describe("ImportPanel", () =>
 		// Assert
 		expect(await screen.findByRole("cell", { name: "3" })).toBeInTheDocument();
 		expect(screen.getByRole("cell", { name: "Bo" })).toBeInTheDocument();
+		expect(screen.getByText("Duplicate")).toBeInTheDocument();
 		expect(screen.getAllByText("1")).toHaveLength(2);
 		const [, init] = fetchMock.mock.calls.find(([url]) => url === "/api/import/batches")!;
 		const body = init!.body as FormData;

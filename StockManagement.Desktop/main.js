@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog } = require("electron");
 const { spawn } = require("node:child_process");
 const path = require("node:path");
 const http = require("node:http");
@@ -7,6 +7,7 @@ const url = process.env.STOCKMANAGEMENT_URL || "http://localhost:5080";
 const isPackaged = app.isPackaged;
 
 let apiProcess = null;
+let apiSpawnError = null;
 
 function apiBinaryPath() {
 	const exe = process.platform === "win32" ? "StockManagement.Api.exe" : "StockManagement.Api";
@@ -18,7 +19,10 @@ function startApi() {
 		cwd: path.dirname(apiBinaryPath()),
 		stdio: "ignore",
 	});
-	apiProcess.on("error", (error) => console.error("Failed to start bundled API:", error));
+	apiProcess.on("error", (error) => {
+		apiSpawnError = error;
+		console.error("Failed to start bundled API:", error);
+	});
 }
 
 function waitForApi(timeoutMs = 30000, intervalMs = 300) {
@@ -28,7 +32,15 @@ function waitForApi(timeoutMs = 30000, intervalMs = 300) {
 			http
 				.get(`${url}/health`, (response) => {
 					response.resume();
-					resolve();
+					if (response.statusCode >= 200 && response.statusCode < 300) {
+						resolve();
+						return;
+					}
+					if (Date.now() > deadline) {
+						reject(new Error(`Bundled API returned status ${response.statusCode}`));
+						return;
+					}
+					setTimeout(attempt, intervalMs);
 				})
 				.on("error", () => {
 					if (Date.now() > deadline) {
@@ -54,6 +66,14 @@ app.whenReady().then(async () => {
 			await waitForApi();
 		} catch (error) {
 			console.error(error);
+			dialog.showErrorBox(
+				"Kora failed to start",
+				apiSpawnError
+					? `The bundled API could not be started: ${apiSpawnError.message}`
+					: `The bundled API did not become ready in time: ${error.message}`,
+			);
+			app.quit();
+			return;
 		}
 	}
 	createWindow();

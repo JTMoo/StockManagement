@@ -267,4 +267,13 @@
   <data name="vatRateNegative" xml:space="preserve">
     <value>VAT rate cannot be negative.</value>
   </data>
+  <data name="statusOutOfStock" xml:space="preserve">
+    <value>Out of stock</value>
+  </data>
+  <data name="statusLowStock" xml:space="preserve">
+    <value>Low stock</value>
+  </data>
+  <data name="statusInStock" xml:space="preserve">
+    <value>In stock</value>
+  </data>
 </root>

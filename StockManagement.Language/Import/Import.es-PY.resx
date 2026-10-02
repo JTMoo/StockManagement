@@ -183,4 +183,13 @@
   <data name="fileRequired" xml:space="preserve">
     <value>Se requiere un archivo.</value>
   </data>
+  <data name="statusImported" xml:space="preserve">
+    <value>Importado</value>
+  </data>
+  <data name="statusDuplicate" xml:space="preserve">
+    <value>Duplicado</value>
+  </data>
+  <data name="statusError" xml:space="preserve">
+    <value>Error</value>
+  </data>
 </root>

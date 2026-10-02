@@ -267,4 +267,13 @@
   <data name="vatRateNegative" xml:space="preserve">
     <value>Der Mehrwertsteuersatz darf nicht negativ sein.</value>
   </data>
+  <data name="statusOutOfStock" xml:space="preserve">
+    <value>Nicht vorrätig</value>
+  </data>
+  <data name="statusLowStock" xml:space="preserve">
+    <value>Fast leer</value>
+  </data>
+  <data name="statusInStock" xml:space="preserve">
+    <value>Auf Lager</value>
+  </data>
 </root>

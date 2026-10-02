@@ -1,7 +1,11 @@
 import { useRef, useState } from "react";
-import { api, type ApiFailure, type DetectedColumns, type ImportBatch, type ImportColumnMapping, type ImportTarget } from "../../api";
+import { api, type ApiFailure, type DetectedColumns, type ImportBatch, type ImportColumnMapping, type ImportRowStatus, type ImportTarget } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
+import { StatusBadge, type StatusTone } from "../../StatusBadge";
 import { useI18n } from "../../i18n";
+
+const rowStatusTone: Record<ImportRowStatus, StatusTone> = { Ready: "success", Duplicate: "warning", Error: "danger" };
+const rowStatusLabelKey = { Ready: "statusImported", Duplicate: "statusDuplicate", Error: "statusError" } as const;
 
 /** Upload → map columns → preview → commit/undo panel shared by every import target (ADR-0018, ADR-0028). */
 export function ImportPanel({ target, onImported }: { target: ImportTarget; onImported?: () => void })
@@ -127,10 +131,14 @@ export function ImportPanel({ target, onImported }: { target: ImportTarget; onIm
 					{batch.status === "Committed" && <button type="button" disabled={busy} onClick={onUndo}>{t("undo")}</button>}
 					{batch.rows.some(row => row.status !== "Ready") && <button type="button" onClick={onDownloadReport}>{t("downloadReport")}</button>}
 					<table>
-						<thead><tr><th>{t("row")}</th><th></th></tr></thead>
+						<thead><tr><th>{t("row")}</th><th>{t("status")}</th><th></th></tr></thead>
 						<tbody>
 							{batch.rows.filter(row => row.status !== "Ready").map(row => (
-								<tr key={row.row}><td>{row.row}</td><td>{row.message ?? rowSummary(row.fields)}</td></tr>
+								<tr key={row.row}>
+									<td>{row.row}</td>
+									<td><StatusBadge tone={rowStatusTone[row.status]}>{t(rowStatusLabelKey[row.status])}</StatusBadge></td>
+									<td>{row.message ?? rowSummary(row.fields)}</td>
+								</tr>
 							))}
 						</tbody>
 					</table>

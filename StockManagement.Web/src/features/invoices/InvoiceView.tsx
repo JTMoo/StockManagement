@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { api, type ApiFailure, type Invoice } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
+import { invoiceStatusBadge } from "./invoiceStatus";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 
@@ -50,7 +51,7 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 					<header>
 						<h3>{t("invoice")} {invoice.number}</h3>
 						<span>{t(invoice.saleCondition === "Cash" ? "cash" : "credit")}</span>
-						{invoice.isCancelled && <span data-testid="invoice-cancelled">{t("cancelled")}</span>}
+						{invoiceStatusBadge(invoice, t)}
 					</header>
 					<dl>
 						<dt>{t("customerName")}</dt><dd>{invoice.customerName} ({invoice.customerId})</dd>
