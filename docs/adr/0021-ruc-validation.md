@@ -1,4 +1,4 @@
-# ADR-0021: RUC validation and duplicate matching
+# ADR-0021: RUC validation and name-based duplicate matching
 
 - Status: Proposed
 - Date: 2026-09-27
@@ -26,4 +26,15 @@
 
 - A RUC with a genuinely wrong check digit is stored as-is, unflagged — there is no per-row report for it. Simpler and safer than guessing which values are "meant to be" a RUC (see Options)
 - Existing stored `IdentificationNumber` values are not backfilled to the normalized form; the new unique index only catches clashes going forward
-- Duplicate matching by normalized customer name (#64's second half) is not covered here; left for a follow-up
+
+## Name-based matching (#64 second half)
+
+- Only kicks in when `IdentificationNumber` is blank, the common legacy case; a row with any identification number still matches on that alone, name is never checked for it
+- `NameNormalizer.Normalize(string?)` (`Kernel/Util`, pure, no DI, same shape as `RucValidator`): strips accents, lowercases, drops a closed set of PY company suffixes (`SA`, `SRL`, `SAC`, `EIRL`, `LTDA`, `EAS`) and sorts the remaining words — "José Pérez" / "PEREZ JOSE" and "Acme S.A." / "Acme SA" all collapse to the same key
+- `CustomerImportTargetHandler.SplitDuplicatesAsync`: the name key is matched against every existing customer's `Name`+`Lastname` (whether or not that customer has an identification number) plus earlier candidates in the same batch, mirroring the existing-ID check
+- No persistence change: this stays an import-time check only (`DuplicateFilterResult.Duplicates`, never silently dropped, never blocked — same as the rest of ADR-0018)
+
+## Consequences (name matching)
+
+- Word-order and suffix stripping can over-match (two different "Jose Perez"); harmless here since a duplicate only means "flagged for review in this batch", not rejected or merged
+- The suffix list is fixed, not configurable; a PY suffix missing from it just doesn't get stripped, same trade-off as RUC's own "no rejection" stance
