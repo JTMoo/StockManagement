@@ -1,8 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Api.Features.Customers;
 using StockManagement.Api.Features.Users;
 using StockManagement.Auth.Core.Contracts;
+using StockManagement.Kernel.Database.Interfaces;
+using StockManagement.Kernel.Model;
 
 namespace StockManagement.Api.Tests;
 
@@ -94,6 +97,54 @@ public sealed class PermissionEnforcementTests
 
 		// Act
 		var response = await client.GetAsync("/api/users");
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task StandardUser_WithoutStockItemsWrite_CannotCheckIn()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		var stockItem = new StockItem("Screw", code: "A1", amount: 10, price: 5000);
+		await stockItems.AddStockItemAsync(stockItem);
+		var client = await this.CreateStandardUserClientAsync("plain3", []);
+
+		// Act
+		var response = await client.PostAsJsonAsync($"/api/stock-items/{stockItem.Id}/check-in", new { Id = stockItem.Id, Amount = 5, Reason = "Delivery" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task StandardUser_WithStockItemsWrite_CanCheckIn()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		var stockItem = new StockItem("Screw", code: "A1", amount: 10, price: 5000);
+		await stockItems.AddStockItemAsync(stockItem);
+		var client = await this.CreateStandardUserClientAsync("stocker", [Permission.StockItemsWrite]);
+
+		// Act
+		var response = await client.PostAsJsonAsync($"/api/stock-items/{stockItem.Id}/check-in", new { Id = stockItem.Id, Amount = 5, Reason = "Delivery" });
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+	}
+
+	[TestMethod]
+	public async Task StandardUser_WithoutStockItemsWrite_CannotCheckOut()
+	{
+		// Arrange
+		var stockItems = _factory.ScopedServices.GetRequiredService<IStockItemServiceProvider>();
+		var stockItem = new StockItem("Screw", code: "A1", amount: 10, price: 5000);
+		await stockItems.AddStockItemAsync(stockItem);
+		var client = await this.CreateStandardUserClientAsync("plain4", []);
+
+		// Act
+		var response = await client.PostAsJsonAsync($"/api/stock-items/{stockItem.Id}/check-out", new { Id = stockItem.Id, Amount = 5, Reason = "Damaged" });
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);

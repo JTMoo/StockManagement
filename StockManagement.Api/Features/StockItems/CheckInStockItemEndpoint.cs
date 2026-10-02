@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
@@ -29,6 +30,7 @@ public class CheckInStockItemEndpoint(IStockItemServiceProvider stockItemService
 	public override void Configure()
 	{
 		this.Post("/stock-items/{Id}/check-in");
+		this.Permissions(Permission.StockItemsWrite);
 	}
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound>> ExecuteAsync(CheckInStockItemRequest request, CancellationToken cancellationToken)
