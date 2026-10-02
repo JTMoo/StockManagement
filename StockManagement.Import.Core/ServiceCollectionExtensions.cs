@@ -9,18 +9,14 @@ public static class ServiceCollectionExtensions
 	/// <summary>
 	/// Registers the import services. Expects the stock item service provider to be registered.
 	/// </summary>
-	/// <remarks>
-	/// Singleton here, matching the GUI's Singleton <c>IStockItemServiceProvider</c>; the API's providers are Scoped
-	/// (EF's <c>AppDbContext</c> isn't thread-safe), so it swaps <see cref="IStockItemImportService"/> to Scoped too, same as <c>ISaleService</c>/<c>ICustomerService</c>/<c>ISettingsService</c>.
-	/// </remarks>
 	public static IServiceCollection AddImportCore(this IServiceCollection services)
 	{
-		services.AddSingleton<IStockItemImportService, StockItemImportService>();
-		services.AddSingleton<IImportTargetHandler, StockItemImportTargetHandler>();
-		services.AddSingleton<IImportTargetHandler, CustomerImportTargetHandler>();
-		services.AddSingleton<IImportTargetHandler, OpeningStockImportTargetHandler>();
-		services.AddSingleton<IImportTargetHandler, OpenInvoiceImportTargetHandler>();
-		services.AddSingleton<IImportBatchService, ImportBatchService>();
+		services.AddScoped<IStockItemImportService, StockItemImportService>();
+		services.AddScoped<IImportTargetHandler, StockItemImportTargetHandler>();
+		services.AddScoped<IImportTargetHandler, CustomerImportTargetHandler>();
+		services.AddScoped<IImportTargetHandler, OpeningStockImportTargetHandler>();
+		services.AddScoped<IImportTargetHandler, OpenInvoiceImportTargetHandler>();
+		services.AddScoped<IImportBatchService, ImportBatchService>();
 		return services;
 	}
 }
