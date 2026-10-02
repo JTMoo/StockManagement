@@ -180,6 +180,9 @@
   <data name="minimumStock" xml:space="preserve">
     <value>Mindestbestand</value>
   </data>
+  <data name="vatRatePercent" xml:space="preserve">
+    <value>MwSt.-Satz (%)</value>
+  </data>
   <data name="belowMinimum" xml:space="preserve">
     <value>Unter Mindestbestand</value>
   </data>
@@ -260,5 +263,8 @@
   </data>
   <data name="minimumStockNegative" xml:space="preserve">
     <value>Der Mindestbestand darf nicht negativ sein.</value>
+  </data>
+  <data name="vatRateNegative" xml:space="preserve">
+    <value>Der Mehrwertsteuersatz darf nicht negativ sein.</value>
   </data>
 </root>

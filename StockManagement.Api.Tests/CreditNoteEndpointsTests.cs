@@ -83,7 +83,7 @@ public sealed class CreditNoteEndpointsTests
 	public async Task CancelInvoice_UnknownNumber_Returns404()
 	{
 		// Act
-		var response = await _client.PostAsJsonAsync("/api/invoices/99/cancel", new CancelInvoiceRequest(99, "Any reason"), ApiFactory.JsonOptions);
+		var response = await _client.PostAsJsonAsync("/api/invoices/99/cancel", new CancelInvoiceRequest("99", "Any reason"), ApiFactory.JsonOptions);
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);

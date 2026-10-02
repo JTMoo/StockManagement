@@ -33,8 +33,8 @@ public sealed class SaleServiceTests
 		var date = new DateTime(2026, 9, 1);
 		List<ShoppingCartItem> items =
 		[
-			CreateCartItem("A1", "Screw", inStock: 10, price: 5000, quantity: 2),
-			CreateCartItem("B2", "Nut", inStock: 10, price: 1000, quantity: 1)
+			CreateCartItem("A1", "Screw", inStock: 10, price: 5000, quantity: 2, vatRatePercent: 10m),
+			CreateCartItem("B2", "Nut", inStock: 10, price: 1000, quantity: 1, vatRatePercent: 10m)
 		];
 
 		// Act
@@ -46,19 +46,19 @@ public sealed class SaleServiceTests
 		Assert.AreEqual(1000, invoice.Tax);
 		Assert.AreEqual(date, invoice.Date);
 		Assert.AreEqual(date.AddDays(30), invoice.ExpirationDate);
-		Assert.AreEqual(0, invoice.Number);
+		Assert.AreEqual("", invoice.Number);
 		CollectionAssert.AreEqual(items, invoice.Items);
 	}
 
 	[TestMethod]
-	public async Task CreateInvoiceAsync_ConfiguredVatRateAndTerm_UsesThem()
+	public async Task CreateInvoiceAsync_ConfiguredPaymentTerm_UsesIt()
 	{
 		// Arrange
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CompanySettings("", "", "", 5m, 14, 1, 1001, 0));
 		var service = this.CreateService();
 		var date = new DateTime(2026, 9, 1);
-		List<ShoppingCartItem> items = [CreateCartItem("A1", "Screw", inStock: 10, price: 2100, quantity: 1)];
+		List<ShoppingCartItem> items = [CreateCartItem("A1", "Screw", inStock: 10, price: 2100, quantity: 1, vatRatePercent: 5m)];
 
 		// Act
 		var invoice = await service.CreateInvoiceAsync(new Customer(), items, date);
@@ -66,6 +66,26 @@ public sealed class SaleServiceTests
 		// Assert
 		Assert.AreEqual(100, invoice.Tax);
 		Assert.AreEqual(date.AddDays(14), invoice.ExpirationDate);
+	}
+
+	[TestMethod]
+	public async Task CreateInvoiceAsync_MixedVatRateItems_TaxesEachLineAtItsOwnRate()
+	{
+		// Arrange
+		var service = this.CreateService();
+		var date = new DateTime(2026, 9, 1);
+		List<ShoppingCartItem> items =
+		[
+			CreateCartItem("A1", "Soda", inStock: 10, price: 110, quantity: 1, vatRatePercent: 10m),
+			CreateCartItem("B2", "Milk", inStock: 10, price: 105, quantity: 1, vatRatePercent: 5m)
+		];
+
+		// Act
+		var invoice = await service.CreateInvoiceAsync(new Customer(), items, date);
+
+		// Assert
+		Assert.AreEqual(215, invoice.Total);
+		Assert.AreEqual(15, invoice.Tax);
 	}
 
 	[TestMethod]
@@ -95,20 +115,35 @@ public sealed class SaleServiceTests
 		var result = await this.CreateService().GetNextInvoiceNumberAsync();
 
 		// Assert
-		Assert.AreEqual(1, result);
+		Assert.AreEqual("001-001-0000001", result);
 	}
 
 	[TestMethod]
 	public async Task GetNextInvoiceNumberAsync_ExistingInvoices_ReturnsHighestPlusOne()
 	{
 		// Arrange
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice() { Number = 3 }, new Invoice() { Number = 41 }]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice() { Number = "001-001-0000003" }, new Invoice() { Number = "001-001-0000041" }]);
 
 		// Act
 		var result = await this.CreateService().GetNextInvoiceNumberAsync();
 
 		// Assert
-		Assert.AreEqual(42, result);
+		Assert.AreEqual("001-001-0000042", result);
+	}
+
+	[TestMethod]
+	public async Task GetNextInvoiceNumberAsync_InvoicesFromAnotherPointOfSale_IgnoresThem()
+	{
+		// Arrange
+		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001, 0, EstablishmentCode: "002", PointOfSaleCode: "001"));
+		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice() { Number = "001-001-0000099" }]);
+
+		// Act
+		var result = await this.CreateService().GetNextInvoiceNumberAsync();
+
+		// Assert
+		Assert.AreEqual("002-001-0000001", result);
 	}
 
 	[TestMethod]
@@ -205,7 +240,7 @@ public sealed class SaleServiceTests
 		// Arrange
 		var stored = new StockItem("Screw", code: "A1", amount: 10, price: 5000);
 		this.SetupStock(stored);
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice() { Number = 7 }]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice() { Number = "001-001-0000007" }]);
 		var customer = new Customer() { CustomerId = 1001 };
 		var date = new DateTime(2026, 9, 1);
 
@@ -214,7 +249,7 @@ public sealed class SaleServiceTests
 
 		// Assert
 		Assert.IsTrue(result.Succeeded);
-		Assert.AreEqual(8, result.Invoice.Number);
+		Assert.AreEqual("001-001-0000008", result.Invoice.Number);
 		Assert.AreEqual(15000, result.Invoice.Total);
 		Assert.AreEqual(SaleCondition.Cash, result.Invoice.SaleCondition);
 		Assert.AreSame(customer, result.Invoice.Customer);
@@ -297,9 +332,9 @@ public sealed class SaleServiceTests
 			});
 	}
 
-	private static ShoppingCartItem CreateCartItem(string code, string name, int inStock, int price, int quantity)
+	private static ShoppingCartItem CreateCartItem(string code, string name, int inStock, int price, int quantity, decimal vatRatePercent = 0)
 	{
-		return new ShoppingCartItem(new StockItem(name, code: code, amount: inStock, price: price)) { Amount = quantity };
+		return new ShoppingCartItem(new StockItem(name, code: code, amount: inStock, price: price) { VatRatePercent = vatRatePercent }) { Amount = quantity };
 	}
 
 	private static Invoice CreateInvoice(params ShoppingCartItem[] items)

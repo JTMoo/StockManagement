@@ -180,4 +180,34 @@
   <data name="currencyDecimalDigitsOutOfRange" xml:space="preserve">
     <value>Die Nachkommastellen der Währung müssen zwischen 0 und 4 liegen.</value>
   </data>
+  <data name="ruc" xml:space="preserve">
+    <value>RUC</value>
+  </data>
+  <data name="timbradoNumber" xml:space="preserve">
+    <value>Timbrado-Nummer</value>
+  </data>
+  <data name="timbradoValidFrom" xml:space="preserve">
+    <value>Timbrado gültig von</value>
+  </data>
+  <data name="timbradoValidTo" xml:space="preserve">
+    <value>Timbrado gültig bis</value>
+  </data>
+  <data name="establishmentCode" xml:space="preserve">
+    <value>Niederlassungscode</value>
+  </data>
+  <data name="pointOfSaleCode" xml:space="preserve">
+    <value>Verkaufsstellencode</value>
+  </data>
+  <data name="rucInvalid" xml:space="preserve">
+    <value>Die RUC-Prüfziffer ist ungültig.</value>
+  </data>
+  <data name="establishmentCodeInvalid" xml:space="preserve">
+    <value>Der Niederlassungscode muss aus 3 Ziffern bestehen.</value>
+  </data>
+  <data name="pointOfSaleCodeInvalid" xml:space="preserve">
+    <value>Der Verkaufsstellencode muss aus 3 Ziffern bestehen.</value>
+  </data>
+  <data name="timbradoDateRangeInvalid" xml:space="preserve">
+    <value>Timbrado gültig-bis darf nicht vor gültig-von liegen.</value>
+  </data>
 </root>

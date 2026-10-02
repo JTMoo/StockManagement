@@ -110,7 +110,7 @@ public sealed class PaymentEndpointsTests
 	public async Task CreatePayment_UnknownInvoice_Returns404()
 	{
 		// Act
-		var response = await _client.PostAsJsonAsync("/api/invoices/999/payments", new CreatePaymentRequest(999, 100, PaymentMethod.Cash, null), ApiFactory.JsonOptions);
+		var response = await _client.PostAsJsonAsync("/api/invoices/999/payments", new CreatePaymentRequest("999", 100, PaymentMethod.Cash, null), ApiFactory.JsonOptions);
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -156,20 +156,20 @@ public sealed class PaymentEndpointsTests
 	{
 		// Arrange
 		var invoices = _factory.ScopedServices.GetRequiredService<IInvoiceServiceProvider>();
-		await invoices.AddInvoiceAsync(new Invoice() { Number = 1, Customer = _customer, Total = 1000, ExpirationDate = DateTime.Now.AddDays(-1), Items = [] });
-		await invoices.AddInvoiceAsync(new Invoice() { Number = 2, Customer = _customer, Total = 1000, ExpirationDate = DateTime.Now.AddDays(10), Items = [] });
+		await invoices.AddInvoiceAsync(new Invoice() { Number = "1", Customer = _customer, Total = 1000, ExpirationDate = DateTime.Now.AddDays(-1), Items = [] });
+		await invoices.AddInvoiceAsync(new Invoice() { Number = "2", Customer = _customer, Total = 1000, ExpirationDate = DateTime.Now.AddDays(10), Items = [] });
 
 		// Act
 		var result = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices/overdue", ApiFactory.JsonOptions);
 
 		// Assert
 		Assert.AreEqual(1, result.TotalCount);
-		Assert.AreEqual(1, result.Items.Single().Number);
+		Assert.AreEqual("1", result.Items.Single().Number);
 		Assert.AreEqual(InvoiceStatus.Overdue, result.Items.Single().Status);
 	}
 
 	/// <returns>Number of a stored 15000-total credit invoice for <see cref="_customer"/></returns>
-	private async Task<int> CreateCreditSaleAsync()
+	private async Task<string> CreateCreditSaleAsync()
 	{
 		var response = await _client.PostAsJsonAsync("/api/sales", new CreateSaleRequest(_customer.CustomerId, SaleCondition.Credit, [new("A1", 3)]), ApiFactory.JsonOptions);
 		var invoice = await response.Content.ReadAsAsync<InvoiceResponse>();

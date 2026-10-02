@@ -13,7 +13,7 @@ public class Invoice : BaseDocument
 	private DateTime expirationDate;
 	private decimal total;
 	private decimal tax;
-	private int number;
+	private string number = "";
 	private bool isCancelled;
 
 
@@ -23,8 +23,11 @@ public class Invoice : BaseDocument
 
 
 	#region Properties
+	/// <summary>
+	/// DNIT composite number (establishment-pointOfSale-sequence); see <see cref="Util.InvoiceNumber"/>
+	/// </summary>
 	[Display(ResourceType = typeof(Language.Invoices), Name = nameof(Language.Invoices.invoiceId))]
-	public int Number
+	public string Number
 	{
 		get { return this.number; }
 		set { this.SetField(ref this.number, value); }

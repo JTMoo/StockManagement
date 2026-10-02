@@ -4,7 +4,10 @@ import { describe, expect, it } from "vitest";
 import { mockApi, renderEnglish, sentBody } from "../../test-utils";
 import { CompanySettingsPage } from "./CompanySettingsPage";
 
-const companySettings = { companyName: "Acme", taxId: "123456", currency: "PYG", vatRatePercent: 10, paymentTermInDays: 30, firstInvoiceNumber: 1, firstCustomerId: 1001, currencyDecimalDigits: 0 };
+const companySettings = {
+	companyName: "Acme", taxId: "123456", currency: "PYG", vatRatePercent: 10, paymentTermInDays: 30, firstInvoiceNumber: 1, firstCustomerId: 1001, currencyDecimalDigits: 0,
+	ruc: "", timbradoNumber: "", timbradoValidFrom: null, timbradoValidTo: null, establishmentCode: "001", pointOfSaleCode: "001"
+};
 
 describe("CompanySettingsPage", () =>
 {

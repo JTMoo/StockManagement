@@ -180,4 +180,34 @@
   <data name="currencyDecimalDigitsOutOfRange" xml:space="preserve">
     <value>Los decimales de la moneda deben estar entre 0 y 4.</value>
   </data>
+  <data name="ruc" xml:space="preserve">
+    <value>RUC</value>
+  </data>
+  <data name="timbradoNumber" xml:space="preserve">
+    <value>Número de timbrado</value>
+  </data>
+  <data name="timbradoValidFrom" xml:space="preserve">
+    <value>Timbrado válido desde</value>
+  </data>
+  <data name="timbradoValidTo" xml:space="preserve">
+    <value>Timbrado válido hasta</value>
+  </data>
+  <data name="establishmentCode" xml:space="preserve">
+    <value>Código de establecimiento</value>
+  </data>
+  <data name="pointOfSaleCode" xml:space="preserve">
+    <value>Código de punto de expedición</value>
+  </data>
+  <data name="rucInvalid" xml:space="preserve">
+    <value>El dígito verificador del RUC no es válido.</value>
+  </data>
+  <data name="establishmentCodeInvalid" xml:space="preserve">
+    <value>El código de establecimiento debe tener 3 dígitos.</value>
+  </data>
+  <data name="pointOfSaleCodeInvalid" xml:space="preserve">
+    <value>El código de punto de expedición debe tener 3 dígitos.</value>
+  </data>
+  <data name="timbradoDateRangeInvalid" xml:space="preserve">
+    <value>La fecha de timbrado válido hasta no puede ser anterior a válido desde.</value>
+  </data>
 </root>

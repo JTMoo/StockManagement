@@ -8,7 +8,7 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Payments;
 
 
-public sealed record CreatePaymentRequest(int Number, decimal Amount, PaymentMethod Method, DateTime? Date);
+public sealed record CreatePaymentRequest(string Number, decimal Amount, PaymentMethod Method, DateTime? Date);
 
 
 /// <param name="Reason">A resource key, e.g. <c>invalidPaymentAmount</c> or <c>paymentExceedsAmountDue</c></param>

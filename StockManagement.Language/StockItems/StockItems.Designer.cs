@@ -268,6 +268,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to VAT rate (%).
+        /// </summary>
+        public static string vatRatePercent {
+            get {
+                return ResourceManager.GetString("vatRatePercent", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Below minimum.
         /// </summary>
         public static string belowMinimum {
@@ -506,6 +515,14 @@ namespace StockManagement.Language {
         public static string minimumStockNegative {
             get {
                 return ResourceManager.GetString("minimumStockNegative", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to VAT rate cannot be negative...
+        /// </summary>
+        public static string vatRateNegative {
+            get {
+                return ResourceManager.GetString("vatRateNegative", resourceCulture);
             }
         }
     }

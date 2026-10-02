@@ -180,4 +180,34 @@
   <data name="currencyDecimalDigitsOutOfRange" xml:space="preserve">
     <value>Currency decimal digits must be between 0 and 4.</value>
   </data>
+  <data name="ruc" xml:space="preserve">
+    <value>RUC</value>
+  </data>
+  <data name="timbradoNumber" xml:space="preserve">
+    <value>Timbrado number</value>
+  </data>
+  <data name="timbradoValidFrom" xml:space="preserve">
+    <value>Timbrado valid from</value>
+  </data>
+  <data name="timbradoValidTo" xml:space="preserve">
+    <value>Timbrado valid to</value>
+  </data>
+  <data name="establishmentCode" xml:space="preserve">
+    <value>Establishment code</value>
+  </data>
+  <data name="pointOfSaleCode" xml:space="preserve">
+    <value>Point of sale code</value>
+  </data>
+  <data name="rucInvalid" xml:space="preserve">
+    <value>RUC check digit is invalid.</value>
+  </data>
+  <data name="establishmentCodeInvalid" xml:space="preserve">
+    <value>Establishment code must be 3 digits.</value>
+  </data>
+  <data name="pointOfSaleCodeInvalid" xml:space="preserve">
+    <value>Point of sale code must be 3 digits.</value>
+  </data>
+  <data name="timbradoDateRangeInvalid" xml:space="preserve">
+    <value>Timbrado valid-to date cannot be before valid-from.</value>
+  </data>
 </root>
