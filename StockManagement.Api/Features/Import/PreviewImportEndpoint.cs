@@ -28,7 +28,7 @@ public class PreviewImportValidator : Validator<PreviewImportRequest>
 {
 	public PreviewImportValidator()
 	{
-		this.RuleFor(request => request.File).Must(file => file is { Length: > 0 });
+		this.RuleFor(request => request.File).Must(file => file is { Length: > 0 }).WithMessage("fileRequired");
 	}
 }
 

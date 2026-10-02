@@ -11,22 +11,23 @@ using StockManagement.Settings.Core.Contracts;
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0);
+public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0, decimal VatRatePercent = 0);
 
 
 public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
 {
 	public UpdateStockItemValidator()
 	{
-		this.RuleFor(request => request.Code).NotEmpty();
-		this.RuleFor(request => request.Name).NotEmpty();
-		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.Factor).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.Code).NotEmpty().WithMessage("codeRequired");
+		this.RuleFor(request => request.Name).NotEmpty().WithMessage("nameRequired");
+		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0).WithMessage("amountNegative");
+		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0).WithMessage("priceNegative");
+		this.RuleFor(request => request.Factor).GreaterThanOrEqualTo(0).WithMessage("factorNegative");
+		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0).WithMessage("purchasePriceNegative");
+		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0).WithMessage("purchaseExchangeRateNegative");
+		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0).WithMessage("additionalPurchaseCostNegative");
+		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0).WithMessage("minimumStockNegative");
+		this.RuleFor(request => request.VatRatePercent).GreaterThanOrEqualTo(0).WithMessage("vatRateNegative");
 	}
 }
 
@@ -60,6 +61,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		stockItem.AdditionalPurchaseCost = request.AdditionalPurchaseCost;
 		stockItem.SupplierId = request.SupplierId;
 		stockItem.MinimumStock = request.MinimumStock;
+		stockItem.VatRatePercent = request.VatRatePercent;
 
 		if (request.Factor > 0)
 		{

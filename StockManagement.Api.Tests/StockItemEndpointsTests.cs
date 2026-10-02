@@ -126,6 +126,7 @@ public sealed class StockItemEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "nameRequired");
 	}
 
 	[TestMethod]
@@ -232,6 +233,7 @@ public sealed class StockItemEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "reasonRequired");
 	}
 
 	[TestMethod]

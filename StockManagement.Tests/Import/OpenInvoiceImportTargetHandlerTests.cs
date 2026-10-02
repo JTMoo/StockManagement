@@ -47,7 +47,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NumberAlreadyStored_IsDuplicate()
 	{
 		// Arrange
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice { Number = 1 }]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice { Number = "1" }]);
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object row = MakeRow("123", 1);
 
@@ -143,8 +143,8 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	public async Task UndoAsync_KnownNumber_DeletesTheInvoice()
 	{
 		// Arrange
-		var invoice = new Invoice { Number = 1 };
-		_invoices.Setup(provider => provider.GetInvoiceAync(1)).ReturnsAsync(invoice);
+		var invoice = new Invoice { Number = "1" };
+		_invoices.Setup(provider => provider.GetInvoiceAync("1")).ReturnsAsync(invoice);
 		var row = MakeRow("123", 1);
 
 		// Act

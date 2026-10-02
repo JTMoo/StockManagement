@@ -180,6 +180,9 @@
   <data name="minimumStock" xml:space="preserve">
     <value>Mindestbestand</value>
   </data>
+  <data name="vatRatePercent" xml:space="preserve">
+    <value>MwSt.-Satz (%)</value>
+  </data>
   <data name="belowMinimum" xml:space="preserve">
     <value>Unter Mindestbestand</value>
   </data>
@@ -236,5 +239,32 @@
   </data>
   <data name="tireDimensions" xml:space="preserve">
     <value>Radabmessungen</value>
+  </data>
+  <data name="codeRequired" xml:space="preserve">
+    <value>Der Code ist erforderlich.</value>
+  </data>
+  <data name="amountNegative" xml:space="preserve">
+    <value>Die Menge darf nicht negativ sein.</value>
+  </data>
+  <data name="priceNegative" xml:space="preserve">
+    <value>Der Preis darf nicht negativ sein.</value>
+  </data>
+  <data name="factorNegative" xml:space="preserve">
+    <value>Der Faktor darf nicht negativ sein.</value>
+  </data>
+  <data name="purchasePriceNegative" xml:space="preserve">
+    <value>Der Einkaufspreis darf nicht negativ sein.</value>
+  </data>
+  <data name="purchaseExchangeRateNegative" xml:space="preserve">
+    <value>Der Wechselkurs darf nicht negativ sein.</value>
+  </data>
+  <data name="additionalPurchaseCostNegative" xml:space="preserve">
+    <value>Die zusätzlichen Einkaufskosten dürfen nicht negativ sein.</value>
+  </data>
+  <data name="minimumStockNegative" xml:space="preserve">
+    <value>Der Mindestbestand darf nicht negativ sein.</value>
+  </data>
+  <data name="vatRateNegative" xml:space="preserve">
+    <value>Der Mehrwertsteuersatz darf nicht negativ sein.</value>
   </data>
 </root>

@@ -180,6 +180,9 @@
   <data name="minimumStock" xml:space="preserve">
     <value>Minimum stock</value>
   </data>
+  <data name="vatRatePercent" xml:space="preserve">
+    <value>VAT rate (%)</value>
+  </data>
   <data name="belowMinimum" xml:space="preserve">
     <value>Below minimum</value>
   </data>
@@ -236,5 +239,32 @@
   </data>
   <data name="tireDimensions" xml:space="preserve">
     <value>Tire dimensions</value>
+  </data>
+  <data name="codeRequired" xml:space="preserve">
+    <value>Code is required.</value>
+  </data>
+  <data name="amountNegative" xml:space="preserve">
+    <value>Amount cannot be negative.</value>
+  </data>
+  <data name="priceNegative" xml:space="preserve">
+    <value>Price cannot be negative.</value>
+  </data>
+  <data name="factorNegative" xml:space="preserve">
+    <value>Factor cannot be negative.</value>
+  </data>
+  <data name="purchasePriceNegative" xml:space="preserve">
+    <value>Purchase price cannot be negative.</value>
+  </data>
+  <data name="purchaseExchangeRateNegative" xml:space="preserve">
+    <value>Exchange rate cannot be negative.</value>
+  </data>
+  <data name="additionalPurchaseCostNegative" xml:space="preserve">
+    <value>Additional purchase cost cannot be negative.</value>
+  </data>
+  <data name="minimumStockNegative" xml:space="preserve">
+    <value>Minimum stock cannot be negative.</value>
+  </data>
+  <data name="vatRateNegative" xml:space="preserve">
+    <value>VAT rate cannot be negative.</value>
   </data>
 </root>

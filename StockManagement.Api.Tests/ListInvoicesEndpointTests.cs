@@ -31,8 +31,8 @@ public sealed class ListInvoicesEndpointTests
 		var ana = await customers.GetCustomerAsync(1001);
 		var bo = await customers.GetCustomerAsync(1002);
 
-		await invoices.AddInvoiceAsync(new Invoice { Number = 1, Customer = ana, Date = new DateTime(2026, 1, 1), SaleCondition = SaleCondition.Cash, Items = [] });
-		await invoices.AddInvoiceAsync(new Invoice { Number = 2, Customer = bo, Date = new DateTime(2026, 2, 1), SaleCondition = SaleCondition.Cash, Items = [] });
+		await invoices.AddInvoiceAsync(new Invoice { Number = "1", Customer = ana, Date = new DateTime(2026, 1, 1), SaleCondition = SaleCondition.Cash, Items = [] });
+		await invoices.AddInvoiceAsync(new Invoice { Number = "2", Customer = bo, Date = new DateTime(2026, 2, 1), SaleCondition = SaleCondition.Cash, Items = [] });
 	}
 
 	[TestCleanup]
@@ -52,8 +52,8 @@ public sealed class ListInvoicesEndpointTests
 		// Assert
 		Assert.AreEqual(2, response!.Items.Count);
 		Assert.IsNull(response.NextCursor);
-		Assert.AreEqual(2, response.Items[0].Number);
-		Assert.AreEqual(1, response.Items[1].Number);
+		Assert.AreEqual("2", response.Items[0].Number);
+		Assert.AreEqual("1", response.Items[1].Number);
 		Assert.AreEqual("Ana Gómez", response.Items[1].CustomerName);
 	}
 
@@ -65,7 +65,7 @@ public sealed class ListInvoicesEndpointTests
 
 		// Assert
 		Assert.AreEqual(1, response!.Items.Count);
-		Assert.AreEqual(2, response.Items.Single().Number);
+		Assert.AreEqual("2", response.Items.Single().Number);
 	}
 
 	[TestMethod]
@@ -76,7 +76,7 @@ public sealed class ListInvoicesEndpointTests
 
 		// Assert
 		Assert.AreEqual(1, response!.Items.Count);
-		Assert.AreEqual(2, response.Items.Single().Number);
+		Assert.AreEqual("2", response.Items.Single().Number);
 	}
 
 	[TestMethod]
@@ -88,8 +88,8 @@ public sealed class ListInvoicesEndpointTests
 
 		// Assert
 		Assert.IsNotNull(first.NextCursor);
-		Assert.AreEqual(2, first.Items.Single().Number);
+		Assert.AreEqual("2", first.Items.Single().Number);
 		Assert.IsNull(second!.NextCursor);
-		Assert.AreEqual(1, second.Items.Single().Number);
+		Assert.AreEqual("1", second.Items.Single().Number);
 	}
 }

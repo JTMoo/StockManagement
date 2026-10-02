@@ -180,4 +180,7 @@
   <data name="tax" xml:space="preserve">
     <value>Tax</value>
   </data>
+  <data name="fileRequired" xml:space="preserve">
+    <value>A file is required.</value>
+  </data>
 </root>

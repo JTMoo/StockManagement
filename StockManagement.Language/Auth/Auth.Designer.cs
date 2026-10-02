@@ -122,5 +122,22 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("username", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Username is required...
+        /// </summary>
+        public static string usernameRequired {
+            get {
+                return ResourceManager.GetString("usernameRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required...
+        /// </summary>
+        public static string passwordRequired {
+            get {
+                return ResourceManager.GetString("passwordRequired", resourceCulture);
+            }
+        }
     }
 }

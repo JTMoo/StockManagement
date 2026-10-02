@@ -198,4 +198,13 @@
   <data name="width" xml:space="preserve">
     <value>Width</value>
   </data>
+  <data name="nameRequired" xml:space="preserve">
+    <value>Name is required.</value>
+  </data>
+  <data name="reasonRequired" xml:space="preserve">
+    <value>A reason is required.</value>
+  </data>
+  <data name="amountNotPositive" xml:space="preserve">
+    <value>Amount must be greater than zero.</value>
+  </data>
 </root>

@@ -65,6 +65,7 @@ public sealed class UserEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "passwordTooShort");
 	}
 
 	[TestMethod]
@@ -75,6 +76,7 @@ public sealed class UserEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "permissionInvalid");
 	}
 
 	[TestMethod]

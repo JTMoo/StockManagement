@@ -76,6 +76,7 @@ public sealed class SupplierEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "nameRequired");
 	}
 
 	[TestMethod]

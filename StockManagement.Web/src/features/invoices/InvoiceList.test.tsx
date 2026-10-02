@@ -16,7 +16,7 @@ describe("InvoiceList", () =>
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Ana Gómez" })).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "7" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "001-001-0000007" })).toBeInTheDocument();
 	});
 
 	it("ClickInvoiceNumber_CallsOnSelectWithThatInvoice", async () =>
@@ -25,10 +25,10 @@ describe("InvoiceList", () =>
 		mockApi({ "GET /api/invoices?pageSize=20": { body: listBody } });
 		const onSelect = vi.fn();
 		renderEnglish(<InvoiceList onSelect={onSelect} />);
-		await screen.findByRole("button", { name: "7" });
+		await screen.findByRole("button", { name: "001-001-0000007" });
 
 		// Act
-		await userEvent.click(screen.getByRole("button", { name: "7" }));
+		await userEvent.click(screen.getByRole("button", { name: "001-001-0000007" }));
 
 		// Assert
 		expect(onSelect).toHaveBeenCalledWith(invoice);
@@ -42,7 +42,7 @@ describe("InvoiceList", () =>
 			"GET /api/invoices?pageSize=20&customerId=1001": { body: listBody }
 		});
 		renderEnglish(<InvoiceList onSelect={vi.fn()} />);
-		await screen.findByRole("button", { name: "7" });
+		await screen.findByRole("button", { name: "001-001-0000007" });
 
 		// Act
 		await userEvent.type(screen.getByLabelText("Customer ID"), "1001");

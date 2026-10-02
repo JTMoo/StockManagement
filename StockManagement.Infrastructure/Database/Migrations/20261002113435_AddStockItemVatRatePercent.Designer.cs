@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockManagement.Infrastructure.Database;
@@ -11,9 +12,11 @@ using StockManagement.Infrastructure.Database;
 namespace StockManagement.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261002113435_AddStockItemVatRatePercent")]
+    partial class AddStockItemVatRatePercent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,12 +44,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(0);
 
-                    b.Property<string>("EstablishmentCode")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasDefaultValue("001");
-
                     b.Property<int>("FirstCustomerId")
                         .HasColumnType("integer");
 
@@ -59,29 +56,9 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Property<int>("PaymentTermInDays")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PointOfSaleCode")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasDefaultValue("001");
-
-                    b.Property<string>("Ruc")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("TaxId")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("TimbradoNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("TimbradoValidFrom")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("TimbradoValidTo")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("VatRatePercent")
                         .HasColumnType("numeric(5,2)");
@@ -237,9 +214,8 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
 
                     b.Property<int>("SaleCondition")
                         .HasColumnType("integer");
