@@ -7,10 +7,10 @@ describe("invoicesApi", () =>
 	it("getInvoice_Ok_ReturnsValue", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/invoices/7": { body: invoice } });
+		mockApi({ "GET /api/invoices/001-001-0000007": { body: invoice } });
 
 		// Act
-		const result = await invoicesApi.getInvoice(7);
+		const result = await invoicesApi.getInvoice("001-001-0000007");
 
 		// Assert
 		expect(result).toEqual({ ok: true, value: invoice });
@@ -19,10 +19,10 @@ describe("invoicesApi", () =>
 	it("getInvoice_404_ReturnsNotFound", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/invoices/7": { status: 404 } });
+		mockApi({ "GET /api/invoices/001-001-0000007": { status: 404 } });
 
 		// Act
-		const result = await invoicesApi.getInvoice(7);
+		const result = await invoicesApi.getInvoice("001-001-0000007");
 
 		// Assert
 		expect(result).toEqual({ ok: false, failure: { kind: "notFound" } });

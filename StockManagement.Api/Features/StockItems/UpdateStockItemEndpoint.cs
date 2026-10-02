@@ -11,7 +11,7 @@ using StockManagement.Settings.Core.Contracts;
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0);
+public sealed record UpdateStockItemRequest(string Id, string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0, decimal VatRatePercent = 0);
 
 
 public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
@@ -27,6 +27,7 @@ public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
 		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.VatRatePercent).GreaterThanOrEqualTo(0);
 	}
 }
 
@@ -46,7 +47,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound, Conflict<DuplicateStockItemCodeResponse>>> ExecuteAsync(UpdateStockItemRequest request, CancellationToken cancellationToken)
 	{
-		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id) is not StockItem stockItem) return TypedResults.NotFound();
+		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id, cancellationToken) is not StockItem stockItem) return TypedResults.NotFound();
 
 		stockItem.Code = request.Code;
 		stockItem.Name = request.Name;
@@ -60,6 +61,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		stockItem.AdditionalPurchaseCost = request.AdditionalPurchaseCost;
 		stockItem.SupplierId = request.SupplierId;
 		stockItem.MinimumStock = request.MinimumStock;
+		stockItem.VatRatePercent = request.VatRatePercent;
 
 		if (request.Factor > 0)
 		{
@@ -73,7 +75,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 		try
 		{
-			await _stockItemServiceProvider.UpdateStockItemAsync(stockItem);
+			await _stockItemServiceProvider.UpdateStockItemAsync(stockItem, cancellationToken);
 		}
 		catch (StockItemCodeAlreadyExistsException)
 		{
@@ -81,7 +83,7 @@ public class UpdateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		}
 
 		// Reload: stockItem.Supplier may still reference the old row after a SupplierId change
-		var updated = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		var updated = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id, cancellationToken);
 		return TypedResults.Ok(StockItemResponse.From(updated));
 	}
 }

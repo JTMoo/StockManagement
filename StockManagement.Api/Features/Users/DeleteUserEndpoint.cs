@@ -28,9 +28,9 @@ public class DeleteUserEndpoint(IUserServiceProvider userServiceProvider) : Endp
 	public override async Task<Results<NoContent, NotFound, Conflict<SelfDeleteResponse>>> ExecuteAsync(DeleteUserRequest request, CancellationToken cancellationToken)
 	{
 		if (request.Id == this.User.FindFirst("sub")?.Value) return TypedResults.Conflict(new SelfDeleteResponse());
-		if (await _userServiceProvider.GetUserAsync(request.Id) is not User user) return TypedResults.NotFound();
+		if (await _userServiceProvider.GetUserAsync(request.Id, cancellationToken) is not User user) return TypedResults.NotFound();
 
-		await _userServiceProvider.DeleteUserAsync(user);
+		await _userServiceProvider.DeleteUserAsync(user, cancellationToken);
 		return TypedResults.NoContent();
 	}
 }

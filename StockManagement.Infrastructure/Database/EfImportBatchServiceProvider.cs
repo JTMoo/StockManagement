@@ -13,21 +13,21 @@ public class EfImportBatchServiceProvider(AppDbContext db) : IImportBatchService
 	private readonly AppDbContext _db = db;
 
 
-	public Task<ImportBatch?> GetImportBatchAsync(string id)
+	public Task<ImportBatch?> GetImportBatchAsync(string id, CancellationToken cancellationToken = default)
 	{
-		return _db.ImportBatches.SingleOrDefaultAsync(batch => batch.Id == id);
+		return _db.ImportBatches.SingleOrDefaultAsync(batch => batch.Id == id, cancellationToken);
 	}
 
-	public async Task AddImportBatchAsync(ImportBatch batch)
+	public async Task AddImportBatchAsync(ImportBatch batch, CancellationToken cancellationToken = default)
 	{
 		_db.ImportBatches.Add(batch);
-		await _db.SaveChangesAsync();
+		await _db.SaveChangesAsync(cancellationToken);
 	}
 
-	public async Task<int> UpdateImportBatchAsync(ImportBatch batch)
+	public async Task<int> UpdateImportBatchAsync(ImportBatch batch, CancellationToken cancellationToken = default)
 	{
 		_db.ImportBatches.Update(batch);
-		await _db.SaveChangesAsync();
+		await _db.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 }

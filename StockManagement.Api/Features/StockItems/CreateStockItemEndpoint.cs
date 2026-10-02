@@ -11,7 +11,7 @@ using StockManagement.Settings.Core.Contracts;
 namespace StockManagement.Api.Features.StockItems;
 
 
-public sealed record CreateStockItemRequest(string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0);
+public sealed record CreateStockItemRequest(string Code, string Name, string Description = "", string Location = "", int Amount = 0, decimal Price = 0, string Manufacturer = "", decimal Factor = 0, decimal PurchasePrice = 0, decimal PurchaseExchangeRate = 0, decimal AdditionalPurchaseCost = 0, string? SupplierId = null, int MinimumStock = 0, decimal? VatRatePercent = null);
 
 
 public class CreateStockItemValidator : Validator<CreateStockItemRequest>
@@ -27,6 +27,7 @@ public class CreateStockItemValidator : Validator<CreateStockItemRequest>
 		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
 		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.VatRatePercent).GreaterThanOrEqualTo(0).When(request => request.VatRatePercent.HasValue);
 	}
 }
 
@@ -49,6 +50,8 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 	public override async Task<Results<Created<StockItemResponse>, Conflict<DuplicateStockItemCodeResponse>>> ExecuteAsync(CreateStockItemRequest request, CancellationToken cancellationToken)
 	{
+		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+
 		var stockItem = new StockItem(request.Name, code: request.Code, description: request.Description, amount: request.Amount, manufacturer: request.Manufacturer)
 		{
 			Location = request.Location,
@@ -57,12 +60,12 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 			PurchaseExchangeRate = request.PurchaseExchangeRate,
 			AdditionalPurchaseCost = request.AdditionalPurchaseCost,
 			SupplierId = request.SupplierId,
-			MinimumStock = request.MinimumStock
+			MinimumStock = request.MinimumStock,
+			VatRatePercent = request.VatRatePercent ?? companySettings.VatRatePercent
 		};
 
 		if (request.Factor > 0)
 		{
-			var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
 			stockItem.Price = StockItemExtensions.CalculateSalePrice(request.PurchasePrice, request.PurchaseExchangeRate, request.AdditionalPurchaseCost, request.Factor, companySettings.CurrencyDecimalDigits);
 		}
 		else
@@ -72,7 +75,7 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 		try
 		{
-			await _stockItemServiceProvider.AddStockItemAsync(stockItem);
+			await _stockItemServiceProvider.AddStockItemAsync(stockItem, cancellationToken);
 		}
 		catch (StockItemCodeAlreadyExistsException)
 		{
@@ -80,7 +83,7 @@ public class CreateStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 		}
 
 		// Reload to fill the Supplier navigation (AddStockItemAsync only tracked the FK)
-		var created = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id);
+		var created = await _stockItemServiceProvider.GetStockItemByIdAsync(stockItem.Id, cancellationToken);
 		return TypedResults.Created($"/api/stock-items/{stockItem.Code}", StockItemResponse.From(created));
 	}
 }

@@ -64,13 +64,13 @@ public sealed class StockItemImportTargetHandlerTests
 	{
 		// Arrange
 		var stockItem = new StockItem("Fresh", code: "B2");
-		_stockItems.Setup(provider => provider.GetStockItemByIdAsync("id-1")).ReturnsAsync(stockItem);
+		_stockItems.Setup(provider => provider.GetStockItemByIdAsync("id-1", It.IsAny<CancellationToken>())).ReturnsAsync(stockItem);
 
 		// Act
 		await _handler.UndoAsync([("id-1", stockItem)]);
 
 		// Assert
-		_stockItems.Verify(provider => provider.DeleteStockItemAsync(stockItem), Times.Once);
+		_stockItems.Verify(provider => provider.DeleteStockItemAsync(stockItem, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]

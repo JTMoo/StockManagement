@@ -22,6 +22,7 @@ public class StockItem : BaseDocument
 	private int _amount;
 	private string? _supplierId;
 	private int _minimumStock;
+	private decimal _vatRatePercent;
 
 	public StockItem ()
 	{
@@ -138,5 +139,13 @@ public class StockItem : BaseDocument
 	{
 		get { return _minimumStock; }
 		set { this.SetField(ref _minimumStock, value); }
+	}
+
+	/// <remarks>Per-item VAT rate (e.g. 5/10/0 for PY's basic-basket exemptions); defaults from <c>CompanySettings.VatRatePercent</c> on create (ADR-0031).</remarks>
+	[Display(ResourceType = typeof(Language.StockItems), Name = nameof(Language.StockItems.vatRatePercent))]
+	public decimal VatRatePercent
+	{
+		get { return _vatRatePercent; }
+		set { this.SetField(ref _vatRatePercent, value); }
 	}
 }

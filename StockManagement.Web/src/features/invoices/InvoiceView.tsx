@@ -7,7 +7,7 @@ import { useI18n } from "../../i18n";
 export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; onBack?: () => void })
 {
 	const { t, formatNumber, formatDate } = useI18n();
-	const [number, setNumber] = useState(initial ? String(initial.number) : "");
+	const [number, setNumber] = useState(initial?.number ?? "");
 	const [invoice, setInvoice] = useState(initial);
 	const [failure, setFailure] = useState<ApiFailure>();
 	const [cancelling, setCancelling] = useState(false);
@@ -19,7 +19,7 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 	async function onSubmit(event: FormEvent)
 	{
 		event.preventDefault();
-		const result = await api.getInvoice(Number(number));
+		const result = await api.getInvoice(number);
 		setInvoice(result.ok ? result.value : undefined);
 		setFailure(result.ok ? undefined : result.failure);
 	}
@@ -40,7 +40,7 @@ export function InvoiceView({ invoice: initial, onBack }: { invoice?: Invoice; o
 		<Page title={t("invoices")} toolbar={
 			<form onSubmit={onSubmit} className="toolbar-form">
 				{onBack && <button type="button" className="quiet" onClick={onBack}>{t("back")}</button>}
-				<input type="number" min={1} required aria-label={t("invoiceId")} placeholder={t("invoiceId")} value={number} onChange={event => setNumber(event.target.value)} />
+				<input type="text" required aria-label={t("invoiceId")} placeholder={t("invoiceId")} value={number} onChange={event => setNumber(event.target.value)} />
 				<button type="submit">{t("show")}</button>
 			</form>
 		}>
