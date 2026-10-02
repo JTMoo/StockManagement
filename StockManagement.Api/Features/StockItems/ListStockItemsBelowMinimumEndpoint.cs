@@ -19,7 +19,7 @@ public class ListStockItemsBelowMinimumEndpoint(IStockItemServiceProvider stockI
 
 	public override async Task<IReadOnlyList<StockItemResponse>> ExecuteAsync(CancellationToken cancellationToken)
 	{
-		var stockItems = await _stockItemServiceProvider.GetStockItemsBelowMinimumAsync() ?? [];
+		var stockItems = await _stockItemServiceProvider.GetStockItemsBelowMinimumAsync(cancellationToken) ?? [];
 		return stockItems.Select(StockItemResponse.From).ToList();
 	}
 }

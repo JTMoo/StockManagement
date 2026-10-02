@@ -279,7 +279,7 @@ public sealed class SaleServiceTests
 	{
 		foreach (var stockItem in stockItems)
 		{
-			_stockItems.Setup(provider => provider.GetStockItemAsync(stockItem.Code)).ReturnsAsync(stockItem);
+			_stockItems.Setup(provider => provider.GetStockItemAsync(stockItem.Code, It.IsAny<CancellationToken>())).ReturnsAsync(stockItem);
 		}
 
 		_invoices

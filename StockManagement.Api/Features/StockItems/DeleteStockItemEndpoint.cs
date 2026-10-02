@@ -24,9 +24,9 @@ public class DeleteStockItemEndpoint(IStockItemServiceProvider stockItemServiceP
 
 	public override async Task<Results<NoContent, NotFound>> ExecuteAsync(DeleteStockItemRequest request, CancellationToken cancellationToken)
 	{
-		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id) is not StockItem stockItem) return TypedResults.NotFound();
+		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id, cancellationToken) is not StockItem stockItem) return TypedResults.NotFound();
 
-		await _stockItemServiceProvider.DeleteStockItemAsync(stockItem);
+		await _stockItemServiceProvider.DeleteStockItemAsync(stockItem, cancellationToken);
 		return TypedResults.NoContent();
 	}
 }

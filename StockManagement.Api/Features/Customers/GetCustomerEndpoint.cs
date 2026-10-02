@@ -23,7 +23,7 @@ public class GetCustomerEndpoint(ICustomerServiceProvider customerServiceProvide
 
 	public override async Task<Results<Ok<CustomerResponse>, NotFound>> ExecuteAsync(GetCustomerRequest request, CancellationToken cancellationToken)
 	{
-		if (await _customerServiceProvider.GetCustomerAsync(request.CustomerId) is not Customer customer) return TypedResults.NotFound();
+		if (await _customerServiceProvider.GetCustomerAsync(request.CustomerId, cancellationToken) is not Customer customer) return TypedResults.NotFound();
 
 		return TypedResults.Ok(CustomerResponse.From(customer));
 	}

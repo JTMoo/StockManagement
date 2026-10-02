@@ -18,7 +18,7 @@ public sealed class SettingsServiceTests
 	public async Task GetLanguageAsync_NothingStored_ReturnsGerman()
 	{
 		// Arrange
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync((AppSettings?)null);
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync((AppSettings?)null);
 
 		// Act
 		var result = await this.CreateService().GetLanguageAsync();
@@ -31,7 +31,7 @@ public sealed class SettingsServiceTests
 	public async Task GetLanguageAsync_Stored_ReturnsIt()
 	{
 		// Arrange
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync(new AppSettings { Language = AvailableLanguages.Spanish });
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new AppSettings { Language = AvailableLanguages.Spanish });
 
 		// Act
 		var result = await this.CreateService().GetLanguageAsync();
@@ -44,13 +44,13 @@ public sealed class SettingsServiceTests
 	public async Task SetLanguageAsync_NothingStored_Adds()
 	{
 		// Arrange
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync((AppSettings?)null);
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync((AppSettings?)null);
 
 		// Act
 		await this.CreateService().SetLanguageAsync(AvailableLanguages.English);
 
 		// Assert
-		_settings.Verify(provider => provider.AddSettingsAsync(It.Is<AppSettings>(settings => settings.Language == AvailableLanguages.English)), Times.Once);
+		_settings.Verify(provider => provider.AddSettingsAsync(It.Is<AppSettings>(settings => settings.Language == AvailableLanguages.English), It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -58,22 +58,22 @@ public sealed class SettingsServiceTests
 	{
 		// Arrange
 		var stored = new AppSettings { Language = AvailableLanguages.German };
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync(stored);
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(stored);
 
 		// Act
 		await this.CreateService().SetLanguageAsync(AvailableLanguages.English);
 
 		// Assert
 		Assert.AreEqual(AvailableLanguages.English, stored.Language);
-		_settings.Verify(provider => provider.UpdateSettingsAsync(stored), Times.Once);
-		_settings.Verify(provider => provider.AddSettingsAsync(It.IsAny<AppSettings>()), Times.Never);
+		_settings.Verify(provider => provider.UpdateSettingsAsync(stored, It.IsAny<CancellationToken>()), Times.Once);
+		_settings.Verify(provider => provider.AddSettingsAsync(It.IsAny<AppSettings>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
 	public async Task GetCompanySettingsAsync_NothingStored_ReturnsDefaults()
 	{
 		// Arrange
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync((AppSettings?)null);
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync((AppSettings?)null);
 
 		// Act
 		var result = await this.CreateService().GetCompanySettingsAsync();
@@ -86,7 +86,7 @@ public sealed class SettingsServiceTests
 	public async Task GetCompanySettingsAsync_Stored_ReturnsIt()
 	{
 		// Arrange
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync(new AppSettings
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new AppSettings
 		{
 			CompanyName = "Acme",
 			TaxId = "123456",
@@ -108,7 +108,7 @@ public sealed class SettingsServiceTests
 	public async Task SetCompanySettingsAsync_NothingStored_Adds()
 	{
 		// Arrange
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync((AppSettings?)null);
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync((AppSettings?)null);
 		var settings = new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000, 0);
 
 		// Act
@@ -118,7 +118,7 @@ public sealed class SettingsServiceTests
 		_settings.Verify(provider => provider.AddSettingsAsync(It.Is<AppSettings>(stored =>
 			stored.CompanyName == "Acme" && stored.TaxId == "123456" && stored.Currency == "PYG" &&
 			stored.VatRatePercent == 5m && stored.PaymentTermInDays == 14 &&
-			stored.FirstInvoiceNumber == 100 && stored.FirstCustomerId == 2000 && stored.CurrencyDecimalDigits == 0)), Times.Once);
+			stored.FirstInvoiceNumber == 100 && stored.FirstCustomerId == 2000 && stored.CurrencyDecimalDigits == 0), It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -126,7 +126,7 @@ public sealed class SettingsServiceTests
 	{
 		// Arrange
 		var stored = new AppSettings { Language = AvailableLanguages.Spanish };
-		_settings.Setup(provider => provider.GetSettingsAsync()).ReturnsAsync(stored);
+		_settings.Setup(provider => provider.GetSettingsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(stored);
 		var settings = new CompanySettings("Acme", "123456", "PYG", 5m, 14, 100, 2000, 0);
 
 		// Act
@@ -136,8 +136,8 @@ public sealed class SettingsServiceTests
 		Assert.AreEqual("Acme", stored.CompanyName);
 		Assert.AreEqual(5m, stored.VatRatePercent);
 		Assert.AreEqual(AvailableLanguages.Spanish, stored.Language);
-		_settings.Verify(provider => provider.UpdateSettingsAsync(stored), Times.Once);
-		_settings.Verify(provider => provider.AddSettingsAsync(It.IsAny<AppSettings>()), Times.Never);
+		_settings.Verify(provider => provider.UpdateSettingsAsync(stored, It.IsAny<CancellationToken>()), Times.Once);
+		_settings.Verify(provider => provider.AddSettingsAsync(It.IsAny<AppSettings>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	private SettingsService CreateService()
