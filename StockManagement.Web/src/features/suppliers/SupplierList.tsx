@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api, type ApiFailure, type Supplier } from "../../api";
+import { ConfirmAction } from "../../ConfirmAction";
 import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
@@ -24,7 +25,6 @@ export function SupplierList()
 
 	async function onDelete(supplier: Supplier)
 	{
-		if (!window.confirm(t("supplierDeletionPrompt").replace("{0}", supplier.name))) return;
 		const result = await api.deleteSupplier(supplier);
 		if (!result.ok) return setDeleteFailure(result.failure);
 
@@ -48,7 +48,7 @@ export function SupplierList()
 							<td className="number">{formatNumber(supplier.leadTimeDays)}</td>
 							<td className="row-actions">
 								<button type="button" className="quiet" onClick={() => setEditing(supplier)}>{t("edit")}</button>
-								<button type="button" className="quiet" onClick={() => onDelete(supplier)}>{t("deleteSupplier")}</button>
+								<ConfirmAction label={t("deleteSupplier")} message={t("supplierDeletionPrompt").replace("{0}", supplier.name)} onConfirm={() => onDelete(supplier)} />
 							</td>
 						</tr>
 					))}
