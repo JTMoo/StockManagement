@@ -51,6 +51,14 @@ label, legend { display: flex; flex-direction: column; gap: var(--space-1); font
 .form-grid input, .form-grid select { width: 100%; }
 .form-actions { display: flex; gap: var(--space-3); }
 
+/* Dialog: centered overlay on a scrim, replaces a permanently-inline create/edit form */
+dialog.dialog { width: 34rem; max-width: calc(100vw - 2 * var(--space-5)); padding: var(--space-5); box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-5); background: var(--surface-raised); border: 0; border-radius: var(--radius-lg); }
+dialog.dialog::backdrop { background: var(--scrim); }
+.dialog-head { display: flex; justify-content: space-between; align-items: center; }
+.dialog-head .display { font-size: 20px; line-height: 26px; font-weight: 600; }
+.dialog-head button { min-height: auto; height: 28px; padding: 0 var(--space-2); font-size: 18px; line-height: 1; }
+.dialog form { display: flex; flex-direction: column; gap: var(--space-5); }
+
 /* Segmented: closed set of 2-3 mutually exclusive options */
 .segmented { border: 0; padding: 0; margin: 0; min-width: 0; }
 .segmented legend { padding: 0; margin-bottom: var(--space-1); }

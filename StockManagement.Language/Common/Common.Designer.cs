@@ -70,6 +70,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Add New.
+        /// </summary>
+        public static string addNew {
+            get {
+                return ResourceManager.GetString("addNew", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string back {
@@ -93,6 +102,15 @@ namespace StockManagement.Language {
         public static string changeInfo {
             get {
                 return ResourceManager.GetString("changeInfo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
             }
         }
 
