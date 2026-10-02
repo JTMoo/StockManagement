@@ -4,6 +4,7 @@ using System.Text.Json;
 using ClosedXML.Excel;
 using Microsoft.Extensions.DependencyInjection;
 using StockManagement.Api.Features.Import;
+using StockManagement.Api.Features.Invoices;
 using StockManagement.Api.Features.StockItems;
 using StockManagement.Import.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
@@ -280,6 +281,70 @@ public sealed class ImportBatchEndpointsTests
 		Assert.AreEqual(HttpStatusCode.OK, undoResponse.StatusCode);
 		var item = await (await _client.GetAsync("/api/stock-items/A1")).Content.ReadAsAsync<StockItemResponse>();
 		Assert.AreEqual(3, item.Amount);
+	}
+
+	[TestMethod]
+	public async Task PreviewThenCommit_OpenInvoiceWithAmountPaid_CreatesInvoiceWithSeededPayment()
+	{
+		// Arrange
+		var customers = _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>();
+		await customers.AddCustomerAsync(new Customer { CustomerId = 1001, Name = "Ann", IdentificationNumber = "ID-1" });
+
+		var content = ExcelFileContent(ImportTarget.OpenInvoices, CreateWorkbook("OpenInvoices",
+			["CustomerIdentificationNumber", "Number", "Date", "ExpirationDate", "Total", "Tax", "AmountPaid"],
+			["ID-1", "500", "2026-01-01", "2026-02-01", "1000", "100", "400"]));
+		var previewResponse = await _client.PostAsync("/api/import/batches", content);
+		var previewed = await previewResponse.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(1, previewed.ReadyCount);
+
+		// Act
+		var commitResponse = await _client.PostAsync($"/api/import/batches/{previewed.Id}/commit", null);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, commitResponse.StatusCode);
+		var invoice = await (await _client.GetAsync("/api/invoices/500")).Content.ReadAsAsync<InvoiceResponse>();
+		Assert.AreEqual(1000, invoice.Total);
+		Assert.AreEqual(400, invoice.AmountPaid);
+		Assert.AreEqual(600, invoice.AmountDue);
+		Assert.AreEqual(SaleCondition.Credit, invoice.SaleCondition);
+	}
+
+	[TestMethod]
+	public async Task Preview_OpenInvoiceCustomerNotFound_ReportsAsDuplicate()
+	{
+		// Arrange
+		var content = ExcelFileContent(ImportTarget.OpenInvoices, CreateWorkbook("OpenInvoices",
+			["CustomerIdentificationNumber", "Number", "Date", "ExpirationDate", "Total", "Tax", "AmountPaid"],
+			["Unknown", "500", "2026-01-01", "2026-02-01", "1000", "100", "0"]));
+
+		// Act
+		var response = await _client.PostAsync("/api/import/batches", content);
+
+		// Assert
+		var batch = await response.Content.ReadAsAsync<ImportBatchResponse>();
+		Assert.AreEqual(0, batch.ReadyCount);
+		Assert.AreEqual(1, batch.DuplicateCount);
+	}
+
+	[TestMethod]
+	public async Task PreviewCommitThenUndo_OpenInvoice_DeletesTheInvoice()
+	{
+		// Arrange
+		var customers = _factory.ScopedServices.GetRequiredService<ICustomerServiceProvider>();
+		await customers.AddCustomerAsync(new Customer { CustomerId = 1001, Name = "Ann", IdentificationNumber = "ID-1" });
+
+		var content = ExcelFileContent(ImportTarget.OpenInvoices, CreateWorkbook("OpenInvoices",
+			["CustomerIdentificationNumber", "Number", "Date", "ExpirationDate", "Total", "Tax", "AmountPaid"],
+			["ID-1", "500", "2026-01-01", "2026-02-01", "1000", "100", "0"]));
+		var previewed = await (await _client.PostAsync("/api/import/batches", content)).Content.ReadAsAsync<ImportBatchResponse>();
+		await _client.PostAsync($"/api/import/batches/{previewed.Id}/commit", null);
+
+		// Act
+		var undoResponse = await _client.PostAsync($"/api/import/batches/{previewed.Id}/undo", null);
+
+		// Assert
+		Assert.AreEqual(HttpStatusCode.OK, undoResponse.StatusCode);
+		Assert.AreEqual(HttpStatusCode.NotFound, (await _client.GetAsync("/api/invoices/500")).StatusCode);
 	}
 
 	[TestMethod]

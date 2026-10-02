@@ -165,6 +165,21 @@
   <data name="selectedFileInUse" xml:space="preserve">
     <value>Selected File is currently being used by another process and cannot be opened.</value>
   </data>
+  <data name="amountPaid" xml:space="preserve">
+    <value>Amount Paid</value>
+  </data>
+  <data name="expirationDate" xml:space="preserve">
+    <value>Expiration Date</value>
+  </data>
+  <data name="invoiceDate" xml:space="preserve">
+    <value>Invoice Date</value>
+  </data>
+  <data name="openInvoices" xml:space="preserve">
+    <value>Open Invoices</value>
+  </data>
+  <data name="tax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
   <data name="fileRequired" xml:space="preserve">
     <value>A file is required.</value>
   </data>

@@ -61,6 +61,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Amount Paid.
+        /// </summary>
+        public static string amountPaid {
+            get {
+                return ResourceManager.GetString("amountPaid", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Choose file.
         /// </summary>
         public static string chooseFile {
@@ -115,6 +124,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Expiration Date.
+        /// </summary>
+        public static string expirationDate {
+            get {
+                return ResourceManager.GetString("expirationDate", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Failed the conversion process for a given excel column to the specified parameter. This happened for the parameter {0} and the column number {1}..
         /// </summary>
         public static string failedConversion {
@@ -156,6 +174,24 @@ namespace StockManagement.Language {
         public static string imported {
             get {
                 return ResourceManager.GetString("imported", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invoice Date.
+        /// </summary>
+        public static string invoiceDate {
+            get {
+                return ResourceManager.GetString("invoiceDate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open Invoices.
+        /// </summary>
+        public static string openInvoices {
+            get {
+                return ResourceManager.GetString("openInvoices", resourceCulture);
             }
         }
 
@@ -203,6 +239,16 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("selectedFileInUse", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Tax.
+        /// </summary>
+        public static string tax {
+            get {
+                return ResourceManager.GetString("tax", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to A file is required...
         /// </summary>

@@ -22,7 +22,7 @@ public class CommitImportBatchEndpoint(IImportBatchService importBatchService) :
 	public override void Configure()
 	{
 		this.Post("/import/batches/{Id}/commit");
-		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite, Permission.SalesWrite);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, NotFound, Conflict<ImportBatchStatusConflictResponse>>> ExecuteAsync(CommitImportBatchRequest request, CancellationToken cancellationToken)
