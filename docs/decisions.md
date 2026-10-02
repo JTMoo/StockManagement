@@ -37,6 +37,7 @@ Generated from `docs/adr/*.md` by `scripts/generate-adr-index.sh`. Don't hand-ed
 | [0026](adr/0026-cross-domain-search.md) | Cross-domain search via Postgres full-text + trigram | Proposed |
 | [0027](adr/0027-auto-merge-and-claude-review.md) | Unattended PR merging: required checks + Claude review, no owner click | Proposed |
 | [0028](adr/0028-import-column-mapping.md) | Import column mapping | Proposed |
+| [0034](adr/0034-open-invoice-import.md) | Open invoices as an import target | Proposed |
 <!-- ADR-INDEX:END -->
 
 ## Standing decisions

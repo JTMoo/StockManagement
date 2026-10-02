@@ -23,7 +23,7 @@ public class GetImportBatchReportEndpoint(IImportBatchService importBatchService
 	public override void Configure()
 	{
 		this.Get("/import/batches/{Id}/report");
-		this.Permissions(Permission.StockItemsRead, Permission.CustomersRead);
+		this.Permissions(Permission.StockItemsRead, Permission.CustomersRead, Permission.SalesRead);
 	}
 
 	public override async Task<Results<FileContentHttpResult, NotFound>> ExecuteAsync(GetImportBatchReportRequest request, CancellationToken cancellationToken)

@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
 		services.AddSingleton<IImportTargetHandler, StockItemImportTargetHandler>();
 		services.AddSingleton<IImportTargetHandler, CustomerImportTargetHandler>();
 		services.AddSingleton<IImportTargetHandler, OpeningStockImportTargetHandler>();
+		services.AddSingleton<IImportTargetHandler, OpenInvoiceImportTargetHandler>();
 		services.AddSingleton<IImportBatchService, ImportBatchService>();
 		return services;
 	}
