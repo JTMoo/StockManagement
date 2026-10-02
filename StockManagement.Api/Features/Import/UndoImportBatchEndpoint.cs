@@ -19,7 +19,7 @@ public class UndoImportBatchEndpoint(IImportBatchService importBatchService) : E
 	public override void Configure()
 	{
 		this.Post("/import/batches/{Id}/undo");
-		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite, Permission.SalesWrite);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, NotFound, Conflict<ImportBatchStatusConflictResponse>>> ExecuteAsync(UndoImportBatchRequest request, CancellationToken cancellationToken)

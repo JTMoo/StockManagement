@@ -5,7 +5,7 @@ import { useI18n } from "../../i18n";
 
 const pageSize = 20;
 
-export function InvoiceList({ onSelect }: { onSelect: (invoice: Invoice) => void })
+export function InvoiceList({ onSelect, refreshToken }: { onSelect: (invoice: Invoice) => void; refreshToken?: number })
 {
 	const { t, formatNumber, formatDate } = useI18n();
 	const [customerId, setCustomerId] = useState("");
@@ -28,7 +28,7 @@ export function InvoiceList({ onSelect }: { onSelect: (invoice: Invoice) => void
 			setTotalCount(result.ok ? result.value.totalCount : 0);
 		});
 		return () => controller.abort();
-	}, [customerId, from, to, page]);
+	}, [customerId, from, to, page, refreshToken]);
 
 	const lastPage = Math.max(1, Math.ceil(totalCount / pageSize));
 

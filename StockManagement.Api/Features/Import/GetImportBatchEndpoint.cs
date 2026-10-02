@@ -18,7 +18,7 @@ public class GetImportBatchEndpoint(IImportBatchService importBatchService) : En
 	public override void Configure()
 	{
 		this.Get("/import/batches/{Id}");
-		this.Permissions(Permission.StockItemsRead, Permission.CustomersRead);
+		this.Permissions(Permission.StockItemsRead, Permission.CustomersRead, Permission.SalesRead);
 	}
 
 	public override async Task<Results<Ok<ImportBatchResponse>, NotFound>> ExecuteAsync(GetImportBatchRequest request, CancellationToken cancellationToken)
