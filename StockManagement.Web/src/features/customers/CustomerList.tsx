@@ -5,6 +5,7 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { useToast } from "../../Toast";
 import { CreateCustomerForm } from "./CreateCustomerForm";
 import { CustomerImport } from "./CustomerImport";
 import { EditCustomerForm } from "./EditCustomerForm";
@@ -12,6 +13,7 @@ import { EditCustomerForm } from "./EditCustomerForm";
 export function CustomerList()
 {
 	const { t } = useI18n();
+	const { show: showToast } = useToast();
 	const { data: customers = [], setData, failure } = useLoad(api.listCustomers);
 	const [editing, setEditing] = useState<Customer>();
 	const [formOpen, setFormOpen] = useState(false);
@@ -39,11 +41,13 @@ export function CustomerList()
 	{
 		setData([...customers, customer]);
 		setFormOpen(false);
+		showToast(t("savedToast").replace("{0}", t("customer")));
 	};
 	const onSaved = (customer: Customer) =>
 	{
 		setData(customers.map(existing => existing.customerId === customer.customerId ? customer : existing));
 		onFormCancel();
+		showToast(t("savedToast").replace("{0}", t("customer")));
 	};
 
 	async function onImported()

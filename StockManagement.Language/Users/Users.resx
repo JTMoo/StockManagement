@@ -204,4 +204,7 @@
   <data name="permissionInvalid" xml:space="preserve">
     <value>Permission is invalid.</value>
   </data>
+  <data name="user" xml:space="preserve">
+    <value>User</value>
+  </data>
 </root>

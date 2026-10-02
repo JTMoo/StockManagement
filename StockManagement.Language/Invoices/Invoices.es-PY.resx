@@ -207,4 +207,16 @@
   <data name="paymentMethodInvalid" xml:space="preserve">
     <value>El método de pago no es válido.</value>
   </data>
+  <data name="statusPending" xml:space="preserve">
+    <value>Pendiente</value>
+  </data>
+  <data name="statusPaid" xml:space="preserve">
+    <value>Pagada</value>
+  </data>
+  <data name="statusOverdue" xml:space="preserve">
+    <value>Vencida</value>
+  </data>
+  <data name="invoiceSavedToast" xml:space="preserve">
+    <value>Factura {0} guardada.</value>
+  </data>
 </root>

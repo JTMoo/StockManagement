@@ -22,6 +22,7 @@ describe("CustomerList", () =>
 		expect(await screen.findByRole("cell", { name: "Gómez" })).toBeInTheDocument();
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 		expect(sentBody(fetchMock, "POST /api/customers")).toEqual({ name: "Ana", lastname: "Gómez" });
+		expect(screen.getByRole("status")).toHaveTextContent("Customer saved.");
 	});
 
 	it("Create_Rejected_ShowsErrorAndKeepsInput", async () =>

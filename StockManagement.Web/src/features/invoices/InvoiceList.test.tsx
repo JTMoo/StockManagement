@@ -17,6 +17,7 @@ describe("InvoiceList", () =>
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Ana Gómez" })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "001-001-0000007" })).toBeInTheDocument();
+		expect(screen.getByText("Paid")).toBeInTheDocument();
 	});
 
 	it("ClickInvoiceNumber_CallsOnSelectWithThatInvoice", async () =>

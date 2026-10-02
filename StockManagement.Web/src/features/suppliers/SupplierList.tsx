@@ -4,11 +4,13 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { useToast } from "../../Toast";
 import { SupplierForm } from "./SupplierForm";
 
 export function SupplierList()
 {
 	const { t, formatNumber } = useI18n();
+	const { show: showToast } = useToast();
 	const { data: suppliers = [], setData, failure } = useLoad(api.listSuppliers);
 	const [editing, setEditing] = useState<Supplier>();
 	const [deleteFailure, setDeleteFailure] = useState<ApiFailure>();
@@ -17,6 +19,7 @@ export function SupplierList()
 	{
 		setData(editing ? suppliers.map(existing => existing.id === supplier.id ? supplier : existing) : [...suppliers, supplier]);
 		setEditing(undefined);
+		showToast(t("savedToast").replace("{0}", t("supplier")));
 	}
 
 	async function onDelete(supplier: Supplier)
