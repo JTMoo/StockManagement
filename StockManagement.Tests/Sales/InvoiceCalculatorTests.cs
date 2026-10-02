@@ -86,16 +86,29 @@ public sealed class InvoiceCalculatorTests
 		Assert.AreEqual(2.02m, result);
 	}
 
+	[TestMethod]
+	public void CalculateTax_NullLines_ReturnsZero()
+	{
+		// Act
+		var result = InvoiceCalculator.CalculateTax(null, 0);
+
+		// Assert
+		Assert.AreEqual(0, result);
+	}
+
 	[DataTestMethod]
 	[DataRow(0d, 10d, 0d)]
 	[DataRow(110d, 10d, 10d)]
 	[DataRow(11000d, 10d, 1000d)]
 	[DataRow(100d, 10d, 9d)]
 	[DataRow(105d, 10d, 10d)]
-	public void CalculateTax_ZeroDigits_ReturnsVatShareRoundedToWholeUnit(double total, double vatRatePercent, double expected)
+	public void CalculateTax_SingleLineZeroDigits_ReturnsVatShareRoundedToWholeUnit(double total, double vatRatePercent, double expected)
 	{
+		// Arrange
+		List<SaleLine> lines = [new("A1", "Screw", 1, (decimal)total, (decimal)vatRatePercent)];
+
 		// Act
-		var result = InvoiceCalculator.CalculateTax((decimal)total, (decimal)vatRatePercent, 0);
+		var result = InvoiceCalculator.CalculateTax(lines, 0);
 
 		// Assert
 		Assert.AreEqual((decimal)expected, result);
@@ -107,8 +120,11 @@ public sealed class InvoiceCalculatorTests
 	[DataRow(2100d, 5d, 100d)]
 	public void CalculateTax_FivePercentRate_ReturnsVatShare(double total, double vatRatePercent, double expected)
 	{
+		// Arrange
+		List<SaleLine> lines = [new("A1", "Screw", 1, (decimal)total, (decimal)vatRatePercent)];
+
 		// Act
-		var result = InvoiceCalculator.CalculateTax((decimal)total, (decimal)vatRatePercent, 0);
+		var result = InvoiceCalculator.CalculateTax(lines, 0);
 
 		// Assert
 		Assert.AreEqual((decimal)expected, result);
@@ -117,11 +133,48 @@ public sealed class InvoiceCalculatorTests
 	[TestMethod]
 	public void CalculateTax_TwoDigits_ReturnsVatShareRoundedToCents()
 	{
+		// Arrange
+		List<SaleLine> lines = [new("A1", "Screw", 1, 11m, 10m)];
+
 		// Act
-		var result = InvoiceCalculator.CalculateTax(11m, 10m, 2);
+		var result = InvoiceCalculator.CalculateTax(lines, 2);
 
 		// Assert
 		Assert.AreEqual(1.00m, result);
+	}
+
+	[TestMethod]
+	public void CalculateTax_MixedRates_SumsEachGroupsShareAndRoundsOnce()
+	{
+		// Arrange: 110 gross @10% (VAT share 10) + 105 gross @5% (VAT share 5) = 15
+		List<SaleLine> lines =
+		[
+			new("A1", "Soda", 1, 110m, 10m),
+			new("B2", "Milk", 1, 105m, 5m)
+		];
+
+		// Act
+		var result = InvoiceCalculator.CalculateTax(lines, 0);
+
+		// Assert
+		Assert.AreEqual(15m, result);
+	}
+
+	[TestMethod]
+	public void CalculateTax_MixedRates_GroupsSameRateLinesBeforeDividing()
+	{
+		// Arrange: two 0% lines plus one 10% line; only the 10% line owes VAT
+		List<SaleLine> lines =
+		[
+			new("A1", "Bread", 2, 50m, 0m),
+			new("B2", "Soda", 1, 110m, 10m)
+		];
+
+		// Act
+		var result = InvoiceCalculator.CalculateTax(lines, 0);
+
+		// Assert
+		Assert.AreEqual(10m, result);
 	}
 
 	[TestMethod]
