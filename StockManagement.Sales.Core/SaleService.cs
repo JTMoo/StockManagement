@@ -45,7 +45,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var invoices = await _invoiceServiceProvider.GetInvoicesAsync() ?? [];
+		var invoices = await _invoiceServiceProvider.GetInvoicesAsync(cancellationToken) ?? [];
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
 		var sequencesInUse = invoices
 			.Select(invoice => InvoiceNumber.TryParseSequence(invoice.Number, companySettings.EstablishmentCode, companySettings.PointOfSaleCode))

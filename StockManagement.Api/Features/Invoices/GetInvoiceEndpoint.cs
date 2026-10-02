@@ -25,7 +25,7 @@ public class GetInvoiceEndpoint(IInvoiceServiceProvider invoiceServiceProvider, 
 
 	public override async Task<Results<Ok<InvoiceResponse>, NotFound>> ExecuteAsync(GetInvoiceRequest request, CancellationToken cancellationToken)
 	{
-		if (await _invoiceServiceProvider.GetInvoiceAync(request.Number) is not Invoice invoice) return TypedResults.NotFound();
+		if (await _invoiceServiceProvider.GetInvoiceAync(request.Number, cancellationToken) is not Invoice invoice) return TypedResults.NotFound();
 
 		return TypedResults.Ok(InvoiceResponse.From(invoice, _paymentService));
 	}

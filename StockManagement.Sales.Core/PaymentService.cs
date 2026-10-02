@@ -33,7 +33,7 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		if (await _invoiceServiceProvider.GetInvoiceAync(invoiceNumber) is not Invoice invoice) return RecordPaymentResult.Failure(RecordPaymentError.InvoiceNotFound);
+		if (await _invoiceServiceProvider.GetInvoiceAync(invoiceNumber, cancellationToken) is not Invoice invoice) return RecordPaymentResult.Failure(RecordPaymentError.InvoiceNotFound);
 
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
 		var roundedAmount = Math.Round(amount, companySettings.CurrencyDecimalDigits, MidpointRounding.AwayFromZero);
@@ -42,7 +42,7 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 
 		var payment = new Payment { Date = date, Amount = roundedAmount, Method = method };
 		invoice.Payments.Add(payment);
-		await _invoiceServiceProvider.UpdateInvoiceAsync(invoice);
+		await _invoiceServiceProvider.UpdateInvoiceAsync(invoice, cancellationToken);
 
 		return RecordPaymentResult.Success(payment);
 	}
@@ -67,7 +67,7 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var invoices = await _invoiceServiceProvider.GetInvoicesAsync() ?? [];
+		var invoices = await _invoiceServiceProvider.GetInvoicesAsync(cancellationToken) ?? [];
 		return customerId is int id ? invoices.Where(invoice => invoice.Customer?.CustomerId == id) : invoices;
 	}
 

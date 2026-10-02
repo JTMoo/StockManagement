@@ -5,8 +5,8 @@ namespace StockManagement.Kernel.Database.Interfaces;
 
 public interface ICreditNoteServiceProvider
 {
-	public Task<CreditNote> GetCreditNoteAsync(int number);
-	public Task<IEnumerable<CreditNote>> GetCreditNotesAsync();
+	public Task<CreditNote> GetCreditNoteAsync(int number, CancellationToken cancellationToken = default);
+	public Task<IEnumerable<CreditNote>> GetCreditNotesAsync(CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Restocks every line of <see cref="CreditNote.Invoice"/>, marks it cancelled and stores the credit note, all in one transaction

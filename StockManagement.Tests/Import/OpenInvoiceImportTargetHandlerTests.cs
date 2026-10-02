@@ -31,7 +31,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NewNumberAndKnownCustomer_IsUnique()
 	{
 		// Arrange
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object row = MakeRow("123", 1);
 
@@ -47,7 +47,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NumberAlreadyStored_IsDuplicate()
 	{
 		// Arrange
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([new Invoice { Number = "1" }]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Invoice { Number = "1" }]);
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object row = MakeRow("123", 1);
 
@@ -63,7 +63,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NumberRepeatedInFile_KeepsFirstAsDuplicate()
 	{
 		// Arrange
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new Customer { IdentificationNumber = "123" }]);
 		object first = MakeRow("123", 1);
 		object second = MakeRow("123", 1);
@@ -80,7 +80,7 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	public async Task SplitDuplicatesAsync_NoMatchingCustomer_IsDuplicate()
 	{
 		// Arrange
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		object row = MakeRow("Unknown", 1);
 
@@ -99,8 +99,8 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 		var customer = new Customer { IdentificationNumber = "123" };
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([customer]);
 		Invoice? stored = null;
-		_invoices.Setup(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()))
-			.Callback<Invoice>(invoice => { invoice.Id = "invoice-1"; stored = invoice; })
+		_invoices.Setup(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()))
+			.Callback<Invoice, CancellationToken>((invoice, _) => { invoice.Id = "invoice-1"; stored = invoice; })
 			.Returns(Task.CompletedTask);
 		var row = MakeRow("123", 1);
 		row.Total = 1000;
@@ -123,8 +123,8 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 		var customer = new Customer { IdentificationNumber = "123" };
 		_customers.Setup(provider => provider.GetCustomersAsync(It.IsAny<CancellationToken>())).ReturnsAsync([customer]);
 		Invoice? stored = null;
-		_invoices.Setup(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>()))
-			.Callback<Invoice>(invoice => { invoice.Id = "invoice-1"; stored = invoice; })
+		_invoices.Setup(provider => provider.AddInvoiceAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()))
+			.Callback<Invoice, CancellationToken>((invoice, _) => { invoice.Id = "invoice-1"; stored = invoice; })
 			.Returns(Task.CompletedTask);
 		var row = MakeRow("123", 1);
 		row.Total = 1000;
@@ -144,14 +144,14 @@ public sealed class OpenInvoiceImportTargetHandlerTests
 	{
 		// Arrange
 		var invoice = new Invoice { Number = "1" };
-		_invoices.Setup(provider => provider.GetInvoiceAync("1")).ReturnsAsync(invoice);
+		_invoices.Setup(provider => provider.GetInvoiceAync("1", It.IsAny<CancellationToken>())).ReturnsAsync(invoice);
 		var row = MakeRow("123", 1);
 
 		// Act
 		await _handler.UndoAsync([("invoice-1", row)]);
 
 		// Assert
-		_invoices.Verify(provider => provider.DeleteInvoiceAsync(invoice), Times.Once);
+		_invoices.Verify(provider => provider.DeleteInvoiceAsync(invoice, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
