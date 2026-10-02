@@ -10,7 +10,7 @@ describe("App", () =>
 	{
 		// Arrange
 		mockApi({
-			"GET /api/stock-items": { body: [] },
+			"GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } },
 			"GET /api/settings": { body: { language: "English" } },
 			"PUT /api/settings": { body: { language: "German" } }
 		});
@@ -27,7 +27,7 @@ describe("App", () =>
 	it("ToggleMenu_Collapsed_KeepsMenuUsable", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [] }, "GET /api/customers": { body: [] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } }, "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } } });
 		renderEnglish(<App />);
 
 		// Act
@@ -52,7 +52,7 @@ describe("App", () =>
 	it("WithoutUsersManage_HidesUsersNavItem", () =>
 	{
 		// Arrange + Act
-		mockApi({ "GET /api/stock-items": { body: [] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } } });
 		renderEnglish(<App />, { permissions: ["StockItems.Read"] });
 
 		// Assert

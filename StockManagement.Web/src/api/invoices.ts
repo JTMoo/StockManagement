@@ -7,9 +7,9 @@ export type Invoice = { number: string; date: string; expirationDate: string; to
 
 export type CreditNote = { number: number; date: string; reason: string; total: number; tax: number; invoiceNumber: string };
 
-export type InvoiceListResult = { items: Invoice[]; totalCount: number };
+export type InvoiceListResult = { items: Invoice[]; nextCursor: string | null };
 
-export type InvoiceFilter = { customerId?: number; from?: string; to?: string; page: number; pageSize: number };
+export type InvoiceFilter = { customerId?: number; from?: string; to?: string; cursor?: string; pageSize: number };
 
 export const invoicesApi = {
 	getInvoice: (number: string, signal?: AbortSignal) => send<Invoice>(`/invoices/${number}`, { signal }),
@@ -19,9 +19,10 @@ export const invoicesApi = {
 
 function invoiceFilterQuery(filter: InvoiceFilter): string
 {
-	const params = new URLSearchParams({ page: String(filter.page), pageSize: String(filter.pageSize) });
+	const params = new URLSearchParams({ pageSize: String(filter.pageSize) });
 	if (filter.customerId !== undefined) params.set("customerId", String(filter.customerId));
 	if (filter.from) params.set("from", filter.from);
 	if (filter.to) params.set("to", filter.to);
+	if (filter.cursor) params.set("cursor", filter.cursor);
 	return params.toString();
 }

@@ -5,7 +5,7 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Invoices;
 
 
-public sealed record ListOverdueInvoicesRequest(int? Page, int? PageSize);
+public sealed record ListOverdueInvoicesRequest(string? Cursor, int? PageSize);
 
 
 /// <remarks>Invoices with an amount due whose due date has passed; soonest due date first.</remarks>
@@ -22,10 +22,9 @@ public class ListOverdueInvoicesEndpoint(IPaymentService paymentService) : Endpo
 
 	public override async Task<InvoiceListResponse> ExecuteAsync(ListOverdueInvoicesRequest request, CancellationToken cancellationToken)
 	{
-		var page = Math.Max(request.Page ?? 1, 1);
 		var pageSize = Math.Clamp(request.PageSize ?? 20, 1, 100);
-		var result = await _paymentService.GetOverdueInvoicesAsync(page, pageSize, cancellationToken);
+		var result = await _paymentService.GetOverdueInvoicesAsync(request.Cursor, pageSize, cancellationToken);
 
-		return new(result.Items.Select(invoice => InvoiceResponse.From(invoice, _paymentService)).ToList(), result.TotalCount);
+		return new(result.Items.Select(invoice => InvoiceResponse.From(invoice, _paymentService)).ToList(), result.NextCursor);
 	}
 }

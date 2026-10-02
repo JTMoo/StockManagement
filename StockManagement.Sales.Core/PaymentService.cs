@@ -47,20 +47,20 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 		return RecordPaymentResult.Success(payment);
 	}
 
-	public async Task<PagedResult<Invoice>> GetOpenInvoicesAsync(int? customerId, int page, int pageSize, CancellationToken cancellationToken = default)
+	public async Task<CursorPage<Invoice>> GetOpenInvoicesAsync(int? customerId, string? cursor, int pageSize, CancellationToken cancellationToken = default)
 	{
 		var now = DateTime.Now;
 		var invoices = await this.LoadInvoicesAsync(customerId, cancellationToken);
 		var open = invoices.Where(invoice => InvoiceStatusCalculator.GetStatus(invoice, now) is not (InvoiceStatus.Paid or InvoiceStatus.Cancelled));
-		return Paginate(open, page, pageSize);
+		return Paginate(open, cursor, pageSize);
 	}
 
-	public async Task<PagedResult<Invoice>> GetOverdueInvoicesAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+	public async Task<CursorPage<Invoice>> GetOverdueInvoicesAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default)
 	{
 		var now = DateTime.Now;
 		var invoices = await this.LoadInvoicesAsync(customerId: null, cancellationToken);
 		var overdue = invoices.Where(invoice => InvoiceStatusCalculator.GetStatus(invoice, now) == InvoiceStatus.Overdue);
-		return Paginate(overdue, page, pageSize);
+		return Paginate(overdue, cursor, pageSize);
 	}
 
 	private async Task<IEnumerable<Invoice>> LoadInvoicesAsync(int? customerId, CancellationToken cancellationToken)
@@ -71,10 +71,20 @@ internal class PaymentService(IInvoiceServiceProvider invoiceServiceProvider, IS
 		return customerId is int id ? invoices.Where(invoice => invoice.Customer?.CustomerId == id) : invoices;
 	}
 
-	private static PagedResult<Invoice> Paginate(IEnumerable<Invoice> invoices, int page, int pageSize)
+	private static CursorPage<Invoice> Paginate(IEnumerable<Invoice> invoices, string? cursor, int pageSize)
 	{
-		var ordered = invoices.OrderBy(invoice => invoice.ExpirationDate).ToList();
-		var items = ordered.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-		return new(items, ordered.Count);
+		var ordered = invoices.OrderBy(invoice => invoice.ExpirationDate).ThenBy(invoice => invoice.Id).ToList();
+
+		var startIndex = 0;
+		if (Cursor.TryDecode(cursor, 2) is [var dateText, var lastId])
+		{
+			var lastDate = DateTime.Parse(dateText, null, System.Globalization.DateTimeStyles.RoundtripKind);
+			startIndex = ordered.FindIndex(invoice => invoice.ExpirationDate > lastDate || (invoice.ExpirationDate == lastDate && string.CompareOrdinal(invoice.Id, lastId) > 0));
+			if (startIndex < 0) startIndex = ordered.Count;
+		}
+
+		var items = ordered.Skip(startIndex).Take(pageSize).ToList();
+		var nextCursor = startIndex + items.Count < ordered.Count ? Cursor.Encode(items[^1].ExpirationDate.ToString("O"), items[^1].Id) : null;
+		return new(items, nextCursor);
 	}
 }

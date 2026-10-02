@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
@@ -27,6 +28,22 @@ public class EfCustomerServiceProvider(AppDbContext db) : ICustomerServiceProvid
 	public async Task<IEnumerable<Customer>> GetCustomersAsync(CancellationToken cancellationToken = default)
 	{
 		return await _db.Customers.ToListAsync(cancellationToken);
+	}
+
+	/// <summary>Keyset page by <see cref="Customer.Name"/> then <see cref="Customer.Id"/> (ADR-0029)</summary>
+	public async Task<CursorPage<Customer>> GetCustomersAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default)
+	{
+		var query = _db.Customers.AsQueryable();
+		if (Cursor.TryDecode(cursor, 2) is [var lastName, var lastId])
+		{
+			query = query.Where(customer => customer.Name.CompareTo(lastName) > 0 || (customer.Name == lastName && customer.Id.CompareTo(lastId) > 0));
+		}
+
+		var page = await query.OrderBy(customer => customer.Name).ThenBy(customer => customer.Id).Take(pageSize + 1).ToListAsync(cancellationToken);
+
+		var items = page.Take(pageSize).ToList();
+		var nextCursor = page.Count > pageSize ? Cursor.Encode(items[^1].Name, items[^1].Id) : null;
+		return new(items, nextCursor);
 	}
 
 	/// <exception cref="CustomerIdAlreadyExistsException">Customer id already in use</exception>

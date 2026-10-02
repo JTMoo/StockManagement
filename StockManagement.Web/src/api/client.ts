@@ -42,6 +42,25 @@ export async function send<T>(path: string, init?: RequestInit): Promise<Result<
 	return handleResponse(() => fetch(`/api${path}`, { ...init, headers }));
 }
 
+// Cursor list endpoints (ADR-0029): follows NextCursor until exhausted, for views that still render one full list
+export async function sendAllPages<T>(path: string, signal?: AbortSignal, pageSize = 100): Promise<Result<T[]>>
+{
+	const items: T[] = [];
+	let cursor: string | undefined;
+
+	for (; ;)
+	{
+		const query = cursor ? `cursor=${encodeURIComponent(cursor)}&pageSize=${pageSize}` : `pageSize=${pageSize}`;
+		const separator = path.includes("?") ? "&" : "?";
+		const result = await send<{ items: T[]; nextCursor: string | null }>(`${path}${separator}${query}`, { signal });
+		if (!result.ok) return result;
+
+		items.push(...result.value.items);
+		if (!result.value.nextCursor) return { ok: true, value: items };
+		cursor = result.value.nextCursor;
+	}
+}
+
 export async function sendForm<T>(path: string, file: File, fields?: Record<string, string>): Promise<Result<T>>
 {
 	const body = new FormData();
