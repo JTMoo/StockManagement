@@ -203,5 +203,59 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("currencyDecimalDigits", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to RUC.
+        /// </summary>
+        public static string ruc {
+            get {
+                return ResourceManager.GetString("ruc", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado number.
+        /// </summary>
+        public static string timbradoNumber {
+            get {
+                return ResourceManager.GetString("timbradoNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado valid from.
+        /// </summary>
+        public static string timbradoValidFrom {
+            get {
+                return ResourceManager.GetString("timbradoValidFrom", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado valid to.
+        /// </summary>
+        public static string timbradoValidTo {
+            get {
+                return ResourceManager.GetString("timbradoValidTo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Establishment code.
+        /// </summary>
+        public static string establishmentCode {
+            get {
+                return ResourceManager.GetString("establishmentCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Point of sale code.
+        /// </summary>
+        public static string pointOfSaleCode {
+            get {
+                return ResourceManager.GetString("pointOfSaleCode", resourceCulture);
+            }
+        }
     }
 }

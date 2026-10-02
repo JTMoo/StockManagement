@@ -12,4 +12,11 @@ namespace StockManagement.Settings.Core.Contracts;
 /// <param name="FirstInvoiceNumber">Seed for the next invoice number when no invoice exists yet</param>
 /// <param name="FirstCustomerId">Seed for the next customer id when no customer exists yet</param>
 /// <param name="CurrencyDecimalDigits">Decimal digits invoice totals/tax round to (0 for a zero-decimal currency like PYG)</param>
-public sealed record CompanySettings(string CompanyName, string TaxId, string Currency, decimal VatRatePercent, int PaymentTermInDays, int FirstInvoiceNumber, int FirstCustomerId, int CurrencyDecimalDigits);
+/// <param name="Ruc">SIFEN taxpayer RUC (with check digit, e.g. "1234567-8")</param>
+/// <param name="TimbradoNumber">DNIT-issued timbrado number</param>
+/// <param name="TimbradoValidFrom">First day the timbrado may be used</param>
+/// <param name="TimbradoValidTo">Last day the timbrado may be used</param>
+/// <param name="EstablishmentCode">DNIT establishment code (3 digits), part of the composite invoice number</param>
+/// <param name="PointOfSaleCode">DNIT point-of-sale code (3 digits), part of the composite invoice number</param>
+public sealed record CompanySettings(string CompanyName, string TaxId, string Currency, decimal VatRatePercent, int PaymentTermInDays, int FirstInvoiceNumber, int FirstCustomerId, int CurrencyDecimalDigits,
+	string Ruc = "", string TimbradoNumber = "", DateTime? TimbradoValidFrom = null, DateTime? TimbradoValidTo = null, string EstablishmentCode = "001", string PointOfSaleCode = "001");

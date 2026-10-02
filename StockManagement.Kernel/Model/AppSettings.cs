@@ -18,6 +18,12 @@ public class AppSettings : BaseDocument
 	private int _firstInvoiceNumber = 1;
 	private int _firstCustomerId = 1001;
 	private int _currencyDecimalDigits = 0;
+	private string _ruc = "";
+	private string _timbradoNumber = "";
+	private DateTime? _timbradoValidFrom;
+	private DateTime? _timbradoValidTo;
+	private string _establishmentCode = "001";
+	private string _pointOfSaleCode = "001";
 
 
 	public AvailableLanguages Language
@@ -88,5 +94,59 @@ public class AppSettings : BaseDocument
 	{
 		get => this._firstCustomerId;
 		set => this.SetField(ref this._firstCustomerId, value);
+	}
+
+	/// <summary>
+	/// SIFEN taxpayer RUC (with check digit, e.g. "1234567-8")
+	/// </summary>
+	public string Ruc
+	{
+		get => this._ruc;
+		set => this.SetField(ref this._ruc, value);
+	}
+
+	/// <summary>
+	/// DNIT-issued timbrado number
+	/// </summary>
+	public string TimbradoNumber
+	{
+		get => this._timbradoNumber;
+		set => this.SetField(ref this._timbradoNumber, value);
+	}
+
+	/// <summary>
+	/// First day the timbrado may be used
+	/// </summary>
+	public DateTime? TimbradoValidFrom
+	{
+		get => this._timbradoValidFrom;
+		set => this.SetField(ref this._timbradoValidFrom, value);
+	}
+
+	/// <summary>
+	/// Last day the timbrado may be used
+	/// </summary>
+	public DateTime? TimbradoValidTo
+	{
+		get => this._timbradoValidTo;
+		set => this.SetField(ref this._timbradoValidTo, value);
+	}
+
+	/// <summary>
+	/// DNIT establishment code (3 digits), part of the composite invoice number
+	/// </summary>
+	public string EstablishmentCode
+	{
+		get => this._establishmentCode;
+		set => this.SetField(ref this._establishmentCode, value);
+	}
+
+	/// <summary>
+	/// DNIT point-of-sale code (3 digits), part of the composite invoice number
+	/// </summary>
+	public string PointOfSaleCode
+	{
+		get => this._pointOfSaleCode;
+		set => this.SetField(ref this._pointOfSaleCode, value);
 	}
 }
