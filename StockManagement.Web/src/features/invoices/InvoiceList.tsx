@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, type ApiFailure, type Invoice } from "../../api";
 import { FailureMessage } from "../../FailureMessage";
+import { invoiceStatusBadge } from "./invoiceStatus";
 import { useI18n } from "../../i18n";
 
 const pageSize = 20;
@@ -66,7 +67,7 @@ export function InvoiceList({ onSelect, refreshToken }: { onSelect: (invoice: In
 			<FailureMessage failure={failure} />
 			<table>
 				<thead>
-					<tr><th>{t("invoiceId")}</th><th>{t("creationDate")}</th><th>{t("customerName")}</th><th className="number">{t("total")}</th><th>{t("saleCondition")}</th></tr>
+					<tr><th>{t("invoiceId")}</th><th>{t("creationDate")}</th><th>{t("customerName")}</th><th className="number">{t("total")}</th><th>{t("saleCondition")}</th><th>{t("status")}</th></tr>
 				</thead>
 				<tbody>
 					{items.map(item => (
@@ -74,6 +75,7 @@ export function InvoiceList({ onSelect, refreshToken }: { onSelect: (invoice: In
 							<td><button type="button" className="quiet" onClick={() => onSelect(item)}>{item.number}</button></td>
 							<td>{formatDate(item.date)}</td><td>{item.customerName}</td>
 							<td className="number">{formatNumber(item.total)}</td><td>{t(item.saleCondition === "Cash" ? "cash" : "credit")}</td>
+							<td>{invoiceStatusBadge(item, t)}</td>
 						</tr>
 					))}
 				</tbody>

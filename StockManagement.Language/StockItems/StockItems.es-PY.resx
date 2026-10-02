@@ -267,4 +267,13 @@
   <data name="vatRateNegative" xml:space="preserve">
     <value>La tasa de IVA no puede ser negativa.</value>
   </data>
+  <data name="statusOutOfStock" xml:space="preserve">
+    <value>Agotado</value>
+  </data>
+  <data name="statusLowStock" xml:space="preserve">
+    <value>Por agotarse</value>
+  </data>
+  <data name="statusInStock" xml:space="preserve">
+    <value>En stock</value>
+  </data>
 </root>

@@ -207,4 +207,16 @@
   <data name="paymentMethodInvalid" xml:space="preserve">
     <value>Die Zahlungsmethode ist ungültig.</value>
   </data>
+  <data name="statusPending" xml:space="preserve">
+    <value>Ausstehend</value>
+  </data>
+  <data name="statusPaid" xml:space="preserve">
+    <value>Bezahlt</value>
+  </data>
+  <data name="statusOverdue" xml:space="preserve">
+    <value>Überfällig</value>
+  </data>
+  <data name="invoiceSavedToast" xml:space="preserve">
+    <value>Rechnung {0} gespeichert.</value>
+  </data>
 </root>

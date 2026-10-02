@@ -5,22 +5,29 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { useToast } from "../../Toast";
 import { CreateUserForm } from "./CreateUserForm";
 import { EditUserForm } from "./EditUserForm";
 
 export function UserList()
 {
 	const { t } = useI18n();
+	const { show: showToast } = useToast();
 	const { username: ownUsername } = useAuth();
 	const { data: users = [], setData, failure: loadFailure } = useLoad(api.listUsers);
 	const [editing, setEditing] = useState<User>();
 	const [deleteFailure, setDeleteFailure] = useState(loadFailure);
 
-	const onCreated = (user: User) => setData([...users, user]);
+	const onCreated = (user: User) =>
+	{
+		setData([...users, user]);
+		showToast(t("savedToast").replace("{0}", t("user")));
+	};
 	const onSaved = (user: User) =>
 	{
 		setData(users.map(existing => existing.id === user.id ? user : existing));
 		setEditing(undefined);
+		showToast(t("savedToast").replace("{0}", t("user")));
 	};
 
 	async function onDelete(user: User)
