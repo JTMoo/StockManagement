@@ -165,4 +165,19 @@
   <data name="currencyDecimalDigits" xml:space="preserve">
     <value>Nachkommastellen der Währung</value>
   </data>
+  <data name="vatRateOutOfRange" xml:space="preserve">
+    <value>Der Mehrwertsteuersatz muss zwischen 0 und 100 liegen.</value>
+  </data>
+  <data name="paymentTermNegative" xml:space="preserve">
+    <value>Die Zahlungsfrist darf nicht negativ sein.</value>
+  </data>
+  <data name="firstInvoiceNumberNotPositive" xml:space="preserve">
+    <value>Die erste Rechnungsnummer muss größer als null sein.</value>
+  </data>
+  <data name="firstCustomerIdNotPositive" xml:space="preserve">
+    <value>Die erste Kunden-ID muss größer als null sein.</value>
+  </data>
+  <data name="currencyDecimalDigitsOutOfRange" xml:space="preserve">
+    <value>Die Nachkommastellen der Währung müssen zwischen 0 und 4 liegen.</value>
+  </data>
 </root>

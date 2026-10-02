@@ -101,4 +101,7 @@
   <data name="supplierDeletionPrompt" xml:space="preserve">
     <value>Delete {0}?</value>
   </data>
+  <data name="leadTimeNegative" xml:space="preserve">
+    <value>Lead time cannot be negative.</value>
+  </data>
 </root>

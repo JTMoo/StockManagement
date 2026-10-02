@@ -18,15 +18,15 @@ public class UpdateStockItemValidator : Validator<UpdateStockItemRequest>
 {
 	public UpdateStockItemValidator()
 	{
-		this.RuleFor(request => request.Code).NotEmpty();
-		this.RuleFor(request => request.Name).NotEmpty();
-		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.Factor).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.Code).NotEmpty().WithMessage("codeRequired");
+		this.RuleFor(request => request.Name).NotEmpty().WithMessage("nameRequired");
+		this.RuleFor(request => request.Amount).GreaterThanOrEqualTo(0).WithMessage("amountNegative");
+		this.RuleFor(request => request.Price).GreaterThanOrEqualTo(0).WithMessage("priceNegative");
+		this.RuleFor(request => request.Factor).GreaterThanOrEqualTo(0).WithMessage("factorNegative");
+		this.RuleFor(request => request.PurchasePrice).GreaterThanOrEqualTo(0).WithMessage("purchasePriceNegative");
+		this.RuleFor(request => request.PurchaseExchangeRate).GreaterThanOrEqualTo(0).WithMessage("purchaseExchangeRateNegative");
+		this.RuleFor(request => request.AdditionalPurchaseCost).GreaterThanOrEqualTo(0).WithMessage("additionalPurchaseCostNegative");
+		this.RuleFor(request => request.MinimumStock).GreaterThanOrEqualTo(0).WithMessage("minimumStockNegative");
 	}
 }
 

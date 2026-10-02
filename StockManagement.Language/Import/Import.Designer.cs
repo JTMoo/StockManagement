@@ -203,5 +203,13 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("selectedFileInUse", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to A file is required...
+        /// </summary>
+        public static string fileRequired {
+            get {
+                return ResourceManager.GetString("fileRequired", resourceCulture);
+            }
+        }
     }
 }

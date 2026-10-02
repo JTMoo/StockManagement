@@ -149,6 +149,7 @@ public sealed class SaleEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "saleItemsRequired");
 	}
 
 	[TestMethod]
@@ -159,6 +160,7 @@ public sealed class SaleEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "amountNotPositive");
 	}
 
 	[TestMethod]

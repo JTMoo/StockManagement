@@ -302,5 +302,31 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("width", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Name is required...
+        /// </summary>
+        public static string nameRequired {
+            get {
+                return ResourceManager.GetString("nameRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A reason is required...
+        /// </summary>
+        public static string reasonRequired {
+            get {
+                return ResourceManager.GetString("reasonRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Amount must be greater than zero...
+        /// </summary>
+        public static string amountNotPositive {
+            get {
+                return ResourceManager.GetString("amountNotPositive", resourceCulture);
+            }
+        }
     }
 }

@@ -165,4 +165,7 @@
   <data name="selectedFileInUse" xml:space="preserve">
     <value>El archivo seleccionado está siendo utilizado por otro proceso y no se puede abrir.</value>
   </data>
+  <data name="fileRequired" xml:space="preserve">
+    <value>Se requiere un archivo.</value>
+  </data>
 </root>

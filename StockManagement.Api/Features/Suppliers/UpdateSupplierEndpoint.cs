@@ -16,8 +16,8 @@ public class UpdateSupplierValidator : Validator<UpdateSupplierRequest>
 {
 	public UpdateSupplierValidator()
 	{
-		this.RuleFor(request => request.Name).NotEmpty();
-		this.RuleFor(request => request.LeadTimeDays).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.Name).NotEmpty().WithMessage("nameRequired");
+		this.RuleFor(request => request.LeadTimeDays).GreaterThanOrEqualTo(0).WithMessage("leadTimeNegative");
 	}
 }
 

@@ -19,8 +19,8 @@ public class CreatePaymentValidator : Validator<CreatePaymentRequest>
 {
 	public CreatePaymentValidator()
 	{
-		this.RuleFor(request => request.Amount).GreaterThan(0);
-		this.RuleFor(request => request.Method).IsInEnum().NotEqual(PaymentMethod.None);
+		this.RuleFor(request => request.Amount).GreaterThan(0).WithMessage("amountNotPositive");
+		this.RuleFor(request => request.Method).IsInEnum().WithMessage("paymentMethodInvalid").NotEqual(PaymentMethod.None).WithMessage("paymentMethodInvalid");
 	}
 }
 

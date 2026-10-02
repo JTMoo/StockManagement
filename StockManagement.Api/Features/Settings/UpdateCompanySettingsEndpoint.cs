@@ -13,11 +13,11 @@ public class UpdateCompanySettingsValidator : Validator<UpdateCompanySettingsReq
 {
 	public UpdateCompanySettingsValidator()
 	{
-		this.RuleFor(request => request.VatRatePercent).InclusiveBetween(0, 100);
-		this.RuleFor(request => request.PaymentTermInDays).GreaterThanOrEqualTo(0);
-		this.RuleFor(request => request.FirstInvoiceNumber).GreaterThan(0);
-		this.RuleFor(request => request.FirstCustomerId).GreaterThan(0);
-		this.RuleFor(request => request.CurrencyDecimalDigits).InclusiveBetween(0, 4);
+		this.RuleFor(request => request.VatRatePercent).InclusiveBetween(0, 100).WithMessage("vatRateOutOfRange");
+		this.RuleFor(request => request.PaymentTermInDays).GreaterThanOrEqualTo(0).WithMessage("paymentTermNegative");
+		this.RuleFor(request => request.FirstInvoiceNumber).GreaterThan(0).WithMessage("firstInvoiceNumberNotPositive");
+		this.RuleFor(request => request.FirstCustomerId).GreaterThan(0).WithMessage("firstCustomerIdNotPositive");
+		this.RuleFor(request => request.CurrencyDecimalDigits).InclusiveBetween(0, 4).WithMessage("currencyDecimalDigitsOutOfRange");
 	}
 }
 

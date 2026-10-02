@@ -18,10 +18,10 @@ public class UpdateUserValidator : Validator<UpdateUserRequest>
 {
 	public UpdateUserValidator()
 	{
-		this.RuleFor(request => request.Username).NotEmpty();
-		this.RuleFor(request => request.Password).MinimumLength(8).When(request => !string.IsNullOrEmpty(request.Password));
-		this.RuleFor(request => request.Role).IsInEnum();
-		this.RuleForEach(request => request.Permissions).Must(permission => Permission.CatalogAll.Contains(permission));
+		this.RuleFor(request => request.Username).NotEmpty().WithMessage("usernameRequired");
+		this.RuleFor(request => request.Password).MinimumLength(8).WithMessage("passwordTooShort").When(request => !string.IsNullOrEmpty(request.Password));
+		this.RuleFor(request => request.Role).IsInEnum().WithMessage("roleInvalid");
+		this.RuleForEach(request => request.Permissions).Must(permission => Permission.CatalogAll.Contains(permission)).WithMessage("permissionInvalid");
 	}
 }
 

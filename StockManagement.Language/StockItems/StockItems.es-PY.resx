@@ -237,4 +237,28 @@
   <data name="tireDimensions" xml:space="preserve">
     <value>Demsions de los neumáticos</value>
   </data>
+  <data name="codeRequired" xml:space="preserve">
+    <value>El código es obligatorio.</value>
+  </data>
+  <data name="amountNegative" xml:space="preserve">
+    <value>La cantidad no puede ser negativa.</value>
+  </data>
+  <data name="priceNegative" xml:space="preserve">
+    <value>El precio no puede ser negativo.</value>
+  </data>
+  <data name="factorNegative" xml:space="preserve">
+    <value>El factor no puede ser negativo.</value>
+  </data>
+  <data name="purchasePriceNegative" xml:space="preserve">
+    <value>El precio de compra no puede ser negativo.</value>
+  </data>
+  <data name="purchaseExchangeRateNegative" xml:space="preserve">
+    <value>El tipo de cambio no puede ser negativo.</value>
+  </data>
+  <data name="additionalPurchaseCostNegative" xml:space="preserve">
+    <value>El costo de compra adicional no puede ser negativo.</value>
+  </data>
+  <data name="minimumStockNegative" xml:space="preserve">
+    <value>El stock mínimo no puede ser negativo.</value>
+  </data>
 </root>

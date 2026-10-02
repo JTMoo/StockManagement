@@ -20,7 +20,7 @@ public class CancelInvoiceValidator : Validator<CancelInvoiceRequest>
 {
 	public CancelInvoiceValidator()
 	{
-		this.RuleFor(request => request.Reason).NotEmpty();
+		this.RuleFor(request => request.Reason).NotEmpty().WithMessage("reasonRequired");
 	}
 }
 

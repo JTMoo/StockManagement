@@ -198,4 +198,13 @@
   <data name="total" xml:space="preserve">
     <value>Total</value>
   </data>
+  <data name="saleConditionInvalid" xml:space="preserve">
+    <value>Sale condition is invalid.</value>
+  </data>
+  <data name="saleItemsRequired" xml:space="preserve">
+    <value>At least one item is required.</value>
+  </data>
+  <data name="paymentMethodInvalid" xml:space="preserve">
+    <value>Payment method is invalid.</value>
+  </data>
 </root>

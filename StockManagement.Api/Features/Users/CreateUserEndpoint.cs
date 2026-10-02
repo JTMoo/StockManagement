@@ -21,10 +21,10 @@ public class CreateUserValidator : Validator<CreateUserRequest>
 {
 	public CreateUserValidator()
 	{
-		this.RuleFor(request => request.Username).NotEmpty();
-		this.RuleFor(request => request.Password).NotEmpty().MinimumLength(8);
-		this.RuleFor(request => request.Role).IsInEnum();
-		this.RuleForEach(request => request.Permissions).Must(permission => Permission.CatalogAll.Contains(permission));
+		this.RuleFor(request => request.Username).NotEmpty().WithMessage("usernameRequired");
+		this.RuleFor(request => request.Password).NotEmpty().WithMessage("passwordRequired").MinimumLength(8).WithMessage("passwordTooShort");
+		this.RuleFor(request => request.Role).IsInEnum().WithMessage("roleInvalid");
+		this.RuleForEach(request => request.Permissions).Must(permission => Permission.CatalogAll.Contains(permission)).WithMessage("permissionInvalid");
 	}
 }
 

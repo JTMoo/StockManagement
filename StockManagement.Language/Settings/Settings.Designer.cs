@@ -203,5 +203,49 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("currencyDecimalDigits", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to VAT rate must be between 0 and 100...
+        /// </summary>
+        public static string vatRateOutOfRange {
+            get {
+                return ResourceManager.GetString("vatRateOutOfRange", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Payment term cannot be negative...
+        /// </summary>
+        public static string paymentTermNegative {
+            get {
+                return ResourceManager.GetString("paymentTermNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to First invoice number must be greater than zero...
+        /// </summary>
+        public static string firstInvoiceNumberNotPositive {
+            get {
+                return ResourceManager.GetString("firstInvoiceNumberNotPositive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to First customer id must be greater than zero...
+        /// </summary>
+        public static string firstCustomerIdNotPositive {
+            get {
+                return ResourceManager.GetString("firstCustomerIdNotPositive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Currency decimal digits must be between 0 and 4...
+        /// </summary>
+        public static string currencyDecimalDigitsOutOfRange {
+            get {
+                return ResourceManager.GetString("currencyDecimalDigitsOutOfRange", resourceCulture);
+            }
+        }
     }
 }
