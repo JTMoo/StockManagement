@@ -34,7 +34,7 @@ Generated from `docs/adr/*.md` by `scripts/generate-adr-index.sh`. Don't hand-ed
 | [0023](adr/0023-suppliers-and-reorder-level.md) | Suppliers and reorder level | Proposed |
 | [0024](adr/0024-credit-notes-cancel-invoice.md) | Cancel an invoice with a credit note | Proposed |
 | [0025](adr/0025-kora-design-system.md) | Kora design system, full replacement of the WPF look | Proposed |
-| [0026](adr/0026-cross-domain-search.md) | Cross-domain search via Postgres full-text + trigram | Proposed |
+| [0026](adr/0026-cross-domain-search.md) | Cross-domain search via Postgres full-text + trigram | Accepted |
 | [0027](adr/0027-auto-merge-and-claude-review.md) | Unattended PR merging: required checks + Claude review, no owner click | Proposed |
 | [0028](adr/0028-import-column-mapping.md) | Import column mapping | Proposed |
 | [0029](adr/0029-cursor-pagination-for-list-endpoints.md) | Cursor pagination for list endpoints | Proposed |
