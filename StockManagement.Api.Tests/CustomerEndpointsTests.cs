@@ -49,10 +49,10 @@ public sealed class CustomerEndpointsTests
 		await _client.PostAsJsonAsync("/api/customers", new CreateCustomerRequest("Luis"));
 
 		// Act
-		var customers = await _client.GetFromJsonAsync<List<CustomerResponse>>("/api/customers", ApiFactory.JsonOptions);
+		var customers = await _client.GetFromJsonAsync<CustomerListResponse>("/api/customers", ApiFactory.JsonOptions);
 
 		// Assert
-		CollectionAssert.AreEquivalent(new[] { 1001, 1002 }, customers.Select(customer => customer.CustomerId).ToList());
+		CollectionAssert.AreEquivalent(new[] { 1001, 1002 }, customers.Items.Select(customer => customer.CustomerId).ToList());
 	}
 
 	[TestMethod]

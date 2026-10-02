@@ -41,8 +41,8 @@ public sealed class SupplierEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-		var suppliers = await response.Content.ReadAsAsync<List<SupplierResponse>>();
-		CollectionAssert.AreEquivalent(new[] { "Acme" }, suppliers.Select(supplier => supplier.Name).ToList());
+		var suppliers = await response.Content.ReadAsAsync<SupplierListResponse>();
+		CollectionAssert.AreEquivalent(new[] { "Acme" }, suppliers.Items.Select(supplier => supplier.Name).ToList());
 	}
 
 	[TestMethod]
@@ -82,7 +82,7 @@ public sealed class SupplierEndpointsTests
 	public async Task UpdateSupplier_KnownId_Returns200AndUpdates()
 	{
 		// Arrange
-		var id = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<List<SupplierResponse>>()).Single().Id;
+		var id = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<SupplierListResponse>()).Items.Single().Id;
 
 		// Act
 		var response = await _client.PutAsJsonAsync($"/api/suppliers/{id}", new { Id = id, Name = "Acme Corp", LeadTimeDays = 7 });
@@ -108,21 +108,21 @@ public sealed class SupplierEndpointsTests
 	public async Task DeleteSupplier_KnownId_Returns204AndRemoves()
 	{
 		// Arrange
-		var id = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<List<SupplierResponse>>()).Single().Id;
+		var id = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<SupplierListResponse>()).Items.Single().Id;
 
 		// Act
 		var response = await _client.DeleteAsync($"/api/suppliers/{id}");
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-		Assert.IsFalse((await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<List<SupplierResponse>>()).Any());
+		Assert.IsFalse((await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<SupplierListResponse>()).Items.Any());
 	}
 
 	[TestMethod]
 	public async Task DeleteSupplier_AssignedToStockItem_Returns409()
 	{
 		// Arrange
-		var supplierId = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<List<SupplierResponse>>()).Single().Id;
+		var supplierId = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<SupplierListResponse>()).Items.Single().Id;
 		await _client.PostAsJsonAsync("/api/stock-items", new { Code = "A1", Name = "Screw", SupplierId = supplierId });
 
 		// Act
@@ -136,7 +136,7 @@ public sealed class SupplierEndpointsTests
 	public async Task CreateStockItem_WithSupplierAndMinimumStock_ReturnedOnGet()
 	{
 		// Arrange
-		var supplierId = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<List<SupplierResponse>>()).Single().Id;
+		var supplierId = (await (await _client.GetAsync("/api/suppliers")).Content.ReadAsAsync<SupplierListResponse>()).Items.Single().Id;
 		await _client.PostAsJsonAsync("/api/stock-items", new { Code = "A1", Name = "Screw", Amount = 1, SupplierId = supplierId, MinimumStock = 5 });
 
 		// Act
@@ -162,7 +162,7 @@ public sealed class SupplierEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-		var stockItems = await response.Content.ReadAsAsync<List<Features.StockItems.StockItemResponse>>();
-		CollectionAssert.AreEquivalent(new[] { "A1" }, stockItems.Select(item => item.Code).ToList());
+		var stockItems = await response.Content.ReadAsAsync<Features.StockItems.StockItemListResponse>();
+		CollectionAssert.AreEquivalent(new[] { "A1" }, stockItems.Items.Select(item => item.Code).ToList());
 	}
 }

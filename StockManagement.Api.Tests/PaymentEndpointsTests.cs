@@ -146,7 +146,7 @@ public sealed class PaymentEndpointsTests
 		var result = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices/open", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.AreEqual(1, result.TotalCount);
+		Assert.AreEqual(1, result.Items.Count);
 		Assert.AreEqual(openNumber, result.Items.Single().Number);
 	}
 
@@ -162,7 +162,7 @@ public sealed class PaymentEndpointsTests
 		var result = await _client.GetFromJsonAsync<InvoiceListResponse>("/api/invoices/overdue", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.AreEqual(1, result.TotalCount);
+		Assert.AreEqual(1, result.Items.Count);
 		Assert.AreEqual(1, result.Items.Single().Number);
 		Assert.AreEqual(InvoiceStatus.Overdue, result.Items.Single().Status);
 	}

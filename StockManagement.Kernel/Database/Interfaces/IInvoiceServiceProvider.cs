@@ -10,10 +10,9 @@ public interface IInvoiceServiceProvider
 	public Task<IEnumerable<Invoice>> GetInvoicesAsync();
 
 	/// <summary>
-	/// Invoices matching every given filter, newest first, one page at a time
+	/// Invoices matching every given filter, newest first then <see cref="BaseDocument.Id"/>, one page at a time
 	/// </summary>
-	/// <param name="page">1-based</param>
-	public Task<PagedResult<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, int page, int pageSize);
+	public Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize);
 
 	/// <returns>Rows affected; 1 on success</returns>
 	public Task<int> UpdateInvoiceAsync(Invoice invoice);

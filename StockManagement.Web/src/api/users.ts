@@ -1,4 +1,4 @@
-import { send } from "./client";
+import { send, sendAllPages } from "./client";
 
 export type UserRole = "Standard" | "Admin";
 
@@ -17,7 +17,7 @@ export type NewUser = Partial<Omit<User, "id" | "role" | "permissions">> & { use
 export type EditUser = Omit<User, "permissions"> & { permissions: Permission[]; password?: string };
 
 export const usersApi = {
-	listUsers: (signal?: AbortSignal) => send<User[]>("/users", { signal }),
+	listUsers: (signal?: AbortSignal) => sendAllPages<User>("/users", signal),
 	createUser: (user: NewUser) => send<User>("/users", { method: "POST", body: JSON.stringify(user) }),
 	updateUser: (user: EditUser) => send<User>(`/users/${user.id}`, { method: "PUT", body: JSON.stringify(user) }),
 	deleteUser: (user: User) => send<void>(`/users/${user.id}`, { method: "DELETE" })

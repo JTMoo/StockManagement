@@ -115,10 +115,10 @@ public sealed class PaymentServiceTests
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([paid, dueLater, dueSoon]);
 
 		// Act
-		var result = await this.CreateService().GetOpenInvoicesAsync(customerId: null, page: 1, pageSize: 20);
+		var result = await this.CreateService().GetOpenInvoicesAsync(customerId: null, cursor: null, pageSize: 20);
 
 		// Assert
-		Assert.AreEqual(2, result.TotalCount);
+		Assert.AreEqual(2, result.Items.Count);
 		CollectionAssert.AreEqual(new[] { dueSoon, dueLater }, result.Items.ToList());
 	}
 
@@ -133,7 +133,7 @@ public sealed class PaymentServiceTests
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([invoiceA, invoiceB]);
 
 		// Act
-		var result = await this.CreateService().GetOpenInvoicesAsync(customerId: 1001, page: 1, pageSize: 20);
+		var result = await this.CreateService().GetOpenInvoicesAsync(customerId: 1001, cursor: null, pageSize: 20);
 
 		// Assert
 		CollectionAssert.AreEqual(new[] { invoiceA }, result.Items.ToList());
@@ -150,7 +150,7 @@ public sealed class PaymentServiceTests
 		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([overdue, notYetDue, paidPastDue]);
 
 		// Act
-		var result = await this.CreateService().GetOverdueInvoicesAsync(page: 1, pageSize: 20);
+		var result = await this.CreateService().GetOverdueInvoicesAsync(cursor: null, pageSize: 20);
 
 		// Assert
 		CollectionAssert.AreEqual(new[] { overdue }, result.Items.ToList());
