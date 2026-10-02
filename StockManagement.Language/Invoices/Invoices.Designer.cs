@@ -142,6 +142,24 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to CDC.
+        /// </summary>
+        public static string cdc {
+            get {
+                return ResourceManager.GetString("cdc", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to SIFEN status.
+        /// </summary>
+        public static string transmissionStatus {
+            get {
+                return ResourceManager.GetString("transmissionStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Credit Note.
         /// </summary>
         public static string creditNote {
@@ -300,6 +318,68 @@ namespace StockManagement.Language {
         public static string total {
             get {
                 return ResourceManager.GetString("total", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Sale condition is invalid...
+        /// </summary>
+        public static string saleConditionInvalid {
+            get {
+                return ResourceManager.GetString("saleConditionInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to At least one item is required...
+        /// </summary>
+        public static string saleItemsRequired {
+            get {
+                return ResourceManager.GetString("saleItemsRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Payment method is invalid...
+        /// </summary>
+        public static string paymentMethodInvalid {
+            get {
+                return ResourceManager.GetString("paymentMethodInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Pending.
+        /// </summary>
+        public static string statusPending {
+            get {
+                return ResourceManager.GetString("statusPending", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Paid.
+        /// </summary>
+        public static string statusPaid {
+            get {
+                return ResourceManager.GetString("statusPaid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Overdue.
+        /// </summary>
+        public static string statusOverdue {
+            get {
+                return ResourceManager.GetString("statusOverdue", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invoice {0} saved..
+        /// </summary>
+        public static string invoiceSavedToast {
+            get {
+                return ResourceManager.GetString("invoiceSavedToast", resourceCulture);
             }
         }
     }

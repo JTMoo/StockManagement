@@ -14,8 +14,8 @@ public class CheckInStockItemValidator : Validator<CheckInStockItemRequest>
 {
 	public CheckInStockItemValidator()
 	{
-		this.RuleFor(request => request.Amount).GreaterThan(0);
-		this.RuleFor(request => request.Reason).NotEmpty();
+		this.RuleFor(request => request.Amount).GreaterThan(0).WithMessage("amountNotPositive");
+		this.RuleFor(request => request.Reason).NotEmpty().WithMessage("reasonRequired");
 	}
 }
 
@@ -33,9 +33,9 @@ public class CheckInStockItemEndpoint(IStockItemServiceProvider stockItemService
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound>> ExecuteAsync(CheckInStockItemRequest request, CancellationToken cancellationToken)
 	{
-		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id) is not StockItem stockItem) return TypedResults.NotFound();
+		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id, cancellationToken) is not StockItem stockItem) return TypedResults.NotFound();
 
-		await _stockItemServiceProvider.CheckInStockItemAsync(stockItem, request.Amount, request.Reason);
+		await _stockItemServiceProvider.CheckInStockItemAsync(stockItem, request.Amount, request.Reason, cancellationToken);
 
 		return TypedResults.Ok(StockItemResponse.From(stockItem));
 	}

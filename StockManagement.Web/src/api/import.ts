@@ -1,6 +1,6 @@
 import { authHeaders, send, sendForm } from "./client";
 
-export type ImportTarget = "StockItems" | "Customers" | "OpeningStock";
+export type ImportTarget = "StockItems" | "Customers" | "OpeningStock" | "OpenInvoices";
 
 export type ImportRowStatus = "Ready" | "Duplicate" | "Error";
 

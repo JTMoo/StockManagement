@@ -9,27 +9,30 @@ describe("CustomerList", () =>
 	it("Create_Valid_PostsAndAddsRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/customers": { body: [] }, "POST /api/customers": { status: 201, body: ana } });
+		const fetchMock = mockApi({ "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/customers": { status: 201, body: ana } });
 		renderEnglish(<CustomerList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Name"), "Ana");
 		await userEvent.type(screen.getByLabelText("Lastname"), "Gómez");
 		await userEvent.click(screen.getByRole("button", { name: "Create Customer" }));
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Gómez" })).toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 		expect(sentBody(fetchMock, "POST /api/customers")).toEqual({ name: "Ana", lastname: "Gómez" });
-		expect(screen.getByLabelText("Name")).toHaveValue("");
+		expect(screen.getByRole("status")).toHaveTextContent("Customer saved.");
 	});
 
 	it("Create_Rejected_ShowsErrorAndKeepsInput", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/customers": { body: [] }, "POST /api/customers": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/customers": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
 		renderEnglish(<CustomerList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Name"), " ");
 		await userEvent.click(screen.getByRole("button", { name: "Create Customer" }));
 
@@ -38,11 +41,26 @@ describe("CustomerList", () =>
 		expect(screen.getByLabelText("Name")).toHaveValue(" ");
 	});
 
+	it("AddNew_Cancel_ClosesDialogWithoutSaving", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [], nextCursor: null } } });
+		renderEnglish(<CustomerList />);
+
+		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
+		expect(screen.getByRole("dialog")).toBeInTheDocument();
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+		// Assert
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+	});
+
 	it("Edit_Valid_PutsAndUpdatesRow", async () =>
 	{
 		// Arrange
 		const updated = { ...ana, lastname: "Silva" };
-		const fetchMock = mockApi({ "GET /api/customers": { body: [ana] }, "PUT /api/customers/1001": { body: updated } });
+		const fetchMock = mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } }, "PUT /api/customers/1001": { body: updated } });
 		renderEnglish(<CustomerList />);
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 
@@ -54,13 +72,13 @@ describe("CustomerList", () =>
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Silva" })).toBeInTheDocument();
 		expect(sentBody(fetchMock, "PUT /api/customers/1001")).toEqual(updated);
-		expect(screen.queryByRole("button", { name: "Save Customer" })).not.toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
-	it("Edit_Cancelled_ShowsCreateFormAgainWithoutSaving", async () =>
+	it("Edit_Cancelled_ClosesDialogWithoutSaving", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/customers": { body: [ana] } });
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } } });
 		renderEnglish(<CustomerList />);
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 
@@ -68,13 +86,13 @@ describe("CustomerList", () =>
 		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
 		// Assert
-		expect(screen.getByRole("button", { name: "Create Customer" })).toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("Edit_Rejected_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/customers": { body: [ana] }, "PUT /api/customers/1001": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
+		mockApi({ "GET /api/customers?pageSize=100": { body: { items: [ana], nextCursor: null } }, "PUT /api/customers/1001": { status: 400, body: { errors: [{ name: "name", reason: "'name' must not be empty." }] } } });
 		renderEnglish(<CustomerList />);
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 

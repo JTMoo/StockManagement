@@ -42,8 +42,8 @@ public sealed class StockItemEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-		var stockItems = await response.Content.ReadAsAsync<List<StockItemResponse>>();
-		CollectionAssert.AreEquivalent(new[] { "A1", "B2" }, stockItems.Select(item => item.Code).ToList());
+		var stockItems = await response.Content.ReadAsAsync<StockItemListResponse>();
+		CollectionAssert.AreEquivalent(new[] { "A1", "B2" }, stockItems.Items.Select(item => item.Code).ToList());
 	}
 
 	[TestMethod]
@@ -126,6 +126,7 @@ public sealed class StockItemEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "nameRequired");
 	}
 
 	[TestMethod]
@@ -232,6 +233,7 @@ public sealed class StockItemEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "reasonRequired");
 	}
 
 	[TestMethod]

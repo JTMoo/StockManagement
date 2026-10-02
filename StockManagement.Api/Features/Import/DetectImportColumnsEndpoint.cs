@@ -22,7 +22,7 @@ public class DetectImportColumnsValidator : Validator<DetectImportColumnsRequest
 {
 	public DetectImportColumnsValidator()
 	{
-		this.RuleFor(request => request.File).Must(file => file is { Length: > 0 });
+		this.RuleFor(request => request.File).Must(file => file is { Length: > 0 }).WithMessage("fileRequired");
 	}
 }
 
@@ -42,7 +42,7 @@ public class DetectImportColumnsEndpoint(IImportBatchService importBatchService,
 	{
 		this.Post("/import/batches/columns");
 		this.AllowFileUploads();
-		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite, Permission.SalesWrite);
 	}
 
 	public override async Task<Results<Ok<DetectedColumnsResponse>, BadRequest<InvalidExcelFileResponse>>> ExecuteAsync(DetectImportColumnsRequest request, CancellationToken cancellationToken)

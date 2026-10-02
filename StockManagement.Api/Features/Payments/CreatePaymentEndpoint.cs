@@ -8,7 +8,7 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Payments;
 
 
-public sealed record CreatePaymentRequest(int Number, decimal Amount, PaymentMethod Method, DateTime? Date);
+public sealed record CreatePaymentRequest(string Number, decimal Amount, PaymentMethod Method, DateTime? Date);
 
 
 /// <param name="Reason">A resource key, e.g. <c>invalidPaymentAmount</c> or <c>paymentExceedsAmountDue</c></param>
@@ -19,8 +19,8 @@ public class CreatePaymentValidator : Validator<CreatePaymentRequest>
 {
 	public CreatePaymentValidator()
 	{
-		this.RuleFor(request => request.Amount).GreaterThan(0);
-		this.RuleFor(request => request.Method).IsInEnum().NotEqual(PaymentMethod.None);
+		this.RuleFor(request => request.Amount).GreaterThan(0).WithMessage("amountNotPositive");
+		this.RuleFor(request => request.Method).IsInEnum().WithMessage("paymentMethodInvalid").NotEqual(PaymentMethod.None).WithMessage("paymentMethodInvalid");
 	}
 }
 

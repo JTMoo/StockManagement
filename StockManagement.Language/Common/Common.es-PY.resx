@@ -120,6 +120,9 @@
   <data name="additionalInformation" xml:space="preserve">
     <value>Informaciones additionales</value>
   </data>
+  <data name="addNew" xml:space="preserve">
+    <value>Nuevo</value>
+  </data>
   <data name="back" xml:space="preserve">
     <value>Volver</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="changeInfo" xml:space="preserve">
     <value>Cambiar infomaciones de un artículo</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Cerrar</value>
   </data>
   <data name="confirm" xml:space="preserve">
     <value>Confirmar</value>
@@ -183,6 +189,18 @@
   <data name="searchBoxDefault" xml:space="preserve">
     <value>Buscar...</value>
   </data>
+  <data name="searchScreens" xml:space="preserve">
+    <value>Pantallas</value>
+  </data>
+  <data name="searchNoResults" xml:space="preserve">
+    <value>Sin resultados</value>
+  </data>
+  <data name="searchIncludeInactive" xml:space="preserve">
+    <value>Incluir anuladas</value>
+  </data>
+  <data name="searchViewAllResults" xml:space="preserve">
+    <value>Ver los {0} resultados en {1} →</value>
+  </data>
   <data name="show" xml:space="preserve">
     <value>Mostrar</value>
   </data>
@@ -197,5 +215,20 @@
   </data>
   <data name="width" xml:space="preserve">
     <value>Ancho</value>
+  </data>
+  <data name="nameRequired" xml:space="preserve">
+    <value>El nombre es obligatorio.</value>
+  </data>
+  <data name="reasonRequired" xml:space="preserve">
+    <value>Se requiere un motivo.</value>
+  </data>
+  <data name="amountNotPositive" xml:space="preserve">
+    <value>La cantidad debe ser mayor que cero.</value>
+  </data>
+  <data name="status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="savedToast" xml:space="preserve">
+    <value>{0} guardado.</value>
   </data>
 </root>

@@ -10,7 +10,7 @@ describe("InvoiceBrowser", () =>
 	it("NoInvoice_ShowsList", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/invoices?page=1&pageSize=20": { body: { items: [invoice], totalCount: 1 } } });
+		mockApi({ "GET /api/invoices?pageSize=20": { body: { items: [invoice], nextCursor: null } } });
 		renderEnglish(<InvoiceBrowser />);
 
 		// Assert
@@ -20,12 +20,12 @@ describe("InvoiceBrowser", () =>
 	it("SelectRowThenBack_ShowsDetailThenListAgain", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/invoices?page=1&pageSize=20": { body: { items: [invoice], totalCount: 1 } } });
+		mockApi({ "GET /api/invoices?pageSize=20": { body: { items: [invoice], nextCursor: null } } });
 		renderEnglish(<InvoiceBrowser />);
-		await userEvent.click(await screen.findByRole("button", { name: "7" }));
+		await userEvent.click(await screen.findByRole("button", { name: "001-001-0000007" }));
 
 		// Assert: detail
-		expect(await screen.findByRole("article", { name: "Invoice 7" })).toBeInTheDocument();
+		expect(await screen.findByRole("article", { name: "Invoice 001-001-0000007" })).toBeInTheDocument();
 
 		// Act: back
 		await userEvent.click(screen.getByRole("button", { name: "Back" }));
@@ -40,6 +40,6 @@ describe("InvoiceBrowser", () =>
 		renderEnglish(<InvoiceBrowser invoice={invoice as Invoice} />);
 
 		// Assert
-		expect(screen.getByRole("article", { name: "Invoice 7" })).toBeInTheDocument();
+		expect(screen.getByRole("article", { name: "Invoice 001-001-0000007" })).toBeInTheDocument();
 	});
 });

@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { mockApi, nut, renderEnglish, screw, sentBody } from "../../test-utils";
 import { StockItemList } from "./StockItemList";
 
@@ -9,7 +9,7 @@ describe("StockItemList", () =>
 	it("Load_TwoItems_ShowsBoth", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [screw, nut] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw, nut], nextCursor: null } } });
 
 		// Act
 		renderEnglish(<StockItemList />);
@@ -22,7 +22,7 @@ describe("StockItemList", () =>
 	it("Search_ByCode_ShowsOnlyMatches", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [screw, nut] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw, nut], nextCursor: null } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
@@ -37,7 +37,7 @@ describe("StockItemList", () =>
 	it("Search_RegexCharacters_TreatedAsText", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [screw] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw], nextCursor: null } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
@@ -63,26 +63,29 @@ describe("StockItemList", () =>
 	it("Create_Valid_PostsAndAddsRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/stock-items": { body: [] }, "POST /api/stock-items": { status: 201, body: screw } });
+		const fetchMock = mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/stock-items": { status: 201, body: screw } });
 		renderEnglish(<StockItemList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Code"), "A1");
 		await userEvent.type(screen.getByLabelText("Name"), "Screw");
 		await userEvent.click(screen.getByRole("button", { name: "Create Stock item" }));
 
 		// Assert
 		expect(await screen.findByRole("cell", { name: "Screw" })).toBeInTheDocument();
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 		expect(sentBody(fetchMock, "POST /api/stock-items")).toEqual({ id: "", code: "A1", name: "Screw", description: "", location: "", amount: 0, price: 0, manufacturer: "", factor: 0, purchasePrice: 0, purchaseExchangeRate: 0, additionalPurchaseCost: 0, minimumStock: 0 });
 	});
 
 	it("Create_DuplicateCode_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [] }, "POST /api/stock-items": { status: 409, body: { code: "A1" } } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/stock-items": { status: 409, body: { code: "A1" } } });
 		renderEnglish(<StockItemList />);
 
 		// Act
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
 		await userEvent.type(screen.getByLabelText("Code"), "A1");
 		await userEvent.type(screen.getByLabelText("Name"), "Screw");
 		await userEvent.click(screen.getByRole("button", { name: "Create Stock item" }));
@@ -91,10 +94,24 @@ describe("StockItemList", () =>
 		expect(await screen.findByRole("alert")).toHaveTextContent("A stock item with this code already exists: A1");
 	});
 
+	it("AddNew_Click_OpensAndClosesDialog", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } } });
+		renderEnglish(<StockItemList />);
+
+		// Act + Assert
+		await userEvent.click(screen.getByRole("button", { name: "+ Add New" }));
+		expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+	});
+
 	it("Edit_Valid_UpdatesRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/stock-items": { body: [screw] }, "PUT /api/stock-items/1": { body: { ...screw, amount: 25 } } });
+		const fetchMock = mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw], nextCursor: null } }, "PUT /api/stock-items/1": { body: { ...screw, amount: 25 } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
@@ -107,19 +124,19 @@ describe("StockItemList", () =>
 		// Assert
 		expect(await screen.findByRole("cell", { name: "25" })).toBeInTheDocument();
 		expect(sentBody(fetchMock, "PUT /api/stock-items/1")).toMatchObject({ id: "1", code: "A1", amount: 25 });
-		expect(screen.getByLabelText("Code")).toHaveValue("");
+		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
 
 	it("Delete_Confirmed_RemovesRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/stock-items": { body: [screw, nut] }, "DELETE /api/stock-items/1": { status: 204 } });
-		vi.spyOn(window, "confirm").mockReturnValue(true);
+		const fetchMock = mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw, nut], nextCursor: null } }, "DELETE /api/stock-items/1": { status: 204 } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
 		// Act
 		await userEvent.click(screen.getAllByRole("button", { name: "Delete Item" })[0]);
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(screen.queryByRole("cell", { name: "Screw" })).not.toBeInTheDocument();
@@ -130,22 +147,37 @@ describe("StockItemList", () =>
 	it("Delete_Cancelled_KeepsRow", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [screw] } });
-		vi.spyOn(window, "confirm").mockReturnValue(false);
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw], nextCursor: null } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete Item" }));
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
 		// Assert
 		expect(screen.getByRole("cell", { name: "Screw" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Delete Item" })).toBeInTheDocument();
+	});
+
+	it("Load_OutOfStockAndBelowMinimum_ShowStatusBadges", async () =>
+	{
+		// Arrange
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [nut, { ...screw, minimumStock: 20 }], nextCursor: null } } });
+
+		// Act
+		renderEnglish(<StockItemList />);
+		await screen.findByRole("cell", { name: "Screw" });
+
+		// Assert
+		expect(screen.getByText("Out of stock")).toBeInTheDocument();
+		expect(screen.getByText("Low stock")).toBeInTheDocument();
 	});
 
 	it("ToggleBelowMinimum_Click_FiltersToItemsBelowTheirMinimum", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [{ ...screw, minimumStock: 20 }, { ...nut, minimumStock: 0 }] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [{ ...screw, minimumStock: 20 }, { ...nut, minimumStock: 0 }], nextCursor: null } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
@@ -160,7 +192,7 @@ describe("StockItemList", () =>
 	it("ToggleExcelImport_Click_ShowsAndHidesImportPanel", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [] } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } } });
 		renderEnglish(<StockItemList />);
 
 		// Act + Assert
@@ -186,7 +218,7 @@ describe("StockItemList", () =>
 			rows: [{ row: 2, status: "Ready", fields: { Code: "A1" } }]
 		};
 		const fetchMock = mockApi({
-			"GET /api/stock-items": { body: [] },
+			"GET /api/stock-items?pageSize=100": { body: { items: [], nextCursor: null } },
 			"POST /api/import/batches/columns": { body: { sheetName: "Sheet1", columns: [], fields: [] } },
 			"POST /api/import/batches": { body: batch },
 			"POST /api/import/batches/batch-1/commit": { body: { ...batch, status: "Committed" } }
@@ -204,19 +236,19 @@ describe("StockItemList", () =>
 
 		// Assert
 		expect(await screen.findByRole("button", { name: "Undo" })).toBeInTheDocument();
-		expect(fetchMock.mock.calls.filter(([url, init]) => `${init?.method ?? "GET"} ${url}` === "GET /api/stock-items")).toHaveLength(2);
+		expect(fetchMock.mock.calls.filter(([url, init]) => `${init?.method ?? "GET"} ${url}` === "GET /api/stock-items?pageSize=100")).toHaveLength(2);
 	});
 
 	it("CheckIn_Valid_PostsAndUpdatesAmount", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/stock-items": { body: [screw] }, "POST /api/stock-items/1/check-in": { body: { ...screw, amount: 15 } } });
+		const fetchMock = mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw], nextCursor: null } }, "POST /api/stock-items/1/check-in": { body: { ...screw, amount: 15 } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Check In/Out" }));
-		const amountField = screen.getAllByLabelText("Amount")[1];
+		const amountField = screen.getByLabelText("Amount");
 		await userEvent.clear(amountField);
 		await userEvent.type(amountField, "5");
 		await userEvent.type(screen.getByLabelText("Reason"), "Delivery");
@@ -230,7 +262,7 @@ describe("StockItemList", () =>
 	it("CheckOut_InsufficientStock_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/stock-items": { body: [screw] }, "POST /api/stock-items/1/check-out": { status: 409, body: { inStock: 2 } } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { body: { items: [screw], nextCursor: null } }, "POST /api/stock-items/1/check-out": { status: 409, body: { inStock: 2 } } });
 		renderEnglish(<StockItemList />);
 		await screen.findByRole("cell", { name: "Screw" });
 

@@ -32,6 +32,8 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IUserServiceProvider, EfUserServiceProvider>();
 		services.AddScoped<IImportBatchServiceProvider, EfImportBatchServiceProvider>();
 		services.AddScoped<ISupplierServiceProvider, EfSupplierServiceProvider>();
+		services.AddScoped<ISearchServiceProvider, EfSearchServiceProvider>();
+		services.AddScoped<IPendingTransmissionServiceProvider, EfPendingTransmissionServiceProvider>();
 		return services;
 	}
 }

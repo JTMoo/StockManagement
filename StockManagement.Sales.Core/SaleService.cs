@@ -26,7 +26,8 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 
 		List<ShoppingCartItem> cartItems = [.. items ?? []];
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
-		var total = this.CalculateTotal(cartItems, companySettings.CurrencyDecimalDigits);
+		var lines = cartItems.Select(ToSaleLine).ToList();
+		var total = InvoiceCalculator.CalculateTotal(lines, companySettings.CurrencyDecimalDigits);
 
 		return new Invoice()
 		{
@@ -35,18 +36,23 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 			ExpirationDate = InvoiceCalculator.CalculateExpirationDate(date, companySettings.PaymentTermInDays),
 			Items = cartItems,
 			Total = total,
-			Tax = InvoiceCalculator.CalculateTax(total, companySettings.VatRatePercent, companySettings.CurrencyDecimalDigits)
+			Tax = InvoiceCalculator.CalculateTax(lines, companySettings.CurrencyDecimalDigits)
 		};
 	}
 
-	/// <remarks>Still "highest + 1" over all stored invoices; a counter document with $inc is the planned replacement.</remarks>
-	public async Task<int> GetNextInvoiceNumberAsync(CancellationToken cancellationToken = default)
+	/// <remarks>"Highest + 1" scoped to invoices already carrying the configured establishment/point-of-sale prefix; a counter document with $inc is the planned replacement.</remarks>
+	public async Task<string> GetNextInvoiceNumberAsync(CancellationToken cancellationToken = default)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
 		var invoices = await _invoiceServiceProvider.GetInvoicesAsync() ?? [];
 		var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
-		return SequenceNumber.Next(invoices.Select(invoice => invoice.Number), companySettings.FirstInvoiceNumber);
+		var sequencesInUse = invoices
+			.Select(invoice => InvoiceNumber.TryParseSequence(invoice.Number, companySettings.EstablishmentCode, companySettings.PointOfSaleCode))
+			.Where(sequence => sequence.HasValue)
+			.Select(sequence => sequence!.Value);
+		var next = SequenceNumber.Next(sequencesInUse, companySettings.FirstInvoiceNumber);
+		return InvoiceNumber.Format(companySettings.EstablishmentCode, companySettings.PointOfSaleCode, next);
 	}
 
 	/// <remarks>
@@ -97,7 +103,7 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			if (await _stockItemServiceProvider.GetStockItemAsync(code) is not StockItem stockItem) continue;
+			if (await _stockItemServiceProvider.GetStockItemAsync(code, cancellationToken) is not StockItem stockItem) continue;
 			currentStock[code] = stockItem;
 		}
 
@@ -106,6 +112,6 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 
 	private static SaleLine ToSaleLine(ShoppingCartItem item)
 	{
-		return new SaleLine(item.StockItem.Code, item.StockItem.Name, item.Amount, item.StockItem.Price);
+		return new SaleLine(item.StockItem.Code, item.StockItem.Name, item.Amount, item.StockItem.Price, item.StockItem.VatRatePercent);
 	}
 }

@@ -16,8 +16,8 @@ public class CreateSupplierValidator : Validator<CreateSupplierRequest>
 {
 	public CreateSupplierValidator()
 	{
-		this.RuleFor(request => request.Name).NotEmpty();
-		this.RuleFor(request => request.LeadTimeDays).GreaterThanOrEqualTo(0);
+		this.RuleFor(request => request.Name).NotEmpty().WithMessage("nameRequired");
+		this.RuleFor(request => request.LeadTimeDays).GreaterThanOrEqualTo(0).WithMessage("leadTimeNegative");
 	}
 }
 
@@ -42,7 +42,7 @@ public class CreateSupplierEndpoint(ISupplierServiceProvider supplierServiceProv
 
 		try
 		{
-			await _supplierServiceProvider.AddSupplierAsync(supplier);
+			await _supplierServiceProvider.AddSupplierAsync(supplier, cancellationToken);
 		}
 		catch (SupplierNameAlreadyExistsException)
 		{

@@ -10,7 +10,7 @@ using StockManagement.Sales.Core.Contracts;
 namespace StockManagement.Api.Features.Invoices;
 
 
-public sealed record CancelInvoiceRequest(int Number, string Reason);
+public sealed record CancelInvoiceRequest(string Number, string Reason);
 
 
 public sealed record InvoiceAlreadyCancelledResponse(string Reason);
@@ -20,7 +20,7 @@ public class CancelInvoiceValidator : Validator<CancelInvoiceRequest>
 {
 	public CancelInvoiceValidator()
 	{
-		this.RuleFor(request => request.Reason).NotEmpty();
+		this.RuleFor(request => request.Reason).NotEmpty().WithMessage("reasonRequired");
 	}
 }
 

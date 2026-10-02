@@ -6,6 +6,17 @@
 2. **No prose. Never.** Bullets, tables, code.
 3. **Cut whenever possible.** Dead code, outdated comments, decisions that need revisiting.
 
+## Communication
+
+Applies to chat replies, PR bodies/comments, status updates, questions to owner.
+
+- Telegraphic: bullets, not paragraphs. Fragments OK.
+- Reply = result + what's needed from owner. Max ~6 bullets / ~60 words. Longer → file, link it.
+- No recap of the ask, no narration of investigation, no "I will now...", no closing offers/hedging.
+- Exact names: `file:line`, PR/issue #, ADR-nnnn. No marketing wording.
+- Status/progress → status update, not a reply. Reply only for result, blocker, or decision.
+- Questions: one line, options as short bullets, recommendation marked.
+
 ## Before an important decision
 
 Important = hard to undo or spans features (layers, frameworks, persistence, API contracts, auth, money, import, tests, packaging).
@@ -28,7 +39,7 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - API tests (Docker): `dotnet test StockManagement.Api.Tests`
 - Run API: `dotnet run --project StockManagement.Api` (PostgreSQL on `127.0.0.1:5432`, see README)
 - Web (`StockManagement.Web`): `npm ci`, `npm run dev` (API running), `npm test`, `npm run e2e` (PostgreSQL), `npm run build` (→ API `wwwroot`)
-- CI: `Integration.yml` (Windows tests + Linux API and web tests on PR), `Delivery.yml` (MSI on tag), `claude-review.yml` (blocking review), `sync-main-into-prs.yml`
+- CI: `Integration.yml` (API, web and unit tests on PR, all `ubuntu-latest`), `Release.yml` (Electron installers on tag), `claude-review.yml` (blocking review), `sync-main-into-prs.yml`
 
 ## Style (existing)
 
@@ -48,15 +59,15 @@ Important = hard to undo or spans features (layers, frameworks, persistence, API
 - FastEndpoints, one endpoint per file, feature folders; React + TS ([ADR-0003](docs/adr/0003-fastendpoints-api-and-react-frontend.md))
 - `StockManagement.Web` UI: Kora design system ([ADR-0025](docs/adr/0025-kora-design-system.md); search backend [ADR-0026](docs/adr/0026-cross-domain-search.md)) — tokens, brand book, component guidelines and previews in [docs/design/kora/](docs/design/kora/README.md), the source of truth (open a `components/<Name>/preview.html` directly, no build step)
 - `Request`/`Response` records, not persistence models
-- Built-in DI; one `IMongoClient`; config for connection/DB name
+- Built-in DI; EF Core on PostgreSQL; config for connection string
 - Update by `Id`; business keys = unique indexes
-- Atomic multi-step writes; counters via `$inc`
+- Atomic multi-step writes
 - `CancellationToken` on async; no `async void`, no fire-and-forget, no empty `catch`
 - `ILogger<T>`, log the exception
 - Import errors: per-row report; keep source (file, sheet, row)
-- Mongo duplicate key → domain error in Infrastructure
+- Postgres duplicate key → domain error in Infrastructure
 - Money: never `double`
-- No binaries (`.msi`) in git; no customer names or connection strings in code
+- No binaries (installers) in git; no customer names or connection strings in code
 
 ## Tests
 

@@ -3,6 +3,7 @@ using StockManagement.Kernel.Database;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Exceptions;
 using StockManagement.Kernel.Model;
+using StockManagement.Kernel.Model.Types;
 
 namespace StockManagement.Infrastructure.Database;
 
@@ -15,7 +16,7 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 	private readonly AppDbContext _db = db;
 
 
-	public Task<Invoice> GetInvoiceAync(int invoiceNumber)
+	public Task<Invoice> GetInvoiceAync(string invoiceNumber)
 	{
 		return _db.Invoices.SingleOrDefaultAsync(invoice => invoice.Number == invoiceNumber)!;
 	}
@@ -25,20 +26,26 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 		return await _db.Invoices.ToListAsync();
 	}
 
-	public async Task<PagedResult<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, int page, int pageSize)
+	public async Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize)
 	{
 		var query = _db.Invoices.AsQueryable();
 		if (customerId is int id) query = query.Where(invoice => invoice.Customer.CustomerId == id);
 		if (from is DateTime start) query = query.Where(invoice => invoice.Date >= start);
 		if (to is DateTime end) query = query.Where(invoice => invoice.Date <= end);
 
-		var totalCount = await query.CountAsync();
-		var items = await query.OrderByDescending(invoice => invoice.Date)
-			.Skip((page - 1) * pageSize)
-			.Take(pageSize)
+		if (Cursor.TryDecode(cursor, 2) is [var dateText, var lastId])
+		{
+			var lastDate = DateTime.Parse(dateText, null, System.Globalization.DateTimeStyles.RoundtripKind);
+			query = query.Where(invoice => invoice.Date < lastDate || (invoice.Date == lastDate && invoice.Id.CompareTo(lastId) < 0));
+		}
+
+		var page = await query.OrderByDescending(invoice => invoice.Date).ThenByDescending(invoice => invoice.Id)
+			.Take(pageSize + 1)
 			.ToListAsync();
 
-		return new(items, totalCount);
+		var items = page.Take(pageSize).ToList();
+		var nextCursor = page.Count > pageSize ? Cursor.Encode(items[^1].Date.ToString("O"), items[^1].Id) : null;
+		return new(items, nextCursor);
 	}
 
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use</exception>
@@ -99,6 +106,8 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 		// Reuse the tracked instance, same reason as the StockItem swap above
 		invoice.Customer = await _db.Customers.FindAsync([invoice.Customer.Id], cancellationToken) ?? invoice.Customer;
 		_db.Invoices.Add(invoice);
+		// Outbox row for the SIFEN transmission worker (ADR-0031); same transaction as the invoice write
+		_db.PendingTransmissions.Add(new PendingTransmission(invoice, DateTime.Now));
 
 		try
 		{
@@ -114,6 +123,14 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 
 		taken.ForEach(line => line.Item.StockItem.Amount = line.AmountLeft);
 		return [];
+	}
+
+	public async Task<IReadOnlyList<Invoice>> GetStuckTransmissionsAsync(CancellationToken cancellationToken = default)
+	{
+		return await _db.Invoices
+			.Where(invoice => invoice.TransmissionStatus == TransmissionStatus.Rejected || invoice.TransmissionStatus == TransmissionStatus.Error)
+			.OrderByDescending(invoice => invoice.Date)
+			.ToListAsync(cancellationToken);
 	}
 
 	private async Task SaveChangesAsync()

@@ -70,6 +70,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Add New.
+        /// </summary>
+        public static string addNew {
+            get {
+                return ResourceManager.GetString("addNew", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string back {
@@ -93,6 +102,15 @@ namespace StockManagement.Language {
         public static string changeInfo {
             get {
                 return ResourceManager.GetString("changeInfo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
             }
         }
 
@@ -259,6 +277,42 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Screens.
+        /// </summary>
+        public static string searchScreens {
+            get {
+                return ResourceManager.GetString("searchScreens", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No results.
+        /// </summary>
+        public static string searchNoResults {
+            get {
+                return ResourceManager.GetString("searchNoResults", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Include cancelled.
+        /// </summary>
+        public static string searchIncludeInactive {
+            get {
+                return ResourceManager.GetString("searchIncludeInactive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to View all {0} results in {1} &#8594;.
+        /// </summary>
+        public static string searchViewAllResults {
+            get {
+                return ResourceManager.GetString("searchViewAllResults", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string show {
@@ -300,6 +354,50 @@ namespace StockManagement.Language {
         public static string width {
             get {
                 return ResourceManager.GetString("width", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Name is required...
+        /// </summary>
+        public static string nameRequired {
+            get {
+                return ResourceManager.GetString("nameRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A reason is required...
+        /// </summary>
+        public static string reasonRequired {
+            get {
+                return ResourceManager.GetString("reasonRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Amount must be greater than zero...
+        /// </summary>
+        public static string amountNotPositive {
+            get {
+                return ResourceManager.GetString("amountNotPositive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string status {
+            get {
+                return ResourceManager.GetString("status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} saved..
+        /// </summary>
+        public static string savedToast {
+            get {
+                return ResourceManager.GetString("savedToast", resourceCulture);
             }
         }
     }

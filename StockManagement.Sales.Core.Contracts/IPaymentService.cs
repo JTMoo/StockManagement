@@ -26,15 +26,15 @@ public interface IPaymentService
 	/// Records a payment against the invoice; rounds <paramref name="amount"/> to the company's configured currency digits first
 	/// </summary>
 	/// <remarks>Rejected when the invoice does not exist, the amount is not positive, or it exceeds the invoice's amount due.</remarks>
-	public Task<RecordPaymentResult> RecordPaymentAsync(int invoiceNumber, decimal amount, PaymentMethod method, DateTime date, CancellationToken cancellationToken = default);
+	public Task<RecordPaymentResult> RecordPaymentAsync(string invoiceNumber, decimal amount, PaymentMethod method, DateTime date, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Invoices with an amount due greater than zero (open, partly paid or overdue), soonest due date first
+	/// Invoices with an amount due greater than zero (open, partly paid or overdue), soonest due date then <see cref="Database.BaseDocument.Id"/> first
 	/// </summary>
-	public Task<PagedResult<Invoice>> GetOpenInvoicesAsync(int? customerId, int page, int pageSize, CancellationToken cancellationToken = default);
+	public Task<CursorPage<Invoice>> GetOpenInvoicesAsync(int? customerId, string? cursor, int pageSize, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Invoices with an amount due greater than zero whose due date has passed, soonest due date first
+	/// Invoices with an amount due greater than zero whose due date has passed, soonest due date then <see cref="Database.BaseDocument.Id"/> first
 	/// </summary>
-	public Task<PagedResult<Invoice>> GetOverdueInvoicesAsync(int page, int pageSize, CancellationToken cancellationToken = default);
+	public Task<CursorPage<Invoice>> GetOverdueInvoicesAsync(string? cursor, int pageSize, CancellationToken cancellationToken = default);
 }

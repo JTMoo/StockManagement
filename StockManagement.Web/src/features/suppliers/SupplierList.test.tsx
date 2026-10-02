@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { acme, mockApi, renderEnglish, sentBody } from "../../test-utils";
 import { SupplierList } from "./SupplierList";
 
@@ -9,7 +9,7 @@ describe("SupplierList", () =>
 	it("Load_OneSupplier_ShowsIt", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/suppliers": { body: [acme] } });
+		mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [acme], nextCursor: null } } });
 
 		// Act
 		renderEnglish(<SupplierList />);
@@ -21,7 +21,7 @@ describe("SupplierList", () =>
 	it("Create_Valid_PostsAndAddsRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/suppliers": { body: [] }, "POST /api/suppliers": { status: 201, body: acme } });
+		const fetchMock = mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/suppliers": { status: 201, body: acme } });
 		renderEnglish(<SupplierList />);
 
 		// Act
@@ -36,7 +36,7 @@ describe("SupplierList", () =>
 	it("Create_DuplicateName_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/suppliers": { body: [] }, "POST /api/suppliers": { status: 409, body: { name: "Acme" } } });
+		mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [], nextCursor: null } }, "POST /api/suppliers": { status: 409, body: { name: "Acme" } } });
 		renderEnglish(<SupplierList />);
 
 		// Act
@@ -50,13 +50,13 @@ describe("SupplierList", () =>
 	it("Delete_Confirmed_RemovesRow", async () =>
 	{
 		// Arrange
-		const fetchMock = mockApi({ "GET /api/suppliers": { body: [acme] }, "DELETE /api/suppliers/1": { status: 204 } });
-		vi.spyOn(window, "confirm").mockReturnValue(true);
+		const fetchMock = mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [acme], nextCursor: null } }, "DELETE /api/suppliers/1": { status: 204 } });
 		renderEnglish(<SupplierList />);
 		await screen.findByRole("cell", { name: "Acme" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete Supplier" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(screen.queryByRole("cell", { name: "Acme" })).not.toBeInTheDocument();
@@ -66,13 +66,13 @@ describe("SupplierList", () =>
 	it("Delete_InUse_ShowsError", async () =>
 	{
 		// Arrange
-		mockApi({ "GET /api/suppliers": { body: [acme] }, "DELETE /api/suppliers/1": { status: 409, body: { reason: "Supplier is assigned to stock items and can't be deleted." } } });
-		vi.spyOn(window, "confirm").mockReturnValue(true);
+		mockApi({ "GET /api/suppliers?pageSize=100": { body: { items: [acme], nextCursor: null } }, "DELETE /api/suppliers/1": { status: 409, body: { reason: "Supplier is assigned to stock items and can't be deleted." } } });
 		renderEnglish(<SupplierList />);
 		await screen.findByRole("cell", { name: "Acme" });
 
 		// Act
 		await userEvent.click(screen.getByRole("button", { name: "Delete Supplier" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		// Assert
 		expect(await screen.findByRole("alert")).toHaveTextContent("Supplier is assigned to stock items and can't be deleted.");

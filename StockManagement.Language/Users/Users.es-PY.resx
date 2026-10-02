@@ -195,4 +195,16 @@
   <data name="permUsersManage" xml:space="preserve">
     <value>Administrar usuarios</value>
   </data>
+  <data name="passwordTooShort" xml:space="preserve">
+    <value>La contraseña debe tener al menos 8 caracteres.</value>
+  </data>
+  <data name="roleInvalid" xml:space="preserve">
+    <value>El rol no es válido.</value>
+  </data>
+  <data name="permissionInvalid" xml:space="preserve">
+    <value>El permiso no es válido.</value>
+  </data>
+  <data name="user" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
 </root>

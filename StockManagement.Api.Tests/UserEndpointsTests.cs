@@ -65,6 +65,7 @@ public sealed class UserEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "passwordTooShort");
 	}
 
 	[TestMethod]
@@ -75,16 +76,17 @@ public sealed class UserEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "permissionInvalid");
 	}
 
 	[TestMethod]
 	public async Task ListUsers_IncludesSeededAdmin()
 	{
 		// Act
-		var users = await _client.GetFromJsonAsync<List<UserResponse>>("/api/users", ApiFactory.JsonOptions);
+		var users = await _client.GetFromJsonAsync<UserListResponse>("/api/users", ApiFactory.JsonOptions);
 
 		// Assert
-		Assert.IsTrue(users.Any(user => user.Username == ApiFactory.SeededAdminUsername && user.Role == UserRole.Admin));
+		Assert.IsTrue(users.Items.Any(user => user.Username == ApiFactory.SeededAdminUsername && user.Role == UserRole.Admin));
 	}
 
 	[TestMethod]
@@ -145,7 +147,7 @@ public sealed class UserEndpointsTests
 	public async Task DeleteUser_Self_Returns409()
 	{
 		// Arrange
-		var admin = (await _client.GetFromJsonAsync<List<UserResponse>>("/api/users", ApiFactory.JsonOptions)).Single(user => user.Username == ApiFactory.SeededAdminUsername);
+		var admin = (await _client.GetFromJsonAsync<UserListResponse>("/api/users", ApiFactory.JsonOptions)).Items.Single(user => user.Username == ApiFactory.SeededAdminUsername);
 
 		// Act
 		var response = await _client.DeleteAsync($"/api/users/{admin.Id}");

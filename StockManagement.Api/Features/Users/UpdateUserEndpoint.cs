@@ -18,10 +18,10 @@ public class UpdateUserValidator : Validator<UpdateUserRequest>
 {
 	public UpdateUserValidator()
 	{
-		this.RuleFor(request => request.Username).NotEmpty();
-		this.RuleFor(request => request.Password).MinimumLength(8).When(request => !string.IsNullOrEmpty(request.Password));
-		this.RuleFor(request => request.Role).IsInEnum();
-		this.RuleForEach(request => request.Permissions).Must(permission => Permission.CatalogAll.Contains(permission));
+		this.RuleFor(request => request.Username).NotEmpty().WithMessage("usernameRequired");
+		this.RuleFor(request => request.Password).MinimumLength(8).WithMessage("passwordTooShort").When(request => !string.IsNullOrEmpty(request.Password));
+		this.RuleFor(request => request.Role).IsInEnum().WithMessage("roleInvalid");
+		this.RuleForEach(request => request.Permissions).Must(permission => Permission.CatalogAll.Contains(permission)).WithMessage("permissionInvalid");
 	}
 }
 
@@ -41,7 +41,7 @@ public class UpdateUserEndpoint(IUserServiceProvider userServiceProvider, IAuthS
 
 	public override async Task<Results<Ok<UserResponse>, NotFound, Conflict<DuplicateUsernameResponse>>> ExecuteAsync(UpdateUserRequest request, CancellationToken cancellationToken)
 	{
-		if (await _userServiceProvider.GetUserAsync(request.Id) is not User user) return TypedResults.NotFound();
+		if (await _userServiceProvider.GetUserAsync(request.Id, cancellationToken) is not User user) return TypedResults.NotFound();
 
 		user.Username = request.Username;
 		user.FullName = request.FullName;
@@ -54,7 +54,7 @@ public class UpdateUserEndpoint(IUserServiceProvider userServiceProvider, IAuthS
 
 		try
 		{
-			await _userServiceProvider.UpdateUserAsync(user);
+			await _userServiceProvider.UpdateUserAsync(user, cancellationToken);
 		}
 		catch (UsernameAlreadyExistsException)
 		{

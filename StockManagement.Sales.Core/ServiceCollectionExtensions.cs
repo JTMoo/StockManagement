@@ -11,9 +11,9 @@ public static class ServiceCollectionExtensions
 	/// </summary>
 	public static IServiceCollection AddSalesCore(this IServiceCollection services)
 	{
-		services.AddSingleton<ISaleService, SaleService>();
+		services.AddScoped<ISaleService, SaleService>();
 		services.AddScoped<ICreditNoteService, CreditNoteService>();
-		services.AddSingleton<IPaymentService, PaymentService>();
+		services.AddScoped<IPaymentService, PaymentService>();
 		return services;
 	}
 }

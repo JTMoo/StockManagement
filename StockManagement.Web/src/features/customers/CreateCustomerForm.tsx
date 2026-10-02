@@ -6,7 +6,7 @@ import { useI18n, type TextKey } from "../../i18n";
 const fields: (keyof NewCustomer & TextKey)[] = ["name", "lastname", "phoneNumber", "email", "address", "identificationNumber"];
 const empty: NewCustomer = { name: "" };
 
-export function CreateCustomerForm({ onCreated }: { onCreated: (customer: Customer) => void })
+export function CreateCustomerForm({ onCreated, onCancel }: { onCreated: (customer: Customer) => void; onCancel: () => void })
 {
 	const { t } = useI18n();
 	const [customer, setCustomer] = useState<NewCustomer>(empty);
@@ -27,7 +27,7 @@ export function CreateCustomerForm({ onCreated }: { onCreated: (customer: Custom
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="panel">
+		<form onSubmit={onSubmit}>
 			<div className="form-grid">
 				{fields.map(field => (
 					<label key={field}>
@@ -39,6 +39,7 @@ export function CreateCustomerForm({ onCreated }: { onCreated: (customer: Custom
 			<FailureMessage failure={failure} duplicate="identificationNumberAlreadyExists" />
 			<div className="form-actions">
 				<button type="submit" disabled={busy}>{t("createCustomer")}</button>
+				<button type="button" onClick={onCancel} disabled={busy}>{t("cancel")}</button>
 			</div>
 		</form>
 	);

@@ -132,11 +132,17 @@
   <data name="cash" xml:space="preserve">
     <value>Cash</value>
   </data>
+  <data name="cdc" xml:space="preserve">
+    <value>CDC</value>
+  </data>
   <data name="creationDate" xml:space="preserve">
     <value>Creation date</value>
   </data>
   <data name="credit" xml:space="preserve">
     <value>Credit</value>
+  </data>
+  <data name="transmissionStatus" xml:space="preserve">
+    <value>SIFEN status</value>
   </data>
   <data name="creditNote" xml:space="preserve">
     <value>Credit Note</value>
@@ -197,5 +203,26 @@
   </data>
   <data name="total" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="saleConditionInvalid" xml:space="preserve">
+    <value>Sale condition is invalid.</value>
+  </data>
+  <data name="saleItemsRequired" xml:space="preserve">
+    <value>At least one item is required.</value>
+  </data>
+  <data name="paymentMethodInvalid" xml:space="preserve">
+    <value>Payment method is invalid.</value>
+  </data>
+  <data name="statusPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="statusPaid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="statusOverdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
+  <data name="invoiceSavedToast" xml:space="preserve">
+    <value>Invoice {0} saved.</value>
   </data>
 </root>

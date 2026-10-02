@@ -40,7 +40,7 @@ describe("AuthProvider", () =>
 		// Arrange
 		localStorage.setItem("auth.token", "stale-token");
 		localStorage.setItem("auth.username", "admin");
-		mockApi({ "GET /api/stock-items": { status: 401 } });
+		mockApi({ "GET /api/stock-items?pageSize=100": { status: 401 } });
 		const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 		expect(result.current.username).toBe("admin");
 

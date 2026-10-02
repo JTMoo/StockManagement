@@ -41,6 +41,12 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(0);
 
+                    b.Property<string>("EstablishmentCode")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("001");
+
                     b.Property<int>("FirstCustomerId")
                         .HasColumnType("integer");
 
@@ -53,9 +59,29 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Property<int>("PaymentTermInDays")
                         .HasColumnType("integer");
 
+                    b.Property<string>("PointOfSaleCode")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("001");
+
+                    b.Property<string>("Ruc")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("TaxId")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("TimbradoNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("TimbradoValidFrom")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("TimbradoValidTo")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("VatRatePercent")
                         .HasColumnType("numeric(5,2)");
@@ -198,6 +224,10 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
+                    b.Property<string>("Cdc")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("CustomerId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -211,8 +241,9 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("integer");
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("SaleCondition")
                         .HasColumnType("integer");
@@ -225,6 +256,9 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
+                    b.Property<int>("TransmissionStatus")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -233,6 +267,33 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("StockManagement.Kernel.Model.PendingTransmission", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("InvoiceId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastError")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("NextAttemptAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("PendingTransmissions");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.StockItem", b =>
@@ -293,6 +354,9 @@ namespace StockManagement.Infrastructure.Database.Migrations
 
                     b.Property<string>("SupplierId")
                         .HasColumnType("text");
+
+                    b.Property<decimal>("VatRatePercent")
+                        .HasColumnType("numeric(5,2)");
 
                     b.HasKey("Id");
 
@@ -550,6 +614,17 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Navigation("Items");
 
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("StockManagement.Kernel.Model.PendingTransmission", b =>
+                {
+                    b.HasOne("StockManagement.Kernel.Model.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.StockItem", b =>

@@ -14,8 +14,8 @@ public class CheckOutStockItemValidator : Validator<CheckOutStockItemRequest>
 {
 	public CheckOutStockItemValidator()
 	{
-		this.RuleFor(request => request.Amount).GreaterThan(0);
-		this.RuleFor(request => request.Reason).NotEmpty();
+		this.RuleFor(request => request.Amount).GreaterThan(0).WithMessage("amountNotPositive");
+		this.RuleFor(request => request.Reason).NotEmpty().WithMessage("reasonRequired");
 	}
 }
 
@@ -36,9 +36,9 @@ public class CheckOutStockItemEndpoint(IStockItemServiceProvider stockItemServic
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound, Conflict<InsufficientStockResponse>>> ExecuteAsync(CheckOutStockItemRequest request, CancellationToken cancellationToken)
 	{
-		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id) is not StockItem stockItem) return TypedResults.NotFound();
+		if (await _stockItemServiceProvider.GetStockItemByIdAsync(request.Id, cancellationToken) is not StockItem stockItem) return TypedResults.NotFound();
 
-		if (!await _stockItemServiceProvider.TryCheckOutStockItemAsync(stockItem, request.Amount, request.Reason))
+		if (!await _stockItemServiceProvider.TryCheckOutStockItemAsync(stockItem, request.Amount, request.Reason, cancellationToken))
 		{
 			return TypedResults.Conflict(new InsufficientStockResponse(stockItem.Amount));
 		}

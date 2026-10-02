@@ -203,5 +203,139 @@ namespace StockManagement.Language {
                 return ResourceManager.GetString("currencyDecimalDigits", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to VAT rate must be between 0 and 100...
+        /// </summary>
+        public static string vatRateOutOfRange {
+            get {
+                return ResourceManager.GetString("vatRateOutOfRange", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Payment term cannot be negative...
+        /// </summary>
+        public static string paymentTermNegative {
+            get {
+                return ResourceManager.GetString("paymentTermNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to First invoice number must be greater than zero...
+        /// </summary>
+        public static string firstInvoiceNumberNotPositive {
+            get {
+                return ResourceManager.GetString("firstInvoiceNumberNotPositive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to First customer id must be greater than zero...
+        /// </summary>
+        public static string firstCustomerIdNotPositive {
+            get {
+                return ResourceManager.GetString("firstCustomerIdNotPositive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Currency decimal digits must be between 0 and 4...
+        /// </summary>
+        public static string currencyDecimalDigitsOutOfRange {
+            get {
+                return ResourceManager.GetString("currencyDecimalDigitsOutOfRange", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to RUC.
+        /// </summary>
+        public static string ruc {
+            get {
+                return ResourceManager.GetString("ruc", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado number.
+        /// </summary>
+        public static string timbradoNumber {
+            get {
+                return ResourceManager.GetString("timbradoNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado valid from.
+        /// </summary>
+        public static string timbradoValidFrom {
+            get {
+                return ResourceManager.GetString("timbradoValidFrom", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado valid to.
+        /// </summary>
+        public static string timbradoValidTo {
+            get {
+                return ResourceManager.GetString("timbradoValidTo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Establishment code.
+        /// </summary>
+        public static string establishmentCode {
+            get {
+                return ResourceManager.GetString("establishmentCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Point of sale code.
+        /// </summary>
+        public static string pointOfSaleCode {
+            get {
+                return ResourceManager.GetString("pointOfSaleCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to RUC check digit is invalid...
+        /// </summary>
+        public static string rucInvalid {
+            get {
+                return ResourceManager.GetString("rucInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Establishment code must be 3 digits...
+        /// </summary>
+        public static string establishmentCodeInvalid {
+            get {
+                return ResourceManager.GetString("establishmentCodeInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Point of sale code must be 3 digits...
+        /// </summary>
+        public static string pointOfSaleCodeInvalid {
+            get {
+                return ResourceManager.GetString("pointOfSaleCodeInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Timbrado valid-to date cannot be before valid-from...
+        /// </summary>
+        public static string timbradoDateRangeInvalid {
+            get {
+                return ResourceManager.GetString("timbradoDateRangeInvalid", resourceCulture);
+            }
+        }
     }
 }

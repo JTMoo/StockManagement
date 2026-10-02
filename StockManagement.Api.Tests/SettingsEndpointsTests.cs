@@ -111,5 +111,6 @@ public sealed class SettingsEndpointsTests
 
 		// Assert
 		Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+		StringAssert.Contains(await response.Content.ReadAsStringAsync(), "vatRateOutOfRange");
 	}
 }

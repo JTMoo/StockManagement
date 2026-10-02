@@ -4,12 +4,14 @@ import { FailureMessage } from "../../FailureMessage";
 import { Page } from "../../Page";
 import { useI18n } from "../../i18n";
 import { useLoad } from "../../useLoad";
+import { useToast } from "../../Toast";
 
 type CartLine = { item: StockItem; amount: number };
 
 export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 {
 	const { t, formatNumber } = useI18n();
+	const { show: showToast } = useToast();
 	const customers = useLoad(api.listCustomers);
 	const stockItems = useLoad(api.listStockItems);
 	const [customerId, setCustomerId] = useState("");
@@ -43,6 +45,7 @@ export function SaleForm({ onSold }: { onSold: (invoice: Invoice) => void })
 		setBusy(false);
 		if (!result.ok) return setFailure(result.failure);
 
+		showToast(t("invoiceSavedToast").replace("{0}", result.value.number));
 		onSold(result.value);
 	}
 

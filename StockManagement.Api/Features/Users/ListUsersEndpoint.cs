@@ -5,7 +5,14 @@ using StockManagement.Kernel.Database.Interfaces;
 namespace StockManagement.Api.Features.Users;
 
 
-public class ListUsersEndpoint(IUserServiceProvider userServiceProvider) : EndpointWithoutRequest<IReadOnlyList<UserResponse>>
+public sealed record ListUsersRequest(string? Cursor, int? PageSize);
+
+
+/// <param name="NextCursor">Opaque cursor for the next page; <see langword="null"/> on the last page</param>
+public sealed record UserListResponse(IReadOnlyList<UserResponse> Items, string? NextCursor);
+
+
+public class ListUsersEndpoint(IUserServiceProvider userServiceProvider) : Endpoint<ListUsersRequest, UserListResponse>
 {
 	private readonly IUserServiceProvider _userServiceProvider = userServiceProvider;
 
@@ -16,9 +23,10 @@ public class ListUsersEndpoint(IUserServiceProvider userServiceProvider) : Endpo
 		this.Permissions(Permission.UsersManage);
 	}
 
-	public override async Task<IReadOnlyList<UserResponse>> ExecuteAsync(CancellationToken cancellationToken)
+	public override async Task<UserListResponse> ExecuteAsync(ListUsersRequest request, CancellationToken cancellationToken)
 	{
-		var users = await _userServiceProvider.GetAllUsersAsync() ?? [];
-		return users.Select(UserResponse.From).ToList();
+		var pageSize = Math.Clamp(request.PageSize ?? 20, 1, 100);
+		var result = await _userServiceProvider.GetUsersAsync(request.Cursor, pageSize, cancellationToken);
+		return new(result.Items.Select(UserResponse.From).ToList(), result.NextCursor);
 	}
 }

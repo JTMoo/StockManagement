@@ -250,6 +250,15 @@ namespace StockManagement.Language {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to VAT rate (%).
+        /// </summary>
+        public static string vatRatePercent {
+            get {
+                return ResourceManager.GetString("vatRatePercent", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Below minimum.
         /// </summary>
         public static string belowMinimum {
@@ -417,6 +426,112 @@ namespace StockManagement.Language {
         public static string tireDimensions {
             get {
                 return ResourceManager.GetString("tireDimensions", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Code is required...
+        /// </summary>
+        public static string codeRequired {
+            get {
+                return ResourceManager.GetString("codeRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Amount cannot be negative...
+        /// </summary>
+        public static string amountNegative {
+            get {
+                return ResourceManager.GetString("amountNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Price cannot be negative...
+        /// </summary>
+        public static string priceNegative {
+            get {
+                return ResourceManager.GetString("priceNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Factor cannot be negative...
+        /// </summary>
+        public static string factorNegative {
+            get {
+                return ResourceManager.GetString("factorNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Purchase price cannot be negative...
+        /// </summary>
+        public static string purchasePriceNegative {
+            get {
+                return ResourceManager.GetString("purchasePriceNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange rate cannot be negative...
+        /// </summary>
+        public static string purchaseExchangeRateNegative {
+            get {
+                return ResourceManager.GetString("purchaseExchangeRateNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Additional purchase cost cannot be negative...
+        /// </summary>
+        public static string additionalPurchaseCostNegative {
+            get {
+                return ResourceManager.GetString("additionalPurchaseCostNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum stock cannot be negative...
+        /// </summary>
+        public static string minimumStockNegative {
+            get {
+                return ResourceManager.GetString("minimumStockNegative", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to VAT rate cannot be negative...
+        /// </summary>
+        public static string vatRateNegative {
+            get {
+                return ResourceManager.GetString("vatRateNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Out of stock.
+        /// </summary>
+        public static string statusOutOfStock {
+            get {
+                return ResourceManager.GetString("statusOutOfStock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Low stock.
+        /// </summary>
+        public static string statusLowStock {
+            get {
+                return ResourceManager.GetString("statusLowStock", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to In stock.
+        /// </summary>
+        public static string statusInStock {
+            get {
+                return ResourceManager.GetString("statusInStock", resourceCulture);
             }
         }
     }

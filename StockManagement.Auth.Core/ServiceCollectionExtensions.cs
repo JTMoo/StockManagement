@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
 	/// </summary>
 	public static IServiceCollection AddAuthCore(this IServiceCollection services)
 	{
-		services.AddSingleton<IAuthService, AuthService>();
+		services.AddScoped<IAuthService, AuthService>();
 		return services;
 	}
 }

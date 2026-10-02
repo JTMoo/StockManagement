@@ -27,11 +27,11 @@ public class DeleteSupplierEndpoint(ISupplierServiceProvider supplierServiceProv
 
 	public override async Task<Results<NoContent, NotFound, Conflict<SupplierInUseResponse>>> ExecuteAsync(DeleteSupplierRequest request, CancellationToken cancellationToken)
 	{
-		if (await _supplierServiceProvider.GetSupplierByIdAsync(request.Id) is not Supplier supplier) return TypedResults.NotFound();
+		if (await _supplierServiceProvider.GetSupplierByIdAsync(request.Id, cancellationToken) is not Supplier supplier) return TypedResults.NotFound();
 
 		try
 		{
-			await _supplierServiceProvider.DeleteSupplierAsync(supplier);
+			await _supplierServiceProvider.DeleteSupplierAsync(supplier, cancellationToken);
 		}
 		catch (SupplierInUseException)
 		{

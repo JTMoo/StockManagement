@@ -6,7 +6,7 @@ namespace StockManagement.Api.Features.CreditNotes;
 /// <summary>
 /// Stored credit note; cancels the referenced invoice in full
 /// </summary>
-public sealed record CreditNoteResponse(int Number, DateTime Date, string Reason, decimal Total, decimal Tax, int InvoiceNumber)
+public sealed record CreditNoteResponse(int Number, DateTime Date, string Reason, decimal Total, decimal Tax, string InvoiceNumber)
 {
 	public static CreditNoteResponse From(CreditNote creditNote)
 	{
