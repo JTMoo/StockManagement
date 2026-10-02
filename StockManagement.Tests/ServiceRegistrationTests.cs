@@ -18,18 +18,22 @@ namespace StockManagement.Tests;
 [TestClass]
 public sealed class ServiceRegistrationTests
 {
+	/// <summary>
+	/// Providers are Scoped in production (EF's <c>AppDbContext</c> isn't thread-safe); mocking them Scoped here
+	/// catches a Core service wrongly registered Singleton (issue #97), which <c>ValidateScopes</c> only flags on resolve
+	/// </summary>
 	[TestMethod]
-	public void AddCores_ResolveAgainstProviderInterfaces_ResolvesEveryContract()
+	public void AddCores_ResolveAgainstScopedProviderInterfaces_ResolvesEveryContractWithinScope()
 	{
 		// Arrange
 		var services = new ServiceCollection()
-			.AddSingleton(new Mock<IStockItemServiceProvider>().Object)
-			.AddSingleton(new Mock<ICustomerServiceProvider>().Object)
-			.AddSingleton(new Mock<IInvoiceServiceProvider>().Object)
-			.AddSingleton(new Mock<ICreditNoteServiceProvider>().Object)
-			.AddSingleton(new Mock<IUserServiceProvider>().Object)
-			.AddSingleton(new Mock<ISettingsServiceProvider>().Object)
-			.AddSingleton(new Mock<IImportBatchServiceProvider>().Object)
+			.AddScoped(_ => new Mock<IStockItemServiceProvider>().Object)
+			.AddScoped(_ => new Mock<ICustomerServiceProvider>().Object)
+			.AddScoped(_ => new Mock<IInvoiceServiceProvider>().Object)
+			.AddScoped(_ => new Mock<ICreditNoteServiceProvider>().Object)
+			.AddScoped(_ => new Mock<IUserServiceProvider>().Object)
+			.AddScoped(_ => new Mock<ISettingsServiceProvider>().Object)
+			.AddScoped(_ => new Mock<IImportBatchServiceProvider>().Object)
 			.AddSalesCore()
 			.AddCustomersCore()
 			.AddImportCore()
@@ -38,17 +42,16 @@ public sealed class ServiceRegistrationTests
 
 		// Act
 		using var provider = services.BuildServiceProvider(new ServiceProviderOptions() { ValidateOnBuild = true, ValidateScopes = true });
+		using var scope = provider.CreateScope();
 
 		// Assert
-		Assert.IsNotNull(provider.GetRequiredService<ISaleService>());
-		Assert.IsNotNull(provider.GetRequiredService<IPaymentService>());
-		// ICreditNoteService is Scoped (it depends on the Scoped ICreditNoteServiceProvider), unlike the other Cores' Singletons
-		using var scope = provider.CreateScope();
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ISaleService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IPaymentService>());
 		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ICreditNoteService>());
-		Assert.IsNotNull(provider.GetRequiredService<ICustomerService>());
-		Assert.IsNotNull(provider.GetRequiredService<IStockItemImportService>());
-		Assert.IsNotNull(provider.GetRequiredService<IImportBatchService>());
-		Assert.IsNotNull(provider.GetRequiredService<IAuthService>());
-		Assert.IsNotNull(provider.GetRequiredService<ISettingsService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ICustomerService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IStockItemImportService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IImportBatchService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IAuthService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ISettingsService>());
 	}
 }
