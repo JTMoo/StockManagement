@@ -18,7 +18,7 @@ public class GetImportFieldsEndpoint(IImportBatchService importBatchService) : E
 	public override void Configure()
 	{
 		this.Get("/import/fields");
-		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite);
+		this.Permissions(Permission.StockItemsWrite, Permission.CustomersWrite, Permission.SalesWrite);
 	}
 
 	public override Task<Ok<IReadOnlyList<ImportField>>> ExecuteAsync(GetImportFieldsRequest request, CancellationToken cancellationToken)
