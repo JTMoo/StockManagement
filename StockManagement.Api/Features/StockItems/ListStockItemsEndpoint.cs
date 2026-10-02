@@ -18,7 +18,7 @@ public class ListStockItemsEndpoint(IStockItemServiceProvider stockItemServicePr
 
 	public override async Task<IReadOnlyList<StockItemResponse>> ExecuteAsync(CancellationToken cancellationToken)
 	{
-		var stockItems = await _stockItemServiceProvider.GetAllStockItemsAsync() ?? [];
+		var stockItems = await _stockItemServiceProvider.GetAllStockItemsAsync(cancellationToken) ?? [];
 		return stockItems.Select(StockItemResponse.From).ToList();
 	}
 }

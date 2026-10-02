@@ -16,7 +16,7 @@ public sealed class StockItemImportServiceTests
 	public async Task SplitDuplicatesAsync_CodesStoredOrRepeated_SeparatesThem()
 	{
 		// Arrange
-		_stockItems.Setup(provider => provider.GetAllStockItemsAsync()).ReturnsAsync([new StockItem("Stored", code: "A1")]);
+		_stockItems.Setup(provider => provider.GetAllStockItemsAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new StockItem("Stored", code: "A1")]);
 		var stored = new StockItem("Stored again", code: "A1");
 		var fresh = new StockItem("Fresh", code: "B2");
 		var repeatedFirst = new StockItem("Repeated", code: "C3");
@@ -42,7 +42,7 @@ public sealed class StockItemImportServiceTests
 		await service.ImportAsync(items);
 
 		// Assert
-		_stockItems.Verify(provider => provider.AddManyStockItemsAsync(It.Is<IList<StockItem>>(added => added.SequenceEqual(items))), Times.Once);
+		_stockItems.Verify(provider => provider.AddManyStockItemsAsync(It.Is<IList<StockItem>>(added => added.SequenceEqual(items)), It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -55,6 +55,6 @@ public sealed class StockItemImportServiceTests
 		await service.ImportAsync([]);
 
 		// Assert
-		_stockItems.Verify(provider => provider.AddManyStockItemsAsync(It.IsAny<IList<StockItem>>()), Times.Never);
+		_stockItems.Verify(provider => provider.AddManyStockItemsAsync(It.IsAny<IList<StockItem>>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 }

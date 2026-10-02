@@ -18,7 +18,7 @@ public class ListUsersEndpoint(IUserServiceProvider userServiceProvider) : Endpo
 
 	public override async Task<IReadOnlyList<UserResponse>> ExecuteAsync(CancellationToken cancellationToken)
 	{
-		var users = await _userServiceProvider.GetAllUsersAsync() ?? [];
+		var users = await _userServiceProvider.GetAllUsersAsync(cancellationToken) ?? [];
 		return users.Select(UserResponse.From).ToList();
 	}
 }

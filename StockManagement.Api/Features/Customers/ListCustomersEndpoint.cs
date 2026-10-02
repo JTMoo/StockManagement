@@ -18,7 +18,7 @@ public class ListCustomersEndpoint(ICustomerServiceProvider customerServiceProvi
 
 	public override async Task<IReadOnlyList<CustomerResponse>> ExecuteAsync(CancellationToken cancellationToken)
 	{
-		var customers = await _customerServiceProvider.GetCustomersAsync() ?? [];
+		var customers = await _customerServiceProvider.GetCustomersAsync(cancellationToken) ?? [];
 		return customers.Select(CustomerResponse.From).ToList();
 	}
 }
