@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IPendingTransmissionServiceProvider, EfPendingTransmissionServiceProvider>();
 		services.AddScoped<IPaymentLinkServiceProvider, EfPaymentLinkServiceProvider>();
 		services.AddScoped<IContingencyCdcRangeServiceProvider, EfContingencyCdcRangeServiceProvider>();
+		services.AddScoped<IReportServiceProvider, EfReportServiceProvider>();
 		return services;
 	}
 }
