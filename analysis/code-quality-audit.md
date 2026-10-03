@@ -108,3 +108,34 @@ Repo @ main (42b3afa). Delta since cycle 1 - merged: cursor pagination (ADR-0029
 
 - No dead code to remove (nothing newly zero-ref found)
 - Findings above filed as #151-#153 + comment on #137
+
+## Cycle 3, 2026-10-03
+
+Repo @ main (6a9abb5). Delta since cycle 2 (bf99814) - merged: #137/#152/#153/#151 fixes, cursor pagination follow-ups (#107), frontend test infra (#109), Marangatu IVA book CSV export (#123), SIFEN contingency mode (#149), Bancard QR payment links (#150).
+
+### Findings (new)
+
+| # | File | What | Issue |
+|---|------|------|-------|
+| 1 | `SaleService.CreateInvoiceAsync`, `ContingencyCdcIssuer.TryIssueAsync` | CDC reserved (committed) before stock-shortage check; failed sale permanently burns a finite DNIT-granted number, no rollback, no test | #167 |
+| 2 | `BancardPaymentLinkGateway.GetStatusAsync` | Bare catch incl. `OperationCanceledException`, defaults to `Pending`, no logging | #168 |
+| 3 | `PaymentLinkService`/`PaymentLinkStatus.Expired` | `ExpiresAt` computed, never checked; `Expired` never assigned; no de-dupe of live links per invoice | #169 |
+| 4 | `ExportIvaBookEndpoint.BuildCsv`/`CsvField` | No test coverage on CSV escaping/formatting that accountants import into Marangatu | #170 |
+| 5 | `IvaBreakdown` vs `InvoiceCalculator.CalculateTax` | Duplicated VAT-grouping/rounding logic, acknowledged but not deduped | #171 |
+
+### Verified clean / no new dead code
+
+- Dead code: zero orphans across all new types (contingency CDC, payment links, IVA book export)
+- Permissions: all 6 new endpoints have `Permissions()`; `BancardWebhookEndpoint` correctly `AllowAnonymous()` + re-verifies against gateway
+- `CancellationToken`: fully threaded through all new interfaces/impls; #152 fix holds
+- DI lifetimes: all new services `AddScoped`; `ServiceRegistrationTests.cs` extended to catch a regression
+- resx/Designer.cs: no new resx surface in this delta, nothing to drift
+- Atomicity: `TryReserveNextAsync` reservation itself is race-safe (bug in #167 is *when* it's called, not the reservation); `PaymentLinkService.ConfirmAsync` record-then-mark ordering safe on webhook retry
+- Money/decimal: `decimal` throughout, consistent rounding
+- No `async void`, fire-and-forget; no secrets in new `Bancard` config section
+- No frontend shipped yet for Marangatu export/contingency/payment links in this delta - design-system check deferred to cycle 4
+
+### Actions taken this cycle
+
+- No dead code to remove
+- Findings above filed as #167-#171

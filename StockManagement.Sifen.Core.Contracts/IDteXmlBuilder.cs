@@ -9,4 +9,9 @@ public interface IDteXmlBuilder
 	/// Builds the unsigned <c>rDE</c> XML document for a Factura Electrónica.
 	/// </summary>
 	XDocument BuildInvoice(DteInvoiceData data);
+
+	/// <summary>
+	/// Builds the unsigned <c>rDE</c> XML document for a Nota de Remisión Electrónica (#162).
+	/// </summary>
+	XDocument BuildRemision(DteRemisionData data);
 }

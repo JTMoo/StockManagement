@@ -27,4 +27,22 @@ public static class SifenTransmissionProcessor
 			_ => throw new ArgumentOutOfRangeException(nameof(result), result.Outcome, null)
 		};
 	}
+
+	/// <summary>
+	/// Same as <see cref="ApplyAsync"/>, for a <see cref="PendingRemisionTransmission"/> (#162).
+	/// </summary>
+	public static Task ApplyRemisionAsync(IPendingRemisionTransmissionServiceProvider pendingTransmissions, PendingRemisionTransmission transmission, SifenTransmissionResult result, DateTime now, CancellationToken cancellationToken = default)
+	{
+		ArgumentNullException.ThrowIfNull(pendingTransmissions);
+		ArgumentNullException.ThrowIfNull(transmission);
+		ArgumentNullException.ThrowIfNull(result);
+
+		return result.Outcome switch
+		{
+			SifenTransmissionOutcome.Accepted => pendingTransmissions.MarkTerminalAsync(transmission, TransmissionStatus.Accepted, result.Cdc!, cancellationToken),
+			SifenTransmissionOutcome.Rejected => pendingTransmissions.MarkTerminalAsync(transmission, TransmissionStatus.Rejected, result.Cdc!, cancellationToken),
+			SifenTransmissionOutcome.Error => pendingTransmissions.MarkErrorAsync(transmission, result.Message, TransmissionRetryPolicy.NextAttempt(transmission.RemissionNote.Date, transmission.Attempts, now), cancellationToken),
+			_ => throw new ArgumentOutOfRangeException(nameof(result), result.Outcome, null)
+		};
+	}
 }
