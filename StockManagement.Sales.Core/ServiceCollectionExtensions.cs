@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<ISaleService, SaleService>();
 		services.AddScoped<ICreditNoteService, CreditNoteService>();
 		services.AddScoped<IPaymentService, PaymentService>();
+		services.AddScoped<IIvaBookExportService, IvaBookExportService>();
 
 		services.Configure<BancardGatewayOptions>(configuration.GetSection(BancardGatewayOptions.SectionName));
 		services.AddHttpClient(nameof(BancardPaymentLinkGateway));
