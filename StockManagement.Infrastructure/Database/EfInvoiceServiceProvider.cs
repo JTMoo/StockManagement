@@ -16,17 +16,17 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 	private readonly AppDbContext _db = db;
 
 
-	public Task<Invoice> GetInvoiceAync(string invoiceNumber)
+	public Task<Invoice> GetInvoiceAync(string invoiceNumber, CancellationToken cancellationToken = default)
 	{
-		return _db.Invoices.SingleOrDefaultAsync(invoice => invoice.Number == invoiceNumber)!;
+		return _db.Invoices.SingleOrDefaultAsync(invoice => invoice.Number == invoiceNumber, cancellationToken)!;
 	}
 
-	public async Task<IEnumerable<Invoice>> GetInvoicesAsync()
+	public async Task<IEnumerable<Invoice>> GetInvoicesAsync(CancellationToken cancellationToken = default)
 	{
-		return await _db.Invoices.ToListAsync();
+		return await _db.Invoices.ToListAsync(cancellationToken);
 	}
 
-	public async Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize)
+	public async Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize, CancellationToken cancellationToken = default)
 	{
 		var query = _db.Invoices.AsQueryable();
 		if (customerId is int id) query = query.Where(invoice => invoice.Customer.CustomerId == id);
@@ -41,7 +41,7 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 
 		var page = await query.OrderByDescending(invoice => invoice.Date).ThenByDescending(invoice => invoice.Id)
 			.Take(pageSize + 1)
-			.ToListAsync();
+			.ToListAsync(cancellationToken);
 
 		var items = page.Take(pageSize).ToList();
 		var nextCursor = page.Count > pageSize ? Cursor.Encode(items[^1].Date.ToString("O"), items[^1].Id) : null;
@@ -49,24 +49,24 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 	}
 
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use</exception>
-	public async Task AddInvoiceAsync(Invoice invoice)
+	public async Task AddInvoiceAsync(Invoice invoice, CancellationToken cancellationToken = default)
 	{
 		_db.Invoices.Add(invoice);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 	}
 
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use</exception>
-	public async Task<int> UpdateInvoiceAsync(Invoice invoice)
+	public async Task<int> UpdateInvoiceAsync(Invoice invoice, CancellationToken cancellationToken = default)
 	{
 		_db.Invoices.Update(invoice);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 
-	public async Task<int> DeleteInvoiceAsync(Invoice invoice)
+	public async Task<int> DeleteInvoiceAsync(Invoice invoice, CancellationToken cancellationToken = default)
 	{
 		_db.Invoices.Remove(invoice);
-		await this.SaveChangesAsync();
+		await this.SaveChangesAsync(cancellationToken);
 		return 1;
 	}
 
@@ -133,11 +133,11 @@ public class EfInvoiceServiceProvider(AppDbContext db) : IInvoiceServiceProvider
 			.ToListAsync(cancellationToken);
 	}
 
-	private async Task SaveChangesAsync()
+	private async Task SaveChangesAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
-			await _db.SaveChangesAsync();
+			await _db.SaveChangesAsync(cancellationToken);
 		}
 		catch (DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException { SqlState: "23505" })
 		{

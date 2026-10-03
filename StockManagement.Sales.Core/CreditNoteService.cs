@@ -15,7 +15,7 @@ internal class CreditNoteService(ICreditNoteServiceProvider creditNoteServicePro
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var creditNotes = await _creditNoteServiceProvider.GetCreditNotesAsync() ?? [];
+		var creditNotes = await _creditNoteServiceProvider.GetCreditNotesAsync(cancellationToken) ?? [];
 		return SequenceNumber.Next(creditNotes.Select(creditNote => creditNote.Number), 1);
 	}
 

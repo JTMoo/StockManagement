@@ -15,14 +15,14 @@ public class EfCreditNoteServiceProvider(AppDbContext db) : ICreditNoteServicePr
 	private readonly AppDbContext _db = db;
 
 
-	public Task<CreditNote> GetCreditNoteAsync(int number)
+	public Task<CreditNote> GetCreditNoteAsync(int number, CancellationToken cancellationToken = default)
 	{
-		return _db.CreditNotes.SingleOrDefaultAsync(creditNote => creditNote.Number == number)!;
+		return _db.CreditNotes.SingleOrDefaultAsync(creditNote => creditNote.Number == number, cancellationToken)!;
 	}
 
-	public async Task<IEnumerable<CreditNote>> GetCreditNotesAsync()
+	public async Task<IEnumerable<CreditNote>> GetCreditNotesAsync(CancellationToken cancellationToken = default)
 	{
-		return await _db.CreditNotes.ToListAsync();
+		return await _db.CreditNotes.ToListAsync(cancellationToken);
 	}
 
 	/// <remarks>

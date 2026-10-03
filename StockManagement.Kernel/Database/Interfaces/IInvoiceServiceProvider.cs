@@ -6,22 +6,22 @@ namespace StockManagement.Kernel.Database.Interfaces;
 
 public interface IInvoiceServiceProvider
 {
-	public Task<Invoice> GetInvoiceAync(string invoiceNumber);
-	public Task<IEnumerable<Invoice>> GetInvoicesAsync();
+	public Task<Invoice> GetInvoiceAync(string invoiceNumber, CancellationToken cancellationToken = default);
+	public Task<IEnumerable<Invoice>> GetInvoicesAsync(CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Invoices matching every given filter, newest first then <see cref="BaseDocument.Id"/>, one page at a time
 	/// </summary>
-	public Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize);
+	public Task<CursorPage<Invoice>> GetInvoicesAsync(int? customerId, DateTime? from, DateTime? to, string? cursor, int pageSize, CancellationToken cancellationToken = default);
 
 	/// <returns>Rows affected; 1 on success</returns>
-	public Task<int> UpdateInvoiceAsync(Invoice invoice);
+	public Task<int> UpdateInvoiceAsync(Invoice invoice, CancellationToken cancellationToken = default);
 
 	/// <returns>Rows affected; 1 on success</returns>
-	public Task<int> DeleteInvoiceAsync(Invoice invoice);
+	public Task<int> DeleteInvoiceAsync(Invoice invoice, CancellationToken cancellationToken = default);
 
 	/// <exception cref="InvoiceNumberAlreadyExistsException">Number already in use; nothing written</exception>
-	public Task AddInvoiceAsync(Invoice invoice);
+	public Task AddInvoiceAsync(Invoice invoice, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Takes every line of <paramref name="invoice"/> out of stock and stores the invoice, all in one transaction

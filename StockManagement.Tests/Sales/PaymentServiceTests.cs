@@ -40,7 +40,7 @@ public sealed class PaymentServiceTests
 	{
 		// Arrange
 		var invoice = new Invoice { Number = "1", Total = 1000 };
-		_invoices.Setup(provider => provider.GetInvoiceAync("1")).ReturnsAsync(invoice);
+		_invoices.Setup(provider => provider.GetInvoiceAync("1", It.IsAny<CancellationToken>())).ReturnsAsync(invoice);
 
 		// Act
 		var result = await this.CreateService().RecordPaymentAsync("1", 0, PaymentMethod.Cash, DateTime.Now);
@@ -48,7 +48,7 @@ public sealed class PaymentServiceTests
 		// Assert
 		Assert.IsFalse(result.Succeeded);
 		Assert.AreEqual(RecordPaymentError.InvalidAmount, result.Error);
-		_invoices.Verify(provider => provider.UpdateInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.UpdateInvoiceAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -56,7 +56,7 @@ public sealed class PaymentServiceTests
 	{
 		// Arrange
 		var invoice = new Invoice { Number = "1", Total = 1000, Payments = [new Payment { Amount = 900 }] };
-		_invoices.Setup(provider => provider.GetInvoiceAync("1")).ReturnsAsync(invoice);
+		_invoices.Setup(provider => provider.GetInvoiceAync("1", It.IsAny<CancellationToken>())).ReturnsAsync(invoice);
 
 		// Act
 		var result = await this.CreateService().RecordPaymentAsync("1", 200, PaymentMethod.Cash, DateTime.Now);
@@ -64,7 +64,7 @@ public sealed class PaymentServiceTests
 		// Assert
 		Assert.IsFalse(result.Succeeded);
 		Assert.AreEqual(RecordPaymentError.ExceedsAmountDue, result.Error);
-		_invoices.Verify(provider => provider.UpdateInvoiceAsync(It.IsAny<Invoice>()), Times.Never);
+		_invoices.Verify(provider => provider.UpdateInvoiceAsync(It.IsAny<Invoice>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -72,7 +72,7 @@ public sealed class PaymentServiceTests
 	{
 		// Arrange
 		var invoice = new Invoice { Number = "1", Total = 1000 };
-		_invoices.Setup(provider => provider.GetInvoiceAync("1")).ReturnsAsync(invoice);
+		_invoices.Setup(provider => provider.GetInvoiceAync("1", It.IsAny<CancellationToken>())).ReturnsAsync(invoice);
 		var date = new DateTime(2026, 9, 1);
 
 		// Act
@@ -84,7 +84,7 @@ public sealed class PaymentServiceTests
 		Assert.AreEqual(PaymentMethod.BankTransfer, result.Payment.Method);
 		Assert.AreEqual(date, result.Payment.Date);
 		CollectionAssert.Contains(invoice.Payments, result.Payment);
-		_invoices.Verify(provider => provider.UpdateInvoiceAsync(invoice), Times.Once);
+		_invoices.Verify(provider => provider.UpdateInvoiceAsync(invoice, It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[TestMethod]
@@ -94,7 +94,7 @@ public sealed class PaymentServiceTests
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001, 2));
 		var invoice = new Invoice { Number = "1", Total = 1000 };
-		_invoices.Setup(provider => provider.GetInvoiceAync("1")).ReturnsAsync(invoice);
+		_invoices.Setup(provider => provider.GetInvoiceAync("1", It.IsAny<CancellationToken>())).ReturnsAsync(invoice);
 
 		// Act
 		var result = await this.CreateService().RecordPaymentAsync("1", 100.006m, PaymentMethod.Cash, DateTime.Now);
@@ -112,7 +112,7 @@ public sealed class PaymentServiceTests
 		var paid = new Invoice { Number = "1", Total = 100, ExpirationDate = now.AddDays(5), Payments = [new Payment { Amount = 100 }] };
 		var dueSoon = new Invoice { Number = "2", Total = 100, ExpirationDate = now.AddDays(2) };
 		var dueLater = new Invoice { Number = "3", Total = 100, ExpirationDate = now.AddDays(20) };
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([paid, dueLater, dueSoon]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([paid, dueLater, dueSoon]);
 
 		// Act
 		var result = await this.CreateService().GetOpenInvoicesAsync(customerId: null, cursor: null, pageSize: 20);
@@ -130,7 +130,7 @@ public sealed class PaymentServiceTests
 		var customerB = new Customer { CustomerId = 1002 };
 		var invoiceA = new Invoice { Number = "1", Total = 100, ExpirationDate = DateTime.Now.AddDays(5), Customer = customerA };
 		var invoiceB = new Invoice { Number = "2", Total = 100, ExpirationDate = DateTime.Now.AddDays(5), Customer = customerB };
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([invoiceA, invoiceB]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([invoiceA, invoiceB]);
 
 		// Act
 		var result = await this.CreateService().GetOpenInvoicesAsync(customerId: 1001, cursor: null, pageSize: 20);
@@ -147,7 +147,7 @@ public sealed class PaymentServiceTests
 		var overdue = new Invoice { Number = "1", Total = 100, ExpirationDate = now.AddDays(-5) };
 		var notYetDue = new Invoice { Number = "2", Total = 100, ExpirationDate = now.AddDays(5) };
 		var paidPastDue = new Invoice { Number = "3", Total = 100, ExpirationDate = now.AddDays(-5), Payments = [new Payment { Amount = 100 }] };
-		_invoices.Setup(provider => provider.GetInvoicesAsync()).ReturnsAsync([overdue, notYetDue, paidPastDue]);
+		_invoices.Setup(provider => provider.GetInvoicesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([overdue, notYetDue, paidPastDue]);
 
 		// Act
 		var result = await this.CreateService().GetOverdueInvoicesAsync(cursor: null, pageSize: 20);

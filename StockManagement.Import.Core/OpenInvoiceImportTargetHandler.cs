@@ -37,7 +37,7 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var existingNumbers = (await _invoiceServiceProvider.GetInvoicesAsync())
+		var existingNumbers = (await _invoiceServiceProvider.GetInvoicesAsync(cancellationToken))
 			.Select(invoice => invoice.Number)
 			.ToHashSet(StringComparer.Ordinal);
 		var knownIdentificationNumbers = (await _customerServiceProvider.GetCustomersAsync(cancellationToken))
@@ -80,7 +80,7 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 			};
 			if (row.AmountPaid > 0) invoice.Payments.Add(new Payment { Date = row.Date, Amount = row.AmountPaid, Method = SeededPaymentMethod });
 
-			await _invoiceServiceProvider.AddInvoiceAsync(invoice);
+			await _invoiceServiceProvider.AddInvoiceAsync(invoice, cancellationToken);
 			invoiceIds.Add(invoice.Id);
 		}
 
@@ -92,9 +92,9 @@ internal sealed class OpenInvoiceImportTargetHandler(ICustomerServiceProvider cu
 		foreach (var (_, candidate) in entities)
 		{
 			var row = (OpenInvoiceRow)candidate;
-			if (await _invoiceServiceProvider.GetInvoiceAync(row.Number.ToString()) is Invoice invoice)
+			if (await _invoiceServiceProvider.GetInvoiceAync(row.Number.ToString(), cancellationToken) is Invoice invoice)
 			{
-				await _invoiceServiceProvider.DeleteInvoiceAsync(invoice);
+				await _invoiceServiceProvider.DeleteInvoiceAsync(invoice, cancellationToken);
 			}
 		}
 	}

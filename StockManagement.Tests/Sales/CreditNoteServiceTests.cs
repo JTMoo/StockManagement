@@ -16,7 +16,7 @@ public sealed class CreditNoteServiceTests
 	public async Task GetNextCreditNoteNumberAsync_NoCreditNotes_ReturnsOne()
 	{
 		// Arrange
-		_creditNotes.Setup(provider => provider.GetCreditNotesAsync()).ReturnsAsync([]);
+		_creditNotes.Setup(provider => provider.GetCreditNotesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 
 		// Act
 		var result = await this.CreateService().GetNextCreditNoteNumberAsync();
@@ -29,7 +29,7 @@ public sealed class CreditNoteServiceTests
 	public async Task GetNextCreditNoteNumberAsync_ExistingCreditNotes_ReturnsHighestPlusOne()
 	{
 		// Arrange
-		_creditNotes.Setup(provider => provider.GetCreditNotesAsync()).ReturnsAsync([new CreditNote() { Number = 3 }, new CreditNote() { Number = 7 }]);
+		_creditNotes.Setup(provider => provider.GetCreditNotesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new CreditNote() { Number = 3 }, new CreditNote() { Number = 7 }]);
 
 		// Act
 		var result = await this.CreateService().GetNextCreditNoteNumberAsync();
@@ -42,7 +42,7 @@ public sealed class CreditNoteServiceTests
 	public async Task CancelInvoiceAsync_NotYetCancelled_StoresNumberedCreditNoteWithInvoiceTotals()
 	{
 		// Arrange
-		_creditNotes.Setup(provider => provider.GetCreditNotesAsync()).ReturnsAsync([new CreditNote() { Number = 4 }]);
+		_creditNotes.Setup(provider => provider.GetCreditNotesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([new CreditNote() { Number = 4 }]);
 		_creditNotes.Setup(provider => provider.TryAddCreditNoteAsync(It.IsAny<CreditNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 		var invoice = new Invoice() { Number = "12", Total = 11000, Tax = 1000 };
 		var date = new DateTime(2026, 9, 27);
@@ -64,7 +64,7 @@ public sealed class CreditNoteServiceTests
 	public async Task CancelInvoiceAsync_AlreadyCancelled_ReportsFailureAndWritesNoCreditNote()
 	{
 		// Arrange
-		_creditNotes.Setup(provider => provider.GetCreditNotesAsync()).ReturnsAsync([]);
+		_creditNotes.Setup(provider => provider.GetCreditNotesAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
 		_creditNotes.Setup(provider => provider.TryAddCreditNoteAsync(It.IsAny<CreditNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
 		var invoice = new Invoice() { Number = "12" };
 

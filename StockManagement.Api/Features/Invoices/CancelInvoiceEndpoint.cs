@@ -41,7 +41,7 @@ public class CancelInvoiceEndpoint(IInvoiceServiceProvider invoiceServiceProvide
 
 	public override async Task<Results<Ok<CreditNoteResponse>, NotFound, Conflict<InvoiceAlreadyCancelledResponse>>> ExecuteAsync(CancelInvoiceRequest request, CancellationToken cancellationToken)
 	{
-		if (await _invoiceServiceProvider.GetInvoiceAync(request.Number) is not Invoice invoice) return TypedResults.NotFound();
+		if (await _invoiceServiceProvider.GetInvoiceAync(request.Number, cancellationToken) is not Invoice invoice) return TypedResults.NotFound();
 
 		var result = await _creditNoteService.CancelInvoiceAsync(invoice, request.Reason, DateTime.Now, cancellationToken);
 		if (!result.Succeeded || result.CreditNote is not CreditNote creditNote) return TypedResults.Conflict(new InvoiceAlreadyCancelledResponse("Invoice is already cancelled."));
