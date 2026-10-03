@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using StockManagement.Auth.Core;
@@ -35,8 +36,9 @@ public sealed class ServiceRegistrationTests
 			.AddScoped(_ => new Mock<IUserServiceProvider>().Object)
 			.AddScoped(_ => new Mock<ISettingsServiceProvider>().Object)
 			.AddScoped(_ => new Mock<IImportBatchServiceProvider>().Object)
+			.AddScoped(_ => new Mock<IPaymentLinkServiceProvider>().Object)
 			.AddScoped(_ => new Mock<IContingencyCdcIssuer>().Object)
-			.AddSalesCore()
+			.AddSalesCore(new ConfigurationBuilder().Build())
 			.AddCustomersCore()
 			.AddImportCore()
 			.AddAuthCore()
@@ -49,6 +51,7 @@ public sealed class ServiceRegistrationTests
 		// Assert
 		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ISaleService>());
 		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IPaymentService>());
+		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IPaymentLinkService>());
 		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ICreditNoteService>());
 		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<ICustomerService>());
 		Assert.IsNotNull(scope.ServiceProvider.GetRequiredService<IStockItemImportService>());

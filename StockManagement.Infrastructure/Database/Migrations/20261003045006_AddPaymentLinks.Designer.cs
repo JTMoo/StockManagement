@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockManagement.Infrastructure.Database;
@@ -11,9 +12,11 @@ using StockManagement.Infrastructure.Database;
 namespace StockManagement.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261003045006_AddPaymentLinks")]
+    partial class AddPaymentLinks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,29 +92,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppSettings");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.ContingencyCdcRange", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<long>("NextNumber")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RangeEnd")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RangeStart")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ContingencyCdcRanges");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.CreditNote", b =>
