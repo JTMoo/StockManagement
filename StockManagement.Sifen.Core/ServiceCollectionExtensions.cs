@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IDteXmlBuilder, DteXmlBuilder>();
 		services.AddScoped<IXadesSigner, XadesSigner>();
 		services.AddScoped<IDteXsdValidator, DteXsdValidator>();
+		services.AddScoped<IContingencyCdcIssuer, ContingencyCdcIssuer>();
 
 		services.Configure<SifenGatewayOptions>(configuration.GetSection(SifenGatewayOptions.SectionName));
 		services.AddHttpClient(nameof(DirectDnitSifenGateway));

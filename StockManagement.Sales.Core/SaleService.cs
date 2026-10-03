@@ -4,15 +4,17 @@ using StockManagement.Kernel.Model.Types;
 using StockManagement.Kernel.Util;
 using StockManagement.Sales.Core.Contracts;
 using StockManagement.Settings.Core.Contracts;
+using StockManagement.Sifen.Core.Contracts;
 
 namespace StockManagement.Sales.Core;
 
 
-internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, ISettingsService settingsService) : ISaleService
+internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, IInvoiceServiceProvider invoiceServiceProvider, ISettingsService settingsService, IContingencyCdcIssuer contingencyCdcIssuer) : ISaleService
 {
 	private readonly IStockItemServiceProvider _stockItemServiceProvider = stockItemServiceProvider;
 	private readonly IInvoiceServiceProvider _invoiceServiceProvider = invoiceServiceProvider;
 	private readonly ISettingsService _settingsService = settingsService;
+	private readonly IContingencyCdcIssuer _contingencyCdcIssuer = contingencyCdcIssuer;
 
 
 	public decimal CalculateTotal(IEnumerable<ShoppingCartItem> items, int currencyDecimalDigits)
@@ -29,6 +31,11 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 		var lines = cartItems.Select(ToSaleLine).ToList();
 		var total = InvoiceCalculator.CalculateTotal(lines, companySettings.CurrencyDecimalDigits);
 
+		// Contingency mode (#149): issue the CDC locally now, from the pre-assigned DNIT range, so the invoice is
+		// legally valid with zero connectivity; null when contingency mode is off, same as the normal path where
+		// the CDC is only assigned once the outbox worker reaches SIFEN.
+		var contingencyCdc = await _contingencyCdcIssuer.TryIssueAsync(cancellationToken);
+
 		return new Invoice()
 		{
 			Customer = customer,
@@ -36,7 +43,8 @@ internal class SaleService(IStockItemServiceProvider stockItemServiceProvider, I
 			ExpirationDate = InvoiceCalculator.CalculateExpirationDate(date, companySettings.PaymentTermInDays),
 			Items = cartItems,
 			Total = total,
-			Tax = InvoiceCalculator.CalculateTax(lines, companySettings.CurrencyDecimalDigits)
+			Tax = InvoiceCalculator.CalculateTax(lines, companySettings.CurrencyDecimalDigits),
+			Cdc = contingencyCdc ?? ""
 		};
 	}
 

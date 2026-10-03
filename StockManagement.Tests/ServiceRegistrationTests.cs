@@ -11,6 +11,7 @@ using StockManagement.Sales.Core;
 using StockManagement.Sales.Core.Contracts;
 using StockManagement.Settings.Core;
 using StockManagement.Settings.Core.Contracts;
+using StockManagement.Sifen.Core.Contracts;
 
 namespace StockManagement.Tests;
 
@@ -34,6 +35,7 @@ public sealed class ServiceRegistrationTests
 			.AddScoped(_ => new Mock<IUserServiceProvider>().Object)
 			.AddScoped(_ => new Mock<ISettingsServiceProvider>().Object)
 			.AddScoped(_ => new Mock<IImportBatchServiceProvider>().Object)
+			.AddScoped(_ => new Mock<IContingencyCdcIssuer>().Object)
 			.AddSalesCore()
 			.AddCustomersCore()
 			.AddImportCore()
