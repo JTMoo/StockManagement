@@ -33,9 +33,14 @@ public sealed class SifenTransmissionWorker(IServiceScopeFactory scopeFactory, I
 	private async Task ProcessDueAsync(CancellationToken cancellationToken)
 	{
 		await using var scope = _scopeFactory.CreateAsyncScope();
-		var pendingTransmissions = scope.ServiceProvider.GetRequiredService<IPendingTransmissionServiceProvider>();
 		var gateway = scope.ServiceProvider.GetRequiredService<ISifenGateway>();
 
+		await this.ProcessDueInvoicesAsync(scope.ServiceProvider.GetRequiredService<IPendingTransmissionServiceProvider>(), gateway, cancellationToken);
+		await this.ProcessDueRemisionesAsync(scope.ServiceProvider.GetRequiredService<IPendingRemisionTransmissionServiceProvider>(), gateway, cancellationToken);
+	}
+
+	private async Task ProcessDueInvoicesAsync(IPendingTransmissionServiceProvider pendingTransmissions, ISifenGateway gateway, CancellationToken cancellationToken)
+	{
 		var due = await pendingTransmissions.GetDueAsync(DateTime.Now, BatchSize, cancellationToken);
 		foreach (var transmission in due)
 		{
@@ -49,6 +54,28 @@ public sealed class SifenTransmissionWorker(IServiceScopeFactory scopeFactory, I
 			catch (Exception ex) when (ex is not OperationCanceledException)
 			{
 				_logger.LogError(ex, "SIFEN transmission failed for invoice {InvoiceNumber}", transmission.Invoice.Number);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Same polling loop for the <see cref="Kernel.Model.RemissionNote"/> outbox (#162).
+	/// </summary>
+	private async Task ProcessDueRemisionesAsync(IPendingRemisionTransmissionServiceProvider pendingTransmissions, ISifenGateway gateway, CancellationToken cancellationToken)
+	{
+		var due = await pendingTransmissions.GetDueAsync(DateTime.Now, BatchSize, cancellationToken);
+		foreach (var transmission in due)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			try
+			{
+				var result = await gateway.SendRemisionAsync(transmission.RemissionNote, cancellationToken);
+				await SifenTransmissionProcessor.ApplyRemisionAsync(pendingTransmissions, transmission, result, DateTime.Now, cancellationToken);
+			}
+			catch (Exception ex) when (ex is not OperationCanceledException)
+			{
+				_logger.LogError(ex, "SIFEN transmission failed for remission note {RemissionNoteNumber}", transmission.RemissionNote.Number);
 			}
 		}
 	}

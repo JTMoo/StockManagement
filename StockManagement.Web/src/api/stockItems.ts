@@ -7,6 +7,7 @@ export type NewStockItem = Partial<Omit<StockItem, "id" | "code">> & { code: str
 export const stockItemsApi = {
 	listStockItems: (signal?: AbortSignal) => sendAllPages<StockItem>("/stock-items", signal),
 	getStockItemByBarcode: (barcode: string) => send<StockItem>(`/stock-items/by-barcode/${encodeURIComponent(barcode)}`),
+	listStockItemsBelowMinimum: (signal?: AbortSignal) => sendAllPages<StockItem>("/stock-items/below-minimum", signal),
 	createStockItem: (stockItem: NewStockItem) => send<StockItem>("/stock-items", { method: "POST", body: JSON.stringify(stockItem) }),
 	updateStockItem: (stockItem: StockItem) => send<StockItem>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "PUT", body: JSON.stringify(stockItem) }),
 	deleteStockItem: (stockItem: StockItem) => send<void>(`/stock-items/${encodeURIComponent(stockItem.id)}`, { method: "DELETE" }),
