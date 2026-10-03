@@ -28,7 +28,7 @@ public class ListInvoicesEndpoint(IInvoiceServiceProvider invoiceServiceProvider
 	public override async Task<InvoiceListResponse> ExecuteAsync(ListInvoicesRequest request, CancellationToken cancellationToken)
 	{
 		var pageSize = Math.Clamp(request.PageSize ?? 20, 1, 100);
-		var result = await _invoiceServiceProvider.GetInvoicesAsync(request.CustomerId, request.From, request.To, request.Cursor, pageSize);
+		var result = await _invoiceServiceProvider.GetInvoicesAsync(request.CustomerId, request.From, request.To, request.Cursor, pageSize, cancellationToken);
 
 		return new(result.Items.Select(invoice => InvoiceResponse.From(invoice, _paymentService)).ToList(), result.NextCursor);
 	}

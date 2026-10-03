@@ -23,7 +23,7 @@ public class GetCreditNoteEndpoint(ICreditNoteServiceProvider creditNoteServiceP
 
 	public override async Task<Results<Ok<CreditNoteResponse>, NotFound>> ExecuteAsync(GetCreditNoteRequest request, CancellationToken cancellationToken)
 	{
-		if (await _creditNoteServiceProvider.GetCreditNoteAsync(request.Number) is not CreditNote creditNote) return TypedResults.NotFound();
+		if (await _creditNoteServiceProvider.GetCreditNoteAsync(request.Number, cancellationToken) is not CreditNote creditNote) return TypedResults.NotFound();
 
 		return TypedResults.Ok(CreditNoteResponse.From(creditNote));
 	}

@@ -29,7 +29,7 @@ public class ListPaymentsEndpoint(IInvoiceServiceProvider invoiceServiceProvider
 
 	public override async Task<Results<Ok<InvoicePaymentsResponse>, NotFound>> ExecuteAsync(ListPaymentsRequest request, CancellationToken cancellationToken)
 	{
-		if (await _invoiceServiceProvider.GetInvoiceAync(request.Number) is not Invoice invoice) return TypedResults.NotFound();
+		if (await _invoiceServiceProvider.GetInvoiceAync(request.Number, cancellationToken) is not Invoice invoice) return TypedResults.NotFound();
 
 		var items = (invoice.Payments ?? []).OrderBy(payment => payment.Date).Select(PaymentResponse.From).ToList();
 		return TypedResults.Ok(new InvoicePaymentsResponse(items, _paymentService.GetAmountPaid(invoice), _paymentService.GetAmountDue(invoice), _paymentService.GetStatus(invoice, DateTime.Now)));
