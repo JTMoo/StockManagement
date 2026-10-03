@@ -5,6 +5,7 @@ using StockManagement.Kernel.Model;
 using StockManagement.Kernel.Model.Types;
 using StockManagement.Sales.Core.Contracts;
 using StockManagement.Settings.Core.Contracts;
+using StockManagement.Sifen.Core.Contracts;
 
 namespace StockManagement.Tests.Sales;
 
@@ -15,6 +16,7 @@ public sealed class SaleServiceTests
 	private readonly Mock<IStockItemServiceProvider> _stockItems = new();
 	private readonly Mock<IInvoiceServiceProvider> _invoices = new();
 	private readonly Mock<ISettingsService> _settings = new();
+	private readonly Mock<IContingencyCdcIssuer> _contingencyCdcIssuer = new();
 
 
 	[TestInitialize]
@@ -22,6 +24,7 @@ public sealed class SaleServiceTests
 	{
 		_settings.Setup(service => service.GetCompanySettingsAsync(It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CompanySettings("", "", "", 10m, 30, 1, 1001, 0));
+		_contingencyCdcIssuer.Setup(issuer => issuer.TryIssueAsync(It.IsAny<CancellationToken>())).ReturnsAsync((string?)null);
 	}
 
 	[TestMethod]
@@ -48,6 +51,36 @@ public sealed class SaleServiceTests
 		Assert.AreEqual(date.AddDays(30), invoice.ExpirationDate);
 		Assert.AreEqual("", invoice.Number);
 		CollectionAssert.AreEqual(items, invoice.Items);
+	}
+
+	[TestMethod]
+	public async Task CreateInvoiceAsync_ContingencyModeOff_LeavesCdcEmpty()
+	{
+		// Arrange
+		var service = this.CreateService();
+		List<ShoppingCartItem> items = [CreateCartItem("A1", "Screw", inStock: 10, price: 100, quantity: 1)];
+
+		// Act
+		var invoice = await service.CreateInvoiceAsync(new Customer(), items, DateTime.Today);
+
+		// Assert
+		Assert.AreEqual("", invoice.Cdc);
+	}
+
+	[TestMethod]
+	public async Task CreateInvoiceAsync_ContingencyModeActive_IssuesCdcLocally()
+	{
+		// Arrange
+		var cdc = "0" + new string('1', 43);
+		_contingencyCdcIssuer.Setup(issuer => issuer.TryIssueAsync(It.IsAny<CancellationToken>())).ReturnsAsync(cdc);
+		var service = this.CreateService();
+		List<ShoppingCartItem> items = [CreateCartItem("A1", "Screw", inStock: 10, price: 100, quantity: 1)];
+
+		// Act
+		var invoice = await service.CreateInvoiceAsync(new Customer(), items, DateTime.Today);
+
+		// Assert
+		Assert.AreEqual(cdc, invoice.Cdc);
 	}
 
 	[TestMethod]
@@ -306,7 +339,7 @@ public sealed class SaleServiceTests
 
 	private SaleService CreateService()
 	{
-		return new SaleService(_stockItems.Object, _invoices.Object, _settings.Object);
+		return new SaleService(_stockItems.Object, _invoices.Object, _settings.Object, _contingencyCdcIssuer.Object);
 	}
 
 	/// <remarks>The sale write takes the lines out of <paramref name="stockItems"/>, like the transaction in the database.</remarks>
