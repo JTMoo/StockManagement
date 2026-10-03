@@ -43,6 +43,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<PaymentLink> PaymentLinks => this.Set<PaymentLink>();
 
+	public DbSet<ContingencyCdcRange> ContingencyCdcRanges => this.Set<ContingencyCdcRange>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{

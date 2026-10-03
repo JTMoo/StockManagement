@@ -73,8 +73,6 @@ public sealed class DirectDnitSifenGateway(
 		var rucBase = rucParts[0];
 		var rucCheckDigit = int.Parse(rucParts[1]);
 
-		if (InvoiceNumber.TryParseSequence(invoice.Number, companySettings.EstablishmentCode, companySettings.PointOfSaleCode) is not int documentNumber)
-			throw new InvalidOperationException($"Invoice number '{invoice.Number}' does not match the configured establishment/point-of-sale.");
 		if (companySettings.TimbradoValidFrom is not DateTime timbradoValidFrom)
 			throw new InvalidOperationException("Company settings timbrado validity start is missing; set it before transmitting to SIFEN.");
 
@@ -94,17 +92,33 @@ public sealed class DirectDnitSifenGateway(
 			RucCheckDigit: null,
 			invoice.Customer.IdentificationNumber);
 
-		var cdc = _cdcGenerator.Generate(new CdcInput(
-			SifenDocumentType.FacturaElectronica,
-			rucBase,
-			rucCheckDigit,
-			companySettings.EstablishmentCode,
-			companySettings.PointOfSaleCode,
-			documentNumber,
-			TaxpayerType.Juridica,
-			DateOnly.FromDateTime(invoice.Date),
-			EmissionType.Normal,
-			GenerateSecurityCode()));
+		// A non-empty invoice.Cdc was already assigned locally (e.g. contingency issuance, #149) - reuse it as-is
+		// rather than regenerating, so the CDC and dNumDoc below always agree on the same document number.
+		string cdc;
+		long documentNumber;
+		if (!string.IsNullOrEmpty(invoice.Cdc))
+		{
+			cdc = invoice.Cdc;
+			documentNumber = long.Parse(cdc.AsSpan(17, 7));
+		}
+		else
+		{
+			if (InvoiceNumber.TryParseSequence(invoice.Number, companySettings.EstablishmentCode, companySettings.PointOfSaleCode) is not int sequence)
+				throw new InvalidOperationException($"Invoice number '{invoice.Number}' does not match the configured establishment/point-of-sale.");
+
+			documentNumber = sequence;
+			cdc = _cdcGenerator.Generate(new CdcInput(
+				SifenDocumentType.FacturaElectronica,
+				rucBase,
+				rucCheckDigit,
+				companySettings.EstablishmentCode,
+				companySettings.PointOfSaleCode,
+				documentNumber,
+				TaxpayerType.Juridica,
+				DateOnly.FromDateTime(invoice.Date),
+				EmissionType.Normal,
+				GenerateSecurityCode()));
+		}
 
 		var items = invoice.Items.Select(item => new DteItem(
 			item.StockItem.Code,
