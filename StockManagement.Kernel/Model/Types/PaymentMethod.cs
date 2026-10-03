@@ -11,5 +11,8 @@ public enum PaymentMethod
 
 	Check,
 
+	/// <summary>Reconciled from a paid <see cref="PaymentLink"/> (#150)</summary>
+	BancardQr,
+
 	Other
 }

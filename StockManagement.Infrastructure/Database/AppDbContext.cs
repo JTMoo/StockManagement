@@ -41,6 +41,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<PendingTransmission> PendingTransmissions => this.Set<PendingTransmission>();
 
+	public DbSet<PaymentLink> PaymentLinks => this.Set<PaymentLink>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{

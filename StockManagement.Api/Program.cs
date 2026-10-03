@@ -22,7 +22,7 @@ builder.Services
 	.AddFastEndpoints()
 	.AddInfrastructure(builder.Configuration)
 	.AddInfrastructureServiceProviders()
-	.AddSalesCore()
+	.AddSalesCore(builder.Configuration)
 	.AddCustomersCore()
 	.AddSettingsCore()
 	.AddImportCore()

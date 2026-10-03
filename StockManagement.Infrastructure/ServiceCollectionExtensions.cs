@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<ISupplierServiceProvider, EfSupplierServiceProvider>();
 		services.AddScoped<ISearchServiceProvider, EfSearchServiceProvider>();
 		services.AddScoped<IPendingTransmissionServiceProvider, EfPendingTransmissionServiceProvider>();
+		services.AddScoped<IPaymentLinkServiceProvider, EfPaymentLinkServiceProvider>();
 		return services;
 	}
 }
