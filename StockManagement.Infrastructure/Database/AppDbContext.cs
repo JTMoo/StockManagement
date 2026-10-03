@@ -45,6 +45,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvid
 
 	public DbSet<ContingencyCdcRange> ContingencyCdcRanges => this.Set<ContingencyCdcRange>();
 
+	public DbSet<RemissionNote> RemissionNotes => this.Set<RemissionNote>();
+
+	public DbSet<PendingRemisionTransmission> PendingRemisionTransmissions => this.Set<PendingRemisionTransmission>();
+
 
 	public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
 	{
