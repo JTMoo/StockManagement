@@ -15,4 +15,10 @@ public interface ISifenGateway
 	/// retry policy; only a programming error (e.g. a malformed invoice) throws.
 	/// </summary>
 	Task<SifenTransmissionResult> SendAsync(Invoice invoice, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Builds, signs and transmits <paramref name="remissionNote"/>'s DE (#162). Same never-throws-for-SIFEN-outcomes
+	/// contract as <see cref="SendAsync(Invoice, CancellationToken)"/>.
+	/// </summary>
+	Task<SifenTransmissionResult> SendRemisionAsync(RemissionNote remissionNote, CancellationToken cancellationToken = default);
 }
