@@ -63,6 +63,88 @@ public sealed class DirectDnitSifenGateway(
 		}
 	}
 
+	/// <summary>
+	/// Builds, signs and transmits a Nota de Remisión Electrónica (#162). No contingency path yet (unlike
+	/// <see cref="SendAsync(Invoice, CancellationToken)"/>) - a remission note always gets <see cref="EmissionType.Normal"/>;
+	/// flagged as a known gap, same reasoning as #149 would apply if remission notes also need offline issuance.
+	/// </summary>
+	public async Task<SifenTransmissionResult> SendRemisionAsync(RemissionNote remissionNote, CancellationToken cancellationToken = default)
+	{
+		ArgumentNullException.ThrowIfNull(remissionNote);
+
+		try
+		{
+			var companySettings = await _settingsService.GetCompanySettingsAsync(cancellationToken);
+			var data = BuildRemisionData(remissionNote, companySettings);
+			var unsignedDe = _xmlBuilder.BuildRemision(data);
+
+			using var certificate = LoadCertificate();
+			var signedDe = _signer.Sign(unsignedDe, certificate);
+
+			using var client = _httpClientFactory.CreateClient(nameof(DirectDnitSifenGateway));
+			using var content = new StringContent(signedDe.ToString(SaveOptions.DisableFormatting), Encoding.UTF8, "text/xml");
+			using var response = await client.PostAsync(_options.ServiceUrl, content, cancellationToken);
+
+			return ParseResponse(await response.Content.ReadAsStringAsync(cancellationToken), data.Cdc);
+		}
+		catch (Exception ex) when (ex is not ArgumentException and not InvalidOperationException)
+		{
+			return SifenTransmissionResult.Error(ex.Message);
+		}
+	}
+
+	/// <exception cref="InvalidOperationException">Company settings or the remission note are missing data a DE needs</exception>
+	private DteRemisionData BuildRemisionData(RemissionNote remissionNote, CompanySettings companySettings)
+	{
+		if (!RucValidator.TryNormalize(companySettings.Ruc, out var normalizedRuc))
+			throw new InvalidOperationException("Company settings RUC is missing or invalid; set it before transmitting to SIFEN.");
+
+		var rucParts = normalizedRuc.Split('-');
+		var rucBase = rucParts[0];
+		var rucCheckDigit = int.Parse(rucParts[1]);
+
+		if (companySettings.TimbradoValidFrom is not DateTime timbradoValidFrom)
+			throw new InvalidOperationException("Company settings timbrado validity start is missing; set it before transmitting to SIFEN.");
+
+		var emisor = new DteEmisor(
+			rucBase,
+			rucCheckDigit,
+			companySettings.CompanyName,
+			companySettings.EstablishmentCode,
+			companySettings.PointOfSaleCode,
+			EstablishmentAddress: "",
+			companySettings.TimbradoNumber,
+			DateOnly.FromDateTime(timbradoValidFrom));
+
+		var receptor = new DteReceptor(
+			remissionNote.Customer.Display,
+			RucBase: null,
+			RucCheckDigit: null,
+			remissionNote.Customer.IdentificationNumber);
+
+		if (InvoiceNumber.TryParseSequence(remissionNote.Number, companySettings.EstablishmentCode, companySettings.PointOfSaleCode) is not int sequence)
+			throw new InvalidOperationException($"Remission note number '{remissionNote.Number}' does not match the configured establishment/point-of-sale.");
+
+		var cdc = _cdcGenerator.Generate(new CdcInput(
+			SifenDocumentType.NotaDeRemisionElectronica,
+			rucBase,
+			rucCheckDigit,
+			companySettings.EstablishmentCode,
+			companySettings.PointOfSaleCode,
+			sequence,
+			TaxpayerType.Juridica,
+			DateOnly.FromDateTime(remissionNote.Date),
+			EmissionType.Normal,
+			GenerateSecurityCode()));
+
+		var items = remissionNote.Items.Select(item => new DteRemisionItem(
+			item.StockItem.Code,
+			item.StockItem.Name,
+			item.Amount)).ToList();
+
+		return new DteRemisionData(cdc, emisor, receptor, remissionNote.Date, sequence, remissionNote.Reason, remissionNote.DestinationAddress, items);
+	}
+
 	/// <exception cref="InvalidOperationException">Company settings or the invoice are missing data a DE needs</exception>
 	private DteInvoiceData BuildInvoiceData(Invoice invoice, CompanySettings companySettings)
 	{
