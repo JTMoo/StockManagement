@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StockManagement.Infrastructure.Database;
@@ -11,9 +12,11 @@ using StockManagement.Infrastructure.Database;
 namespace StockManagement.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261003055748_AddStockItemBarcode")]
+    partial class AddStockItemBarcode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,33 +339,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.ToTable("PaymentLinks");
                 });
 
-            modelBuilder.Entity("StockManagement.Kernel.Model.PendingRemisionTransmission", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Attempts")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LastError")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("NextAttemptAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("RemissionNoteId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RemissionNoteId");
-
-                    b.ToTable("PendingRemisionTransmissions");
-                });
-
             modelBuilder.Entity("StockManagement.Kernel.Model.PendingTransmission", b =>
                 {
                     b.Property<string>("Id")
@@ -388,47 +364,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.HasIndex("InvoiceId");
 
                     b.ToTable("PendingTransmissions");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.RemissionNote", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Cdc")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("DestinationAddress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Reason")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TransmissionStatus")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("Number")
-                        .IsUnique();
-
-                    b.ToTable("RemissionNotes");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.StockItem", b =>
@@ -771,17 +706,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                     b.Navigation("Invoice");
                 });
 
-            modelBuilder.Entity("StockManagement.Kernel.Model.PendingRemisionTransmission", b =>
-                {
-                    b.HasOne("StockManagement.Kernel.Model.RemissionNote", "RemissionNote")
-                        .WithMany()
-                        .HasForeignKey("RemissionNoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RemissionNote");
-                });
-
             modelBuilder.Entity("StockManagement.Kernel.Model.PendingTransmission", b =>
                 {
                     b.HasOne("StockManagement.Kernel.Model.Invoice", "Invoice")
@@ -791,56 +715,6 @@ namespace StockManagement.Infrastructure.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Invoice");
-                });
-
-            modelBuilder.Entity("StockManagement.Kernel.Model.RemissionNote", b =>
-                {
-                    b.HasOne("StockManagement.Kernel.Model.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsMany("StockManagement.Kernel.Model.RemissionNoteItem", "Items", b1 =>
-                        {
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("Amount")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("RemissionNoteId")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("StockItemId")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("RemissionNoteId");
-
-                            b1.HasIndex("StockItemId");
-
-                            b1.ToTable("RemissionNoteItems", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("RemissionNoteId");
-
-                            b1.HasOne("StockManagement.Kernel.Model.StockItem", "StockItem")
-                                .WithMany()
-                                .HasForeignKey("StockItemId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-
-                            b1.Navigation("StockItem");
-                        });
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("StockManagement.Kernel.Model.StockItem", b =>
