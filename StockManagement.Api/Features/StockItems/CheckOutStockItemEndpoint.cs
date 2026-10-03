@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StockManagement.Auth.Core.Contracts;
 using StockManagement.Kernel.Database.Interfaces;
 using StockManagement.Kernel.Model;
 
@@ -32,6 +33,7 @@ public class CheckOutStockItemEndpoint(IStockItemServiceProvider stockItemServic
 	public override void Configure()
 	{
 		this.Post("/stock-items/{Id}/check-out");
+		this.Permissions(Permission.StockItemsWrite);
 	}
 
 	public override async Task<Results<Ok<StockItemResponse>, NotFound, Conflict<InsufficientStockResponse>>> ExecuteAsync(CheckOutStockItemRequest request, CancellationToken cancellationToken)
