@@ -6,7 +6,7 @@ namespace StockManagement.Sifen.Core;
 
 
 /// <summary>
-/// Builds the unsigned <c>rDE</c>/<c>DE</c> XML for a Factura Electrónica.
+/// Builds the unsigned <c>rDE</c>/<c>DE</c> XML for a Factura Electrónica or a Nota de Remisión Electrónica (#162).
 /// </summary>
 /// <remarks>
 /// Element/group names (<c>gOpeDE</c>, <c>gTimb</c>, <c>gDatGralOpe</c>, <c>gEmis</c>, <c>gDatRec</c>, <c>gDtipDE</c>,
@@ -50,6 +50,93 @@ public sealed class DteXmlBuilder : IDteXmlBuilder
 			new XElement(Ns + "rDE",
 				new XElement(Ns + "dVerFor", "150"),
 				de));
+	}
+
+	/// <remarks>
+	/// Covers the core groups for a goods-movement document: no <c>gCamIVA</c>/<c>gTotSub</c> (no price or tax on a
+	/// remission note) but adds <c>gTransp</c> (motivo + destination address). The DNIT XSD for this document type
+	/// has not been checked in this session (no network access to dnit.gov.py) - same unverified flag as
+	/// <see cref="BuildInvoice"/>; run <see cref="DteXsdValidator"/> against the real schema before production use.
+	/// </remarks>
+	public XDocument BuildRemision(DteRemisionData data)
+	{
+		ArgumentNullException.ThrowIfNull(data);
+		if (data.Cdc.Length != 44 || !data.Cdc.All(char.IsDigit))
+			throw new ArgumentException("Cdc must be 44 digits.", nameof(data));
+		if (data.Items.Count == 0)
+			throw new ArgumentException("A remission note needs at least one item.", nameof(data));
+
+		var emissionTypeDigit = data.Cdc[34];
+		var securityCode = data.Cdc.Substring(34, 9);
+
+		var de = new XElement(Ns + "DE",
+			new XAttribute("Id", "DE" + data.Cdc),
+			new XElement(Ns + "dDVId", data.Cdc[^1]),
+			new XElement(Ns + "gOpeDE",
+				new XElement(Ns + "iTipEmi", emissionTypeDigit),
+				new XElement(Ns + "dCodSeg", securityCode)),
+			BuildRemisionTimb(data),
+			BuildRemisionDatGralOpe(data),
+			BuildRemisionDtipDE(data),
+			BuildTransp(data));
+
+		return new XDocument(
+			new XDeclaration("1.0", "UTF-8", null),
+			new XElement(Ns + "rDE",
+				new XElement(Ns + "dVerFor", "150"),
+				de));
+	}
+
+	private XElement BuildRemisionTimb(DteRemisionData data)
+	{
+		var emisor = data.Emisor;
+		return new XElement(Ns + "gTimb",
+			new XElement(Ns + "iTiDE", (int)SifenDocumentType.NotaDeRemisionElectronica),
+			new XElement(Ns + "dNumTim", emisor.TimbradoNumber),
+			new XElement(Ns + "dEst", emisor.EstablishmentCode),
+			new XElement(Ns + "dPunExp", emisor.PointOfSaleCode),
+			new XElement(Ns + "dNumDoc", data.DocumentNumber.ToString("D7", CultureInfo.InvariantCulture)),
+			new XElement(Ns + "dFeIniT", emisor.TimbradoValidSince.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+	}
+
+	private XElement BuildRemisionDatGralOpe(DteRemisionData data)
+	{
+		var emisor = data.Emisor;
+		var receptor = data.Receptor;
+		var hasRuc = receptor.RucBase != null;
+
+		return new XElement(Ns + "gDatGralOpe",
+			new XElement(Ns + "dFeEmiDE", data.IssueDate.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)),
+			new XElement(Ns + "gEmis",
+				new XElement(Ns + "dRucEm", emisor.RucBase),
+				new XElement(Ns + "dDVEmi", emisor.RucCheckDigit),
+				new XElement(Ns + "dNomEmi", emisor.RazonSocial),
+				new XElement(Ns + "gDirEmi",
+					new XElement(Ns + "dDirEmi", emisor.EstablishmentAddress))),
+			new XElement(Ns + "gDatRec",
+				new XElement(Ns + "iNatRec", hasRuc ? 1 : 2),
+				hasRuc
+					? new XElement(Ns + "dRucRec", receptor.RucBase)
+					: new XElement(Ns + "dNumIDRec", receptor.DocumentNumber),
+				hasRuc ? new XElement(Ns + "dDVRec", receptor.RucCheckDigit) : null,
+				new XElement(Ns + "dNomRec", receptor.Name)));
+	}
+
+	private XElement BuildRemisionDtipDE(DteRemisionData data)
+	{
+		return new XElement(Ns + "gDtipDE",
+			data.Items.Select(item =>
+				new XElement(Ns + "gCamItem",
+					new XElement(Ns + "dCodInt", item.Code),
+					new XElement(Ns + "dDesProSer", item.Description),
+					new XElement(Ns + "dCantProSer", item.Quantity))));
+	}
+
+	private XElement BuildTransp(DteRemisionData data)
+	{
+		return new XElement(Ns + "gTransp",
+			new XElement(Ns + "iMotTras", (int)data.Reason),
+			new XElement(Ns + "dDirDest", data.DestinationAddress));
 	}
 
 	private XElement BuildTimb(DteInvoiceData data)
